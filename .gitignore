@@ -1,0 +1,28 @@
+# Tauri build artifacts
+src-tauri/target
+src-tauri/gen/apple
+src-tauri/gen/android
+
+# Screenshots (keeping the folder but ignoring content if desired, or just ignoring specific sizes)
+# public/screenshots/*.png
+
+# Environment
+.env
+.env*.local
+
+# Node
+node_modules
+dist
+dist-ssr
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor/System
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.sw?

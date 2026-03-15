@@ -1,0 +1,62 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+  "productName": "Daily Prayer Timer",
+  "version": "0.1.0",
+  "identifier": "com.dailyprayertimer.app",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Daily Prayer Timer",
+        "width": 380,
+        "height": 650,
+        "resizable": false,
+        "fullscreen": false,
+        "decorations": true,
+        "transparent": false,
+        "url": "index.html"
+      },
+      {
+        "label": "overlay",
+        "title": "Daily Prayer Timer Overlay",
+        "width": 120,
+        "height": 30,
+        "resizable": false,
+        "fullscreen": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": true,
+        "skipTaskbar": true,
+        "url": "/overlay.html"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "plugins": {
+    "notification": null,
+    "autostart": null,
+    "shell": {
+      "open": true
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}
