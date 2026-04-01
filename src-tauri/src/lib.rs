@@ -1,7 +1,7 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{TrayIconBuilder},
-    Emitter, Listener, Manager, Runtime, WebviewWindow,
+    Emitter, Manager, Runtime, WebviewWindow,
 };
 
 #[cfg(target_os = "windows")]
@@ -84,35 +84,11 @@ pub fn run() {
                 });
             }
 
-            // Setup Native Styles for Overlay and Popup
+            // Setup Native Styles for Overlay
             if let Some(overlay) = app.get_webview_window("overlay") {
                 #[cfg(target_os = "windows")]
                 setup_native_window(overlay);
             }
-            if let Some(popup) = app.get_webview_window("popup") {
-                #[cfg(target_os = "windows")]
-                setup_native_window(popup);
-            }
-
-            // Listen for Hover Events
-            let h = app.handle().clone();
-            app.listen("show-popup", move |_| {
-                if let (Some(overlay), Some(popup)) = (h.get_webview_window("overlay"), h.get_webview_window("popup")) {
-                    if let (Ok(o_pos), Ok(o_size), Ok(p_size)) = (overlay.outer_position(), overlay.outer_size(), popup.outer_size()) {
-                        let x = o_pos.x + (o_size.width as i32 / 2) - (p_size.width as i32 / 2);
-                        let y = o_pos.y - p_size.height as i32 - 8; // 8px padding from the taskbar
-                        let _ = popup.set_position(tauri::PhysicalPosition::new(x, y));
-                        let _ = popup.show();
-                    }
-                }
-            });
-
-            let h_hide = app.handle().clone();
-            app.listen("hide-popup", move |_| {
-                if let Some(popup) = h_hide.get_webview_window("popup") {
-                    let _ = popup.hide();
-                }
-            });
 
             Ok(())
         })

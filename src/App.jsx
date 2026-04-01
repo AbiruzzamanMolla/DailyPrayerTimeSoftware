@@ -161,22 +161,10 @@ function App() {
     const toggleOverlay = async () => {
       console.log("🔄 Toggle overlay feature fired. Current setting:", settings.showOverlay);
       try {
-        const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
-        const overlay = await WebviewWindow.getByLabel("overlay");
-        
-        if (overlay) {
-          if (settings.showOverlay) {
-            console.log("👁️ Showing overlay window...");
-            await overlay.show();
-          } else {
-            console.log("🙈 Hiding overlay window...");
-            await overlay.hide();
-          }
-        } else {
-          console.warn("⚠️ Overlay window 'overlay' not found via getByLabel");
-        }
+        const { emitTo } = await import("@tauri-apps/api/event");
+        await emitTo("overlay", "set-visibility", settings.showOverlay);
       } catch (err) {
-        console.error("❌ Failed to toggle overlay visibility:", err);
+        console.error("❌ Failed to emit overlay visibility:", err);
       }
     };
 
@@ -405,7 +393,6 @@ function App() {
               emit("prayer-update", payload);
               try {
                 const { emitTo } = await import("@tauri-apps/api/event");
-                await emitTo("popup", "prayer-update", payload);
                 await emitTo("overlay", "prayer-update", payload);
               } catch (e) {
                 // Ignore emitTo import/execution errors

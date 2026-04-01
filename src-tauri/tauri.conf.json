@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Daily Prayer Timer",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "identifier": "com.dailyprayertimer.app",
   "build": {
     "frontendDist": "../dist",
@@ -35,20 +35,6 @@
         "visible": true,
         "skipTaskbar": true,
         "url": "/overlay.html"
-      },
-      {
-        "label": "popup",
-        "title": "Prayer Details",
-        "width": 190,
-        "height": 260,
-        "resizable": false,
-        "fullscreen": false,
-        "decorations": false,
-        "transparent": true,
-        "alwaysOnTop": true,
-        "visible": false,
-        "skipTaskbar": true,
-        "url": "/popup.html"
       }
     ],
     "security": {

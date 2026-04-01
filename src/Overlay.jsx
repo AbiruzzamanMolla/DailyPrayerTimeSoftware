@@ -7,22 +7,39 @@ function Overlay() {
 
   useEffect(() => {
     console.log("📡 Overlay Window: Initializing listener for 'prayer-update'");
-    let unlistenFn;
-    
+    let unsubscribeData;
+    let unsubscribeToggle;
+
     const setup = async () => {
-      unlistenFn = await listen("prayer-update", (event) => {
-        console.log("📥 Overlay Window: Received payload", event.payload);
+      unsubscribeData = await listen("prayer-update", (event) => {
         setPrayerData(event.payload);
       });
+
+      // Listen to visibility instructions from the main App state (which listens to tray & UI)
+      const win = getCurrentWindow();
+      unsubscribeToggle = await listen("set-visibility", async (event) => {
+        const shouldShow = event.payload;
+        if (shouldShow) {
+          await win.show();
+        } else {
+          await win.hide();
+        }
+      });
+
+      // Aggressively maintain z-order against Windows 11 Taskbar
+      const zOrderInterval = setInterval(() => {
+        win.setAlwaysOnTop(true);
+      }, 1500);
+
+      // Save interval ID for cleanup
+      globalThis._zOrderInterval = zOrderInterval;
     };
 
     setup();
-
     return () => {
-      if (unlistenFn) {
-        console.log("📡 Overlay Window: Unsubscribing");
-        unlistenFn();
-      }
+      if (unsubscribeData) unsubscribeData();
+      if (unsubscribeToggle) unsubscribeToggle();
+      if (window._zOrderInterval) clearInterval(window._zOrderInterval);
     };
   }, []);
 
@@ -35,31 +52,9 @@ function Overlay() {
     }
   };
 
-  const handleMouseEnter = async () => {
-    try {
-      console.log("🖱️ Overlay: Mouse Enter, showing popup");
-      const { emit } = await import("@tauri-apps/api/event");
-      await emit("show-popup");
-    } catch (err) {
-      console.error("❌ Overlay hover error:", err);
-    }
-  };
-
-  const handleMouseLeave = async () => {
-    try {
-      console.log("🖱️ Overlay: Mouse Leave, hiding popup");
-       const { emit } = await import("@tauri-apps/api/event");
-      await emit("hide-popup");
-    } catch (err) {
-      console.error("❌ Overlay leave error:", err);
-    }
-  };
-
   return (
     <div 
       onMouseDown={handleMouseDown}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       style={{
         display: 'flex',
         alignItems: 'center',

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-04-01
+
+### Added
+- Added a unified Tauri `prayer-update` event broadcaster for better background synchronization.
+- Overlay window gracefully attempts to force `Always on Top` state via JavaScript intervals to prevent the Windows 11 taskbar from hiding it.
+
+### Changed
+- Overlay taskbar indicator redesigned to be highly compact, native-feeling, and explicitly avoids taskbar overlaps.
+- Switched default `WebViewWindow` references to robust emit-based communication.
+
+### Removed
+- Removed the hover-popup feature and its associated windows and handlers to guarantee a more lightweight and reliable experience on all hardware bounds.
+
 ## [0.1.1] - 2026-04-01
 
 ### Added
