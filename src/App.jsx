@@ -1,8 +1,7 @@
 import Loader from "./components/Loader";
 
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
-  getCachedData,
   setCachedData,
   getCachedLocation,
   setCachedLocation,
@@ -11,7 +10,6 @@ import {
   getNextPrayerTime,
   DHAKA_DEFAULT,
   addRecentLocation,
-  getRawCachedData,
   getCurrentTimeInZone,
   parseTime,
   formatPrayerTime,
@@ -24,13 +22,13 @@ import PrayerList from "./components/PrayerList";
 import SettingsModal from "./components/SettingsModal";
 import ProhibitedTimesModal from "./components/ProhibitedTimesModal";
 import { getPrayerTimes } from "./utils/prayerTimeService";
-import { emit, emitTo } from "@tauri-apps/api/event";
+import { emit, listen } from "@tauri-apps/api/event";
 import { 
   isPermissionGranted, 
   requestPermission, 
   sendNotification 
 } from "@tauri-apps/plugin-notification";
-import { getCurrentWindow, getAllWindows } from "@tauri-apps/api/window";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 const DEFAULT_SETTINGS = {
   bgType: "gradient",
@@ -184,6 +182,22 @@ function App() {
 
     toggleOverlay();
   }, [settings.showOverlay]);
+
+  // Listen for tray menu toggle request
+  useEffect(() => {
+    if (!window.__TAURI_INTERNALS__) return;
+    
+    let unlisten;
+    const setup = async () => {
+      unlisten = await listen("toggle-overlay-request", () => {
+        console.log("📥 Received toggle-overlay-request from tray");
+        setSettings(s => ({ ...s, showOverlay: !s.showOverlay }));
+      });
+    };
+    setup();
+    
+    return () => { if (unlisten) unlisten(); };
+  }, [listen]);
 
   // Fetch prayer times using local calculation
   const fetchPrayerTimes = useCallback(async () => {
@@ -372,7 +386,7 @@ function App() {
             try {
               console.log("📤 Emitting prayer-update:", nextTimeStrShort);
               emit("prayer-update", {
-                name: prayerName === "Sunrise" ? "Doha" : prayerName,
+                name: currentPrayer === "Sunrise" ? "Doha" : currentPrayer,
                 time: nextTimeStrShort
               });
             } catch (err) {

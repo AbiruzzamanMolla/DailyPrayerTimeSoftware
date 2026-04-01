@@ -53,7 +53,8 @@ pub fn run() {
             // Create Tray Menu
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let show_i = MenuItem::with_id(app, "show", "Open Dashboard", true, None::<&str>)?;
-            let menu = Menu::with_items(app, &[&show_i, &quit_i])?;
+            let toggle_overlay_i = MenuItem::with_id(app, "toggle_overlay", "Toggle Overlay", true, None::<&str>)?;
+            let menu = Menu::with_items(app, &[&show_i, &toggle_overlay_i, &quit_i])?;
 
             let _tray = TrayIconBuilder::new()
                 .icon(app.default_window_icon().unwrap().clone())
@@ -67,6 +68,9 @@ pub fn run() {
                             let _ = window.show();
                             let _ = window.set_focus();
                         }
+                    }
+                    "toggle_overlay" => {
+                        let _ = app.emit("toggle-overlay-request", ());
                     }
                     _ => {}
                 })

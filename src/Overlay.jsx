@@ -41,32 +41,40 @@ function Overlay() {
       style={{
         display: 'flex',
         alignItems: 'center',
-        padding: '0 8px',
+        padding: '0 10px',
         height: '100vh',
         width: '100vw',
         color: 'white',
-        fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
-        fontSize: '11px',
-        fontWeight: '700',
-        textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+        fontFamily: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+        fontSize: '12px',
+        fontWeight: '600',
+        textShadow: '0 1px 2px rgba(0,0,0,0.5)',
         overflow: 'hidden',
         userSelect: 'none',
         cursor: 'move',
-        background: 'rgba(23, 9, 57, 0.7)', // Dark semi-transparent background
-        border: '1px solid rgba(255,255,255,0.2)',
-        borderRadius: '6px',
-        backdropFilter: 'blur(4px)',
+        background: 'rgba(23, 9, 57, 0.75)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: '8px',
+        backdropFilter: 'blur(8px)',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
       }}
     >
       <div style={{
-        width: '4px',
-        height: '16px',
-        background: 'rgba(255,255,255,0.3)',
+        width: '3px',
+        height: '14px',
+        background: '#00ff00',
         borderRadius: '2px',
-        marginRight: '8px'
+        marginRight: '8px',
+        boxShadow: '0 0 5px rgba(0,255,0,0.5)'
       }} />
-      <span style={{ marginRight: '4px', opacity: 0.9 }}>{prayerData.name}:</span>
-      <span style={{ color: '#00ff00' }}>{prayerData.time}</span>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+        <span style={{ opacity: 0.8, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          {prayerData.name || '---'}:
+        </span>
+        <span style={{ color: '#00ff00', fontFamily: 'monospace', fontSize: '13px' }}>
+          {prayerData.time || '--:--'}
+        </span>
+      </div>
     </div>
   );
 }
