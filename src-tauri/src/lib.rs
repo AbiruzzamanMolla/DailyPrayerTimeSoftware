@@ -1,19 +1,19 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::{TrayIconBuilder},
-    Manager, Runtime, WebviewWindow,
+    Emitter, Listener, Manager, Runtime, WebviewWindow,
 };
 
 #[cfg(target_os = "windows")]
 use windows::Win32::UI::WindowsAndMessaging::{
-    GetWindowLongW, SetWindowLongW, GWL_EXSTYLE, WS_EX_LAYERED, WS_EX_TRANSPARENT,
+    GetWindowLongW, SetWindowLongW, GWL_EXSTYLE, WS_EX_LAYERED,
     SetWindowPos, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW,
     WS_EX_TOPMOST, WS_EX_NOACTIVATE
 };
 use windows::Win32::Foundation::HWND;
 
 #[cfg(target_os = "windows")]
-fn setup_overlay_window<R: Runtime>(window: WebviewWindow<R>) {
+fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
     let hwnd = window.hwnd().unwrap().0;
     let hwnd_struct = HWND(hwnd as _);
 
@@ -22,15 +22,12 @@ fn setup_overlay_window<R: Runtime>(window: WebviewWindow<R>) {
         
         // WS_EX_TOPMOST: Reinforce for always-on-top nature
         // WS_EX_NOACTIVATE: prevents the window from being activated when clicked (non-stealing focus)
-        let new_style = (ex_style | WS_EX_LAYERED.0 as i32 | WS_EX_TOPMOST.0 as i32 | WS_EX_NOACTIVATE.0 as i32) & !WS_EX_TRANSPARENT.0 as i32;
-        
         let _ = SetWindowLongW(
             hwnd_struct,
             GWL_EXSTYLE,
-            new_style,
+            ex_style | WS_EX_LAYERED.0 as i32 | WS_EX_TOPMOST.0 as i32 | WS_EX_NOACTIVATE.0 as i32,
         );
 
-        // Explicitly set as topmost to keep it above other taskbar items and windows
         let _ = SetWindowPos(
             hwnd_struct,
             HWND_TOPMOST,
@@ -76,7 +73,7 @@ pub fn run() {
                 })
                 .build(app)?;
 
-            // Setup Main Window hide on close
+            // Setup Window Events
             if let Some(window) = app.get_webview_window("main") {
                 let window_ = window.clone();
                 window.on_window_event(move |event| {
@@ -87,11 +84,35 @@ pub fn run() {
                 });
             }
 
-            // Setup Overlay Window
+            // Setup Native Styles for Overlay and Popup
             if let Some(overlay) = app.get_webview_window("overlay") {
                 #[cfg(target_os = "windows")]
-                setup_overlay_window(overlay);
+                setup_native_window(overlay);
             }
+            if let Some(popup) = app.get_webview_window("popup") {
+                #[cfg(target_os = "windows")]
+                setup_native_window(popup);
+            }
+
+            // Listen for Hover Events
+            let h = app.handle().clone();
+            app.listen("show-popup", move |_| {
+                if let (Some(overlay), Some(popup)) = (h.get_webview_window("overlay"), h.get_webview_window("popup")) {
+                    if let (Ok(o_pos), Ok(o_size), Ok(p_size)) = (overlay.outer_position(), overlay.outer_size(), popup.outer_size()) {
+                        let x = o_pos.x + (o_size.width as i32 / 2) - (p_size.width as i32 / 2);
+                        let y = o_pos.y - p_size.height as i32 - 8; // 8px padding from the taskbar
+                        let _ = popup.set_position(tauri::PhysicalPosition::new(x, y));
+                        let _ = popup.show();
+                    }
+                }
+            });
+
+            let h_hide = app.handle().clone();
+            app.listen("hide-popup", move |_| {
+                if let Some(popup) = h_hide.get_webview_window("popup") {
+                    let _ = popup.hide();
+                }
+            });
 
             Ok(())
         })

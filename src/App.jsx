@@ -256,7 +256,7 @@ function App() {
   useEffect(() => {
     if (!prayerTimes) return;
 
-    const updateTimer = () => {
+    const updateTimer = async () => {
       // Use timezone if available, otherwise local time
       let currentTime = timezone ? getCurrentTimeInZone(timezone) : getCurrentTime();
 
@@ -379,16 +379,37 @@ function App() {
           }
         }
 
-        // === TAURI OVERLAY & NOTIFICATIONS ===
+        // === TAURI OVERLAY & POPUP DATA ===
         if (window.__TAURI_INTERNALS__) {
-          const nextTimeStrShort = formatTime(timeDiff, true); // Use local timeDiff constant
-          if (nextTimeStrShort) {
+          const nextTimeStrShort = formatTime(timeDiff, true);
+          if (nextTimeStrShort && prayerTimes && currentPrayer) {
             try {
-              console.log("📤 Emitting prayer-update:", nextTimeStrShort);
-              emit("prayer-update", {
-                name: currentPrayer === "Sunrise" ? "Doha" : currentPrayer,
-                time: nextTimeStrShort
+              const formattedTimes = {};
+              ["Fajr", "Sunrise", "Dhuhr", "Asr", "Maghrib", "Isha"].forEach(p => {
+                formattedTimes[p] = formatPrayerTime(prayerTimes[p], settings?.timeFormat || "12h");
               });
+
+              // Prepare payload
+              const payload = {
+                // For slim overlay
+                name: currentPrayer === "Sunrise" ? "Doha" : currentPrayer,
+                time: nextTimeStrShort,
+                // For detailed popup
+                current: currentPrayer,
+                times: formattedTimes,
+                location: selectedLocation?.name || "Unknown",
+                countdown: nextTimeStrShort
+              };
+
+              // Broadcast via all means to bypass Tauri IPC bugs
+              emit("prayer-update", payload);
+              try {
+                const { emitTo } = await import("@tauri-apps/api/event");
+                await emitTo("popup", "prayer-update", payload);
+                await emitTo("overlay", "prayer-update", payload);
+              } catch (e) {
+                // Ignore emitTo import/execution errors
+              }
             } catch (err) {
               console.error("❌ Emit error:", err);
             }

@@ -25,16 +25,30 @@
       {
         "label": "overlay",
         "title": "Daily Prayer Timer Overlay",
-        "width": 120,
-        "height": 30,
+        "width": 150,
+        "height": 34,
         "resizable": false,
         "fullscreen": false,
         "decorations": false,
         "transparent": true,
         "alwaysOnTop": true,
         "visible": true,
-        "skipTaskbar": false,
+        "skipTaskbar": true,
         "url": "/overlay.html"
+      },
+      {
+        "label": "popup",
+        "title": "Prayer Details",
+        "width": 190,
+        "height": 260,
+        "resizable": false,
+        "fullscreen": false,
+        "decorations": false,
+        "transparent": true,
+        "alwaysOnTop": true,
+        "visible": false,
+        "skipTaskbar": true,
+        "url": "/popup.html"
       }
     ],
     "security": {
