@@ -7,18 +7,35 @@ use tauri::{
 #[cfg(target_os = "windows")]
 use windows::Win32::UI::WindowsAndMessaging::{
     GetWindowLongW, SetWindowLongW, GWL_EXSTYLE, WS_EX_LAYERED, WS_EX_TRANSPARENT,
+    SetWindowPos, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW,
+    WS_EX_TOPMOST, WS_EX_NOACTIVATE
 };
+use windows::Win32::Foundation::HWND;
 
 #[cfg(target_os = "windows")]
 fn setup_overlay_window<R: Runtime>(window: WebviewWindow<R>) {
     let hwnd = window.hwnd().unwrap().0;
+    let hwnd_struct = HWND(hwnd as _);
+
     unsafe {
-        let ex_style = GetWindowLongW(windows::Win32::Foundation::HWND(hwnd as _), GWL_EXSTYLE);
-        let new_style = (ex_style | WS_EX_LAYERED.0 as i32) & !WS_EX_TRANSPARENT.0 as i32;
+        let ex_style = GetWindowLongW(hwnd_struct, GWL_EXSTYLE);
+        
+        // WS_EX_TOPMOST: Reinforce for always-on-top nature
+        // WS_EX_NOACTIVATE: prevents the window from being activated when clicked (non-stealing focus)
+        let new_style = (ex_style | WS_EX_LAYERED.0 as i32 | WS_EX_TOPMOST.0 as i32 | WS_EX_NOACTIVATE.0 as i32) & !WS_EX_TRANSPARENT.0 as i32;
+        
         let _ = SetWindowLongW(
-            windows::Win32::Foundation::HWND(hwnd as _),
+            hwnd_struct,
             GWL_EXSTYLE,
             new_style,
+        );
+
+        // Explicitly set as topmost to keep it above other taskbar items and windows
+        let _ = SetWindowPos(
+            hwnd_struct,
+            HWND_TOPMOST,
+            0, 0, 0, 0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW
         );
     }
 }
