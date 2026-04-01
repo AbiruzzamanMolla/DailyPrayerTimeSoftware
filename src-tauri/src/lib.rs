@@ -1,16 +1,15 @@
 use tauri::{
     menu::{Menu, MenuItem},
-    tray::{TrayIconBuilder},
+    tray::TrayIconBuilder,
     Emitter, Manager, Runtime, WebviewWindow,
 };
 
+use windows::Win32::Foundation::HWND;
 #[cfg(target_os = "windows")]
 use windows::Win32::UI::WindowsAndMessaging::{
-    GetWindowLongW, SetWindowLongW, GWL_EXSTYLE, WS_EX_LAYERED,
-    SetWindowPos, HWND_TOPMOST, SWP_NOMOVE, SWP_NOSIZE, SWP_SHOWWINDOW,
-    WS_EX_TOPMOST, WS_EX_NOACTIVATE
+    GetWindowLongW, SetWindowLongW, SetWindowPos, GWL_EXSTYLE, HWND_TOPMOST, SWP_NOMOVE,
+    SWP_NOSIZE, SWP_SHOWWINDOW, WS_EX_LAYERED, WS_EX_NOACTIVATE, WS_EX_TOPMOST,
 };
-use windows::Win32::Foundation::HWND;
 
 #[cfg(target_os = "windows")]
 fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
@@ -19,7 +18,7 @@ fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
 
     unsafe {
         let ex_style = GetWindowLongW(hwnd_struct, GWL_EXSTYLE);
-        
+
         // WS_EX_TOPMOST: Reinforce for always-on-top nature
         // WS_EX_NOACTIVATE: prevents the window from being activated when clicked (non-stealing focus)
         let _ = SetWindowLongW(
@@ -31,8 +30,11 @@ fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
         let _ = SetWindowPos(
             hwnd_struct,
             HWND_TOPMOST,
-            0, 0, 0, 0,
-            SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW
+            0,
+            0,
+            0,
+            0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
         );
     }
 }
@@ -41,16 +43,22 @@ fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_notification::init())
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec!["--hidden"])))
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec!["--hidden"]),
+        ))
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
-            let _ = app.get_webview_window("main").map(|w| w.show().and_then(|_| w.set_focus()));
+            let _ = app
+                .get_webview_window("main")
+                .map(|w| w.show().and_then(|_| w.set_focus()));
         }))
         .setup(|app| {
             // Create Tray Menu
             let quit_i = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
             let show_i = MenuItem::with_id(app, "show", "Open Dashboard", true, None::<&str>)?;
-            let toggle_overlay_i = MenuItem::with_id(app, "toggle_overlay", "Toggle Overlay", true, None::<&str>)?;
+            let toggle_overlay_i =
+                MenuItem::with_id(app, "toggle_overlay", "Toggle Overlay", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&show_i, &toggle_overlay_i, &quit_i])?;
 
             let _tray = TrayIconBuilder::new()

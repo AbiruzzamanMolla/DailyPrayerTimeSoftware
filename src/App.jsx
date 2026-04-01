@@ -48,6 +48,7 @@ const DEFAULT_SETTINGS = {
   timeFormat: "12h", // Default to 12-hour format
   ramadanMode: false,
   showOverlay: true,
+  autoStart: false,
 };
 
 
@@ -170,6 +171,28 @@ function App() {
 
     toggleOverlay();
   }, [settings.showOverlay]);
+
+  // Handle auto-start configuration
+  useEffect(() => {
+    if (!window.__TAURI_INTERNALS__) return;
+
+    const setupAutoStart = async () => {
+      try {
+        const { enable, disable, isEnabled } = await import('@tauri-apps/plugin-autostart');
+        const currentlyEnabled = await isEnabled();
+        
+        if (settings.autoStart && !currentlyEnabled) {
+          await enable();
+        } else if (!settings.autoStart && currentlyEnabled) {
+          await disable();
+        }
+      } catch (err) {
+        console.error("❌ Failed to configure auto start:", err);
+      }
+    };
+
+    setupAutoStart();
+  }, [settings.autoStart]);
 
   // Listen for tray menu toggle request
   useEffect(() => {

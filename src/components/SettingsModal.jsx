@@ -340,6 +340,24 @@ const SettingsModal = ({
               </div>
 
               <div className="setting-group">
+                <label>Start with Windows (Auto Start)</label>
+                <div className="toggle-group">
+                  <button
+                    className={`toggle-btn ${safeSettings.autoStart ? "active" : ""}`}
+                    onClick={() => handleSettingChange("autoStart", true)}
+                  >
+                    Enabled
+                  </button>
+                  <button
+                    className={`toggle-btn ${!safeSettings.autoStart ? "active" : ""}`}
+                    onClick={() => handleSettingChange("autoStart", false)}
+                  >
+                    Disabled
+                  </button>
+                </div>
+              </div>
+
+              <div className="setting-group">
                 <label>Background Style</label>
                 <div className="toggle-group">
                   <button
