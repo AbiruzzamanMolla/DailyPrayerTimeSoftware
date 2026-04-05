@@ -14,6 +14,10 @@ namespace DailyPrayerTime.Native
 {
     public partial class MainWindow : Window
     {
+        private const string TimeFmtFull = "hh:mm tt";
+        private const string TimeFmtShort = "hh:mm";
+        private const string CountdownFmt = "{0:D2}:{1:D2}:{2:D2}";
+
         private DispatcherTimer? _timer;
         private PrayerTimes? _todayPrayerTimes;
         private PrayerTimes? _tomorrowPrayerTimes;
@@ -170,27 +174,30 @@ namespace DailyPrayerTime.Native
             _todayPrayerTimes = new PrayerTimes(coordinates, today, parameters);
             _tomorrowPrayerTimes = new PrayerTimes(coordinates, tomorrow, parameters);
 
-            // Update UI list
-            // Update UI list with Ranges
-            string fmt = "hh:mm tt";
-            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToLocalTime().ToString(fmt)} - {_todayPrayerTimes.Sunrise.ToLocalTime().ToString(fmt)}";
-            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToLocalTime().ToString(fmt);
-            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToLocalTime().ToString(fmt)} - {_todayPrayerTimes.Asr.ToLocalTime().ToString(fmt)}";
-            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToLocalTime().ToString(fmt)} - {_todayPrayerTimes.Maghrib.ToLocalTime().ToString(fmt)}";
-            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToLocalTime().ToString(fmt)} - {_todayPrayerTimes.Isha.ToLocalTime().ToString(fmt)}";
-            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToLocalTime().ToString(fmt)} - {_tomorrowPrayerTimes.Fajr.ToLocalTime().ToString(fmt)}";
+            RefreshUIDisplay();
+        }
+
+        private void RefreshUIDisplay()
+        {
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
+
+            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull)}";
+            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull);
+            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Asr.ToLocalTime().ToString(TimeFmtFull)}";
+            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull)}";
+            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Isha.ToLocalTime().ToString(TimeFmtFull)}";
+            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToLocalTime().ToString(TimeFmtFull)} - {_tomorrowPrayerTimes.Fajr.ToLocalTime().ToString(TimeFmtFull)}";
             
-            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToLocalTime().ToString(fmt);
-            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToLocalTime().ToString(fmt);
+            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull);
+            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull);
             
-            // Set Prohibited Ranges (Short format)
             DateTime sunrise = _todayPrayerTimes.Sunrise.ToLocalTime();
             DateTime dhuhr = _todayPrayerTimes.Dhuhr.ToLocalTime();
             DateTime maghrib = _todayPrayerTimes.Maghrib.ToLocalTime();
 
-            SunriseProhibRange.Text = $"{sunrise.ToString("hh:mm")} - {sunrise.AddMinutes(15).ToString("hh:mm")}";
-            ZawalProhibRange.Text = $"{dhuhr.AddMinutes(-30).ToString("hh:mm")} - {dhuhr.ToString("hh:mm")}";
-            SunsetProhibRange.Text = $"{maghrib.AddMinutes(-15).ToString("hh:mm")} - {maghrib.ToString("hh:mm")}";
+            SunriseProhibRange.Text = $"{sunrise.ToString(TimeFmtShort)} - {sunrise.AddMinutes(15).ToString(TimeFmtShort)}";
+            ZawalProhibRange.Text = $"{dhuhr.AddMinutes(-30).ToString(TimeFmtShort)} - {dhuhr.ToString(TimeFmtShort)}";
+            SunsetProhibRange.Text = $"{maghrib.AddMinutes(-15).ToString(TimeFmtShort)} - {maghrib.ToString(TimeFmtShort)}";
 
             UpdateCountdown();
         }
@@ -269,44 +276,43 @@ namespace DailyPrayerTime.Native
             DateTime now = DateTime.Now;
             DateTime utcNow = DateTime.UtcNow;
 
-            var nextPrayer = _todayPrayerTimes.NextPrayer(utcNow);
-            DateTime nextTime;
-            
-            if (nextPrayer == Prayer.NONE)
-            {
-                // After Isha, next prayer is Fajr tomorrow
-                nextPrayer = Prayer.FAJR;
-                nextTime = _tomorrowPrayerTimes.Fajr.ToLocalTime();
-            }
-            else
-            {
-                nextTime = _todayPrayerTimes.TimeForPrayer(nextPrayer)!.Value.ToLocalTime();
-            }
+            var nextResult = GetNextPrayerInfo(utcNow);
+            Prayer nextPrayer = nextResult.nextPrayer;
+            DateTime nextTime = nextResult.nextTime;
 
             TimeSpan remaining = nextTime - now;
-            // If remaining is negative, something went wrong, let's recalibrate (might happen at midnight)
             if (remaining.TotalSeconds < 0)
             {
                  CalculatePrayerTimes();
                  return;
             }
 
+            string countStr = string.Format(CountdownFmt, remaining.Hours, remaining.Minutes, remaining.Seconds);
             var nextName = FormatPrayerName(nextPrayer);
-            string countStr = string.Format("{0:D2}:{1:D2}:{2:D2}", remaining.Hours, remaining.Minutes, remaining.Seconds);
             
-            // Current Prayer Detection
             var currentPrayer = _todayPrayerTimes.CurrentPrayer(utcNow);
-            Prayer curPrayer = currentPrayer;
-            
-            // Special handling for the night period (After Isha, before Fajr)
-            if (curPrayer == Prayer.NONE || (nextPrayer == Prayer.FAJR && now > _todayPrayerTimes.Isha.ToLocalTime())) 
-            {
-                curPrayer = Prayer.ISHA;
-            }
-            
+            Prayer curPrayer = currentPrayer == Prayer.NONE && now > _todayPrayerTimes.Isha.ToLocalTime() ? Prayer.ISHA : currentPrayer;
             string curName = FormatPrayerName(curPrayer);
 
-            // Dynamic Hero Labeling
+            UpdateHeroSection(currentPrayer, curName, nextName, countStr);
+            UpdateOverlay(currentPrayer, curName, nextName, countStr, nextTime);
+            CheckNotifications(currentPrayer);
+            UpdateProgressBar(currentPrayer, nextTime, now);
+            UpdatePrayerListHighlighting(curPrayer);
+        }
+
+        private (Prayer nextPrayer, DateTime nextTime) GetNextPrayerInfo(DateTime utcNow)
+        {
+            var nextPrayer = _todayPrayerTimes!.NextPrayer(utcNow);
+            if (nextPrayer == Prayer.NONE)
+            {
+                return (Prayer.FAJR, _tomorrowPrayerTimes!.Fajr.ToLocalTime());
+            }
+            return (nextPrayer, _todayPrayerTimes.TimeForPrayer(nextPrayer)!.Value.ToLocalTime());
+        }
+
+        private void UpdateHeroSection(Prayer currentPrayer, string curName, string nextName, string countStr)
+        {
             if (currentPrayer != Prayer.NONE)
             {
                 NextPrayerNameText.Text = curName;
@@ -317,23 +323,28 @@ namespace DailyPrayerTime.Native
                 NextPrayerNameText.Text = nextName;
                 HeroStatusText.Text = "starts in";
             }
-
             CountdownText.Text = countStr;
-            
-            if (_overlay != null)
-            {
-                _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";
-                _overlay.OverlayCountdownText.Text = countStr;
-                
-                DateTime? currentStart = _todayPrayerTimes.TimeForPrayer(curPrayer)?.ToLocalTime() ?? _todayPrayerTimes.Isha.ToLocalTime();
-                string rangeStr = $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}";
-                
-                _overlay.ToolTipCurrentText.Text = $"Current: {curName} ({rangeStr})";
-                _overlay.ToolTipNextText.Text = $"Next: {nextName} starts at {nextTime:hh:mm tt}";
-                _overlay.ForceTopmost();
-            }
+        }
 
-            // Notification Logic
+        private void UpdateOverlay(Prayer currentPrayer, string curName, string nextName, string countStr, DateTime nextTime)
+        {
+            if (_overlay == null) return;
+
+            _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";
+            _overlay.OverlayCountdownText.Text = countStr;
+            
+            DateTime? currentStart = _todayPrayerTimes?.TimeForPrayer(_todayPrayerTimes.CurrentPrayer(DateTime.UtcNow))?.ToLocalTime() 
+                                    ?? _todayPrayerTimes?.Isha.ToLocalTime();
+            
+            string rangeStr = currentStart.HasValue ? $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}" : "N/A";
+            
+            _overlay.ToolTipCurrentText.Text = $"Current: {curName} ({rangeStr})";
+            _overlay.ToolTipNextText.Text = $"Next: {nextName} starts at {nextTime:hh:mm tt}";
+            _overlay.ForceTopmost();
+        }
+
+        private void CheckNotifications(Prayer currentPrayer)
+        {
             if (currentPrayer != _lastPrayer && currentPrayer != Prayer.NONE)
             {
                 if (SettingsManager.Current.NotificationsEnabled)
@@ -346,10 +357,13 @@ namespace DailyPrayerTime.Native
                 }
                 _lastPrayer = currentPrayer;
             }
+        }
 
+        private void UpdateProgressBar(Prayer currentPrayer, DateTime nextTime, DateTime now)
+        {
             if (currentPrayer != Prayer.NONE)
             {
-                DateTime currentPrayerTime = _todayPrayerTimes.TimeForPrayer(currentPrayer)!.Value.ToLocalTime();
+                DateTime currentPrayerTime = _todayPrayerTimes!.TimeForPrayer(currentPrayer)!.Value.ToLocalTime();
                 double totalMs = (nextTime - currentPrayerTime).TotalMilliseconds;
                 double elapsedMs = (now - currentPrayerTime).TotalMilliseconds;
                 PrayerProgress.Value = Math.Min(100, Math.Max(0, (elapsedMs / totalMs) * 100));
@@ -358,11 +372,19 @@ namespace DailyPrayerTime.Native
             {
                 PrayerProgress.Value = 0;
             }
+        }
 
-            // Highlight active prayer card in UI
+        private static string FormatPrayerName(Prayer p)
+        {
+            if (p == Prayer.SUNRISE) return "Sunrise";
+            return char.ToUpper(p.ToString()[0]) + p.ToString().Substring(1).ToLower();
+        }
+
+        private void UpdatePrayerListHighlighting(Prayer curPrayer)
+        {
             ResetHighlighting(this);
-            var activeBg = new SolidColorBrush(WColor.FromArgb(40, 255, 255, 255)); // 15% white
-            var activeNameBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153)); // Secondary green (#34d399)
+            var activeBg = new SolidColorBrush(WColor.FromArgb(40, 255, 255, 255));
+            var activeNameBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153));
             var whiteBrush = new SolidColorBrush(Colors.White);
 
             switch (curPrayer)
@@ -376,17 +398,11 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private static string FormatPrayerName(Prayer p)
-        {
-            if (p == Prayer.SUNRISE) return "Sunrise";
-            return char.ToUpper(p.ToString()[0]) + p.ToString().Substring(1).ToLower();
-        }
-
         private static void ResetHighlighting(MainWindow window)
         {
-            var transparentBg = new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255)); // 10% white
+            var transparentBg = new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255));
             var whiteBrush = new SolidColorBrush(Colors.White);
-            var greenBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153)); // #34d399
+            var greenBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153));
             
             SetCardHighlight(window.FajrCard, window.FajrNameText, window.FajrTimeText, transparentBg, whiteBrush, greenBrush);
             SetCardHighlight(window.SunriseCard, window.SunriseNameText, window.SunriseTimeText, transparentBg, whiteBrush, greenBrush);

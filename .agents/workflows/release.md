@@ -32,7 +32,7 @@ Build the standalone, single-file executable for Windows x64.
 dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 
-- **Output Location**: `DailyPrayerTime.Native/bin/Release/net8.0-windows/win-x64/publish/DailyPrayerTime.Native.exe`
+- **Output Location**: `DailyPrayerTime.Native/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/DailyPrayerTime.Native.exe`
 
 ## 4. Git Versioning
 ```powershell
@@ -47,7 +47,7 @@ Create a release on GitHub and upload the `.exe`.
 
 ```powershell
 gh release create vx.x.x `
-  ./DailyPrayerTime.Native/bin/Release/net8.0-windows/win-x64/publish/DailyPrayerTime.Native.exe `
+  ./DailyPrayerTime.Native/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/DailyPrayerTime.Native.exe `
   --title "vx.x.x" `
   --notes "Release notes here"
 ```

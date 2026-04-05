@@ -8,9 +8,9 @@ namespace DailyPrayerTime.Native
 {
     public partial class OverlayWindow : Window
     {
-        const int GWL_EXSTYLE = -20;
-        const int WS_EX_NOACTIVATE = 0x08000000;
-        const int WS_EX_TOOLWINDOW = 0x00000080;
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_NOACTIVATE = 0x08000000;
+        private const int WS_EX_TOOLWINDOW = 0x00000080;
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hwnd, int index);
@@ -19,10 +19,10 @@ namespace DailyPrayerTime.Native
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
-        static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
-        const uint SWP_NOSIZE = 0x0001;
-        const uint SWP_NOMOVE = 0x0002;
-        const uint SWP_NOACTIVATE = 0x0010;
+        private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOMOVE = 0x0002;
+        private const uint SWP_NOACTIVATE = 0x0010;
 
         public OverlayWindow()
         {
@@ -50,7 +50,8 @@ namespace DailyPrayerTime.Native
         {
             var s = SettingsManager.Current;
             // Force reset on first launch after update to fix the Top docking issue
-            if (s.OverlayX == -1 || s.OverlayY == -1 || s.OverlayY > SystemParameters.WorkArea.Bottom - 90)
+            // Using range-based checks for floating-point values
+            if (s.OverlayX < 0 || s.OverlayY < 0 || s.OverlayY > SystemParameters.WorkArea.Bottom - 90)
             {
                 RepositionDefault();
             }
@@ -83,8 +84,6 @@ namespace DailyPrayerTime.Native
             SettingsManager.Save();
         }
 
-        }
-
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var sb = (Storyboard)this.Resources["ExpandAnim"];
@@ -95,6 +94,8 @@ namespace DailyPrayerTime.Native
         {
             var sb = (Storyboard)this.Resources["CollapseAnim"];
             sb.Begin();
+        }
+
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -102,7 +103,6 @@ namespace DailyPrayerTime.Native
                 this.DragMove();
                 SavePosition();
             }
-        }
         }
     }
 }
