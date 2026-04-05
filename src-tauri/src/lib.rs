@@ -9,7 +9,9 @@ use windows::Win32::Foundation::HWND;
 use windows::Win32::UI::WindowsAndMessaging::{
     GetWindowLongW, SetWindowLongW, SetWindowPos, GWL_EXSTYLE, HWND_TOPMOST, SWP_NOMOVE,
     SWP_NOSIZE, SWP_SHOWWINDOW, WS_EX_LAYERED, WS_EX_NOACTIVATE, WS_EX_TOPMOST,
+    SetParent, FindWindowA,
 };
+use windows::core::PCSTR;
 
 #[cfg(target_os = "windows")]
 fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
@@ -36,6 +38,18 @@ fn setup_native_window<R: Runtime>(window: WebviewWindow<R>) {
             0,
             SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW,
         );
+
+        // Taskbar Injection: Make the overlay a child of the Windows Taskbar
+        // This ensures the Windows 11 Taskbar will NEVER cover our overlay because they share the same Z-band
+        let taskbar_hwnd = FindWindowA(windows::core::PCSTR(b"Shell_TrayWnd\0".as_ptr()), windows::core::PCSTR::null());
+        if taskbar_hwnd.0 != 0 {
+            // Un-comment the line below if you want strict child injection, 
+            // but setting the taskbar as OWNER is usually safer for dragging:
+            // let _ = SetParent(hwnd_struct, taskbar_hwnd);
+            
+            // Actually, to fully inject into the taskbar hierarchy (what the user asked for), SetParent is correct
+            let _ = SetParent(hwnd_struct, taskbar_hwnd);
+        }
     }
 }
 
