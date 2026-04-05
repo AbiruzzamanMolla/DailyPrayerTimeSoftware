@@ -36,7 +36,7 @@
         <Border x:Name="HeroBorder" Grid.Row="1" Margin="20,10,20,20" CornerRadius="12" Background="#170939" Padding="20">
             <StackPanel>
                 <TextBlock x:Name="NextPrayerNameText" Text="Asr" Foreground="White" FontSize="28" FontWeight="Bold"/>
-                <TextBlock Text="ends in" Foreground="#b0aac0" FontSize="14" Margin="0,5,0,0"/>
+                <TextBlock Text="ends in" Foreground="White" Opacity="0.75" FontSize="14" Margin="0,5,0,0"/>
                 <TextBlock x:Name="CountdownText" Text="02:15:30" Foreground="White" FontSize="36" FontWeight="Bold"/>
                 
                 <ProgressBar x:Name="PrayerProgress" Height="4" Margin="0,15,0,0" Value="60" Maximum="100" Background="#3a2e5d" Foreground="#00ff00" BorderThickness="0"/>
@@ -126,7 +126,7 @@
 
         <!-- Footer -->
         <Border x:Name="FooterBorder" Grid.Row="3" Background="#170939" Padding="10">
-            <TextBlock Text="© 2026 Abiruzzaman Molla. All Rights Reserved." Foreground="#b0aac0" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="© 2026 Abiruzzaman Molla. All Rights Reserved." Foreground="White" Opacity="0.85" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Border>
     </Grid>
 </Window>
