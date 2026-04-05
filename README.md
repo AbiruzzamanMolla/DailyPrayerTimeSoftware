@@ -1,68 +1,39 @@
-# Daily Prayer Timer 🕋
+# Daily Prayer Timer (Native)
 
-A beautiful, lightweight, and modern prayer time desktop application built with **Tauri 2.0**, **React**, and **Rust**. Keep track of your daily prayers with a stunning dashboard and a convenient taskbar overlay.
+A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay.
 
-![App Dashboard Showcase](https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimerSoftware/main/public/screenshots/01.png)
+![Preview](DailyPrayerTime.Native/Resources/AppIcon.ico)
 
 ## 🚀 Key Features
+- **Taskbar Overlay**: A minimal, non-intrusive widget that docks to your taskbar (DU Meter style).
+- **Popup Expansion**: Hover over the overlay to see a smooth vertical "popup" growth with current and next prayer details.
+- **Glassmorphism UI**: Modern, premium design with semi-transparent backgrounds and vibrant Islamic Green gradients.
+- **Prohibited Time Alerts**: Automatic detection and visual warnings for sunrise, zawal, and sunset periods.
+- **Accurate Adhan Logic**: Powered by the Adhan library with support for various calculation methods and Madhabs.
+- **Tray Persistence**: Runs in the background with a system tray icon for quick access and settings.
 
-- **Dashboard View**: A full-featured window with beautiful gradients, countdown timers, and Hijri dates.
-- **Taskbar Overlay**: A minimalist, semi-transparent timer that sits cleanly on your taskbar or anywhere on your screen. Completely draggable and positionable.
-- **Tauri 2.0 Powered**: Ultra-fast performance and low resource usage compared to traditional desktop apps.
-- **Global Location Support**: Search thousands of cities worldwide or enter manual coordinates for absolute precision.
-- **Offline Calculations**: Uses the **Adhan-js** library to calculate timings locally. No internet required once configured.
-- **Theme Engine**: Customize background colors, gradients, and text styles to make the app truly yours.
-- **Windows Notifications**: Stay alerted with native system notifications for every prayer time.
-- **Ramadan Mode**: Special tracking for Sehri and Iftar times with progress bars.
-- **Prohibited Times Warning**: Real-time alerts for Sunrise, Zawal, and sunset periods where prayer is prohibited.
+## 🛠️ Tech Stack
+- **Framework**: WPF (.NET 8.0)
+- **Styling**: Vanilla XAML with custom glassmorphism styles
+- **Library**: `Adhan` for prayer time calculations
+- **Notifications**: `Microsoft.Toolkit.Uwp.Notifications`
 
-## 🛠️ Technology Stack
+## ⚙️ Configuration
+The app saves your preferences in `%APPDATA%\DailyPrayerTimeNative\settings.json`. You can configure:
+- **Location**: Search by city name (using LocationIQ API).
+- **Methods**: Karachi, UMM_AL_QURA, North America, etc.
+- **Madhab**: Standard (Shafi) or Hanafi.
+- **Theme**: Custom primary/secondary colors and background gradients.
+- **Auto-Start**: Toggle to run on Windows startup.
 
-- **Backend**: Rust (Tauri 2.0)
-- **Frontend**: React (Vite)
-- **Logic**: Adhan-js for prayer time calculations
-- **State Management**: LocalStorage for persistent settings
-- **Styling**: Modern CSS with Glassmorphism and Dynamic Gradients
+## 📦 Building from Source
+1. Clone the repository.
+2. Open in Visual Studio 2022 or use CLI.
+3. Run `dotnet publish -c Release -r win-x64 --self-contained`.
 
-## 📸 Screenshots
-
-|                                                        Dashboard                                                         |                                                    Theme Settings                                                     |                                                   Location Discovery                                                    |
-| :----------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
-| ![Dashboard](https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimerSoftware/main/public/screenshots/01.png) | ![Themes](https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimerSoftware/main/public/screenshots/02.png) | ![Location](https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimerSoftware/main/public/screenshots/03.png) |
-
-## ⚙️ Development & Build
-
-### Prerequisites
-
-- Rust & Cargo installed ([rust-lang.org](https://www.rust-lang.org/))
-- Node.js ([nodejs.org](https://nodejs.org/))
-
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/AbiruzzamanMolla/DailyPrayerTimerSoftware.git
-    cd DailyPrayerTimerSoftware
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-### Run Locally
-
-```bash
-npm run tauri dev
-```
-
-### Build for Windows
-
-```bash
-npm run tauri build
-```
-
-## 📜 License
-
-This project is licensed under the MIT License.
+## 📜 Dev Info
+Developed by **Abiruzzaman Molla**
+[GitHub Profile](https://github.com/AbiruzzamanMolla)
 
 ---
+© 2026 Abiruzzaman Molla. All Rights Reserved.

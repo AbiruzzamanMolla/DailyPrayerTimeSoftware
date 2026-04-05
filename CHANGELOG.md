@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-04-06
+
+### Added
+- Complete migration from Tauri (JS/Rust) to **Native WPF (.NET 8.0)** for maximum performance and stability.
+- **Glassmorphism UI**: Redesigned all windows with premium blurred backgrounds and vibrant Islamic Green themes.
+- **Vertical Popup Overlay**: The taskbar overlay now expands upwards like a professional system popup on hover.
+- **Improved Taskbar Docking**: Reliable docking and repositioning logic that respects the Windows work area and supports manual dragging.
+- **Prohibited Prayer Times**: Integrated prohibited time display (Sunrise, Zawal, Sunset) with visual warnings.
+- **Tray Toggle**: Quickly show/hide the overlay directly from the system tray context menu.
+- **GitHub Integration**: Added developer profile link in the Settings menu.
+
+### Fixed
+- Fixed flickering when hovering over the taskbar overlay.
+- Fixed inaccurate prayer status labels (e.g. "Fajr ends in" correctly identified).
+- Fixed text clipping for AM/PM and long prayer names.
+
+## [0.4.0] - 2026-04-06
+
+### Added
+- Implemented deep native Windows taskbar injection using Rust Win32 bindings (`SetParent` to `Shell_TrayWnd`) so the overlay is natively integrated and cannot be hidden by the Windows taskbar.
+
 ## [0.3.0] - 2026-04-01
 
 ### Added

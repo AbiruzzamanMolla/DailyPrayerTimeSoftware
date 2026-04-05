@@ -19,10 +19,20 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# .NET artifacts
+bin/
+obj/
+publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
 # Editor/System
 .vscode/*
 !.vscode/extensions.json
 .idea
+.vs/
 .DS_Store
 *.suo
 *.sw?

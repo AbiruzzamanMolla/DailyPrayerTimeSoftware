@@ -1,0 +1,1 @@
+using System; using Batoulapps.Adhan; class T { static void M() { var p = new PrayerTimes(new Coordinates(0,0), new Batoulapps.Adhan.Internal.DateComponents(2024,1,1), Batoulapps.Adhan.CalculationMethod.KARACHI.GetParameters()); var s = p.Maghrib; var s2 = p.GetType().GetProperty("Sunset") != null; Console.WriteLine(s2); } }
