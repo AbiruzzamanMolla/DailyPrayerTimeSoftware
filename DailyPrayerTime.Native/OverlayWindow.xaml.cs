@@ -83,6 +83,8 @@ namespace DailyPrayerTime.Native
             SettingsManager.Save();
         }
 
+        }
+
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             var sb = (Storyboard)this.Resources["ExpandAnim"];
@@ -93,8 +95,6 @@ namespace DailyPrayerTime.Native
         {
             var sb = (Storyboard)this.Resources["CollapseAnim"];
             sb.Begin();
-        }
-
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -102,6 +102,7 @@ namespace DailyPrayerTime.Native
                 this.DragMove();
                 SavePosition();
             }
+        }
         }
     }
 }

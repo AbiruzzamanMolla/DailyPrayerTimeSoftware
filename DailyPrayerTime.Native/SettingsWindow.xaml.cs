@@ -150,7 +150,6 @@ namespace DailyPrayerTime.Native
                 if (btn != null) btn.Content = "Search";
             }
         }
-
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             try {
