@@ -54,12 +54,32 @@ namespace DailyPrayerTime.Native
             cms.Items.Add("-");
             cms.Items.Add("Exit", null, (s, e) => System.Windows.Application.Current.Shutdown());
             _notifyIcon.ContextMenuStrip = cms;
-            _notifyIcon.DoubleClick += (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); };
+            _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
+            
+            this.Closing += (s, e) =>
+            {
+                e.Cancel = true;
+                this.Hide();
+            };
+        }
+
+        private void ShowWindow()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            Activate();
         }
 
         protected override void OnStateChanged(EventArgs e)
         {
-            if (WindowState == WindowState.Minimized) Hide();
+            if (WindowState == WindowState.Minimized)
+            {
+                this.Hide();
+                if (_notifyIcon != null)
+                {
+                    _notifyIcon.ShowBalloonTip(2000, "Daily Prayer Timer", "App is running in the background.", Forms.ToolTipIcon.Info);
+                }
+            }
             base.OnStateChanged(e);
         }
 

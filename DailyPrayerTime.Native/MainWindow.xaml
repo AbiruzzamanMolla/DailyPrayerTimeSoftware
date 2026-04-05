@@ -39,11 +39,11 @@
                 <TextBlock Text="ends in" Foreground="White" Opacity="0.75" FontSize="14" Margin="0,5,0,0"/>
                 <TextBlock x:Name="CountdownText" Text="02:15:30" Foreground="White" FontSize="36" FontWeight="Bold"/>
                 
-                <ProgressBar x:Name="PrayerProgress" Height="4" Margin="0,15,0,0" Value="60" Maximum="100" Background="#3a2e5d" Foreground="#00ff00" BorderThickness="0"/>
+                <ProgressBar x:Name="PrayerProgress" Height="4" Margin="0,15,0,0" Value="60" Maximum="100" Background="#33FFFFFF" Foreground="#10b981" BorderThickness="0"/>
                 
                 <UniformGrid Columns="2" Margin="0,15,0,0">
-                    <TextBlock x:Name="HeroSunriseText" Text="&#x2600; Sunrise: --" Foreground="#b0aac0" FontSize="12" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
-                    <TextBlock x:Name="HeroSunsetText" Text="&#x1F315; Sunset: --" Foreground="#b0aac0" FontSize="12" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="HeroSunriseText" Text="&#x2600; Sunrise: --" Foreground="White" Opacity="0.85" FontSize="12" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="HeroSunsetText" Text="&#x1F315; Sunset: --" Foreground="White" Opacity="0.85" FontSize="12" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis"/>
                 </UniformGrid>
 
                 <!-- Prohibited Times Warning -->

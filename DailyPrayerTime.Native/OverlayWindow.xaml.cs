@@ -1,8 +1,8 @@
-using System;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
+using System.Runtime.InteropServices;
 
 namespace DailyPrayerTime.Native
 {
@@ -14,14 +14,8 @@ namespace DailyPrayerTime.Native
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hwnd, int index);
-
         [DllImport("user32.dll")]
         private static extern int SetWindowLong(IntPtr hwnd, int index, int newStyle);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
-
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
 
@@ -30,21 +24,12 @@ namespace DailyPrayerTime.Native
         const uint SWP_NOMOVE = 0x0002;
         const uint SWP_NOACTIVATE = 0x0010;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct Rect
-        {
-            public int Left;        // x position of upper-left corner
-            public int Top;         // y position of upper-left corner
-            public int Right;       // x position of lower-right corner
-            public int Bottom;      // y position of lower-right corner
-        }
-
         public OverlayWindow()
         {
             InitializeComponent();
-            this.Loaded += OverlayWindow_Loaded;
-            this.MouseLeftButtonDown += Overlay_MouseDown;
-            this.MouseLeftButtonUp += Overlay_MouseUp;
+            this.Loaded += (s, e) => Reposition();
+            // Watch for taskbar changes
+            SystemParameters.StaticPropertyChanged += (s, e) => { if (e.PropertyName == "WorkArea") Reposition(); };
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -57,47 +42,32 @@ namespace DailyPrayerTime.Native
 
         public void ForceTopmost()
         {
-            try
-            {
-                var hwnd = new WindowInteropHelper(this).Handle;
-                SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 1, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-            }
-            catch (Exception)
-            {
-                // Ignore errors during window position updates
-            }
+            var hwnd = new WindowInteropHelper(this).Handle;
+            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
 
-        private void OverlayWindow_Loaded(object sender, RoutedEventArgs e)
+        private void Reposition()
         {
-            // Set position from settings or default to bottom right
-            double x = SettingsManager.Current.OverlayX;
-            double y = SettingsManager.Current.OverlayY;
-
-            if (Math.Abs(x - (-1)) < 0.01 || Math.Abs(y - (-1)) < 0.01)
-            {
-                // Default to bottom right of primary screen, above taskbar
-                var workArea = SystemParameters.WorkArea;
-                x = workArea.Right - this.Width - 100;
-                y = workArea.Bottom - this.Height - 10;
-            }
-
-            this.Left = x;
-            this.Top = y;
+            var workArea = SystemParameters.WorkArea;
+            // Dock to bottom right, slightly above taskbar
+            this.Left = workArea.Right - this.Width - 10; 
+            this.Top = workArea.Bottom - this.Height - 5;
         }
 
-        private void Overlay_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
+            var sb = (Storyboard)this.Resources["ExpandAnim"];
+            sb.Begin();
+            // When expanding, we might need to shift Left to keep it in view if it's too wide
+            var workArea = SystemParameters.WorkArea;
+            this.Left = workArea.Right - 350 - 10; 
         }
 
-        private void Overlay_MouseUp(object sender, MouseButtonEventArgs e)
+        private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            // Save absolute position when drag finishes
-            SettingsManager.Current.OverlayX = this.Left;
-            SettingsManager.Current.OverlayY = this.Top;
-            SettingsManager.Save();
+            var sb = (Storyboard)this.Resources["CollapseAnim"];
+            sb.Begin();
+            Reposition();
         }
     }
 }

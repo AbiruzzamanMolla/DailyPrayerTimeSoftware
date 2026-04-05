@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DailyPrayerTime.Native")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7038a70a65a3fa79d0e9f3a7363fbff76976f732")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26ea38191d3e3a9bf70968ca400e14982c2900c4")]
 [assembly: System.Reflection.AssemblyProductAttribute("DailyPrayerTime.Native")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DailyPrayerTime.Native")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

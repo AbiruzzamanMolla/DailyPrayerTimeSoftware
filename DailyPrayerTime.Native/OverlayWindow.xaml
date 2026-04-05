@@ -1,29 +1,41 @@
 <Window x:Class="DailyPrayerTime.Native.OverlayWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Prayer Overlay" Height="34" SizeToContent="Width"
+        Title="Prayer Overlay" Height="30" Width="160" x:Name="OverlayRoot"
         WindowStyle="None" ResizeMode="NoResize"
         AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False">
-    <Border Background="#A6042f2e" CornerRadius="6" BorderBrush="#26FFFFFF" BorderThickness="1" Padding="12,0" x:Name="OverlayBorder">
-        <Border.ToolTip>
-            <ToolTip>
-                <StackPanel>
-                    <TextBlock x:Name="ToolTipCurrentText" FontWeight="Bold" Text="Current: --"/>
-                    <TextBlock x:Name="ToolTipNextText" Foreground="#666666" Text="Next: --"/>
-                </StackPanel>
-            </ToolTip>
-        </Border.ToolTip>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <!-- Green indicator line -->
-            <Border Width="2" Height="12" Background="#00ff00" CornerRadius="1" Margin="0,0,10,0">
-                <Border.Effect>
-                    <DropShadowEffect Color="#00ff00" BlurRadius="4" ShadowDepth="0"/>
-                </Border.Effect>
-            </Border>
-            
-            <TextBlock x:Name="OverlayNameText" Text="Next:" Foreground="#99FFFFFF" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center"/>
-            <TextBlock x:Name="OverlayCountdownText" Text="--:--" Foreground="#00ff00" FontSize="14" FontFamily="Consolas" VerticalAlignment="Center" FontWeight="Bold"/>
+    <Window.Resources>
+        <Storyboard x:Key="ExpandAnim">
+            <DoubleAnimation Storyboard.TargetName="OverlayRoot" Storyboard.TargetProperty="Width" To="350" Duration="0:0:0.3">
+                <DoubleAnimation.EasingFunction><PowerEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ExtraDetails" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
+        </Storyboard>
+        <Storyboard x:Key="CollapseAnim">
+            <DoubleAnimation Storyboard.TargetName="OverlayRoot" Storyboard.TargetProperty="Width" To="160" Duration="0:0:0.2">
+                <DoubleAnimation.EasingFunction><PowerEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+            <DoubleAnimation Storyboard.TargetName="ExtraDetails" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
+        </Storyboard>
+    </Window.Resources>
+    
+    <Border Background="#CC022c22" CornerRadius="4" BorderBrush="#33FFFFFF" BorderThickness="1" 
+            MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave" 
+            MouseLeftButtonDown="Border_MouseLeftButtonDown" x:Name="OverlayBorder">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+            <!-- Normal Content (Always Visible) -->
+            <StackPanel Orientation="Horizontal" Width="140">
+                <Border Width="3" Height="14" Background="#10b981" CornerRadius="1" Margin="0,0,8,0"/>
+                <TextBlock x:Name="OverlayNameText" Text="Fajr ends in:" Foreground="#B0B0B0" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <TextBlock x:Name="OverlayCountdownText" Text="00:00:00" Foreground="#2ECC71" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Expanded Details (Fades in) -->
+            <StackPanel x:Name="ExtraDetails" Orientation="Horizontal" Opacity="0" Margin="10,0,0,0">
+                <TextBlock x:Name="ToolTipCurrentText" Text="Current: --" Foreground="#B0B0B0" FontSize="10" VerticalAlignment="Center" Margin="0,0,15,0"/>
+                <TextBlock x:Name="ToolTipNextText" Text="Next: --" Foreground="#B0B0B0" FontSize="10" VerticalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
     </Border>
 </Window>
