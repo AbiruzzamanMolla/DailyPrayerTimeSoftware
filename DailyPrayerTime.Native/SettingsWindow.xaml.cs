@@ -3,6 +3,11 @@ using System.Windows;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Batoulapps.Adhan;
+using System.Linq;
+using System.Windows.Controls;
+using System.Net.Http;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace DailyPrayerTime.Native
 {
@@ -10,13 +15,117 @@ namespace DailyPrayerTime.Native
     {
         private CombinedPrayerTimes? _today;
         private CombinedPrayerTimes? _tomorrow;
+        private System.Windows.Media.MediaPlayer _testPlayer = new System.Windows.Media.MediaPlayer();
 
         public SettingsWindow(CombinedPrayerTimes? today, CombinedPrayerTimes? tomorrow)
         {
             _today = today;
             _tomorrow = tomorrow;
             InitializeComponent();
+            InitializeTimeInputs();
             LoadForm();
+            
+            // Wire up time format change event
+            TimeFormatInput.SelectionChanged += TimeFormatInput_SelectionChanged;
+        }
+
+        private void InitializeTimeInputs()
+        {
+            // Initial population is now handled by PopulateHints which is called in LoadForm
+            UpdateHourItems();
+        }
+
+        private void UpdateHourItems()
+        {
+            var selectedItem = TimeFormatInput.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            bool is24h = selectedItem?.Content.ToString()?.Contains("24") ?? false;
+            
+            // If we have prayer times, we will filter for each combo specifically in PopulateHints
+            // For now, these are the defaults:
+            var defaultHours = is24h 
+                ? Enumerable.Range(0, 24).Select(i => i.ToString("D2")).ToList()
+                : Enumerable.Range(1, 12).Select(i => i.ToString("D2")).ToList();
+
+            foreach (var combo in new[] { FajrHourInput, DhuhrHourInput, AsrHourInput, MaghribHourInput, IshaHourInput })
+            {
+                if (combo.ItemsSource == null) combo.ItemsSource = defaultHours;
+            }
+
+            var visibility = is24h ? Visibility.Collapsed : Visibility.Visible;
+            foreach (var combo in new[] { FajrAmPmInput, DhuhrAmPmInput, AsrAmPmInput, MaghribAmPmInput, IshaAmPmInput })
+            {
+                combo.Visibility = visibility;
+                if (combo.SelectedIndex == -1) combo.SelectedIndex = 0;
+            }
+
+            PopulateHints();
+        }
+
+        private void TimeFormatInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = TimeFormatInput.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            if (selectedItem == null) return;
+
+            bool to24h = selectedItem.Content.ToString()?.Contains("24") ?? false;
+            
+            // Simple approach: temporarily store current times as 24h internal
+            var fajr = GetTimeFromInputs(FajrHourInput, FajrMinuteInput, FajrAmPmInput, !to24h);
+            var dhuhr = GetTimeFromInputs(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, !to24h);
+            var asr = GetTimeFromInputs(AsrHourInput, AsrMinuteInput, AsrAmPmInput, !to24h);
+            var maghrib = GetTimeFromInputs(MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, !to24h);
+            var isha = GetTimeFromInputs(IshaHourInput, IshaMinuteInput, IshaAmPmInput, !to24h);
+
+            UpdateHourItems();
+            PopulateHints();
+
+            // Set them back
+            SetTimeToInputs(fajr, FajrHourInput, FajrMinuteInput, FajrAmPmInput, to24h);
+            SetTimeToInputs(dhuhr, DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, to24h);
+            SetTimeToInputs(asr, AsrHourInput, AsrMinuteInput, AsrAmPmInput, to24h);
+            SetTimeToInputs(maghrib, MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, to24h);
+            SetTimeToInputs(isha, IshaHourInput, IshaMinuteInput, IshaAmPmInput, to24h);
+        }
+
+        private string GetTimeFromInputs(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool was12h)
+        {
+            try
+            {
+                int hh = int.Parse(h.SelectedItem as string ?? "0");
+                int mm = int.Parse(m.SelectedItem as string ?? "0");
+                if (was12h)
+                {
+                    string ap = (ampm.SelectedItem as System.Windows.Controls.ComboBoxItem)?.Content.ToString() ?? "AM";
+                    if (ap == "PM" && hh < 12) hh += 12;
+                    else if (ap == "AM" && hh == 12) hh = 0;
+                }
+                return $"{hh:D2}:{mm:D2}";
+            }
+            catch { return "00:00"; }
+        }
+
+        private void SetTimeToInputs(string time, System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool isUI24h)
+        {
+            if (string.IsNullOrEmpty(time) || !time.Contains(":")) return;
+            var parts = time.Split(':');
+            int hh = int.Parse(parts[0]);
+            string mm = parts[1];
+
+            if (isUI24h)
+            {
+                h.SelectedItem = hh.ToString("D2");
+            }
+            else
+            {
+                string ap = hh >= 12 ? "PM" : "AM";
+                int h12 = hh % 12;
+                if (h12 == 0) h12 = 12;
+                h.SelectedItem = h12.ToString("D2");
+                foreach (System.Windows.Controls.ComboBoxItem item in ampm.Items)
+                {
+                    if (item.Content.ToString() == ap) { ampm.SelectedItem = item; break; }
+                }
+            }
+            m.SelectedItem = mm;
         }
 
         private void LoadForm()
@@ -36,26 +145,32 @@ namespace DailyPrayerTime.Native
             }
 
             MadhabInput.SelectedIndex = s.School == 1 ? 1 : 0;
+            
             OverlayInput.IsChecked = s.ShowOverlay;
             NotificationsInput.IsChecked = s.NotificationsEnabled;
-            AutoStartInput.IsChecked = s.AutoStart;
-
+            
             GradStartInput.Text = s.GradientStart;
             GradEndInput.Text = s.GradientEnd;
             PrimaryColorInput.Text = s.PrimaryColor;
             SecondaryColorInput.Text = s.SecondaryColor;
 
-            FajrJamaatTimeInput.Text = s.FajrJamaatTime;
-            DhuhrJamaatTimeInput.Text = s.DhuhrJamaatTime;
-            AsrJamaatTimeInput.Text = s.AsrJamaatTime;
-            MaghribJamaatTimeInput.Text = s.MaghribJamaatTime;
-            IshaJamaatTimeInput.Text = s.IshaJamaatTime;
+            AutoStartInput.IsChecked = s.AutoStart;
+            ExternalApiInput.IsChecked = s.UseExternalApi;
+
+            bool is24h = s.TimeFormat == "24h";
+            TimeFormatInput.SelectedIndex = is24h ? 1 : 0;
+            
+            SetTimeToInputs(s.FajrJamaatTime, FajrHourInput, FajrMinuteInput, FajrAmPmInput, is24h);
+            SetTimeToInputs(s.DhuhrJamaatTime, DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, is24h);
+            SetTimeToInputs(s.AsrJamaatTime, AsrHourInput, AsrMinuteInput, AsrAmPmInput, is24h);
+            SetTimeToInputs(s.MaghribJamaatTime, MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, is24h);
+            SetTimeToInputs(s.IshaJamaatTime, IshaHourInput, IshaMinuteInput, IshaAmPmInput, is24h);
+
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
 
             AdhanAlarmEnabledInput.IsChecked = s.AdhanAlarmEnabled;
             AdhanAlarmOffsetInput.Text = s.AdhanAlarmOffset.ToString();
             AdhanSoundPathInput.Text = s.AdhanSoundPath;
-            ExternalApiInput.IsChecked = s.UseExternalApi;
 
             PopulateHints();
         }
@@ -63,12 +178,98 @@ namespace DailyPrayerTime.Native
         private void PopulateHints()
         {
             if (_today == null || _tomorrow == null) return;
+            var selectedItem = TimeFormatInput?.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            bool is24h = selectedItem?.Content.ToString()?.Contains("24") ?? false;
+            string fmt = is24h ? "HH:mm" : "hh:mm tt";
 
-            FajrRangeHint.Text = $"Today: {_today.Fajr:HH:mm} - {_today.Sunrise:HH:mm}";
-            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr:HH:mm} - {_today.Asr:HH:mm}";
-            AsrRangeHint.Text = $"Today: {_today.Asr:HH:mm} - {_today.Maghrib:HH:mm}";
-            MaghribRangeHint.Text = $"Today: {_today.Maghrib:HH:mm} - {_today.Isha:HH:mm}";
-            IshaRangeHint.Text = $"Today: {_today.Isha:HH:mm} - {_tomorrow.Fajr:HH:mm}";
+            FajrRangeHint.Text = $"Today: {_today.Fajr.ToString(fmt)} - {_today.Sunrise.ToString(fmt)}";
+            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr.ToString(fmt)} - {_today.Asr.ToString(fmt)}";
+            AsrRangeHint.Text = $"Today: {_today.Asr.ToString(fmt)} - {_today.Maghrib.ToString(fmt)}";
+            MaghribRangeHint.Text = $"Today: {_today.Maghrib.ToString(fmt)} - {_today.Isha.ToString(fmt)}";
+            IshaRangeHint.Text = $"Today: {_today.Isha.ToString(fmt)} - {_tomorrow.Fajr.ToString(fmt)}";
+
+            FilterCombo(FajrHourInput, FajrMinuteInput, FajrAmPmInput, _today.Fajr, _today.Sunrise, is24h);
+            FilterCombo(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, _today.Dhuhr, _today.Asr, is24h);
+            FilterCombo(AsrHourInput, AsrMinuteInput, AsrAmPmInput, _today.Asr, _today.Maghrib, is24h);
+            FilterCombo(MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, _today.Maghrib, _today.Isha, is24h);
+            FilterCombo(IshaHourInput, IshaMinuteInput, IshaAmPmInput, _today.Isha, _tomorrow.Fajr, is24h);
+        }
+
+        private void FilterCombo(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, DateTime start, DateTime end, bool is24h)
+        {
+            string? currentH = h.SelectedItem as string;
+            string? currentM = m.SelectedItem as string;
+
+            var validHours = GetValidHours(start, end, is24h);
+            h.ItemsSource = validHours;
+            if (currentH != null && validHours.Contains(currentH)) h.SelectedItem = currentH;
+            else h.SelectedIndex = 0;
+
+            UpdateMinuteCombo(h, m, ampm, start, end, is24h);
+            if (currentM != null && (m.ItemsSource as List<string>)?.Contains(currentM) == true) m.SelectedItem = currentM;
+        }
+
+        private List<string> GetValidHours(DateTime start, DateTime end, bool is24h)
+        {
+            var hours = new List<int>();
+            DateTime current = new DateTime(start.Year, start.Month, start.Day, start.Hour, 0, 0);
+            while (current <= end)
+            {
+                if (!hours.Contains(current.Hour)) hours.Add(current.Hour);
+                current = current.AddHours(1);
+            }
+
+            if (is24h) return hours.Select(h => h.ToString("D2")).ToList();
+            
+            return hours.Select(h => {
+                int h12 = h % 12;
+                if (h12 == 0) h12 = 12;
+                return h12.ToString("D2");
+            }).Distinct().OrderBy(s => s).ToList();
+        }
+
+        private void HourInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_today == null || _tomorrow == null) return;
+            var selectedItem = TimeFormatInput?.SelectedItem as System.Windows.Controls.ComboBoxItem;
+            bool is24h = selectedItem?.Content.ToString()?.Contains("24") ?? false;
+
+            if (sender == FajrHourInput || sender == FajrAmPmInput) UpdateMinuteCombo(FajrHourInput, FajrMinuteInput, FajrAmPmInput, _today.Fajr, _today.Sunrise, is24h);
+            else if (sender == DhuhrHourInput || sender == DhuhrAmPmInput) UpdateMinuteCombo(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, _today.Dhuhr, _today.Asr, is24h);
+            else if (sender == AsrHourInput || sender == AsrAmPmInput) UpdateMinuteCombo(AsrHourInput, AsrMinuteInput, AsrAmPmInput, _today.Asr, _today.Maghrib, is24h);
+            else if (sender == MaghribHourInput || sender == MaghribAmPmInput) UpdateMinuteCombo(MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, _today.Maghrib, _today.Isha, is24h);
+            else if (sender == IshaHourInput || sender == IshaAmPmInput) UpdateMinuteCombo(IshaHourInput, IshaMinuteInput, IshaAmPmInput, _today.Isha, _tomorrow.Fajr, is24h);
+        }
+
+        private void UpdateMinuteCombo(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, DateTime start, DateTime end, bool is24h)
+        {
+            string? selH = h.SelectedItem as string;
+            if (selH == null) return;
+
+            int hour24 = int.Parse(selH);
+            if (!is24h)
+            {
+                string ap = (ampm.SelectedItem as System.Windows.Controls.ComboBoxItem)?.Content.ToString() ?? "AM";
+                if (ap == "PM" && hour24 < 12) hour24 += 12;
+                else if (ap == "AM" && hour24 == 12) hour24 = 0;
+            }
+
+            var minutes = new List<string>();
+            for (int min = 0; min < 60; min++)
+            {
+                DateTime check;
+                if (hour24 < start.Hour && hour24 <= end.Hour && start.Hour > end.Hour) 
+                    check = new DateTime(end.Year, end.Month, end.Day, hour24, min, 0);
+                else
+                    check = new DateTime(start.Year, start.Month, start.Day, hour24, min, 0);
+
+                if (check >= start && check <= end)
+                {
+                    minutes.Add(min.ToString("D2"));
+                }
+            }
+            m.ItemsSource = minutes;
+            if (m.SelectedIndex == -1) m.SelectedIndex = 0;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -101,17 +302,23 @@ namespace DailyPrayerTime.Native
             s.PrimaryColor = PrimaryColorInput.Text;
             s.SecondaryColor = SecondaryColorInput.Text;
 
-            s.FajrJamaatTime = FajrJamaatTimeInput.Text;
-            s.DhuhrJamaatTime = DhuhrJamaatTimeInput.Text;
-            s.AsrJamaatTime = AsrJamaatTimeInput.Text;
-            s.MaghribJamaatTime = MaghribJamaatTimeInput.Text;
-            s.IshaJamaatTime = IshaJamaatTimeInput.Text;
-            if (int.TryParse(JamaatPopupOffsetInput.Text, out int jpo)) s.JamaatPopupOffset = jpo;
+            s.AutoStart = AutoStartInput.IsChecked ?? false;
+            s.UseExternalApi = ExternalApiInput.IsChecked ?? false;
+            
+            bool is24h = TimeFormatInput.SelectedIndex == 1;
+            s.TimeFormat = is24h ? "24h" : "12h";
+
+            s.FajrJamaatTime = GetTimeFromInputs(FajrHourInput, FajrMinuteInput, FajrAmPmInput, !is24h);
+            s.DhuhrJamaatTime = GetTimeFromInputs(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, !is24h);
+            s.AsrJamaatTime = GetTimeFromInputs(AsrHourInput, AsrMinuteInput, AsrAmPmInput, !is24h);
+            s.MaghribJamaatTime = GetTimeFromInputs(MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, !is24h);
+            s.IshaJamaatTime = GetTimeFromInputs(IshaHourInput, IshaMinuteInput, IshaAmPmInput, !is24h);
+
+            if (int.TryParse(JamaatPopupOffsetInput.Text, out int offset)) s.JamaatPopupOffset = offset;
 
             s.AdhanAlarmEnabled = AdhanAlarmEnabledInput.IsChecked ?? false;
             if (int.TryParse(AdhanAlarmOffsetInput.Text, out int aao)) s.AdhanAlarmOffset = aao;
             s.AdhanSoundPath = AdhanSoundPathInput.Text;
-            s.UseExternalApi = ExternalApiInput.IsChecked ?? true;
 
             SettingsManager.Save();
             this.DialogResult = true;
@@ -204,12 +411,93 @@ namespace DailyPrayerTime.Native
                 if (btn != null) btn.Content = "Search";
             }
         }
+        private void TestAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(AdhanSoundPathInput.Text) || !System.IO.File.Exists(AdhanSoundPathInput.Text))
+            {
+                System.Windows.MessageBox.Show("Please select a valid Adhan sound file first.", "Test Sound", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                _testPlayer.Open(new Uri(AdhanSoundPathInput.Text));
+                _testPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void TestPopup_Click(object sender, RoutedEventArgs e)
+        {
+            var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
+            popup.Owner = this;
+            popup.Show();
+        }
+
         private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
             try {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
                 e.Handled = true;
             } catch { /* Handle error */ }
+        }
+        private void PickColor_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button btn && btn.Tag is string tag)
+            {
+                using (var dialog = new System.Windows.Forms.ColorDialog())
+                {
+                    if (tag == "Primary") dialog.Color = System.Drawing.ColorTranslator.FromHtml(PrimaryColorInput?.Text ?? "#000000");
+                    else dialog.Color = System.Drawing.ColorTranslator.FromHtml(SecondaryColorInput?.Text ?? "#000000");
+
+                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        string hex = $"#{dialog.Color.R:X2}{dialog.Color.G:X2}{dialog.Color.B:X2}";
+                        if (tag == "Primary" && PrimaryColorInput != null) PrimaryColorInput.Text = hex;
+                        else if (tag == "Secondary" && SecondaryColorInput != null) SecondaryColorInput.Text = hex;
+                        else if (tag == "GradStart" && GradStartInput != null) GradStartInput.Text = hex;
+                        else if (tag == "GradEnd" && GradEndInput != null) GradEndInput.Text = hex;
+                    }
+                }
+            }
+        }
+        private async void DownloadDefault_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as System.Windows.Controls.Button;
+            if (btn == null) return;
+
+            string originalContent = btn.Content.ToString() ?? "Download Default";
+            btn.Content = "Downloading...";
+            btn.IsEnabled = false;
+
+            try
+            {
+                string appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+                string assets = Path.Combine(appData, "assets");
+                if (!Directory.Exists(assets)) Directory.CreateDirectory(assets);
+
+                string destPath = Path.Combine(assets, "default_adhan.mp3");
+                string adhanUrl = "https://www.islamcan.com/audio/adhan/azan1.mp3"; 
+
+                using var client = new HttpClient();
+                var data = await client.GetByteArrayAsync(adhanUrl);
+                await File.WriteAllBytesAsync(destPath, data);
+
+                AdhanSoundPathInput.Text = destPath;
+                System.Windows.MessageBox.Show("Default Adhan downloaded successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Failed to download Adhan: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                btn.Content = originalContent;
+                btn.IsEnabled = true;
+            }
         }
     }
 }

@@ -16,6 +16,9 @@ namespace DailyPrayerTime.Native
             _targetTime = targetTime;
             PrayerNameText.Text = $"{prayerName} Congregation";
             
+            string timeFmt = SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
+            TargetTimeText.Text = $"Starts at {targetTime.ToString(timeFmt)}";
+            
             ApplyTheme();
             
             _timer = new DispatcherTimer();

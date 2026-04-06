@@ -1,4 +1,5 @@
 # Daily Prayer Timer (Native)
+Version: 1.5.4
 
 A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay.
 
@@ -9,7 +10,9 @@ A premium, glassmorphic Windows desktop application for Islamic prayer time trac
 - **Popup Expansion**: Hover over the overlay to see a smooth vertical "popup" growth with current and next prayer details.
 - **Glassmorphism UI**: Modern, premium design with semi-transparent backgrounds and vibrant Islamic Green gradients.
 - **Prohibited Time Alerts**: Automatic detection and visual warnings for sunrise, zawal, and sunset periods.
-- **Accurate Adhan Logic**: Powered by the Adhan library with support for various calculation methods and Madhabs.
+- **Smart Congregation Entry**: Time selectors in Settings are now strictly filtered to each prayer's valid range (e.g., you can't set Fajr Jamaat at 10 AM).
+- **Adhan Sound Management**: Integrated downloader for default Adhan audio and built-in "Test Sound" for verification.
+- **Premium Themes**: Full control over primary/secondary colors and background gradients with a native color picker.
 - **Tray Persistence**: Runs in the background with a system tray icon for quick access and settings.
 
 ## 🛠️ Tech Stack

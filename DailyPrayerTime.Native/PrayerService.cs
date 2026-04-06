@@ -16,6 +16,8 @@ namespace DailyPrayerTime.Native
         public DateTime Asr { get; set; }
         public DateTime Maghrib { get; set; }
         public DateTime Isha { get; set; }
+        public DateTime Suhur { get; set; } // End of Sehri (Imsak)
+        public DateTime Iftar { get; set; } // Maghrib time
         public string HijriDate { get; set; } = "";
 
         public CombinedPrayerTimes() { }
@@ -28,6 +30,8 @@ namespace DailyPrayerTime.Native
             Asr = local.Asr.ToLocalTime();
             Maghrib = local.Maghrib.ToLocalTime();
             Isha = local.Isha.ToLocalTime();
+            Suhur = local.Fajr.ToLocalTime(); // Fallback for local
+            Iftar = local.Maghrib.ToLocalTime();
         }
 
         public Prayer CurrentPrayer(DateTime now)
@@ -86,6 +90,8 @@ namespace DailyPrayerTime.Native
                             Asr = ParseApiTime(timings.Asr.ToString()),
                             Maghrib = ParseApiTime(timings.Maghrib.ToString()),
                             Isha = ParseApiTime(timings.Isha.ToString()),
+                            Suhur = ParseApiTime(timings.Imsak.ToString()),
+                            Iftar = ParseApiTime(timings.Maghrib.ToString()),
                             HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH"
                         };
                     }
@@ -115,16 +121,30 @@ namespace DailyPrayerTime.Native
         {
             return method.ToUpper() switch
             {
+                "SHIA" => 0,
                 "KARACHI" => 1,
                 "ISNA" => 2,
                 "MWL" => 3,
-                "UMM_AL_QURA" => 4,
-                "EGYPTIAN" => 5,
-                "QATAR" => 10,
+                "MAKKAH" => 4,
+                "EGYPT" => 5,
+                "TEHRAN" => 7,
+                "GULF" => 8,
                 "KUWAIT" => 9,
+                "QATAR" => 10,
                 "SINGAPORE" => 11,
+                "FRANCE" => 12,
                 "TURKEY" => 13,
-                "DUBAI" => 12,
+                "RUSSIA" => 14,
+                "MOONSIGHTING" => 15,
+                "DUBAI" => 16,
+                "JAKIM" => 17,
+                "TUNISIA" => 18,
+                "ALGERIA" => 19,
+                "KEMENAG" => 20,
+                "MOROCCO" => 21,
+                "BRAZIL" => 22,
+                "PORTUGAL" => 23,
+                "JORDAN" => 24,
                 _ => 3
             };
         }
@@ -136,8 +156,8 @@ namespace DailyPrayerTime.Native
                 "KARACHI" => CalculationMethod.KARACHI,
                 "ISNA" => CalculationMethod.NORTH_AMERICA,
                 "MWL" => CalculationMethod.MUSLIM_WORLD_LEAGUE,
-                "UMM_AL_QURA" => CalculationMethod.UMM_AL_QURA,
-                "EGYPTIAN" => CalculationMethod.EGYPTIAN,
+                "MAKKAH" => CalculationMethod.UMM_AL_QURA,
+                "EGYPT" => CalculationMethod.EGYPTIAN,
                 "QATAR" => CalculationMethod.QATAR,
                 "KUWAIT" => CalculationMethod.KUWAIT,
                 "SINGAPORE" => CalculationMethod.SINGAPORE,

@@ -28,6 +28,13 @@ namespace DailyPrayerTime.Native
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
+        
+        private bool _sunriseProhibActive = false;
+        private bool _zawalProhibActive = false;
+        private bool _sunsetProhibActive = false;
+        private string _prohibNotifyDate = "";
+
+        private string GetTimeFmt() => SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
         private MediaPlayer _adhanPlayer = new MediaPlayer();
         private Prayer _lastAdhanPrayer = Prayer.NONE;
         private string _lastAdhanDate = "";
@@ -44,7 +51,7 @@ namespace DailyPrayerTime.Native
             SetupTimer();
             SetupTrayIcon();
             _ = CalculatePrayerTimes();
-            _ = DownloadDefaultAdhan();
+            Task.Run(async () => await DownloadDefaultAdhan());
             ManageOverlay();
         }
 
@@ -236,16 +243,19 @@ namespace DailyPrayerTime.Native
         private void RefreshUIDisplay()
         {
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
-
-            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Sunrise.ToString(TimeFmtFull)}";
-            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToString(TimeFmtFull);
-            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Asr.ToString(TimeFmtFull)}";
-            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Maghrib.ToString(TimeFmtFull)}";
-            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(TimeFmtFull)} - {_todayPrayerTimes.Isha.ToString(TimeFmtFull)}";
-            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(TimeFmtFull)} - {_tomorrowPrayerTimes.Fajr.ToString(TimeFmtFull)}";
+            string timeFmt = GetTimeFmt();
+            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToString(timeFmt)} - {_todayPrayerTimes.Sunrise.ToString(timeFmt)}";
+            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
+            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
+            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToString(timeFmt)} - {_todayPrayerTimes.Maghrib.ToString(timeFmt)}";
+            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
+            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
             
-            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(TimeFmtFull);
-            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(TimeFmtFull);
+            SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
+            IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
+            
+            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(timeFmt);
+            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(timeFmt);
             
             DateTime sunrise = _todayPrayerTimes.Sunrise;
             DateTime dhuhr = _todayPrayerTimes.Dhuhr;
@@ -279,7 +289,7 @@ namespace DailyPrayerTime.Native
             // 1. Prayer Start Notification
             if (currentPrayer != _lastStartNotificationPrayer && currentPrayer != Prayer.NONE)
             {
-                ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now:HH:mm}).");
+                ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now.ToString(GetTimeFmt())}).");
                 _lastStartNotificationPrayer = currentPrayer;
             }
 
@@ -290,7 +300,7 @@ namespace DailyPrayerTime.Native
                 // Trigger exactly at jamaat time or within 1 minute
                 if (now >= jamaatTime.Value && now < jamaatTime.Value.AddMinutes(1))
                 {
-                    ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value:HH:mm}.");
+                    ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value.ToString(GetTimeFmt())}.");
                     _lastJamaatNotificationID = currentPrayer;
                 }
             }
@@ -404,7 +414,7 @@ namespace DailyPrayerTime.Native
 
         private DateTime? GetJamaatTime(Prayer p, AppSettings s, DateTime now)
         {
-            string timeStr = p switch
+            string? timeStr = p switch
             {
                 Prayer.FAJR => s.FajrJamaatTime,
                 Prayer.DHUHR => s.DhuhrJamaatTime,
@@ -591,25 +601,59 @@ namespace DailyPrayerTime.Native
         {
             if (_todayPrayerTimes == null) return;
             DateTime now = DateTime.Now;
+            var s = SettingsManager.Current;
+            string today = now.ToShortDateString();
+            
+            // Reset daily notification state
+            if (_prohibNotifyDate != today)
+            {
+                _sunriseProhibActive = false;
+                _zawalProhibActive = false;
+                _sunsetProhibActive = false;
+                _prohibNotifyDate = today;
+            }
+
             DateTime sunrise = _todayPrayerTimes.Sunrise;
             DateTime dhuhr = _todayPrayerTimes.Dhuhr;
             DateTime maghrib = _todayPrayerTimes.Maghrib;
 
-            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrise, sunrise.AddMinutes(15));
-            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, dhuhr.AddMinutes(-30), dhuhr);
-            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, now, maghrib.AddMinutes(-15), maghrib);
+            DateTime sunrStart = sunrise, sunrEnd = sunrise.AddMinutes(15);
+            DateTime zawlStart = dhuhr.AddMinutes(-30), zawlEnd = dhuhr;
+            DateTime sunsStart = maghrib.AddMinutes(-15), sunsEnd = maghrib;
 
-            bool isProhib = (now >= sunrise && now <= sunrise.AddMinutes(15)) ||
-                           (now >= dhuhr.AddMinutes(-30) && now <= dhuhr) ||
-                           (now >= maghrib.AddMinutes(-15) && now <= maghrib);
+            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrStart, sunrEnd);
+            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, zawlStart, zawlEnd);
+            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, now, sunsStart, sunsEnd);
 
-            if (isProhib)
+            // Handle Notifications
+            if (s.NotificationsEnabled)
             {
-                ProhibitedWarning.Visibility = Visibility.Visible;
+                CheckProhibNotify("Sunrise Prohibited", now, sunrStart, sunrEnd, ref _sunriseProhibActive);
+                CheckProhibNotify("Zawal Prohibited", now, zawlStart, zawlEnd, ref _zawalProhibActive);
+                CheckProhibNotify("Sunset Prohibited", now, sunsStart, sunsEnd, ref _sunsetProhibActive);
             }
-            else
+
+            bool isProhib = (now >= sunrStart && now <= sunrEnd) ||
+                           (now >= zawlStart && now <= zawlEnd) ||
+                           (now >= sunsStart && now <= sunsEnd);
+
+            ProhibitedWarning.Visibility = isProhib ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void CheckProhibNotify(string name, DateTime now, DateTime start, DateTime end, ref bool isActive)
+        {
+            if (now >= start && now <= end)
             {
-                ProhibitedWarning.Visibility = Visibility.Collapsed;
+                if (!isActive)
+                {
+                    ShowNotification($"{name} Started", $"Prayer is prohibited until {end.ToString(GetTimeFmt())}.");
+                    isActive = true;
+                }
+            }
+            else if (now > end && isActive)
+            {
+                ShowNotification($"{name} Ended", $"Prohibited time has passed. You can pray now.");
+                isActive = false;
             }
         }
 
