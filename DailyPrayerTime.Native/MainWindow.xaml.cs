@@ -12,6 +12,7 @@ using WColorConverter = System.Windows.Media.ColorConverter;
 using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace DailyPrayerTime.Native
 {
@@ -41,6 +42,7 @@ namespace DailyPrayerTime.Native
         private Prayer _lastStartNotificationPrayer = Prayer.NONE;
         private Prayer _lastJamaatNotificationID = Prayer.NONE;
         private Prayer _lastEndNotificationID = Prayer.NONE;
+        private UpdateInfo? _currentUpdate;
         
 
         public MainWindow()
@@ -52,7 +54,28 @@ namespace DailyPrayerTime.Native
             SetupTrayIcon();
             _ = CalculatePrayerTimes();
             Task.Run(async () => await DownloadDefaultAdhan());
+            _ = CheckForUpdates();
             ManageOverlay();
+        }
+
+        private async Task CheckForUpdates()
+        {
+            try
+            {
+                _currentUpdate = await UpdateService.CheckForUpdateAsync();
+                if (_currentUpdate != null && _currentUpdate.IsUpdateAvailable)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        UpdateVersionText.Text = $"Version v{_currentUpdate.LatestVersion} is now available.";
+                        UpdateBanner.Visibility = Visibility.Visible;
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Update check UI error: " + ex.Message);
+            }
         }
 
         private void SetupTrayIcon()
@@ -140,6 +163,25 @@ namespace DailyPrayerTime.Native
             }
         }
 
+        private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_currentUpdate != null && !string.IsNullOrEmpty(_currentUpdate.ReleaseUrl))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = _currentUpdate.ReleaseUrl,
+                        UseShellExecute = true
+                    });
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show("Could not open the update link: " + ex.Message);
+                }
+            }
+        }
+        
         private void ApplySettingsTheme()
         {
             var s = SettingsManager.Current;

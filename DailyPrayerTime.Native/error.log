@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\MainWindow.xaml.cs(96,22): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\MainWindow.xaml.cs(180,21): error CS0104: 'MessageBox' is an ambiguous reference between 'System.Windows.Forms.MessageBox' and 'System.Windows.MessageBox' [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\SettingsWindow.xaml.cs(392,38): warning CS8602: Dereference of a possibly null reference. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\SettingsWindow.xaml.cs(394,37): warning CS8602: Dereference of a possibly null reference. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+
+Build FAILED.
+
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\MainWindow.xaml.cs(96,22): warning CS4014: Because this call is not awaited, execution of the current method continues before the call is completed. Consider applying the 'await' operator to the result of the call. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\SettingsWindow.xaml.cs(392,38): warning CS8602: Dereference of a possibly null reference. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\SettingsWindow.xaml.cs(394,37): warning CS8602: Dereference of a possibly null reference. [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\MainWindow.xaml.cs(180,21): error CS0104: 'MessageBox' is an ambiguous reference between 'System.Windows.Forms.MessageBox' and 'System.Windows.MessageBox' [J:\Web Development\abir\software\DailyPrayerTime\DailyPrayerTime.Native\DailyPrayerTime.Native.csproj]
+    3 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:00.96
