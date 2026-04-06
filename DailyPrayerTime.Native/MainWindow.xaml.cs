@@ -296,6 +296,8 @@ namespace DailyPrayerTime.Native
             SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
             IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
             
+            UpdateFastingHighlights();
+            
             HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(timeFmt);
             HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(timeFmt);
             
@@ -720,6 +722,80 @@ namespace DailyPrayerTime.Native
             {
                 ShowNotification($"{name} Ended", $"Prohibited time has passed. You can pray now.");
                 isActive = false;
+            }
+        }
+
+        private void UpdateFastingHighlights()
+        {
+            if (_todayPrayerTimes == null) return;
+
+            int hijriDay = _todayPrayerTimes.HijriDay;
+            int hijriMonth = _todayPrayerTimes.HijriMonth;
+
+            // Fallback if structured data is 0 (offline or API failed)
+            if (hijriDay == 0 || hijriMonth == 0)
+            {
+                try {
+                    var calendar = new System.Globalization.UmAlQuraCalendar();
+                    var now = DateTime.Now;
+                    hijriDay = calendar.GetDayOfMonth(now);
+                    hijriMonth = calendar.GetMonth(now);
+                } catch { /* Silently fail and hide */ }
+            }
+
+            var highlights = new System.Collections.Generic.List<string>();
+
+            // 1. Prohibited Days (Check these first as they override Sunnah recommendations)
+            bool isProhibited = false;
+            if (hijriMonth == 10 && hijriDay == 1) 
+            {
+                highlights.Add("Prohibited: Eid-ul-Fitr (First of Shawwal) - Forbidden to fast today.");
+                isProhibited = true;
+            }
+            else if (hijriMonth == 12 && hijriDay == 10)
+            {
+                highlights.Add("Prohibited: Eid-ul-Adha (10th of Dhul-Hijjah) - Forbidden to fast today.");
+                isProhibited = true;
+            }
+            else if (hijriMonth == 12 && (hijriDay == 11 || hijriDay == 12 || hijriDay == 13))
+            {
+                highlights.Add("Prohibited: Day of Tashreeq (Following Eid-ul-Adha) - Forbidden to fast today.");
+                isProhibited = true;
+            }
+
+            if (isProhibited)
+            {
+                FastingNoteText.Text = string.Join("\n\n", highlights);
+                FastingNoteBorder.Visibility = Visibility.Visible;
+                return;
+            }
+
+            // 2. Weekly Sunnah Fasts
+            var dayOfWeek = DateTime.Now.DayOfWeek;
+            if (dayOfWeek == DayOfWeek.Monday) highlights.Add("Monday Fast: The day the Prophet ﷺ was born and received revelation.");
+            else if (dayOfWeek == DayOfWeek.Thursday) highlights.Add("Thursday Fast: The day deeds are presented to Allah.");
+
+            // 3. Monthly Sunnah Fasts (Ayyam al-Bidh) - 13, 14, 15
+            if (hijriDay == 13 || hijriDay == 14 || hijriDay == 15)
+            {
+                 highlights.Insert(0, "Ayyam al-Bidh: The monthly Sunnah 'White Days' (13th, 14th, & 15th).");
+            }
+
+            // 4. Annual Special Fasts
+            if (hijriMonth == 10 && hijriDay > 1 && hijriDay <= 30) highlights.Add("6 Days of Shawwal: Sunnah to fast any six days in the month following Ramadan.");
+            if (hijriMonth == 12 && hijriDay == 9) highlights.Add("Day of Arafah: Highly recommended fast for those not performing Hajj.");
+            if (hijriMonth == 1 && hijriDay == 10) highlights.Add("Day of Ashura: Highly recommended fast. (Note: Recommend adding 9th or 11th).");
+            if (hijriMonth == 12 && hijriDay >= 1 && hijriDay <= 9) highlights.Add("Virtuous Days: Sunnah to fast during the first nine days of Dhul-Hijjah.");
+            if (hijriMonth == 8) highlights.Add("Month of Sha'ban: Increasing voluntary fasts is recommended this month.");
+
+            if (highlights.Count > 0)
+            {
+                FastingNoteText.Text = string.Join("\n\n", highlights);
+                FastingNoteBorder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                FastingNoteBorder.Visibility = Visibility.Collapsed;
             }
         }
 

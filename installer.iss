@@ -1,6 +1,6 @@
 ; Inno Setup Script for Daily Prayer Timer (Native)
 #define AppName "Daily Prayer Timer"
-#define AppVersion "1.5.7"
+#define AppVersion "1.5.8"
 #define AppPublisher "Abiruzzaman Molla"
 #define AppURL "https://github.com/AbiruzzamanMolla"
 #define AppExeName "DailyPrayerTime.Native.exe"

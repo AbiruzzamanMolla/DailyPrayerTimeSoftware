@@ -19,6 +19,8 @@ namespace DailyPrayerTime.Native
         public DateTime Suhur { get; set; } // End of Sehri (Imsak)
         public DateTime Iftar { get; set; } // Maghrib time
         public string HijriDate { get; set; } = "";
+        public int HijriDay { get; set; } = 0;
+        public int HijriMonth { get; set; } = 0;
 
         public CombinedPrayerTimes() { }
 
@@ -92,7 +94,9 @@ namespace DailyPrayerTime.Native
                             Isha = ParseApiTime(timings.Isha.ToString()),
                             Suhur = ParseApiTime(timings.Imsak.ToString()),
                             Iftar = ParseApiTime(timings.Maghrib.ToString()),
-                            HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH"
+                            HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH",
+                            HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
+                            HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0
                         };
                     }
                 }

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.8] - 2026-04-06
+
+### Added
+- **Sunnah Fasting Highlights**: Added a dedicated section in "Daily Highlights" to showcase Sunnah and recommended fasting days.
+- **Weekly Fasts**: Highlights Mondays and Thursdays with their specific spiritual benefits.
+- **Monthly Fasts**: Automatically detects and reminds of Ayyam al-Bidh (13th, 14th, and 15th of Hijri months).
+- **Annual Special Fasts**: Added support for 6 Days of Shawwal, Day of Arafah, Day of Ashura, and more.
+- **Prohibited Days**: Clear visual warnings for days when fasting is forbidden (Eids and Tashreeq).
+- **Smart Date Matching**: Uses high-accuracy API data for Hijri dates with a reliable local calendar fallback.
+
 ## [1.5.7] - 2026-04-06
 
 ### Added
