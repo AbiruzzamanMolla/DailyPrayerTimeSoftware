@@ -50,7 +50,7 @@ namespace DailyPrayerTime.Native
             var cms = new Forms.ContextMenuStrip();
             cms.Items.Add("Open", null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
             cms.Items.Add("Settings", null, (s, e) => { 
-                 var sw = new SettingsWindow();
+                 var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
                  if (sw.ShowDialog() == true) {
                      ApplySettingsTheme();
                      CalculatePrayerTimes();
@@ -100,7 +100,7 @@ namespace DailyPrayerTime.Native
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            var sw = new SettingsWindow();
+            var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
             if (sw.ShowDialog() == true)
             {
                 ApplySettingsTheme();
@@ -434,6 +434,18 @@ namespace DailyPrayerTime.Native
                 HeroStatusText.Text = "starts in";
             }
             CountdownText.Text = countStr;
+            
+            // Show Jamaat time for the displayed prayer
+            DateTime? jamaatTime = GetJamaatTime(currentPrayer != Prayer.NONE ? currentPrayer : Prayer.FAJR, SettingsManager.Current, DateTime.Now);
+            if (jamaatTime.HasValue)
+            {
+                HeroJamaatText.Text = "Jamaat: " + jamaatTime.Value.ToString(TimeFmtFull);
+                HeroJamaatText.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                HeroJamaatText.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void UpdateOverlay(Prayer currentPrayer, string curName, string nextName, string countStr, DateTime nextTime)
@@ -460,8 +472,9 @@ namespace DailyPrayerTime.Native
                 if (SettingsManager.Current.NotificationsEnabled)
                 {
                     string pName = FormatPrayerName(currentPrayer);
+                    string dateStr = DateTime.Now.ToString("dd MMM yyyy");
                     new ToastContentBuilder()
-                        .AddText($"{pName} Time")
+                        .AddText($"{pName} Time - {dateStr}")
                         .AddText($"It's time for {pName} prayer. {LocationDisplay.Text}")
                         .Show();
                 }

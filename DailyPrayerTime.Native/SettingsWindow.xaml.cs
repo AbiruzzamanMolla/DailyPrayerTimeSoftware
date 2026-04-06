@@ -2,13 +2,19 @@ using System;
 using System.Windows;
 using Microsoft.Win32;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Batoulapps.Adhan;
 
 namespace DailyPrayerTime.Native
 {
     public partial class SettingsWindow : Window
     {
-        public SettingsWindow()
+        private PrayerTimes? _today;
+        private PrayerTimes? _tomorrow;
+
+        public SettingsWindow(PrayerTimes? today, PrayerTimes? tomorrow)
         {
+            _today = today;
+            _tomorrow = tomorrow;
             InitializeComponent();
             LoadForm();
         }
@@ -45,6 +51,19 @@ namespace DailyPrayerTime.Native
             MaghribJamaatTimeInput.Text = s.MaghribJamaatTime;
             IshaJamaatTimeInput.Text = s.IshaJamaatTime;
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
+
+            PopulateHints();
+        }
+
+        private void PopulateHints()
+        {
+            if (_today == null || _tomorrow == null) return;
+
+            FajrRangeHint.Text = $"Today: {_today.Fajr.ToLocalTime():HH:mm} - {_today.Sunrise.ToLocalTime():HH:mm}";
+            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr.ToLocalTime():HH:mm} - {_today.Asr.ToLocalTime():HH:mm}";
+            AsrRangeHint.Text = $"Today: {_today.Asr.ToLocalTime():HH:mm} - {_today.Maghrib.ToLocalTime():HH:mm}";
+            MaghribRangeHint.Text = $"Today: {_today.Maghrib.ToLocalTime():HH:mm} - {_today.Isha.ToLocalTime():HH:mm}";
+            IshaRangeHint.Text = $"Today: {_today.Isha.ToLocalTime():HH:mm} - {_tomorrow.Fajr.ToLocalTime():HH:mm}";
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
