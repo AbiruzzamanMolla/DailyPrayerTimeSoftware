@@ -86,7 +86,7 @@ namespace DailyPrayerTime.Native
             SetTimeToInputs(isha, IshaHourInput, IshaMinuteInput, IshaAmPmInput, to24h);
         }
 
-        private string GetTimeFromInputs(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool was12h)
+        private static string GetTimeFromInputs(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool was12h)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace DailyPrayerTime.Native
             catch { return "00:00"; }
         }
 
-        private void SetTimeToInputs(string time, System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool isUI24h)
+        private static void SetTimeToInputs(string time, System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool isUI24h)
         {
             if (string.IsNullOrEmpty(time) || !time.Contains(":")) return;
             var parts = time.Split(':');
@@ -209,10 +209,10 @@ namespace DailyPrayerTime.Native
             if (currentM != null && (m.ItemsSource as List<string>)?.Contains(currentM) == true) m.SelectedItem = currentM;
         }
 
-        private List<string> GetValidHours(DateTime start, DateTime end, bool is24h)
+        private static List<string> GetValidHours(DateTime start, DateTime end, bool is24h)
         {
             var hours = new List<int>();
-            DateTime current = new DateTime(start.Year, start.Month, start.Day, start.Hour, 0, 0);
+            DateTime current = new DateTime(start.Year, start.Month, start.Day, start.Hour, 0, 0, DateTimeKind.Local);
             while (current <= end)
             {
                 if (!hours.Contains(current.Hour)) hours.Add(current.Hour);
@@ -241,7 +241,7 @@ namespace DailyPrayerTime.Native
             else if (sender == IshaHourInput || sender == IshaAmPmInput) UpdateMinuteCombo(IshaHourInput, IshaMinuteInput, IshaAmPmInput, _today.Isha, _tomorrow.Fajr, is24h);
         }
 
-        private void UpdateMinuteCombo(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, DateTime start, DateTime end, bool is24h)
+        private static void UpdateMinuteCombo(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, DateTime start, DateTime end, bool is24h)
         {
             string? selH = h.SelectedItem as string;
             if (selH == null) return;
@@ -259,9 +259,9 @@ namespace DailyPrayerTime.Native
             {
                 DateTime check;
                 if (hour24 < start.Hour && hour24 <= end.Hour && start.Hour > end.Hour) 
-                    check = new DateTime(end.Year, end.Month, end.Day, hour24, min, 0);
+                    check = new DateTime(end.Year, end.Month, end.Day, hour24, min, 0, DateTimeKind.Local);
                 else
-                    check = new DateTime(start.Year, start.Month, start.Day, hour24, min, 0);
+                    check = new DateTime(start.Year, start.Month, start.Day, hour24, min, 0, DateTimeKind.Local);
 
                 if (check >= start && check <= end)
                 {
@@ -350,7 +350,7 @@ namespace DailyPrayerTime.Native
             }
         }
         
-        private void SetAutoStart(bool enable)
+        private static void SetAutoStart(bool enable)
         {
             try
             {
@@ -496,6 +496,54 @@ namespace DailyPrayerTime.Native
             finally
             {
                 btn.Content = originalContent;
+                btn.IsEnabled = true;
+            }
+        }
+
+        private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as System.Windows.Controls.Button;
+            if (btn == null) return;
+
+            btn.Content = "Checking...";
+            btn.IsEnabled = false;
+
+            try
+            {
+                var updateInfo = await UpdateService.CheckForUpdateAsync();
+                if (updateInfo.IsUpdateAvailable)
+                {
+                    var result = System.Windows.MessageBox.Show(
+                        $"A new version ({updateInfo.LatestVersion}) is available!\n\nWould you like to open the download page?",
+                        "Update Available",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Information);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(updateInfo.ReleaseUrl) { UseShellExecute = true });
+                    }
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(
+                        "You are already using the latest version.",
+                        "Check for Updates",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(
+                    $"Failed to check for updates: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                btn.Content = "Check for Updates";
                 btn.IsEnabled = true;
             }
         }
