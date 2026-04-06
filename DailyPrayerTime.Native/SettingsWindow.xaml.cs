@@ -399,13 +399,16 @@ namespace DailyPrayerTime.Native
                 using var client = new System.Net.Http.HttpClient();
                 var response = await client.GetStringAsync(url);
                 
-                var items = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(response);
+                var items = Newtonsoft.Json.JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JArray>(response);
                 if (items != null && items.Count > 0)
                 {
                     var firstItem = items[0];
-                    LocationNameInput.Text = firstItem.display_name;
-                    LatInput.Text = firstItem.lat;
-                    LngInput.Text = firstItem.lon;
+                    if (firstItem != null)
+                    {
+                        LocationNameInput.Text = firstItem["display_name"]?.ToString();
+                        LatInput.Text = firstItem["lat"]?.ToString();
+                        LngInput.Text = firstItem["lon"]?.ToString();
+                    }
                 }
                 else
                 {

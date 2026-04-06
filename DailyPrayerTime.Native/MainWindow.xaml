@@ -92,7 +92,7 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <TextBlock Text="🌙 Tahajjud" Foreground="#e0e7ff" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
-                                <TextBlock Text=" (ends at Fajr)" Foreground="White" Opacity="0.8" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                                <TextBlock Text=" (ends 10m before Fajr)" Foreground="White" Opacity="0.8" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                             <TextBlock x:Name="TahajjudHeroTimerText" Grid.Column="1" Text="01:20:30" Foreground="White" FontSize="18" FontWeight="Bold" VerticalAlignment="Center"/>
                         </Grid>

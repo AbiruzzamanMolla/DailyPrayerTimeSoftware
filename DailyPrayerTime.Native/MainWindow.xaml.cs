@@ -89,14 +89,14 @@ namespace DailyPrayerTime.Native
 
             var cms = new Forms.ContextMenuStrip();
             cms.Items.Add("Open", null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
-            cms.Items.Add("Settings", null, (s, e) => { 
+             cms.Items.Add("Settings", null, async (s, e) => { 
                  var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
                  if (sw.ShowDialog() == true) {
                      ApplySettingsTheme();
-                     CalculatePrayerTimes();
+                     await CalculatePrayerTimes();
                      ManageOverlay();
                  }
-            });
+             });
             var overlayItem = new Forms.ToolStripMenuItem("Show Overlay");
             overlayItem.CheckOnClick = true;
             overlayItem.Checked = SettingsManager.Current.ShowOverlay;
@@ -566,9 +566,9 @@ namespace DailyPrayerTime.Native
             string curName = FormatPrayerName(curPrayer);
 
             string heroCountStr = countStr;
-            Prayer heroPrayer = currentPrayer;
+            Prayer heroPrayer = curPrayer;
 
-            if (currentPrayer == Prayer.SUNRISE)
+            if (currentPrayer.ToString() == "SUNRISE") // Adhan library enum may have SUNRISE
             {
                 heroCountStr = "-" + countStr;
                 heroPrayer = Prayer.NONE;
@@ -731,16 +731,17 @@ namespace DailyPrayerTime.Native
                     TimeSpan oneThird = new TimeSpan(nightDuration.Ticks / 3);
                     DateTime lastThirdStart = nightEnd - oneThird;
                     
+                    DateTime tahajjudWindowEnd = nightEnd.AddMinutes(-10);
                     if (now < islamicMidnight && now >= nightStart)
                     {
                         HeroContextNoteText.Text = $"⚠️ Makruh begins at {islamicMidnight.ToString(GetTimeFmt())}";
                         HeroContextNoteText.Visibility = Visibility.Visible;
                     }
-                    else if (now >= lastThirdStart && now < nightEnd)
+                    else if (now >= lastThirdStart && now < tahajjudWindowEnd)
                     {
                         // Dedicated Tahajjud Timer
                         TahajjudHeroDisplay.Visibility = Visibility.Visible;
-                        TimeSpan rem = nightEnd - now;
+                        TimeSpan rem = tahajjudWindowEnd - now;
                         TahajjudHeroTimerText.Text = string.Format(CountdownFmt, rem.Hours, rem.Minutes, rem.Seconds);
                     }
                     else

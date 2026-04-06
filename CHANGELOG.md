@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.9] - 2026-04-07
+## [1.6.0] - 2026-04-07
+ 
+ ### Added
+ - **API Response Caching**: Implemented a persistent disk cache for Aladhan.com results to significantly speed up app startup and reduce data usage.
+ - **Intelligent Cache Invalidation**: Added metadata-driven cache logic that automatically refreshes data if location (latitude/longitude), date, or calculation method settings change.
+ 
+ ### Changed
+ - **Hero Section Night Context**: Improved the Hero section experience during the night. The app now correctly shows "**Isha ends in**" instead of "Fajr starts in", providing better religious context.
+ - **Accurate Prayer Windows**: Fixed a logic issue where the app would continue showing "Fajr" as active after Sunrise. It now correctly transitions to "**Dhuhr starts in**" immediately after Sunrise.
+ 
+ ### Fixed
+ - **Tahajjud Buffer Restoration**: Restored the +15m start and -10m end offsets for Tahajjud prayer calculation to ensure accurate timing for night prayers.
+ - **UI Label Synchronization**: Updated the Hero section labels and countdown timers to perfectly match the buffered Tahajjud windows.
+ 
+ ## [1.5.9] - 2026-04-07
 
 ### Added
 - **Tahajjud Timer**: Integrated a dynamic countdown timer for the last third of the night, automatically appearing in the Hero Card.

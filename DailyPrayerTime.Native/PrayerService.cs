@@ -2,6 +2,7 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.IO;
 using Newtonsoft.Json;
 using Batoulapps.Adhan;
 using Batoulapps.Adhan.Internal;
@@ -42,6 +43,7 @@ namespace DailyPrayerTime.Native
             if (now >= Maghrib) return Prayer.MAGHRIB;
             if (now >= Asr) return Prayer.ASR;
             if (now >= Dhuhr) return Prayer.DHUHR;
+            if (now >= Sunrise) return Prayer.NONE; // After Sunrise, the current prayer is NONE (waiting for Dhuhr)
             if (now >= Fajr) return Prayer.FAJR;
             return Prayer.NONE;
         }
@@ -60,6 +62,15 @@ namespace DailyPrayerTime.Native
             };
         }
     }
+    public class PrayerCache
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Method { get; set; } = "";
+        public int School { get; set; }
+        public string Date { get; set; } = "";
+        public CombinedPrayerTimes Data { get; set; } = new CombinedPrayerTimes();
+    }
 
     public static class PrayerService
     {
@@ -68,12 +79,33 @@ namespace DailyPrayerTime.Native
         public static async Task<CombinedPrayerTimes> GetPrayerTimesAsync(double lat, double lon, string methodStr, int school)
         {
             var s = SettingsManager.Current;
+            string dateStr = DateTime.Now.ToString("dd-MM-yyyy");
+
+            // Cache check
+            string appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+            string cachePath = Path.Combine(appData, "prayer_cache.json");
+
             if (s.UseExternalApi)
             {
                 try
                 {
+                    if (File.Exists(cachePath))
+                    {
+                        var json = await File.ReadAllTextAsync(cachePath);
+                        var cache = JsonConvert.DeserializeObject<PrayerCache>(json);
+
+                        if (cache != null &&
+                            cache.Date == dateStr &&
+                            cache.Method == methodStr &&
+                            cache.School == school &&
+                            Math.Abs(cache.Latitude - lat) < 0.001 &&
+                            Math.Abs(cache.Longitude - lon) < 0.001)
+                        {
+                            return cache.Data;
+                        }
+                    }
+
                     int methodId = MapMethodToApi(methodStr);
-                    string dateStr = DateTime.Now.ToString("dd-MM-yyyy");
                     string url = $"https://api.aladhan.com/v1/timings/{dateStr}?latitude={lat}&longitude={lon}&method={methodId}&school={school}";
                     
                     var response = await client.GetStringAsync(url);
@@ -84,7 +116,7 @@ namespace DailyPrayerTime.Native
                         var timings = apiData.data.timings;
                         var hijri = apiData.data.date.hijri;
                         
-                        return new CombinedPrayerTimes
+                        var results = new CombinedPrayerTimes
                         {
                             Fajr = ParseApiTime(timings.Fajr.ToString()),
                             Sunrise = ParseApiTime(timings.Sunrise.ToString()),
@@ -98,6 +130,20 @@ namespace DailyPrayerTime.Native
                             HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
                             HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0
                         };
+
+                        // Save to cache
+                        var cache = new PrayerCache
+                        {
+                            Latitude = lat,
+                            Longitude = lon,
+                            Method = methodStr,
+                            School = school,
+                            Date = dateStr,
+                            Data = results
+                        };
+                        await File.WriteAllTextAsync(cachePath, JsonConvert.SerializeObject(cache, Formatting.Indented));
+
+                        return results;
                     }
                 }
                 catch { /* Fallback to local */ }
