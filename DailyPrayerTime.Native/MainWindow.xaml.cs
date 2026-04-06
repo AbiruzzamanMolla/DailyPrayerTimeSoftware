@@ -25,13 +25,16 @@ namespace DailyPrayerTime.Native
         private CombinedPrayerTimes? _todayPrayerTimes;
         private CombinedPrayerTimes? _tomorrowPrayerTimes;
         private OverlayWindow? _overlay;
-        private Prayer _lastPrayer = Prayer.NONE;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
         private MediaPlayer _adhanPlayer = new MediaPlayer();
         private Prayer _lastAdhanPrayer = Prayer.NONE;
         private string _lastAdhanDate = "";
+        private Prayer _lastStartNotificationPrayer = Prayer.NONE;
+        private Prayer _lastJamaatNotificationID = Prayer.NONE;
+        private Prayer _lastEndNotificationID = Prayer.NONE;
+        
 
         public MainWindow()
         {
@@ -259,14 +262,64 @@ namespace DailyPrayerTime.Native
         {
             if (_todayPrayerTimes == null) return;
             
-            var now = DateTime.Now;
+            DateTime now = DateTime.Now;
             var currentPrayer = _todayPrayerTimes.CurrentPrayer(now);
 
             UpdateCountdown();
-            CheckNotifications(currentPrayer);
+            CheckEnhancedNotifications(now, currentPrayer);
             CheckProhibitedTimes();
             CheckAndShowJamaatAlarm();
             CheckAndPlayAdhanAlarm(currentPrayer);
+        }
+
+        private void CheckEnhancedNotifications(DateTime now, Prayer currentPrayer)
+        {
+            if (!SettingsManager.Current.NotificationsEnabled) return;
+
+            // 1. Prayer Start Notification
+            if (currentPrayer != _lastStartNotificationPrayer && currentPrayer != Prayer.NONE)
+            {
+                ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now:HH:mm}).");
+                _lastStartNotificationPrayer = currentPrayer;
+            }
+
+            // 2. Jamaat Notification
+            var jamaatTime = GetJamaatTime(currentPrayer, SettingsManager.Current, now);
+            if (jamaatTime.HasValue && _lastJamaatNotificationID != currentPrayer)
+            {
+                // Trigger exactly at jamaat time or within 1 minute
+                if (now >= jamaatTime.Value && now < jamaatTime.Value.AddMinutes(1))
+                {
+                    ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value:HH:mm}.");
+                    _lastJamaatNotificationID = currentPrayer;
+                }
+            }
+
+            // 3. Prayer End Warning (10 mins before)
+            var nextResult = GetNextPrayerInfo(now);
+            if (nextResult.nextTime != DateTime.MinValue && _lastEndNotificationID != currentPrayer)
+            {
+                TimeSpan timeToNext = nextResult.nextTime - now;
+                if (timeToNext.TotalMinutes > 0 && timeToNext.TotalMinutes <= 10)
+                {
+                    ShowNotification($"{FormatPrayerName(currentPrayer)} ending soon", $"{FormatPrayerName(currentPrayer)} time will end in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.");
+                    _lastEndNotificationID = currentPrayer;
+                }
+            }
+            
+            // Reset "End Notification" state when prayer changes to allow next one
+            if (currentPrayer != _lastEndNotificationID && currentPrayer != Prayer.NONE)
+            {
+                // This logic is handled by the ID check above, but we ensure consistency
+            }
+        }
+
+        private void ShowNotification(string title, string message)
+        {
+            new ToastContentBuilder()
+                .AddText(title)
+                .AddText(message)
+                .Show();
         }
 
         private void CheckAndPlayAdhanAlarm(Prayer currentPrayer)
@@ -386,68 +439,6 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private DateTime GetPrayerEndTime(Prayer p)
-        {
-            return p switch
-            {
-                Prayer.FAJR => _todayPrayerTimes!.Sunrise,
-                Prayer.DHUHR => _todayPrayerTimes!.Asr,
-                Prayer.ASR => _todayPrayerTimes!.Maghrib,
-                Prayer.MAGHRIB => _todayPrayerTimes!.Isha,
-                Prayer.ISHA => _tomorrowPrayerTimes!.Fajr,
-                _ => DateTime.MaxValue
-            };
-        }
-
-        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime)
-        {
-            // Close existing if open
-            if (_activeJamaatPopup != null && _activeJamaatPopup.IsVisible)
-            {
-                _activeJamaatPopup.Close();
-            }
-
-            _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
-            _activeJamaatPopup.Show();
-        }
-
-        private void CheckProhibitedTimes()
-        {
-            if (_todayPrayerTimes == null) return;
- 
-            DateTime now = DateTime.Now;
-            DateTime sunrise = _todayPrayerTimes.Sunrise;
-            DateTime dhuhr = _todayPrayerTimes.Dhuhr;
-            DateTime maghrib = _todayPrayerTimes.Maghrib;
-
-            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrise, sunrise.AddMinutes(15));
-            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, dhuhr.AddMinutes(-30), dhuhr);
-            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, now, maghrib.AddMinutes(-15), maghrib);
-
-            // Update main banner
-            if (now >= sunrise && now <= sunrise.AddMinutes(15))
-            {
-                ProhibitedWarning.Visibility = Visibility.Visible;
-                TimeSpan rem = sunrise.AddMinutes(15) - now;
-                ProhibitedText.Text = $"⚠️ Prohibited: Sunrise Period ({rem.Minutes:D2}:{rem.Seconds:D2})";
-            }
-            else if (now >= dhuhr.AddMinutes(-30) && now <= dhuhr)
-            {
-                ProhibitedWarning.Visibility = Visibility.Visible;
-                TimeSpan rem = dhuhr - now;
-                ProhibitedText.Text = $"⚠️ Prohibited: Zawal Period ({rem.Minutes:D2}:{rem.Seconds:D2})";
-            }
-            else if (now >= maghrib.AddMinutes(-15) && now <= maghrib)
-            {
-                ProhibitedWarning.Visibility = Visibility.Visible;
-                TimeSpan rem = maghrib - now;
-                ProhibitedText.Text = $"⚠️ Prohibited: Sunset Period ({rem.Minutes:D2}:{rem.Seconds:D2})";
-            }
-            else
-            {
-                ProhibitedWarning.Visibility = Visibility.Collapsed;
-            }
-        }
 
         private static void UpdateProhibCard(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock timerText, DateTime now, DateTime start, DateTime end)
         {
@@ -477,9 +468,8 @@ namespace DailyPrayerTime.Native
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
             
             DateTime now = DateTime.Now;
-            DateTime utcNow = DateTime.UtcNow;
 
-            var nextResult = GetNextPrayerInfo(utcNow);
+            var nextResult = GetNextPrayerInfo(now);
             Prayer nextPrayer = nextResult.nextPrayer;
             DateTime nextTime = nextResult.nextTime;
 
@@ -493,29 +483,28 @@ namespace DailyPrayerTime.Native
             string countStr = string.Format(CountdownFmt, remaining.Hours, remaining.Minutes, remaining.Seconds);
             var nextName = FormatPrayerName(nextPrayer);
             
-            var currentPrayer = _todayPrayerTimes.CurrentPrayer(utcNow);
-            Prayer curPrayer = currentPrayer == Prayer.NONE && now > _todayPrayerTimes.Isha.ToLocalTime() ? Prayer.ISHA : currentPrayer;
+            var currentPrayer = _todayPrayerTimes.CurrentPrayer(now);
+            Prayer curPrayer = currentPrayer == Prayer.NONE && now > _todayPrayerTimes.Isha ? Prayer.ISHA : currentPrayer;
             string curName = FormatPrayerName(curPrayer);
 
             UpdateHeroSection(currentPrayer, curName, nextName, countStr);
             UpdateOverlay(currentPrayer, curName, nextName, countStr, nextTime);
-            CheckNotifications(currentPrayer);
             UpdateProgressBar(currentPrayer, nextTime, now);
             UpdatePrayerListHighlighting(curPrayer);
         }
 
-        private (Prayer nextPrayer, DateTime nextTime) GetNextPrayerInfo(DateTime utcNow)
+        private (Prayer nextPrayer, DateTime nextTime) GetNextPrayerInfo(DateTime now)
         {
-            var now = DateTime.Now;
-            Prayer[] prayers = { Prayer.FAJR, Prayer.SUNRISE, Prayer.DHUHR, Prayer.ASR, Prayer.MAGHRIB, Prayer.ISHA };
-            
-            foreach (var p in prayers)
-            {
-                var time = _todayPrayerTimes!.TimeForPrayer(p);
-                if (time > now) return (p, time);
-            }
-            
-            return (Prayer.FAJR, _tomorrowPrayerTimes!.Fajr);
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return (Prayer.NONE, DateTime.MinValue);
+
+            // Using local times throughout
+            if (now < _todayPrayerTimes.Fajr) return (Prayer.FAJR, _todayPrayerTimes.Fajr);
+            if (now < _todayPrayerTimes.Dhuhr) return (Prayer.DHUHR, _todayPrayerTimes.Dhuhr);
+            if (now < _todayPrayerTimes.Asr) return (Prayer.ASR, _todayPrayerTimes.Asr);
+            if (now < _todayPrayerTimes.Maghrib) return (Prayer.MAGHRIB, _todayPrayerTimes.Maghrib);
+            if (now < _todayPrayerTimes.Isha) return (Prayer.ISHA, _todayPrayerTimes.Isha);
+
+            return (Prayer.FAJR, _tomorrowPrayerTimes.Fajr);
         }
 
         private void UpdateHeroSection(Prayer currentPrayer, string curName, string nextName, string countStr)
@@ -562,28 +551,11 @@ namespace DailyPrayerTime.Native
             _overlay.ForceTopmost();
         }
 
-        private void CheckNotifications(Prayer currentPrayer)
-        {
-            if (currentPrayer != _lastPrayer && currentPrayer != Prayer.NONE)
-            {
-                if (SettingsManager.Current.NotificationsEnabled)
-                {
-                    string pName = FormatPrayerName(currentPrayer);
-                    string dateStr = DateTime.Now.ToString("dd MMM yyyy");
-                    new ToastContentBuilder()
-                        .AddText($"{pName} Time - {dateStr}")
-                        .AddText($"It's time for {pName} prayer. {LocationDisplay.Text}")
-                        .Show();
-                }
-                _lastPrayer = currentPrayer;
-            }
-        }
-
         private void UpdateProgressBar(Prayer currentPrayer, DateTime nextTime, DateTime now)
         {
-            if (currentPrayer != Prayer.NONE)
+            if (_todayPrayerTimes != null && currentPrayer != Prayer.NONE)
             {
-                DateTime currentPrayerTime = _todayPrayerTimes!.TimeForPrayer(currentPrayer);
+                DateTime currentPrayerTime = _todayPrayerTimes.TimeForPrayer(currentPrayer);
                 double totalMs = (nextTime - currentPrayerTime).TotalMilliseconds;
                 double elapsedMs = (now - currentPrayerTime).TotalMilliseconds;
                 PrayerProgress.Value = Math.Min(100, Math.Max(0, (elapsedMs / totalMs) * 100));
@@ -591,6 +563,53 @@ namespace DailyPrayerTime.Native
             else
             {
                 PrayerProgress.Value = 0;
+            }
+        }
+
+        private DateTime GetPrayerEndTime(Prayer p)
+        {
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return DateTime.MaxValue;
+            return p switch
+            {
+                Prayer.FAJR => _todayPrayerTimes.Sunrise,
+                Prayer.DHUHR => _todayPrayerTimes.Asr,
+                Prayer.ASR => _todayPrayerTimes.Maghrib,
+                Prayer.MAGHRIB => _todayPrayerTimes.Isha,
+                Prayer.ISHA => _tomorrowPrayerTimes.Fajr,
+                _ => _todayPrayerTimes.Sunrise
+            };
+        }
+
+        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime)
+        {
+            if (_activeJamaatPopup != null) _activeJamaatPopup.Close();
+            _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
+            _activeJamaatPopup.Show();
+        }
+
+        private void CheckProhibitedTimes()
+        {
+            if (_todayPrayerTimes == null) return;
+            DateTime now = DateTime.Now;
+            DateTime sunrise = _todayPrayerTimes.Sunrise;
+            DateTime dhuhr = _todayPrayerTimes.Dhuhr;
+            DateTime maghrib = _todayPrayerTimes.Maghrib;
+
+            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrise, sunrise.AddMinutes(15));
+            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, dhuhr.AddMinutes(-30), dhuhr);
+            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, now, maghrib.AddMinutes(-15), maghrib);
+
+            bool isProhib = (now >= sunrise && now <= sunrise.AddMinutes(15)) ||
+                           (now >= dhuhr.AddMinutes(-30) && now <= dhuhr) ||
+                           (now >= maghrib.AddMinutes(-15) && now <= maghrib);
+
+            if (isProhib)
+            {
+                ProhibitedWarning.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProhibitedWarning.Visibility = Visibility.Collapsed;
             }
         }
 

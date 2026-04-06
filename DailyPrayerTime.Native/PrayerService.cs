@@ -108,7 +108,7 @@ namespace DailyPrayerTime.Native
             // API returns "HH:mm"
             var parts = timeStr.Split(':');
             var now = DateTime.Now;
-            return new DateTime(now.Year, now.Month, now.Day, int.Parse(parts[0]), int.Parse(parts[1]), 0);
+            return new DateTime(now.Year, now.Month, now.Day, int.Parse(parts[0]), int.Parse(parts[1]), 0, DateTimeKind.Local);
         }
 
         private static int MapMethodToApi(string method)

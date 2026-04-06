@@ -189,7 +189,7 @@
                                 github.com/AbiruzzamanMolla
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock Text="Version: Native Release 1.5.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
+                        <TextBlock Text="Version: Native Release 1.5.1" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
                     </StackPanel>
                 </Border>
 
