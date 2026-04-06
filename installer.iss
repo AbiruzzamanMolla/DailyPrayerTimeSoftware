@@ -21,7 +21,7 @@ DefaultDirName={autopf}\Daily Prayer Timer
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
-OutputBaseFilename=DailyPrayerTimer_Setup
+OutputBaseFilename=DailyPrayerTimer_Setup_v{#AppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern

@@ -36,3 +36,6 @@ publish/
 .DS_Store
 *.suo
 *.sw?
+
+# Release Output
+Output/
