@@ -39,11 +39,11 @@ namespace DailyPrayerTime.Native
             PrimaryColorInput.Text = s.PrimaryColor;
             SecondaryColorInput.Text = s.SecondaryColor;
 
-            FajrJamaatInput.Text = s.FajrJamaat.ToString();
-            DhuhrJamaatInput.Text = s.DhuhrJamaat.ToString();
-            AsrJamaatInput.Text = s.AsrJamaat.ToString();
-            MaghribJamaatInput.Text = s.MaghribJamaat.ToString();
-            IshaJamaatInput.Text = s.IshaJamaat.ToString();
+            FajrJamaatTimeInput.Text = s.FajrJamaatTime;
+            DhuhrJamaatTimeInput.Text = s.DhuhrJamaatTime;
+            AsrJamaatTimeInput.Text = s.AsrJamaatTime;
+            MaghribJamaatTimeInput.Text = s.MaghribJamaatTime;
+            IshaJamaatTimeInput.Text = s.IshaJamaatTime;
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
         }
 
@@ -77,11 +77,11 @@ namespace DailyPrayerTime.Native
             s.PrimaryColor = PrimaryColorInput.Text;
             s.SecondaryColor = SecondaryColorInput.Text;
 
-            if (int.TryParse(FajrJamaatInput.Text, out int fj)) s.FajrJamaat = fj;
-            if (int.TryParse(DhuhrJamaatInput.Text, out int dj)) s.DhuhrJamaat = dj;
-            if (int.TryParse(AsrJamaatInput.Text, out int aj)) s.AsrJamaat = aj;
-            if (int.TryParse(MaghribJamaatInput.Text, out int mj)) s.MaghribJamaat = mj;
-            if (int.TryParse(IshaJamaatInput.Text, out int ij)) s.IshaJamaat = ij;
+            s.FajrJamaatTime = FajrJamaatTimeInput.Text;
+            s.DhuhrJamaatTime = DhuhrJamaatTimeInput.Text;
+            s.AsrJamaatTime = AsrJamaatTimeInput.Text;
+            s.MaghribJamaatTime = MaghribJamaatTimeInput.Text;
+            s.IshaJamaatTime = IshaJamaatTimeInput.Text;
             if (int.TryParse(JamaatPopupOffsetInput.Text, out int jpo)) s.JamaatPopupOffset = jpo;
 
             SettingsManager.Save();

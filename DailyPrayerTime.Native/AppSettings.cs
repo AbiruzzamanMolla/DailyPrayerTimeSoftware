@@ -34,12 +34,12 @@ namespace DailyPrayerTime.Native
 
         public bool NotificationsEnabled { get; set; } = true;
         
-        // Congregation (Jamaat) Settings
-        public int FajrJamaat { get; set; } = 30;
-        public int DhuhrJamaat { get; set; } = 15;
-        public int AsrJamaat { get; set; } = 15;
-        public int MaghribJamaat { get; set; } = 5;
-        public int IshaJamaat { get; set; } = 15;
+        // Congregation (Jamaat) Settings (Fixed Times in "HH:mm" format)
+        public string FajrJamaatTime { get; set; } = "05:15";
+        public string DhuhrJamaatTime { get; set; } = "13:30";
+        public string AsrJamaatTime { get; set; } = "17:00";
+        public string MaghribJamaatTime { get; set; } = "18:45";
+        public string IshaJamaatTime { get; set; } = "20:30";
         public int JamaatPopupOffset { get; set; } = 5; // Minutes before Jamaat
     }
 

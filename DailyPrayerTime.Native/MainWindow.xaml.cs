@@ -231,22 +231,24 @@ namespace DailyPrayerTime.Native
 
         private bool CheckAndShowJamaatAlarm(Prayer p, DateTime now, AppSettings s)
         {
-            DateTime? startTime = _todayPrayerTimes?.TimeForPrayer(p)?.ToLocalTime();
-            if (!startTime.HasValue) return false;
+            DateTime? jamaatTime = GetJamaatTime(p, s, now);
+            if (!jamaatTime.HasValue) return false;
 
-            int offsetMinutes = GetJamaatOffset(p, s);
-            DateTime jamaatTime = startTime.Value.AddMinutes(offsetMinutes);
-            
+            DateTime startTime = _todayPrayerTimes!.TimeForPrayer(p)!.Value.ToLocalTime();
             DateTime endTime = GetPrayerEndTime(p);
-            if (jamaatTime >= endTime) jamaatTime = endTime.AddMinutes(-1);
 
-            DateTime popupTriggerTime = jamaatTime.AddMinutes(-s.JamaatPopupOffset);
+            // Validation: Ensure Jamaat is between Start and End
+            DateTime validatedJamaat = jamaatTime.Value;
+            if (validatedJamaat < startTime) validatedJamaat = startTime;
+            if (validatedJamaat >= endTime) validatedJamaat = endTime.AddMinutes(-1);
 
-            if (now >= popupTriggerTime && now < jamaatTime)
+            DateTime popupTriggerTime = validatedJamaat.AddMinutes(-s.JamaatPopupOffset);
+
+            if (now >= popupTriggerTime && now < validatedJamaat)
             {
                 if (_lastJamaatPopupPrayer != p)
                 {
-                    ShowJamaatPopup(FormatPrayerName(p), jamaatTime);
+                    ShowJamaatPopup(FormatPrayerName(p), validatedJamaat);
                     _lastJamaatPopupPrayer = p;
                 }
                 return true;
@@ -254,32 +256,40 @@ namespace DailyPrayerTime.Native
             return false;
         }
 
-        private int GetJamaatOffset(Prayer p, AppSettings s)
+        private DateTime? GetJamaatTime(Prayer p, AppSettings s, DateTime now)
         {
-            return p switch
+            string timeStr = p switch
             {
-                Prayer.FAJR => s.FajrJamaat,
-                Prayer.DHUHR => s.DhuhrJamaat,
-                Prayer.ASR => s.AsrJamaat,
-                Prayer.MAGHRIB => s.MaghribJamaat,
-                Prayer.ISHA => s.IshaJamaat,
-                _ => 0
+                Prayer.FAJR => s.FajrJamaatTime,
+                Prayer.DHUHR => s.DhuhrJamaatTime,
+                Prayer.ASR => s.AsrJamaatTime,
+                Prayer.MAGHRIB => s.MaghribJamaatTime,
+                Prayer.ISHA => s.IshaJamaatTime,
+                _ => null
             };
+
+            if (string.IsNullOrEmpty(timeStr)) return null;
+
+            if (TimeSpan.TryParse(timeStr, System.Globalization.CultureInfo.InvariantCulture, out TimeSpan ts))
+            {
+                DateTime jamaat = now.Date.Add(ts);
+                
+                // If it's already passed and it's early next morning (common for Isha/Tahajjud area)
+                // but usually prayer times follow the sunrise-sunset cycle of the "current Islamic day".
+                // We'll just stick to today's date mostly.
+                return jamaat;
+            }
+            return null;
         }
 
         private void ResetJamaatAlarmState(DateTime now, AppSettings s)
         {
             if (_lastJamaatPopupPrayer == Prayer.NONE) return;
 
-            DateTime? lastStartTime = _todayPrayerTimes?.TimeForPrayer(_lastJamaatPopupPrayer)?.ToLocalTime();
-            if (lastStartTime.HasValue)
+            DateTime? lastJamaatTime = GetJamaatTime(_lastJamaatPopupPrayer, s, now);
+            if (lastJamaatTime.HasValue && now > lastJamaatTime.Value.AddMinutes(1))
             {
-                int lastOffset = GetJamaatOffset(_lastJamaatPopupPrayer, s);
-                DateTime lastJamaatTime = lastStartTime.Value.AddMinutes(lastOffset);
-                if (now > lastJamaatTime.AddMinutes(1))
-                {
-                    _lastJamaatPopupPrayer = Prayer.NONE;
-                }
+                _lastJamaatPopupPrayer = Prayer.NONE;
             }
         }
 
