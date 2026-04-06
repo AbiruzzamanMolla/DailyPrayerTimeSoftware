@@ -26,6 +26,9 @@ namespace DailyPrayerTime.Native
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
+        private MediaPlayer _adhanPlayer = new MediaPlayer();
+        private Prayer _lastAdhanPrayer = Prayer.NONE;
+        private string _lastAdhanDate = "";
 
         public MainWindow()
         {
@@ -227,12 +230,54 @@ namespace DailyPrayerTime.Native
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
+            if (_todayPrayerTimes == null) return;
+            
+            var now = DateTime.Now;
+            var currentPrayer = _todayPrayerTimes.CurrentPrayer(now);
+
             UpdateCountdown();
+            CheckNotifications(currentPrayer);
             CheckProhibitedTimes();
-            CheckJamaatAlarms();
+            CheckAndShowJamaatAlarm();
+            CheckAndPlayAdhanAlarm(currentPrayer);
         }
 
-        private void CheckJamaatAlarms()
+        private void CheckAndPlayAdhanAlarm(Prayer currentPrayer)
+        {
+            var s = SettingsManager.Current;
+            if (!s.AdhanAlarmEnabled || string.IsNullOrEmpty(s.AdhanSoundPath)) return;
+
+            // Only trigger if we haven't played it for this prayer today
+            string today = DateTime.Now.ToShortDateString();
+            if (_lastAdhanPrayer == currentPrayer && _lastAdhanDate == today) return;
+
+            DateTime? jamaatTime = GetJamaatTime(currentPrayer != Prayer.NONE ? currentPrayer : Prayer.FAJR, s, DateTime.Now);
+            if (!jamaatTime.HasValue) return;
+
+            DateTime adhanTriggerTime = jamaatTime.Value.AddMinutes(-s.AdhanAlarmOffset);
+            DateTime now = DateTime.Now;
+
+            // Trigger if within a 30-second window of the offset
+            if (now >= adhanTriggerTime && now < adhanTriggerTime.AddSeconds(30))
+            {
+                try
+                {
+                    if (System.IO.File.Exists(s.AdhanSoundPath))
+                    {
+                        _adhanPlayer.Open(new Uri(s.AdhanSoundPath));
+                        _adhanPlayer.Play();
+                        _lastAdhanPrayer = currentPrayer;
+                        _lastAdhanDate = today;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Adhan play failed: " + ex.Message);
+                }
+            }
+        }
+    
+        private void CheckAndShowJamaatAlarm()
         {
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
 

@@ -52,6 +52,10 @@ namespace DailyPrayerTime.Native
             IshaJamaatTimeInput.Text = s.IshaJamaatTime;
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
 
+            AdhanAlarmEnabledInput.IsChecked = s.AdhanAlarmEnabled;
+            AdhanAlarmOffsetInput.Text = s.AdhanAlarmOffset.ToString();
+            AdhanSoundPathInput.Text = s.AdhanSoundPath;
+
             PopulateHints();
         }
 
@@ -103,6 +107,10 @@ namespace DailyPrayerTime.Native
             s.IshaJamaatTime = IshaJamaatTimeInput.Text;
             if (int.TryParse(JamaatPopupOffsetInput.Text, out int jpo)) s.JamaatPopupOffset = jpo;
 
+            s.AdhanAlarmEnabled = AdhanAlarmEnabledInput.IsChecked ?? false;
+            if (int.TryParse(AdhanAlarmOffsetInput.Text, out int aao)) s.AdhanAlarmOffset = aao;
+            s.AdhanSoundPath = AdhanSoundPathInput.Text;
+
             SettingsManager.Save();
             this.DialogResult = true;
             this.Close();
@@ -120,6 +128,17 @@ namespace DailyPrayerTime.Native
         {
             this.DialogResult = false;
             this.Close();
+        }
+
+        private void BrowseAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Audio files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
+            bool? result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                AdhanSoundPathInput.Text = openFileDialog.FileName;
+            }
         }
         
         private void SetAutoStart(bool enable)

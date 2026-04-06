@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-04-06
+
+### Added
+- **Adhan Sound Alarm**: You can now enable an Adhan sound to play a specific number of minutes before the congregation.
+- **Custom Sound Support**: Select any MP3 or WAV file from your computer to use as the Adhan.
+
 ## [1.3.0] - 2026-04-06
 
 ### Added

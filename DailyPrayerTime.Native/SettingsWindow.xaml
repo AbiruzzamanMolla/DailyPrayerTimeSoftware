@@ -83,12 +83,13 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="Fajr Time:" VerticalAlignment="Center" Foreground="#6f6885"/>
@@ -123,8 +124,25 @@
 
                     <TextBlock Text="Popup Alarm:" Grid.Row="5" VerticalAlignment="Center" Foreground="#10b981" FontWeight="SemiBold" Margin="0,10,0,0"/>
                     <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,10,0,0">
-                        <TextBox x:Name="JamaatPopupOffsetInput" Width="50" Padding="5"/>
-                        <TextBlock Text="minutes before Jamaat" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="11" Foreground="#6f6885"/>
+                        <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Padding="5"/>
+                        <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Adhan Alarm:" Grid.Row="6" VerticalAlignment="Center" Foreground="#2563eb" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                    <StackPanel Grid.Row="6" Grid.Column="1" Margin="0,10,0,0">
+                        <CheckBox x:Name="AdhanAlarmEnabledInput" Content="Enable Adhan sound before Jamaat" Foreground="#170939"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBox x:Name="AdhanAlarmOffsetInput" Width="40" Padding="5"/>
+                            <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <Grid Margin="0,5,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected Adhan sound file"/>
+                            <Button Grid.Column="1" Content="Browse..." Click="BrowseAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand"/>
+                        </Grid>
                     </StackPanel>
                 </Grid>
 
@@ -170,7 +188,7 @@
                                 github.com/AbiruzzamanMolla
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock Text="Version: Native Release 1.3.1" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
+                        <TextBlock Text="Version: Native Release 1.4.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
                     </StackPanel>
                 </Border>
 
