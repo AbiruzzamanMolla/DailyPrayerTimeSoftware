@@ -23,7 +23,9 @@ namespace DailyPrayerTime.Native
         private PrayerTimes? _tomorrowPrayerTimes;
         private OverlayWindow? _overlay;
         private Prayer _lastPrayer = Prayer.NONE;
+        private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
+        private CongregationTimerPopup? _activeJamaatPopup;
 
         public MainWindow()
         {
@@ -206,6 +208,104 @@ namespace DailyPrayerTime.Native
         {
             UpdateCountdown();
             CheckProhibitedTimes();
+            CheckJamaatAlarms();
+        }
+
+        private void CheckJamaatAlarms()
+        {
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
+
+            DateTime now = DateTime.Now;
+            var s = SettingsManager.Current;
+
+            // List of prayers to check for jamaat
+            Prayer[] prayers = { Prayer.FAJR, Prayer.DHUHR, Prayer.ASR, Prayer.MAGHRIB, Prayer.ISHA };
+
+            foreach (var p in prayers)
+            {
+                if (CheckAndShowJamaatAlarm(p, now, s)) return;
+            }
+
+            ResetJamaatAlarmState(now, s);
+        }
+
+        private bool CheckAndShowJamaatAlarm(Prayer p, DateTime now, AppSettings s)
+        {
+            DateTime? startTime = _todayPrayerTimes?.TimeForPrayer(p)?.ToLocalTime();
+            if (!startTime.HasValue) return false;
+
+            int offsetMinutes = GetJamaatOffset(p, s);
+            DateTime jamaatTime = startTime.Value.AddMinutes(offsetMinutes);
+            
+            DateTime endTime = GetPrayerEndTime(p);
+            if (jamaatTime >= endTime) jamaatTime = endTime.AddMinutes(-1);
+
+            DateTime popupTriggerTime = jamaatTime.AddMinutes(-s.JamaatPopupOffset);
+
+            if (now >= popupTriggerTime && now < jamaatTime)
+            {
+                if (_lastJamaatPopupPrayer != p)
+                {
+                    ShowJamaatPopup(FormatPrayerName(p), jamaatTime);
+                    _lastJamaatPopupPrayer = p;
+                }
+                return true;
+            }
+            return false;
+        }
+
+        private int GetJamaatOffset(Prayer p, AppSettings s)
+        {
+            return p switch
+            {
+                Prayer.FAJR => s.FajrJamaat,
+                Prayer.DHUHR => s.DhuhrJamaat,
+                Prayer.ASR => s.AsrJamaat,
+                Prayer.MAGHRIB => s.MaghribJamaat,
+                Prayer.ISHA => s.IshaJamaat,
+                _ => 0
+            };
+        }
+
+        private void ResetJamaatAlarmState(DateTime now, AppSettings s)
+        {
+            if (_lastJamaatPopupPrayer == Prayer.NONE) return;
+
+            DateTime? lastStartTime = _todayPrayerTimes?.TimeForPrayer(_lastJamaatPopupPrayer)?.ToLocalTime();
+            if (lastStartTime.HasValue)
+            {
+                int lastOffset = GetJamaatOffset(_lastJamaatPopupPrayer, s);
+                DateTime lastJamaatTime = lastStartTime.Value.AddMinutes(lastOffset);
+                if (now > lastJamaatTime.AddMinutes(1))
+                {
+                    _lastJamaatPopupPrayer = Prayer.NONE;
+                }
+            }
+        }
+
+        private DateTime GetPrayerEndTime(Prayer p)
+        {
+            return p switch
+            {
+                Prayer.FAJR => _todayPrayerTimes!.Sunrise.ToLocalTime(),
+                Prayer.DHUHR => _todayPrayerTimes!.Asr.ToLocalTime(),
+                Prayer.ASR => _todayPrayerTimes!.Maghrib.ToLocalTime(),
+                Prayer.MAGHRIB => _todayPrayerTimes!.Isha.ToLocalTime(),
+                Prayer.ISHA => _tomorrowPrayerTimes!.Fajr.ToLocalTime(),
+                _ => DateTime.MaxValue
+            };
+        }
+
+        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime)
+        {
+            // Close existing if open
+            if (_activeJamaatPopup != null && _activeJamaatPopup.IsVisible)
+            {
+                _activeJamaatPopup.Close();
+            }
+
+            _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
+            _activeJamaatPopup.Show();
         }
 
         private void CheckProhibitedTimes()

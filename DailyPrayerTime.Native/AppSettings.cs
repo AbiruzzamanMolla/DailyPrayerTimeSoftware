@@ -33,6 +33,14 @@ namespace DailyPrayerTime.Native
         public double OverlayY { get; set; } = -1;
 
         public bool NotificationsEnabled { get; set; } = true;
+        
+        // Congregation (Jamaat) Settings
+        public int FajrJamaat { get; set; } = 30;
+        public int DhuhrJamaat { get; set; } = 15;
+        public int AsrJamaat { get; set; } = 15;
+        public int MaghribJamaat { get; set; } = 5;
+        public int IshaJamaat { get; set; } = 15;
+        public int JamaatPopupOffset { get; set; } = 5; // Minutes before Jamaat
     }
 
     public static class SettingsManager

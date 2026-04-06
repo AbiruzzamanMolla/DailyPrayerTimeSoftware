@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-04-06
+
+### Added
+- **Congregation (Jamaat) Alarms**: You can now set a congregation time (minutes after start) for each of the 5 prayers in settings.
+- **Jamaat Countdown Popup**: A high-contrast, premium alarm window appears before the congregation starts, showing a live countdown.
+- **Configurable Alarm Trigger**: Set exactly how many minutes before the congregation you want the alarm window to appear.
+- **Smart Validation**: Jamaat times are automatically validated to stay within the prayer window (e.g., Fajr Jamaat is always before Sunrise).
+
 ## [1.0.1] - 2026-04-06
 
 ### Added

@@ -38,6 +38,13 @@ namespace DailyPrayerTime.Native
             GradEndInput.Text = s.GradientEnd;
             PrimaryColorInput.Text = s.PrimaryColor;
             SecondaryColorInput.Text = s.SecondaryColor;
+
+            FajrJamaatInput.Text = s.FajrJamaat.ToString();
+            DhuhrJamaatInput.Text = s.DhuhrJamaat.ToString();
+            AsrJamaatInput.Text = s.AsrJamaat.ToString();
+            MaghribJamaatInput.Text = s.MaghribJamaat.ToString();
+            IshaJamaatInput.Text = s.IshaJamaat.ToString();
+            JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -69,6 +76,13 @@ namespace DailyPrayerTime.Native
             s.GradientEnd = GradEndInput.Text;
             s.PrimaryColor = PrimaryColorInput.Text;
             s.SecondaryColor = SecondaryColorInput.Text;
+
+            if (int.TryParse(FajrJamaatInput.Text, out int fj)) s.FajrJamaat = fj;
+            if (int.TryParse(DhuhrJamaatInput.Text, out int dj)) s.DhuhrJamaat = dj;
+            if (int.TryParse(AsrJamaatInput.Text, out int aj)) s.AsrJamaat = aj;
+            if (int.TryParse(MaghribJamaatInput.Text, out int mj)) s.MaghribJamaat = mj;
+            if (int.TryParse(IshaJamaatInput.Text, out int ij)) s.IshaJamaat = ij;
+            if (int.TryParse(JamaatPopupOffsetInput.Text, out int jpo)) s.JamaatPopupOffset = jpo;
 
             SettingsManager.Save();
             this.DialogResult = true;
