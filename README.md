@@ -4,7 +4,9 @@ Version: 1.5.4
 
 A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay.
 
-![Preview](https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/refs/heads/native-rewrite/DailyPrayerTime.Native/icon.ico)
+## 📸 App Preview
+
+![Daily Prayer Timer Preview](screenshots/preview.gif)
 
 ## 🚀 Key Features
 
