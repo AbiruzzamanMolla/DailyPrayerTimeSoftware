@@ -90,12 +90,14 @@
                         <StackPanel>
                             <TextBlock x:Name="SuhurNameText" Text="Suhur (Ends)" FontSize="12" FontWeight="SemiBold" Foreground="White" Opacity="0.7"/>
                             <TextBlock x:Name="SuhurTimeText" Text="--:-- AM" FontSize="16" FontWeight="Bold" Foreground="#60a5fa"/>
+                            <TextBlock x:Name="SuhurCountdownText" Text="--:--:--" FontSize="11" Foreground="White" Opacity="0.8" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
                     <Border x:Name="IftarCard" Background="#1AFFFFFF" CornerRadius="8" Padding="15">
                         <StackPanel>
                             <TextBlock x:Name="IftarNameText" Text="Iftar (Begins)" FontSize="12" FontWeight="SemiBold" Foreground="White" Opacity="0.7"/>
                             <TextBlock x:Name="IftarTimeText" Text="--:-- PM" FontSize="16" FontWeight="Bold" Foreground="#f87171"/>
+                            <TextBlock x:Name="IftarCountdownText" Text="--:--:--" FontSize="11" Foreground="White" Opacity="0.8" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
                 </UniformGrid>

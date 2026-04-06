@@ -35,7 +35,7 @@ namespace DailyPrayerTime.Native
         private bool _sunsetProhibActive = false;
         private string _prohibNotifyDate = "";
 
-        private string GetTimeFmt() => SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
+        private static string GetTimeFmt() => SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
         private MediaPlayer _adhanPlayer = new MediaPlayer();
         private Prayer _lastAdhanPrayer = Prayer.NONE;
         private string _lastAdhanDate = "";
@@ -228,7 +228,7 @@ namespace DailyPrayerTime.Native
             RefreshUIDisplay();
         }
 
-        private async Task DownloadDefaultAdhan()
+        private static async Task DownloadDefaultAdhan()
         {
             var s = SettingsManager.Current;
             if (!string.IsNullOrEmpty(s.AdhanSoundPath)) return;
@@ -263,7 +263,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private string GetHijriDate()
+        private static string GetHijriDate()
         {
             try {
                 var now = DateTime.Now;
@@ -366,7 +366,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private void ShowNotification(string title, string message)
+        private static void ShowNotification(string title, string message)
         {
             new ToastContentBuilder()
                 .AddText(title)
@@ -454,7 +454,7 @@ namespace DailyPrayerTime.Native
             return false;
         }
 
-        private DateTime? GetJamaatTime(Prayer p, AppSettings s, DateTime now)
+        private static DateTime? GetJamaatTime(Prayer p, AppSettings s, DateTime now)
         {
             string? timeStr = p switch
             {
@@ -543,6 +543,30 @@ namespace DailyPrayerTime.Native
             UpdateOverlay(currentPrayer, curName, nextName, countStr, nextTime);
             UpdateProgressBar(currentPrayer, nextTime, now);
             UpdatePrayerListHighlighting(curPrayer);
+            UpdateHighlightsCountdown(now);
+        }
+
+        private void UpdateHighlightsCountdown(DateTime now)
+        {
+            if (_todayPrayerTimes == null) return;
+
+            UpdateSingleHighlight(SuhurCountdownText, now, _todayPrayerTimes.Suhur);
+            UpdateSingleHighlight(IftarCountdownText, now, _todayPrayerTimes.Iftar);
+        }
+
+        private static void UpdateSingleHighlight(System.Windows.Controls.TextBlock textBlock, DateTime now, DateTime target)
+        {
+            if (now > target)
+            {
+                textBlock.Text = "Passed";
+                textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(156, 163, 175)); // slate-400
+            }
+            else
+            {
+                TimeSpan rem = target - now;
+                textBlock.Text = $"-{rem.Hours:D2}:{rem.Minutes:D2}:{rem.Seconds:D2}";
+                textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(255, 255, 255)); // white
+            }
         }
 
         private (Prayer nextPrayer, DateTime nextTime) GetNextPrayerInfo(DateTime now)
@@ -682,7 +706,7 @@ namespace DailyPrayerTime.Native
             ProhibitedWarning.Visibility = isProhib ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void CheckProhibNotify(string name, DateTime now, DateTime start, DateTime end, ref bool isActive)
+        private static void CheckProhibNotify(string name, DateTime now, DateTime start, DateTime end, ref bool isActive)
         {
             if (now >= start && now <= end)
             {
