@@ -98,6 +98,7 @@
                     <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
                 </Grid>
                 <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
+                <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
                 <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,10" Foreground="#170939"/>
                 
                 <!-- Congregation Times -->
@@ -288,13 +289,27 @@
                                 github.com/AbiruzzamanMolla
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.5.8" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
+                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.5.9" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
                         <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="0,10,0,0" HorizontalAlignment="Left" Padding="10,4" Background="#170939" Foreground="White" BorderThickness="0">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="4"/>
                                 </Style>
                             </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Support Me -->
+                <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
+                <Border Background="#fff9e6" BorderBrush="#fde68a" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="Buy Me a Coffee ☕" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                        <TextBlock Foreground="#78350f" TextWrapping="Wrap" Margin="0,0,0,10">
+                            If you find this application helpful, please consider supporting its development.
+                        </TextBlock>
+                        <Button Cursor="Hand" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Click="SupportMe_Click">
+                            <Image Source="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Button>
                     </StackPanel>
                 </Border>

@@ -15,6 +15,24 @@ namespace DailyPrayerTime.Native
             };
 
             base.OnStartup(e);
+
+            var mainWindow = new MainWindow();
+            bool isSilent = false;
+            
+            foreach (var arg in e.Args)
+            {
+                if (arg.Equals("-silent", System.StringComparison.OrdinalIgnoreCase) || 
+                    arg.Equals("--silent", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    isSilent = true;
+                    break;
+                }
+            }
+
+            if (!isSilent)
+            {
+                mainWindow.Show();
+            }
         }
     }
 }

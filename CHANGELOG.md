@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.9] - 2026-04-07
+
+### Added
+- **Tahajjud Timer**: Integrated a dynamic countdown timer for the last third of the night, automatically appearing in the Hero Card.
+- **Nafal Prayer Notices**: Added smart detection for Salat al-Duha and Salat al-Awwabin windows with dedicated "Nafal Notice" cards.
+- **Truly Transparent Icons**: Replaced PNG-based icons with high-quality XAML Vector paths to ensure 100% transparency and a professional, box-free look.
+- **Dynamic Status Colors**: Vector icons now change colors based on the time of day (Golden for Day, Silver for Night, Warm Orange for Sunrise/Sunset).
+- **UI Visibility Improvements**: Brightened prayer labels and increased timer font sizes in the Hero section for better readability during night-time use.
+
 ## [1.5.8] - 2026-04-06
 
 ### Added

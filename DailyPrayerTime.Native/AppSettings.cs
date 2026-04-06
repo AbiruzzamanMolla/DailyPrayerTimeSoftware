@@ -24,6 +24,7 @@ namespace DailyPrayerTime.Native
         
         public bool ShowOverlay { get; set; } = true;
         public bool AutoStart { get; set; } = false;
+        public bool SilentStart { get; set; } = false;
 
         public double Latitude { get; set; } = 23.8103;
         public double Longitude { get; set; } = 90.4125;

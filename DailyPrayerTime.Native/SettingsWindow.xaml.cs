@@ -155,6 +155,12 @@ namespace DailyPrayerTime.Native
             SecondaryColorInput.Text = s.SecondaryColor;
 
             AutoStartInput.IsChecked = s.AutoStart;
+            SilentStartInput.IsChecked = s.SilentStart;
+            SilentStartInput.IsEnabled = s.AutoStart;
+            
+            AutoStartInput.Checked += (snd, evt) => SilentStartInput.IsEnabled = true;
+            AutoStartInput.Unchecked += (snd, evt) => SilentStartInput.IsEnabled = false;
+
             ExternalApiInput.IsChecked = s.UseExternalApi;
 
             bool is24h = s.TimeFormat == "24h";
@@ -291,10 +297,13 @@ namespace DailyPrayerTime.Native
             s.NotificationsEnabled = NotificationsInput.IsChecked ?? true;
             
             bool newAutoStart = AutoStartInput.IsChecked ?? false;
-            if (s.AutoStart != newAutoStart)
+            bool newSilentStart = SilentStartInput.IsChecked ?? false;
+            
+            if (s.AutoStart != newAutoStart || s.SilentStart != newSilentStart)
             {
                 s.AutoStart = newAutoStart;
-                SetAutoStart(newAutoStart);
+                s.SilentStart = newSilentStart;
+                SetAutoStart(newAutoStart, newSilentStart);
             }
 
             s.GradientStart = GradStartInput.Text;
@@ -303,6 +312,7 @@ namespace DailyPrayerTime.Native
             s.SecondaryColor = SecondaryColorInput.Text;
 
             s.AutoStart = AutoStartInput.IsChecked ?? false;
+            s.SilentStart = SilentStartInput.IsChecked ?? false;
             s.UseExternalApi = ExternalApiInput.IsChecked ?? false;
             
             bool is24h = TimeFormatInput.SelectedIndex == 1;
@@ -350,7 +360,7 @@ namespace DailyPrayerTime.Native
             }
         }
         
-        private static void SetAutoStart(bool enable)
+        private static void SetAutoStart(bool enable, bool silentStart = false)
         {
             try
             {
@@ -358,7 +368,8 @@ namespace DailyPrayerTime.Native
                 if (enable)
                 {
                     string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName;
-                    key.SetValue("DailyPrayerTimeNative", "\"" + exePath + "\"");
+                    string args = silentStart ? " -silent" : "";
+                    key.SetValue("DailyPrayerTimeNative", "\"" + exePath + "\"" + args);
                 }
                 else
                 {
@@ -546,6 +557,15 @@ namespace DailyPrayerTime.Native
                 btn.Content = "Check for Updates";
                 btn.IsEnabled = true;
             }
+        }
+
+        private void SupportMe_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://www.supportkori.com/abiruzzaman") { UseShellExecute = true });
+            }
+            catch { /* Ignore */ }
         }
     }
 }
