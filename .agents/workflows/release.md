@@ -25,14 +25,18 @@ Run the app in debug mode to verify:
 4. Settings are saved and loaded after app restart.
 5. Tray icon menu works correctly.
 
-## 3. Build Application
-Build the standalone, single-file executable for Windows x64.
+## 3. Build & Compile Application
+Build the standalone, single-file executable and سپس compile the professional installer.
 
 ```powershell
-dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true
+# 3.1 Build Release
+dotnet publish DailyPrayerTime.Native -c Release -r win-x64 --self-contained -p:PublishSingleFile=true -p:PublishReadyToRun=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+# 3.2 Compile Installer
+& "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "installer.iss"
 ```
 
-- **Output Location**: `DailyPrayerTime.Native/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/DailyPrayerTime.Native.exe`
+- **Output Location**: `Output/DailyPrayerTimer_Setup.exe`
 
 ## 4. Git Versioning
 ```powershell
@@ -47,7 +51,7 @@ Create a release on GitHub and upload the `.exe`.
 
 ```powershell
 gh release create vx.x.x `
-  ./DailyPrayerTime.Native/bin/Release/net8.0-windows10.0.19041.0/win-x64/publish/DailyPrayerTime.Native.exe `
+  ./Output/DailyPrayerTimer_Setup.exe `
   --title "vx.x.x" `
   --notes "Release notes here"
 ```
