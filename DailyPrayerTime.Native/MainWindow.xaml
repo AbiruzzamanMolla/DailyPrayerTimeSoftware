@@ -28,7 +28,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" x:Name="LocationDisplay" Text="📍 Dhaka, Bangladesh" Foreground="#170939" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" />
+            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                <TextBlock x:Name="LocationDisplay" Text="📍 Dhaka, Bangladesh" Foreground="#170939" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="HijriDateDisplay" Text="18 Ramadan 1447" Foreground="#170939" Opacity="0.6" FontSize="11" HorizontalAlignment="Left" Margin="0,2,0,0"/>
+            </StackPanel>
             <Button Grid.Column="1" Content="⚙" Click="Settings_Click" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderBrush="Transparent" Foreground="#170939" FontSize="20" Cursor="Hand" />
         </Grid>
 

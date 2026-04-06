@@ -134,6 +134,7 @@ namespace DailyPrayerTime.Native
             // Hero section background
             HeroBorder.Background = primaryBrush;
             FooterBorder.Background = primaryBrush;
+            HijriDateDisplay.Foreground = primaryBrush;
 
             try 
             {
@@ -175,8 +176,28 @@ namespace DailyPrayerTime.Native
 
             _todayPrayerTimes = new PrayerTimes(coordinates, today, parameters);
             _tomorrowPrayerTimes = new PrayerTimes(coordinates, tomorrow, parameters);
-
+            
+            HijriDateDisplay.Text = GetHijriDate();
             RefreshUIDisplay();
+        }
+
+        private string GetHijriDate()
+        {
+            try {
+                var now = DateTime.Now;
+                var hijri = new System.Globalization.UmAlQuraCalendar();
+                int year = hijri.GetYear(now);
+                int month = hijri.GetMonth(now);
+                int day = hijri.GetDayOfMonth(now);
+
+                string[] months = {
+                    "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
+                    "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                    "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
+                };
+
+                return $"{day} {months[month - 1]} {year} AH";
+            } catch { return "Hijri Date N/A"; }
         }
 
         private void RefreshUIDisplay()
