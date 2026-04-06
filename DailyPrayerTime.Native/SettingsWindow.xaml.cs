@@ -8,10 +8,10 @@ namespace DailyPrayerTime.Native
 {
     public partial class SettingsWindow : Window
     {
-        private PrayerTimes? _today;
-        private PrayerTimes? _tomorrow;
+        private CombinedPrayerTimes? _today;
+        private CombinedPrayerTimes? _tomorrow;
 
-        public SettingsWindow(PrayerTimes? today, PrayerTimes? tomorrow)
+        public SettingsWindow(CombinedPrayerTimes? today, CombinedPrayerTimes? tomorrow)
         {
             _today = today;
             _tomorrow = tomorrow;
@@ -55,6 +55,7 @@ namespace DailyPrayerTime.Native
             AdhanAlarmEnabledInput.IsChecked = s.AdhanAlarmEnabled;
             AdhanAlarmOffsetInput.Text = s.AdhanAlarmOffset.ToString();
             AdhanSoundPathInput.Text = s.AdhanSoundPath;
+            ExternalApiInput.IsChecked = s.UseExternalApi;
 
             PopulateHints();
         }
@@ -63,11 +64,11 @@ namespace DailyPrayerTime.Native
         {
             if (_today == null || _tomorrow == null) return;
 
-            FajrRangeHint.Text = $"Today: {_today.Fajr.ToLocalTime():HH:mm} - {_today.Sunrise.ToLocalTime():HH:mm}";
-            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr.ToLocalTime():HH:mm} - {_today.Asr.ToLocalTime():HH:mm}";
-            AsrRangeHint.Text = $"Today: {_today.Asr.ToLocalTime():HH:mm} - {_today.Maghrib.ToLocalTime():HH:mm}";
-            MaghribRangeHint.Text = $"Today: {_today.Maghrib.ToLocalTime():HH:mm} - {_today.Isha.ToLocalTime():HH:mm}";
-            IshaRangeHint.Text = $"Today: {_today.Isha.ToLocalTime():HH:mm} - {_tomorrow.Fajr.ToLocalTime():HH:mm}";
+            FajrRangeHint.Text = $"Today: {_today.Fajr:HH:mm} - {_today.Sunrise:HH:mm}";
+            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr:HH:mm} - {_today.Asr:HH:mm}";
+            AsrRangeHint.Text = $"Today: {_today.Asr:HH:mm} - {_today.Maghrib:HH:mm}";
+            MaghribRangeHint.Text = $"Today: {_today.Maghrib:HH:mm} - {_today.Isha:HH:mm}";
+            IshaRangeHint.Text = $"Today: {_today.Isha:HH:mm} - {_tomorrow.Fajr:HH:mm}";
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -110,6 +111,7 @@ namespace DailyPrayerTime.Native
             s.AdhanAlarmEnabled = AdhanAlarmEnabledInput.IsChecked ?? false;
             if (int.TryParse(AdhanAlarmOffsetInput.Text, out int aao)) s.AdhanAlarmOffset = aao;
             s.AdhanSoundPath = AdhanSoundPathInput.Text;
+            s.UseExternalApi = ExternalApiInput.IsChecked ?? true;
 
             SettingsManager.Save();
             this.DialogResult = true;

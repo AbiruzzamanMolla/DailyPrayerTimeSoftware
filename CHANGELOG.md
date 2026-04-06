@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-04-06
+
+### Added
+- **AlAdhan API Integration**: High-accuracy prayer times fetched from AlAdhan.com with automatic offline fallback to local calculations.
+- **Improved Islamic Calendar**: Hijri date is now fetched directly from the API for better regional accuracy.
+- **Default Adhan Sound**: Automatic download of a high-quality Adhan file on the first run.
+- **External API Toggle**: Option to enable/disable external API requests in Settings.
+
 ## [1.4.0] - 2026-04-06
 
 ### Added

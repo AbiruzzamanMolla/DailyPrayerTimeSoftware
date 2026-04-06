@@ -46,6 +46,7 @@ namespace DailyPrayerTime.Native
         public bool AdhanAlarmEnabled { get; set; } = false;
         public int AdhanAlarmOffset { get; set; } = 10; // Minutes before Jamaat
         public string AdhanSoundPath { get; set; } = "";
+        public bool UseExternalApi { get; set; } = true;
     }
 
     public static class SettingsManager

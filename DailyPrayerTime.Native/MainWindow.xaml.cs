@@ -9,6 +9,9 @@ using Batoulapps.Adhan;
 using Microsoft.Toolkit.Uwp.Notifications;
 using WColor = System.Windows.Media.Color;
 using WColorConverter = System.Windows.Media.ColorConverter;
+using System.Net.Http;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace DailyPrayerTime.Native
 {
@@ -19,8 +22,8 @@ namespace DailyPrayerTime.Native
         private const string CountdownFmt = "{0:D2}:{1:D2}:{2:D2}";
 
         private DispatcherTimer? _timer;
-        private PrayerTimes? _todayPrayerTimes;
-        private PrayerTimes? _tomorrowPrayerTimes;
+        private CombinedPrayerTimes? _todayPrayerTimes;
+        private CombinedPrayerTimes? _tomorrowPrayerTimes;
         private OverlayWindow? _overlay;
         private Prayer _lastPrayer = Prayer.NONE;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
@@ -37,7 +40,8 @@ namespace DailyPrayerTime.Native
             ApplySettingsTheme();
             SetupTimer();
             SetupTrayIcon();
-            CalculatePrayerTimes();
+            _ = CalculatePrayerTimes();
+            _ = DownloadDefaultAdhan();
             ManageOverlay();
         }
 
@@ -107,7 +111,7 @@ namespace DailyPrayerTime.Native
             if (sw.ShowDialog() == true)
             {
                 ApplySettingsTheme();
-                CalculatePrayerTimes();
+                _ = CalculatePrayerTimes();
                 ManageOverlay();
             }
         }
@@ -156,32 +160,55 @@ namespace DailyPrayerTime.Native
             _timer.Start();
         }
 
-        private void CalculatePrayerTimes()
+        private async Task CalculatePrayerTimes()
         {
             var s = SettingsManager.Current;
+            _todayPrayerTimes = await PrayerService.GetPrayerTimesAsync(s.Latitude, s.Longitude, s.Method, s.School);
+            
+            // Get tomorrow's times (offline calculation is fine for this)
             var coordinates = new Coordinates(s.Latitude, s.Longitude);
-            
-            CalculationParameters parameters = CalculationMethod.KARACHI.GetParameters();
-            try {
-                if (s.Method == "MUSLIMWORLDLEAGUE") parameters = CalculationMethod.MUSLIM_WORLD_LEAGUE.GetParameters();
-                else if (s.Method == "NORTHAMERICA") parameters = CalculationMethod.NORTH_AMERICA.GetParameters();
-                else if (s.Method == "UMMALQURA") parameters = CalculationMethod.UMM_AL_QURA.GetParameters();
-                else if (s.Method == "EGYPTIAN") parameters = CalculationMethod.EGYPTIAN.GetParameters();
-            } catch (Exception) { /* Fallback to Karachi if format is invalid */ }
-
-            parameters.Madhab = s.School == 1 ? Madhab.HANAFI : Madhab.SHAFI;
-
-            var todayDate = DateTime.Now;
             var tomorrowDate = DateTime.Now.AddDays(1);
+            var nextDay = new Batoulapps.Adhan.Internal.DateComponents(tomorrowDate.Year, tomorrowDate.Month, tomorrowDate.Day);
+            var parameters = CalculationMethodExtensions.GetParameters(CalculationMethod.MUSLIM_WORLD_LEAGUE); // Standard
+            _tomorrowPrayerTimes = new CombinedPrayerTimes(new PrayerTimes(coordinates, nextDay, parameters));
             
-            var today = new Batoulapps.Adhan.Internal.DateComponents(todayDate.Year, todayDate.Month, todayDate.Day);
-            var tomorrow = new Batoulapps.Adhan.Internal.DateComponents(tomorrowDate.Year, tomorrowDate.Month, tomorrowDate.Day);
-
-            _todayPrayerTimes = new PrayerTimes(coordinates, today, parameters);
-            _tomorrowPrayerTimes = new PrayerTimes(coordinates, tomorrow, parameters);
-            
-            HijriDateDisplay.Text = GetHijriDate();
+            HijriDateDisplay.Text = string.IsNullOrEmpty(_todayPrayerTimes.HijriDate) ? GetHijriDate() : _todayPrayerTimes.HijriDate;
             RefreshUIDisplay();
+        }
+
+        private async Task DownloadDefaultAdhan()
+        {
+            var s = SettingsManager.Current;
+            if (!string.IsNullOrEmpty(s.AdhanSoundPath)) return;
+
+            string appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+            string assets = Path.Combine(appData, "assets");
+            if (!Directory.Exists(assets)) Directory.CreateDirectory(assets);
+
+            string destPath = Path.Combine(assets, "default_adhan.mp3");
+            if (File.Exists(destPath)) 
+            {
+                s.AdhanSoundPath = destPath;
+                SettingsManager.Save();
+                return;
+            }
+
+            try
+            {
+                using var client = new HttpClient();
+                // A reliable public domain adhan MP3
+                string adhanUrl = "https://www.islamcan.com/audio/adhan/azan1.mp3"; 
+                var data = await client.GetByteArrayAsync(adhanUrl);
+                await File.WriteAllBytesAsync(destPath, data);
+                
+                s.AdhanSoundPath = destPath;
+                SettingsManager.Save();
+                Debug.WriteLine("Default Adhan downloaded to: " + destPath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Failed to download default Adhan: " + ex.Message);
+            }
         }
 
         private string GetHijriDate()
@@ -207,19 +234,19 @@ namespace DailyPrayerTime.Native
         {
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
 
-            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull)}";
-            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull);
-            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Asr.ToLocalTime().ToString(TimeFmtFull)}";
-            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull)}";
-            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull)} - {_todayPrayerTimes.Isha.ToLocalTime().ToString(TimeFmtFull)}";
-            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToLocalTime().ToString(TimeFmtFull)} - {_tomorrowPrayerTimes.Fajr.ToLocalTime().ToString(TimeFmtFull)}";
+            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Sunrise.ToString(TimeFmtFull)}";
+            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToString(TimeFmtFull);
+            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Asr.ToString(TimeFmtFull)}";
+            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToString(TimeFmtFull)} - {_todayPrayerTimes.Maghrib.ToString(TimeFmtFull)}";
+            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(TimeFmtFull)} - {_todayPrayerTimes.Isha.ToString(TimeFmtFull)}";
+            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(TimeFmtFull)} - {_tomorrowPrayerTimes.Fajr.ToString(TimeFmtFull)}";
             
-            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToLocalTime().ToString(TimeFmtFull);
-            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToLocalTime().ToString(TimeFmtFull);
+            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(TimeFmtFull);
+            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(TimeFmtFull);
             
-            DateTime sunrise = _todayPrayerTimes.Sunrise.ToLocalTime();
-            DateTime dhuhr = _todayPrayerTimes.Dhuhr.ToLocalTime();
-            DateTime maghrib = _todayPrayerTimes.Maghrib.ToLocalTime();
+            DateTime sunrise = _todayPrayerTimes.Sunrise;
+            DateTime dhuhr = _todayPrayerTimes.Dhuhr;
+            DateTime maghrib = _todayPrayerTimes.Maghrib;
 
             SunriseProhibRange.Text = $"{sunrise.ToString(TimeFmtShort)} - {sunrise.AddMinutes(15).ToString(TimeFmtShort)}";
             ZawalProhibRange.Text = $"{dhuhr.AddMinutes(-30).ToString(TimeFmtShort)} - {dhuhr.ToString(TimeFmtShort)}";
@@ -299,8 +326,8 @@ namespace DailyPrayerTime.Native
         {
             DateTime? jamaatTime = GetJamaatTime(p, s, now);
             if (!jamaatTime.HasValue) return false;
-
-            DateTime startTime = _todayPrayerTimes!.TimeForPrayer(p)!.Value.ToLocalTime();
+            
+            DateTime startTime = _todayPrayerTimes!.TimeForPrayer(p);
             DateTime endTime = GetPrayerEndTime(p);
 
             // Validation: Ensure Jamaat is between Start and End
@@ -363,11 +390,11 @@ namespace DailyPrayerTime.Native
         {
             return p switch
             {
-                Prayer.FAJR => _todayPrayerTimes!.Sunrise.ToLocalTime(),
-                Prayer.DHUHR => _todayPrayerTimes!.Asr.ToLocalTime(),
-                Prayer.ASR => _todayPrayerTimes!.Maghrib.ToLocalTime(),
-                Prayer.MAGHRIB => _todayPrayerTimes!.Isha.ToLocalTime(),
-                Prayer.ISHA => _tomorrowPrayerTimes!.Fajr.ToLocalTime(),
+                Prayer.FAJR => _todayPrayerTimes!.Sunrise,
+                Prayer.DHUHR => _todayPrayerTimes!.Asr,
+                Prayer.ASR => _todayPrayerTimes!.Maghrib,
+                Prayer.MAGHRIB => _todayPrayerTimes!.Isha,
+                Prayer.ISHA => _tomorrowPrayerTimes!.Fajr,
                 _ => DateTime.MaxValue
             };
         }
@@ -387,11 +414,11 @@ namespace DailyPrayerTime.Native
         private void CheckProhibitedTimes()
         {
             if (_todayPrayerTimes == null) return;
-
+ 
             DateTime now = DateTime.Now;
-            DateTime sunrise = _todayPrayerTimes.Sunrise.ToLocalTime();
-            DateTime dhuhr = _todayPrayerTimes.Dhuhr.ToLocalTime();
-            DateTime maghrib = _todayPrayerTimes.Maghrib.ToLocalTime();
+            DateTime sunrise = _todayPrayerTimes.Sunrise;
+            DateTime dhuhr = _todayPrayerTimes.Dhuhr;
+            DateTime maghrib = _todayPrayerTimes.Maghrib;
 
             UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrise, sunrise.AddMinutes(15));
             UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, dhuhr.AddMinutes(-30), dhuhr);
@@ -459,7 +486,7 @@ namespace DailyPrayerTime.Native
             TimeSpan remaining = nextTime - now;
             if (remaining.TotalSeconds < 0)
             {
-                 CalculatePrayerTimes();
+                 _ = CalculatePrayerTimes();
                  return;
             }
 
@@ -479,12 +506,16 @@ namespace DailyPrayerTime.Native
 
         private (Prayer nextPrayer, DateTime nextTime) GetNextPrayerInfo(DateTime utcNow)
         {
-            var nextPrayer = _todayPrayerTimes!.NextPrayer(utcNow);
-            if (nextPrayer == Prayer.NONE)
+            var now = DateTime.Now;
+            Prayer[] prayers = { Prayer.FAJR, Prayer.SUNRISE, Prayer.DHUHR, Prayer.ASR, Prayer.MAGHRIB, Prayer.ISHA };
+            
+            foreach (var p in prayers)
             {
-                return (Prayer.FAJR, _tomorrowPrayerTimes!.Fajr.ToLocalTime());
+                var time = _todayPrayerTimes!.TimeForPrayer(p);
+                if (time > now) return (p, time);
             }
-            return (nextPrayer, _todayPrayerTimes.TimeForPrayer(nextPrayer)!.Value.ToLocalTime());
+            
+            return (Prayer.FAJR, _tomorrowPrayerTimes!.Fajr);
         }
 
         private void UpdateHeroSection(Prayer currentPrayer, string curName, string nextName, string countStr)
@@ -521,8 +552,8 @@ namespace DailyPrayerTime.Native
             _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";
             _overlay.OverlayCountdownText.Text = countStr;
             
-            DateTime? currentStart = _todayPrayerTimes?.TimeForPrayer(_todayPrayerTimes.CurrentPrayer(DateTime.UtcNow))?.ToLocalTime() 
-                                    ?? _todayPrayerTimes?.Isha.ToLocalTime();
+            DateTime? currentStart = _todayPrayerTimes?.TimeForPrayer(_todayPrayerTimes.CurrentPrayer(DateTime.Now));
+            if (!currentStart.HasValue) currentStart = _todayPrayerTimes?.Isha;
             
             string rangeStr = currentStart.HasValue ? $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}" : "N/A";
             
@@ -552,7 +583,7 @@ namespace DailyPrayerTime.Native
         {
             if (currentPrayer != Prayer.NONE)
             {
-                DateTime currentPrayerTime = _todayPrayerTimes!.TimeForPrayer(currentPrayer)!.Value.ToLocalTime();
+                DateTime currentPrayerTime = _todayPrayerTimes!.TimeForPrayer(currentPrayer);
                 double totalMs = (nextTime - currentPrayerTime).TotalMilliseconds;
                 double elapsedMs = (now - currentPrayerTime).TotalMilliseconds;
                 PrayerProgress.Value = Math.Min(100, Math.Max(0, (elapsedMs / totalMs) * 100));

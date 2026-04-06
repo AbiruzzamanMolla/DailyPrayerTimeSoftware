@@ -71,7 +71,8 @@
                     <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
                     <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
                 </Grid>
-                <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,10" Foreground="#170939"/>
+                <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
+                <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,10" Foreground="#170939"/>
                 
                 <!-- Congregation Times -->
                 <TextBlock Text="Congregation (Jamaat) Times" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
@@ -155,11 +156,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="Gradient Start:" Foreground="#6f6885"/>
+                        <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
                         <TextBox x:Name="GradStartInput" Padding="5"/>
                     </StackPanel>
                     <StackPanel Grid.Column="2">
-                        <TextBlock Text="Gradient End:" Foreground="#6f6885"/>
+                        <TextBlock Text="Gradient End:" Foreground="#05813D"/>
                         <TextBox x:Name="GradEndInput" Padding="5"/>
                     </StackPanel>
                 </Grid>
@@ -188,7 +189,7 @@
                                 github.com/AbiruzzamanMolla
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock Text="Version: Native Release 1.4.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
+                        <TextBlock Text="Version: Native Release 1.5.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
                     </StackPanel>
                 </Border>
 
