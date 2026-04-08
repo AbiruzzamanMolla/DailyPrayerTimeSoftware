@@ -21,6 +21,12 @@ A premium, glassmorphic Windows desktop application for Islamic prayer time trac
 - **Smart Update System**: Automatic version checks on startup and a manual "Check for Updates" button in Settings.
 - **Tray Persistence**: Runs in the background with a system tray icon for quick access and settings.
 
+## 🌐 Extension Versions
+
+Check out other versions of this tool:
+- **Chrome Extension**: [Prayer Time on GitHub](https://github.com/AbiruzzamanMolla/PrayerTime)
+- **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
+
 ## 🛠️ Tech Stack
 
 - **Framework**: WPF (.NET 8.0)
