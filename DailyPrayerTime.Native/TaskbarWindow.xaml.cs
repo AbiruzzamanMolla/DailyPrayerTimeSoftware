@@ -12,6 +12,7 @@ namespace DailyPrayerTime.Native
         private DispatcherTimer _posTimer;
         private IntPtr _trayHandle;
         private IntPtr _myHwnd;
+        private bool _isFirstPositioning = true;
 
         public TaskbarWindow()
         {
@@ -102,8 +103,15 @@ namespace DailyPrayerTime.Native
                     if (x < 0) x = 0;
 
                     // Set position without activating, ensuring we use physical pixels for size
-                    NativeMethods.SetWindowPos(_myHwnd, IntPtr.Zero, x, y, physicalWidth, physicalHeight,
-                        NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW);
+                    uint flags = NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER;
+                    
+                    if (_isFirstPositioning)
+                    {
+                        flags |= NativeMethods.SWP_SHOWWINDOW;
+                        _isFirstPositioning = false;
+                    }
+
+                    NativeMethods.SetWindowPos(_myHwnd, IntPtr.Zero, x, y, physicalWidth, physicalHeight, flags);
                 }
             });
         }

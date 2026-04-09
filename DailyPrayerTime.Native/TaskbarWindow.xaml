@@ -7,7 +7,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock x:Name="TimerText" 
-                       Text="00:00:00" 
+                       Text="--:--:--" 
                        Foreground="White" 
                        FontSize="13" 
                        FontWeight="SemiBold"
@@ -17,7 +17,7 @@
                 </TextBlock.Effect>
             </TextBlock>
             <TextBlock x:Name="PrayerLabel" 
-                       Text="Asr" 
+                       Text="..." 
                        Foreground="#AAFFFFFF" 
                        FontSize="10" 
                        Margin="5,2,0,0"

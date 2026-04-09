@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.5.1] - 2026-04-09
+### Fixed
+- **Integrated Taskbar Stabilization**:
+    - Eliminated continuous flickering by optimizing Win32 `SetWindowPos` flags to prevent excessive redraws.
+    - Resolved application startup freeze where the taskbar showed "00:00:00 Asr" by using neutral placeholders and forcing a data refresh post-calculation.
+    - Improved robustness of high-DPI scaling calculations in the taskbar integration.
+
 ## [1.7.5] - 2026-04-09
 ### Added
 - **Developer Profile Polished**: Reordered information for better readability (Name -> Email -> Projects).
@@ -33,7 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Major UI Restructuring**: Reorganized Settings into three intuitive tabs:
     - **Daily Prayer**: Consolidated Location, Calculation, and Jamaat settings.
     - **Layout & Theme**: Dedicated section for Windows Integrations and Appearance.
-    - **Support & Contact**: Centralized project links and developer info.
+    - **Support & Contact**: Centralized project links and #define AppVersion "1.7.5.1"
 - Expanded **Developer Profiles** with links to Portfolio, npm, Packagist, and Marketplace.
 ### Fixed
 - Fixed **Integrated Taskbar Timer (Win 11 Source)** not initializing on application startup.

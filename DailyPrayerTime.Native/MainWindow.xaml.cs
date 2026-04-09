@@ -289,6 +289,12 @@ namespace DailyPrayerTime.Native
                 EnglishDateDisplay.Text = DateTime.Now.ToString("dddd, MMM d");
                 HijriDateDisplay.Text = string.IsNullOrEmpty(_todayPrayerTimes.HijriDate) ? GetHijriDate() : _todayPrayerTimes.HijriDate;
                 RefreshUIDisplay();
+                
+                // Force an explicit update to the taskbar window now that data is loaded
+                if (_taskbarWindow != null)
+                {
+                   UpdateCountdown();
+                }
             });
         }
 
