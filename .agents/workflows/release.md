@@ -59,6 +59,12 @@ dotnet publish DailyPrayerTime.Native -c Release -r win-x86 --self-contained -p:
 
 # Compile 32-bit Installer
 & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "installer_x86.iss"
+
+### 3.3 Build Portable Version (x64 only)
+
+```powershell
+./publish_portable.ps1
+```
 ```
 
 - **Output Location (x64)**: `Output/DailyPrayerTimer_Setup_v{VERSION}_x64.exe`
@@ -81,6 +87,7 @@ Create a release on GitHub and upload **both** installers.
 gh release create vx.x.x `
   ./Output/DailyPrayerTimer_Setup_v{VERSION}_x64.exe `
   ./Output/DailyPrayerTimer_Setup_v{VERSION}_x86.exe `
+  ./Output/Portable/DailyPrayerTimer_v{VERSION}_Portable_x64.exe `
   --title "vx.x.x" `
   --notes "Release notes here"
 ```

@@ -82,7 +82,7 @@ namespace DailyPrayerTime.Native
             string dateStr = DateTime.Now.ToString("dd-MM-yyyy");
 
             // Cache check
-            string appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+            string appData = StorageService.GetAppDataPath();
             string cachePath = Path.Combine(appData, "prayer_cache.json");
 
             if (s.UseExternalApi)

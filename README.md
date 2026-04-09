@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.7.7
+Version: 1.7.8
 
-## 🚀 Daily Prayer Timer (Native) - v1.7.7
+## 🚀 Daily Prayer Timer (Native) - v1.7.8
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
@@ -40,7 +40,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.7.7-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.7.8-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -66,16 +66,26 @@ Check out other versions of this tool:
 - **Prohibited Times (Makruh) Alerts:** Visual countdowns for Sunrise, Zawal, and Sunset.
 - **Adhan & Alarms:** Customizable sound alerts before Jamaat time.
 
-## 📸 Screenshots
+## 📸 UI Preview
 
-COMING SOON.
+<p align="center">
+  <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
+</p>
 
-## 💾 Installation
-
-| Platform | Installer |
+| Platform | Link |
 |---|---|
-| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.7_x64.exe` |
-| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.7_x86.exe` |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.7.8_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.7.8_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.7.8_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+
+### 🚀 Portable Version
+The portable version is a single-file executable that stores all its settings and data in a `data` subfolder within the application directory. 
+- **No Installation Required**: Just download and run.
+- **Easy Backup**: Simply copy the application folder to keep your settings.
+- **Stealthy**: Does not write to `%APPDATA%` unless manually configured otherwise.
+
+> [!NOTE]
+> To manually enable portable mode on any build, create an empty file named `.portable` in the same directory as the executable.
 
 1. Download the installer matching your system from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.

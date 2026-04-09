@@ -304,7 +304,7 @@ namespace DailyPrayerTime.Native
             var s = SettingsManager.Current;
             if (!string.IsNullOrEmpty(s.AdhanSoundPath)) return;
 
-            string appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+            string appData = StorageService.GetAppDataPath();
             string assets = Path.Combine(appData, "assets");
             if (!Directory.Exists(assets)) Directory.CreateDirectory(assets);
 

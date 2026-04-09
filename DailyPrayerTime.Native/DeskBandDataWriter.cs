@@ -7,7 +7,7 @@ namespace DailyPrayerTime.Native
 {
     public static class DeskBandDataWriter
     {
-        private static readonly string AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
+        private static string AppDataFolder => StorageService.GetAppDataPath();
         private static readonly string DataFile = Path.Combine(AppDataFolder, "deskband_data.json");
 
         public static void Write(DeskBandData data)

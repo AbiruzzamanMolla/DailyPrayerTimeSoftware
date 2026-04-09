@@ -54,8 +54,8 @@ namespace DailyPrayerTime.Native
 
     public static class SettingsManager
     {
-        private static readonly string AppDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "DailyPrayerTimeNative");
-        private static readonly string SettingsFile = Path.Combine(AppDataFolder, "settings.json");
+        private static string AppDataFolder => StorageService.GetAppDataPath();
+        private static string SettingsFile => Path.Combine(AppDataFolder, "settings.json");
 
         public static AppSettings Current { get; private set; } = new AppSettings();
 
