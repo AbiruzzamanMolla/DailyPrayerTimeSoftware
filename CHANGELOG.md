@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.5] - 2026-04-09
+
+### Added
+- **Native Taskbar DeskBand (Windows 10 & 11)**: Introduced a high-performance COM-based taskbar extension that docks directly next to the system tray for real-time prayer countdowns.
+- **Independent Feature Toggles**: Decoupled the Floating Overlay and Taskbar DeskBand, allowing users to enable neither, either, or both simultaneously.
+- **Enhanced Windows 11 Compatibility**: Enabled DeskBand registration for all Windows versions, supporting power users with custom taskbar tools like ExplorerPatcher.
+- **Improved Tray Menu**: Added granular toggle items for both "Show Floating Overlay" and "Show Taskbar Timer" directly in the system tray context menu.
+- **Real-time State Sync**: Implemented a low-latency IPC bridge via JSON to ensure the DeskBand always reflects the main application's state.
+
+### Changed
+- **SDK-style Project Migration**: Converted the DeskBand project to modern SDK-style for improved build stability and .NET CLI compatibility.
+- **Unified Installer**: Updated both x64 and x86 installers to handle administrative COM registration for the taskbar extension on all systems.
+
+### Fixed
+- Fixed a syntax error in `MainWindow.xaml.cs` that previously caused build failures in the notification registration logic.
+- Resolved dependency resolution issues for .NET Framework projects in fresh build environments using ReferenceAssemblies.
+
 ## [1.6.0] - 2026-04-07
  
  ### Added
