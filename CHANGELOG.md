@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.6] - 2026-04-09
+### Fixed
+- **Taskbar Timer Flicker (Root Cause Fixed)**: Completely rewrote the Integrated Taskbar Timer to work as a standalone topmost window instead of using `SetParent` into `Shell_TrayWnd`. On Windows 11, the `SetParent` approach causes the taskbar to continuously repaint and fight the child window, resulting in constant flickering. The new approach positions the timer window over the taskbar using screen coordinates — the same method used by modern system tools.
+- **Eliminated Redundant Win32 Calls**: Position is now cached; `SetWindowPos` is only called when the position actually changes (e.g., taskbar moves or DPI changes), reducing CPU overhead and visual jitter.
+- **Update Checker False Positive**: Fixed an issue where 4-part versions (e.g., `1.7.5.1`) would always trigger the "Update Available" banner because the internal version reader only returned 3 parts. All future releases will use standard 3-part semantic versioning (e.g., `1.7.6`).
+
 ## [1.7.5.1] - 2026-04-09
 ### Fixed
 - **Integrated Taskbar Stabilization**:

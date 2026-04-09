@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Interop;
@@ -10,36 +9,37 @@ namespace DailyPrayerTime.Native
     public partial class TaskbarWindow : Window
     {
         private DispatcherTimer _posTimer;
-        private IntPtr _trayHandle;
         private IntPtr _myHwnd;
-        private bool _isFirstPositioning = true;
+
+        // Cache position to avoid unnecessary SetWindowPos calls
+        private int _lastX = -1;
+        private int _lastY = -1;
+        private int _lastW = -1;
+        private int _lastH = -1;
 
         public TaskbarWindow()
         {
             InitializeComponent();
             this.SourceInitialized += TaskbarWindow_SourceInitialized;
-            
-            _posTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
-            _posTimer.Tick += (s, e) => UpdatePosition();
+
+            // Poll position every 2 seconds (only need to react to taskbar moves/resizes)
+            _posTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+            _posTimer.Tick += (s, e) => RepositionOnTaskbar();
         }
 
         private void TaskbarWindow_SourceInitialized(object sender, EventArgs e)
         {
             _myHwnd = new WindowInteropHelper(this).Handle;
 
-            // Set extended styles: ToolWindow (no taskbar icon) and NoActivate (don't steal focus)
+            // Set extended styles: ToolWindow (no taskbar icon) + NoActivate (don't steal focus)
             int exStyle = NativeMethods.GetWindowLong(_myHwnd, NativeMethods.GWL_EXSTYLE);
-            NativeMethods.SetWindowLong(_myHwnd, NativeMethods.GWL_EXSTYLE, exStyle | NativeMethods.WS_EX_TOOLWINDOW | NativeMethods.WS_EX_NOACTIVATE);
+            NativeMethods.SetWindowLong(_myHwnd, NativeMethods.GWL_EXSTYLE,
+                exStyle | NativeMethods.WS_EX_TOOLWINDOW | NativeMethods.WS_EX_NOACTIVATE);
 
-            // Find the taskbar
-            _trayHandle = NativeMethods.FindWindow("Shell_TrayWnd", null);
-            if (_trayHandle != IntPtr.Zero)
-            {
-                // Parent to the Taskbar (TrafficMonitor style)
-                NativeMethods.SetParent(_myHwnd, _trayHandle);
-                UpdatePosition();
-                _posTimer.Start();
-            }
+            // Do NOT use SetParent on Windows 11 — it causes constant flickering.
+            // Instead, position ourselves as a top-level topmost window over the taskbar.
+            RepositionOnTaskbar();
+            _posTimer.Start();
         }
 
         public void UpdateData(string time, string prayer)
@@ -52,7 +52,6 @@ namespace DailyPrayerTime.Native
                 {
                     TimerText.Text = time;
                     PrayerLabel.Text = prayer;
-                    Debug.WriteLine($"[TaskbarWindow] UI Updated successfully: {prayer} - {time}");
                 }
                 catch (Exception ex)
                 {
@@ -61,59 +60,60 @@ namespace DailyPrayerTime.Native
             });
         }
 
-        private void UpdatePosition()
+        private void RepositionOnTaskbar()
         {
-            if (_trayHandle == IntPtr.Zero || _myHwnd == IntPtr.Zero) return;
+            if (_myHwnd == IntPtr.Zero) return;
 
-            Dispatcher.Invoke(() =>
+            try
             {
-                // Find the notification area (TrayNotifyWnd) to anchor next to it
-                IntPtr notifyWnd = NativeMethods.FindWindowEx(_trayHandle, IntPtr.Zero, "TrayNotifyWnd", null);
-                if (notifyWnd != IntPtr.Zero)
+                IntPtr trayHandle = NativeMethods.FindWindow("Shell_TrayWnd", null);
+                if (trayHandle == IntPtr.Zero) return;
+
+                IntPtr notifyWnd = NativeMethods.FindWindowEx(trayHandle, IntPtr.Zero, "TrayNotifyWnd", null);
+                if (notifyWnd == IntPtr.Zero) return;
+
+                NativeMethods.GetWindowRect(trayHandle, out NativeMethods.RECT trayRect);
+                NativeMethods.GetWindowRect(notifyWnd, out NativeMethods.RECT notifyRect);
+
+                // Get DPI scaling
+                double scaleX = 1.0, scaleY = 1.0;
+                var source = PresentationSource.FromVisual(this);
+                if (source?.CompositionTarget != null)
                 {
-                    NativeMethods.RECT notifyRect;
-                    NativeMethods.GetWindowRect(notifyWnd, out notifyRect);
-
-                    NativeMethods.RECT trayRect;
-                    NativeMethods.GetWindowRect(_trayHandle, out trayRect);
-
-                    // Get DPI scaling factor
-                    double scaleX = 1.0;
-                    double scaleY = 1.0;
-                    var source = PresentationSource.FromVisual(this);
-                    if (source?.CompositionTarget != null)
-                    {
-                        scaleX = source.CompositionTarget.TransformToDevice.M11;
-                        scaleY = source.CompositionTarget.TransformToDevice.M22;
-                    }
-
-                    // Convert logical sizes to physical pixels
-                    int physicalWidth = (int)(this.ActualWidth * scaleX);
-                    int physicalHeight = (int)(this.ActualHeight * scaleY);
-
-                    if (physicalWidth == 0) physicalWidth = (int)(this.Width * scaleX);
-                    if (physicalHeight == 0) physicalHeight = (int)(this.Height * scaleY);
-
-                    // Calculate position relative to Shell_TrayWnd
-                    // We want to be just to the left of the notification area
-                    int x = (notifyRect.Left - trayRect.Left) - physicalWidth - (int)(10 * scaleX);
-                    int y = (trayRect.Height - physicalHeight) / 2;
-
-                    // Ensure we don't end up with negative coordinates if something is weird
-                    if (x < 0) x = 0;
-
-                    // Set position without activating, ensuring we use physical pixels for size
-                    uint flags = NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER;
-                    
-                    if (_isFirstPositioning)
-                    {
-                        flags |= NativeMethods.SWP_SHOWWINDOW;
-                        _isFirstPositioning = false;
-                    }
-
-                    NativeMethods.SetWindowPos(_myHwnd, IntPtr.Zero, x, y, physicalWidth, physicalHeight, flags);
+                    scaleX = source.CompositionTarget.TransformToDevice.M11;
+                    scaleY = source.CompositionTarget.TransformToDevice.M22;
                 }
-            });
+
+                int physicalWidth = (int)(this.ActualWidth * scaleX);
+                int physicalHeight = (int)(this.ActualHeight * scaleY);
+
+                if (physicalWidth <= 0) physicalWidth = (int)(this.Width * scaleX);
+                if (physicalHeight <= 0) physicalHeight = (int)(this.Height * scaleY);
+
+                // Position: just to the left of the notification area, vertically centered on the taskbar
+                // These are SCREEN coordinates (not relative to a parent)
+                int x = notifyRect.Left - physicalWidth - (int)(6 * scaleX);
+                int y = trayRect.Top + (trayRect.Height - physicalHeight) / 2;
+
+                if (x < trayRect.Left) x = trayRect.Left;
+
+                // Only call SetWindowPos if position actually changed
+                if (x != _lastX || y != _lastY || physicalWidth != _lastW || physicalHeight != _lastH)
+                {
+                    NativeMethods.SetWindowPos(_myHwnd, NativeMethods.HWND_TOPMOST,
+                        x, y, physicalWidth, physicalHeight,
+                        NativeMethods.SWP_NOACTIVATE);
+
+                    _lastX = x;
+                    _lastY = y;
+                    _lastW = physicalWidth;
+                    _lastH = physicalHeight;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[TaskbarWindow] Reposition failed: {ex.Message}");
+            }
         }
 
         protected override void OnClosed(EventArgs e)
