@@ -15,192 +15,289 @@
 
         <TextBlock Text="Settings" FontSize="24" FontWeight="Bold" Foreground="#170939" Margin="0,0,0,15"/>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="0,0,10,0">
-                <!-- Location -->
-                <TextBlock Text="Location" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
-                <TextBlock Text="Name:" Foreground="#6f6885"/>
-                <Grid Margin="0,0,0,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="LocationNameInput" Padding="5" Margin="0,0,5,0" />
-                    <Button Grid.Column="1" Content="Search" Width="60" Click="SearchLocation_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Latitude:" Foreground="#6f6885"/>
-                        <TextBox x:Name="LatInput" Padding="5"/>
+        <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0,1,0,0" BorderBrush="#ececec">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Padding" Value="10,5"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Foreground" Value="#6f6885"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border x:Name="Border" BorderThickness="0,0,0,2" Margin="0,0,10,0">
+                                    <ContentPresenter ContentSource="Header" Margin="10,5"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="#170939"/>
+                                        <Setter Property="Foreground" Value="#170939"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="BorderBrush" Value="Transparent"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- TAB 1: GENERAL -->
+            <TabItem Header="General">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
+                    <StackPanel>
+                        <!-- Location -->
+                        <TextBlock Text="Location" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="Name:" Foreground="#6f6885"/>
+                        <Grid Margin="0,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="LocationNameInput" Padding="5" Margin="0,0,5,0" />
+                            <Button Grid.Column="1" Content="Search" Width="60" Click="SearchLocation_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Latitude:" Foreground="#6f6885"/>
+                                <TextBox x:Name="LatInput" Padding="5"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Longitude:" Foreground="#6f6885"/>
+                                <TextBox x:Name="LngInput" Padding="5"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Calculation Preferences -->
+                        <TextBlock Text="Calculation" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
+                        <TextBlock Text="Calculation Method:" Foreground="#6f6885"/>
+                        <ComboBox x:Name="MethodInput" Margin="0,0,0,10" Padding="5">
+                            <ComboBoxItem Content="Shia"/>
+                            <ComboBoxItem Content="Karachi"/>
+                            <ComboBoxItem Content="ISNA"/>
+                            <ComboBoxItem Content="MWL"/>
+                            <ComboBoxItem Content="Makkah"/>
+                            <ComboBoxItem Content="Egypt"/>
+                            <ComboBoxItem Content="Tehran"/>
+                            <ComboBoxItem Content="Gulf"/>
+                            <ComboBoxItem Content="Kuwait"/>
+                            <ComboBoxItem Content="Qatar"/>
+                            <ComboBoxItem Content="Singapore"/>
+                            <ComboBoxItem Content="France"/>
+                            <ComboBoxItem Content="Turkey"/>
+                            <ComboBoxItem Content="Russia"/>
+                            <ComboBoxItem Content="Moonsighting"/>
+                            <ComboBoxItem Content="Dubai"/>
+                            <ComboBoxItem Content="JAKIM"/>
+                            <ComboBoxItem Content="Tunisia"/>
+                            <ComboBoxItem Content="Algeria"/>
+                            <ComboBoxItem Content="KEMENAG"/>
+                            <ComboBoxItem Content="Morocco"/>
+                            <ComboBoxItem Content="Brazil"/>
+                            <ComboBoxItem Content="Portugal"/>
+                            <ComboBoxItem Content="Jordan"/>
+                        </ComboBox>
+                        
+                        <TextBlock Text="Madhab (Asr):" Foreground="#6f6885"/>
+                        <ComboBox x:Name="MadhabInput" Margin="0,0,0,10" Padding="5">
+                            <ComboBoxItem Content="Shafi (Standard)"/>
+                            <ComboBoxItem Content="Hanafi"/>
+                        </ComboBox>
+
+                        <TextBlock Text="Time Format:" Foreground="#6f6885"/>
+                        <ComboBox x:Name="TimeFormatInput" Margin="0,0,0,10" Padding="5">
+                            <ComboBoxItem Content="12 Hours (AM/PM)"/>
+                            <ComboBoxItem Content="24 Hours"/>
+                        </ComboBox>
+
+                        <!-- Integrations -->
+                        <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
+                            <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
+                        </Grid>
+                        <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,10" Foreground="#170939"/>
+
+                        <!-- Appearance -->
+                        <TextBlock Text="Appearance" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="GradStartInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Gradient End:" Foreground="#05813D"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="GradEndInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,10,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Primary Color:" Foreground="#6f6885"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="PrimaryColorInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Secondary Color:" Foreground="#6f6885"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="SecondaryColorInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Longitude:" Foreground="#6f6885"/>
-                        <TextBox x:Name="LngInput" Padding="5"/>
-                    </StackPanel>
-                </Grid>
+                </ScrollViewer>
+            </TabItem>
 
-                <!-- Calculation Preferences -->
-                <TextBlock Text="Calculation" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                <TextBlock Text="Calculation Method:" Foreground="#6f6885"/>
-                <ComboBox x:Name="MethodInput" Margin="0,0,0,10" Padding="5">
-                    <ComboBoxItem Content="Shia"/>
-                    <ComboBoxItem Content="Karachi"/>
-                    <ComboBoxItem Content="ISNA"/>
-                    <ComboBoxItem Content="MWL"/>
-                    <ComboBoxItem Content="Makkah"/>
-                    <ComboBoxItem Content="Egypt"/>
-                    <ComboBoxItem Content="Tehran"/>
-                    <ComboBoxItem Content="Gulf"/>
-                    <ComboBoxItem Content="Kuwait"/>
-                    <ComboBoxItem Content="Qatar"/>
-                    <ComboBoxItem Content="Singapore"/>
-                    <ComboBoxItem Content="France"/>
-                    <ComboBoxItem Content="Turkey"/>
-                    <ComboBoxItem Content="Russia"/>
-                    <ComboBoxItem Content="Moonsighting"/>
-                    <ComboBoxItem Content="Dubai"/>
-                    <ComboBoxItem Content="JAKIM"/>
-                    <ComboBoxItem Content="Tunisia"/>
-                    <ComboBoxItem Content="Algeria"/>
-                    <ComboBoxItem Content="KEMENAG"/>
-                    <ComboBoxItem Content="Morocco"/>
-                    <ComboBoxItem Content="Brazil"/>
-                    <ComboBoxItem Content="Portugal"/>
-                    <ComboBoxItem Content="Jordan"/>
-                </ComboBox>
-                
-                <TextBlock Text="Madhab (Asr):" Foreground="#6f6885"/>
-                <ComboBox x:Name="MadhabInput" Margin="0,0,0,10" Padding="5">
-                    <ComboBoxItem Content="Shafi (Standard)"/>
-                    <ComboBoxItem Content="Hanafi"/>
-                </ComboBox>
+            <!-- TAB 2: JAMAAT TIMES -->
+            <TabItem Header="Jamaat Times">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
+                    <StackPanel>
+                        <TextBlock Text="Jamaat (Congregation) Times" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="Set the actual fixed time for Jamaat (HH:mm):" FontSize="12" Foreground="#6f6885" FontStyle="Italic" Margin="0,0,0,10"/>
 
-                <TextBlock Text="Time Format:" Foreground="#6f6885"/>
-                <ComboBox x:Name="TimeFormatInput" Margin="0,0,0,10" Padding="5">
-                    <ComboBoxItem Content="12 Hours (AM/PM)"/>
-                    <ComboBoxItem Content="24 Hours"/>
-                </ComboBox>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
 
-                <!-- Integrations -->
-                <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,0,0,5" Foreground="#170939"/>
-                <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
-                <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
-                <Grid Margin="0,0,0,5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
-                    <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
-                </Grid>
-                <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
-                <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
-                <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,10" Foreground="#170939"/>
-                
-                <!-- Congregation Times -->
-                <TextBlock Text="Congregation (Jamaat) Times" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                <TextBlock Text="Set the actual fixed time for Jamaat (HH:mm):" FontSize="12" Foreground="#6f6885" FontStyle="Italic" Margin="0,0,0,10"/>
-                
-                <Grid Margin="0,0,0,5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                            <TextBlock Text="Fajr Time:" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <StackPanel Grid.Column="1" Margin="0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="FajrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                    <ComboBox x:Name="FajrMinuteInput" Width="50" Margin="0,2"/>
+                                    <ComboBox x:Name="FajrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
+                                        <ComboBoxItem Content="AM"/>
+                                        <ComboBoxItem Content="PM"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="FajrRangeHint" Text="Today: 04:30 - 05:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
+                            </StackPanel>
 
-                    <TextBlock Text="Fajr Time:" VerticalAlignment="Center" Foreground="#6f6885"/>
-                    <StackPanel Grid.Column="1" Margin="0,5">
+                            <TextBlock Text="Dhuhr Time:" Grid.Row="1" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="DhuhrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                    <ComboBox x:Name="DhuhrMinuteInput" Width="50" Margin="0,2"/>
+                                    <ComboBox x:Name="DhuhrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
+                                        <ComboBoxItem Content="AM"/>
+                                        <ComboBoxItem Content="PM"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="DhuhrRangeHint" Text="Today: 12:05 - 16:30" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Asr Time:" Grid.Row="2" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="AsrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                    <ComboBox x:Name="AsrMinuteInput" Width="50" Margin="0,2"/>
+                                    <ComboBox x:Name="AsrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
+                                        <ComboBoxItem Content="AM"/>
+                                        <ComboBoxItem Content="PM"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="AsrRangeHint" Text="Today: 16:30 - 18:15" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Maghrib Time:" Grid.Row="3" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="MaghribHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                    <ComboBox x:Name="MaghribMinuteInput" Width="50" Margin="0,2"/>
+                                    <ComboBox x:Name="MaghribAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
+                                        <ComboBoxItem Content="AM"/>
+                                        <ComboBoxItem Content="PM"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="MaghribRangeHint" Text="Today: 18:15 - 19:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Isha Time:" Grid.Row="4" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,5">
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="IshaHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
+                                    <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                    <ComboBox x:Name="IshaMinuteInput" Width="50" Margin="0,2"/>
+                                    <ComboBox x:Name="IshaAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
+                                        <ComboBoxItem Content="AM"/>
+                                        <ComboBoxItem Content="PM"/>
+                                    </ComboBox>
+                                </StackPanel>
+                                <TextBlock x:Name="IshaRangeHint" Text="Today: 19:45 - 04:30" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock Text="Popup Alarm" FontWeight="SemiBold" Margin="0,15,0,5" Foreground="#10b981"/>
                         <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="FajrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
-                            <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                            <ComboBox x:Name="FajrMinuteInput" Width="50" Margin="0,2"/>
-                            <ComboBox x:Name="FajrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
-                                <ComboBoxItem Content="AM"/>
-                                <ComboBoxItem Content="PM"/>
-                            </ComboBox>
+                            <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Padding="5"/>
+                            <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,0"/>
+                            <Button Content="Test Popup" Click="TestPopup_Click" Margin="10,0,0,0" Padding="8,2" FontSize="11" Background="#f3f4f6" BorderThickness="1" BorderBrush="#ccc"/>
                         </StackPanel>
-                        <TextBlock x:Name="FajrRangeHint" Text="Today: 04:30 - 05:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
-                    </StackPanel>
 
-                    <TextBlock Text="Dhuhr Time:" Grid.Row="1" VerticalAlignment="Center" Foreground="#6f6885"/>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="DhuhrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
-                            <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                            <ComboBox x:Name="DhuhrMinuteInput" Width="50" Margin="0,2"/>
-                            <ComboBox x:Name="DhuhrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
-                                <ComboBoxItem Content="AM"/>
-                                <ComboBoxItem Content="PM"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <TextBlock x:Name="DhuhrRangeHint" Text="Today: 12:05 - 16:30" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
-                    </StackPanel>
-
-                    <TextBlock Text="Asr Time:" Grid.Row="2" VerticalAlignment="Center" Foreground="#6f6885"/>
-                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5">
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="AsrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
-                            <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                            <ComboBox x:Name="AsrMinuteInput" Width="50" Margin="0,2"/>
-                            <ComboBox x:Name="AsrAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
-                                <ComboBoxItem Content="AM"/>
-                                <ComboBoxItem Content="PM"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <TextBlock x:Name="AsrRangeHint" Text="Today: 16:30 - 18:15" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
-                    </StackPanel>
-
-                    <TextBlock Text="Maghrib Time:" Grid.Row="3" VerticalAlignment="Center" Foreground="#6f6885"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="MaghribHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
-                            <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                            <ComboBox x:Name="MaghribMinuteInput" Width="50" Margin="0,2"/>
-                            <ComboBox x:Name="MaghribAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
-                                <ComboBoxItem Content="AM"/>
-                                <ComboBoxItem Content="PM"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <TextBlock x:Name="MaghribRangeHint" Text="Today: 18:15 - 19:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
-                    </StackPanel>
-
-                    <TextBlock Text="Isha Time:" Grid.Row="4" VerticalAlignment="Center" Foreground="#6f6885"/>
-                    <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,5">
-                        <StackPanel Orientation="Horizontal">
-                            <ComboBox x:Name="IshaHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
-                            <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
-                            <ComboBox x:Name="IshaMinuteInput" Width="50" Margin="0,2"/>
-                            <ComboBox x:Name="IshaAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed" SelectionChanged="HourInput_SelectionChanged">
-                                <ComboBoxItem Content="AM"/>
-                                <ComboBoxItem Content="PM"/>
-                            </ComboBox>
-                        </StackPanel>
-                        <TextBlock x:Name="IshaRangeHint" Text="Today: 19:45 - 04:30" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
-                    </StackPanel>
-
-                    <TextBlock Text="Popup Alarm:" Grid.Row="5" VerticalAlignment="Center" Foreground="#10b981" FontWeight="SemiBold" Margin="0,10,0,0"/>
-                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,10,0,0">
-                        <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Padding="5"/>
-                        <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,10"/>
-                        <Button Content="Test Popup" Click="TestPopup_Click" Margin="10,0,0,0" Padding="8,2" FontSize="11" Background="#f3f4f6" BorderThickness="1" BorderBrush="#ccc"/>
-                    </StackPanel>
-
-                    <TextBlock Text="Adhan Alarm:" Grid.Row="6" VerticalAlignment="Center" Foreground="#2563eb" FontWeight="SemiBold" Margin="0,10,0,0"/>
-                    <StackPanel Grid.Row="6" Grid.Column="1" Margin="0,10,0,0">
+                        <TextBlock Text="Adhan Alarm" FontWeight="SemiBold" Margin="0,15,0,5" Foreground="#2563eb"/>
                         <CheckBox x:Name="AdhanAlarmEnabledInput" Content="Enable Adhan sound before Jamaat" Foreground="#170939"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBox x:Name="AdhanAlarmOffsetInput" Width="40" Padding="5"/>
@@ -214,110 +311,74 @@
                             <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected Adhan sound file" Grid.Column="0"/>
                             <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,0">
                                 <Button Content="Browse..." Click="BrowseAdhan_Click" Padding="10,0" Cursor="Hand" Height="30"/>
-                                <Button Content="Download Default" Click="DownloadDefault_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="30" Background="#eff6ff" BorderBrush="#bfdbfe"/>
-                                <Button Content="Test Sound" Click="TestAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="30" Background="#dcfce7" BorderBrush="#86efac"/>
                             </StackPanel>
                         </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,15">
+                            <Button Content="Download Default" Click="DownloadDefault_Click" Padding="10,0" Cursor="Hand" Height="30" Background="#eff6ff" BorderBrush="#bfdbfe"/>
+                            <Button Content="Test Sound" Click="TestAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="30" Background="#dcfce7" BorderBrush="#86efac"/>
+                        </StackPanel>
                     </StackPanel>
-                </Grid>
+                </ScrollViewer>
+            </TabItem>
 
-                <!-- Appearance -->
-                <TextBlock Text="Appearance" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="GradStartInput" Padding="5"/>
-                            <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Gradient End:" Foreground="#05813D"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="GradEndInput" Padding="5"/>
-                            <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                </Grid>
-                <Grid Margin="0,10,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Primary Color:" Foreground="#6f6885"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="PrimaryColorInput" Padding="5"/>
-                            <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Secondary Color:" Foreground="#6f6885"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBox x:Name="SecondaryColorInput" Padding="5"/>
-                            <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
-                        </Grid>
-                    </StackPanel>
-                </Grid>
-                <!-- Developer Info -->
-                <TextBlock Text="Developer Info" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                <Border Background="#f9f9f9" BorderBrush="#ececec" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+            <!-- TAB 3: SUPPORT & CONTACT -->
+            <TabItem Header="Support &amp; Contact">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
-                        <TextBlock Text="Developed by Abiruzzaman Molla" Foreground="#333" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
-                        <TextBlock Foreground="#666" Margin="0,2,0,0">
-                            GitHub: <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla" RequestNavigate="Hyperlink_RequestNavigate">
-                                github.com/AbiruzzamanMolla
-                            </Hyperlink>
-                        </TextBlock>
-                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
-                        <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="0,10,0,0" HorizontalAlignment="Left" Padding="10,4" Background="#170939" Foreground="White" BorderThickness="0">
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="4"/>
-                                </Style>
-                            </Button.Resources>
-                        </Button>
-                    </StackPanel>
-                </Border>
+                        <!-- Developer Info -->
+                        <TextBlock Text="Developer Info" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <Border Background="#f9f9f9" BorderBrush="#ececec" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="Abiruzzaman Molla" Foreground="#333" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                <TextBlock Foreground="#666" Margin="0,2,0,0">
+                                    GitHub: <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla" RequestNavigate="Hyperlink_RequestNavigate">
+                                        github.com/AbiruzzamanMolla
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.1" Foreground="#999" Margin="0,5,0,0" FontSize="11"/>
+                                <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="0,10,0,0" HorizontalAlignment="Left" Padding="10,4" Background="#170939" Foreground="White" BorderThickness="0">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="4"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </Border>
 
-                <!-- Support Me -->
-                <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
-                <Border Background="#fff9e6" BorderBrush="#fde68a" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                    <StackPanel>
-                        <TextBlock Text="Buy Me a Coffee ☕" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
-                        <TextBlock Foreground="#78350f" TextWrapping="Wrap" Margin="0,0,0,10">
-                            If you find this application helpful, please consider supporting its development.
-                        </TextBlock>
-                        <Button Cursor="Hand" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Click="SupportMe_Click">
-                            <Image Source="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        </Button>
-                    </StackPanel>
-                </Border>
+                        <!-- Projects -->
+                        <TextBlock Text="Our Projects" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
+                        <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Margin="0,0,0,8">
+                                    • <Bold>Windows App:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware" RequestNavigate="Hyperlink_RequestNavigate">GitHub Repo</Hyperlink>
+                                </TextBlock>
+                                <TextBlock Margin="0,0,0,8">
+                                    • <Bold>Chrome Extension:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/PrayerTime" RequestNavigate="Hyperlink_RequestNavigate">GitHub Repo</Hyperlink>
+                                </TextBlock>
+                                <TextBlock>
+                                    • <Bold>VS Code Extension:</Bold> <Hyperlink NavigateUri="https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh" RequestNavigate="Hyperlink_RequestNavigate">Marketplace</Hyperlink>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
 
-            </StackPanel>
-        </ScrollViewer>
+                        <!-- Support Me -->
+                        <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
+                        <Border Background="#fff9e6" BorderBrush="#fde68a" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="Buy Me a Coffee ☕" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                <TextBlock Foreground="#78350f" TextWrapping="Wrap" Margin="0,0,0,10">
+                                    If you find this application helpful, please consider supporting its development.
+                                </TextBlock>
+                                <Button Cursor="Hand" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Click="SupportMe_Click">
+                                    <Image Source="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
 
         <!-- Buttons -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">

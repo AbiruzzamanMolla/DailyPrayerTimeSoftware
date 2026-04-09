@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.7.0
+Version: 1.7.1
 
-## 🚀 Daily Prayer Timer (Native) - v1.7.0
+## 🚀 Daily Prayer Timer (Native) - v1.7.1
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
@@ -85,10 +85,17 @@ Once installed, you can find **Daily Prayer Timer** on your Desktop or by search
    dotnet publish DailyPrayerTime.Native -c Release -r win-x86 --self-contained -p:PublishSingleFile=true
    ```
 
-## 📜 Dev Info
+---
 
-Developed by **Abiruzzaman Molla**
-[GitHub Profile](https://github.com/AbiruzzamanMolla)
+### 🙏 Acknowledgements
+Special thanks to the entire open-source community. This project draws immense inspiration and ideas from numerous developers, and we are grateful for the help and foundation provided by their projects.
+
+---
+
+### 📬 Contact & Support
+- **Developer**: Abiruzzaman Molla
+- **GitHub**: [github.com/AbiruzzamanMolla](https://github.com/AbiruzzamanMolla)
+- **Support Me**: [SupportKori](https://www.supportkori.com/abiruzzaman)
 
 ---
 

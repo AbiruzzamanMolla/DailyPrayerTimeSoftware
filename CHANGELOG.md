@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-04-09
+
+### Added
+- **Tabbed Settings UI**: Restructured the Settings window into three organized tabs: "General", "Jamaat Times", and "Support & Contact" for better usability.
+- **Support Links**: Added direct links to the Windows App, Chrome Extension, and VS Code Extension in the Contact tab.
+- **Acknowledgements**: Added a dedicated section in README to thank the open-source community for their inspiration and contributions.
+
+### Changed
+- Improved Settings window organization by decoupling functional settings from support/dev information.
+
 ## [1.7.0] - 2026-04-09
 
 ### Added
