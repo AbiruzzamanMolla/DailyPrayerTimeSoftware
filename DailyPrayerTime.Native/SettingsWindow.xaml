@@ -90,6 +90,7 @@
                 <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
                 <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,0,0,5" Foreground="#170939"/>
                 <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
+                <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
                 <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -290,7 +291,7 @@
                                 github.com/AbiruzzamanMolla
                             </Hyperlink>
                         </TextBlock>
-                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.6.5" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
+                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.0" Foreground="#999" Margin="0,5,0,0" FontSize="10"/>
                         <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="0,10,0,0" HorizontalAlignment="Left" Padding="10,4" Background="#170939" Foreground="White" BorderThickness="0">
                             <Button.Resources>
                                 <Style TargetType="Border">

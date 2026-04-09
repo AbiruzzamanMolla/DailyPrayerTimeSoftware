@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-04-09
+
+### Added
+- **Integrated Taskbar Timer (Windows 11 Native)**: New taskbar integration method inspired by TrafficMonitor. It attaches directly to `Shell_TrayWnd`, providing a native experience on Windows 11 without requiring DeskBand registration.
+- **Smart Docking Logic**: The integrated timer automatically anchors itself next to the Notification Area (System Tray icons).
+- **Independent Windows Integration Toggles**: Refined the Settings UI to allow independent toggling of:
+  - Floating Prayer Overlay
+  - Legacy DeskBand (for Win 10/ExplorerPatcher)
+  - Integrated Taskbar Timer (Win 11 Source)
+
+### Changed
+- **Performance Optimization**: Switched taskbar positioning logic to a low-impact polling system to ensure 0% impact on Windows Explorer's performance.
+- **UI Refinement**: Taskbar timer now features a subtle drop shadow for better readability on light/dark taskbar backgrounds.
+
+### Fixed
+- Fixed a state-management issue where toggling the taskbar timer via the tray menu didn't always reflect in the Settings window.
+
 ## [1.6.5] - 2026-04-09
 
 ### Added

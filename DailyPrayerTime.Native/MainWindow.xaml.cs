@@ -26,6 +26,7 @@ namespace DailyPrayerTime.Native
         private CombinedPrayerTimes? _todayPrayerTimes;
         private CombinedPrayerTimes? _tomorrowPrayerTimes;
         private OverlayWindow? _overlay;
+        private TaskbarWindow? _taskbarWindow;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
@@ -98,6 +99,7 @@ namespace DailyPrayerTime.Native
                     ApplySettingsTheme();
                     await CalculatePrayerTimes();
                     ManageOverlay();
+                    ManageIntegratedTaskbar();
                 }
             });
 
@@ -113,15 +115,25 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
-            var deskbandItem = new Forms.ToolStripMenuItem("Show Taskbar Timer");
+            var deskbandItem = new Forms.ToolStripMenuItem("Show DeskBand (Legacy)");
             deskbandItem.CheckOnClick = true;
             deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
             deskbandItem.Click += (s, e) => {
                 SettingsManager.Current.UseDeskBand = deskbandItem.Checked;
                 SettingsManager.Save();
-                ManageOverlay();
+                // DeskBand is handled by Explorer, we just update data
             };
             cms.Items.Add(deskbandItem);
+
+            var integratedItem = new Forms.ToolStripMenuItem("Show Integrated Taskbar Timer (Win 11 Source)");
+            integratedItem.CheckOnClick = true;
+            integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
+            integratedItem.Click += (s, e) => {
+                SettingsManager.Current.UseIntegratedTaskbar = integratedItem.Checked;
+                SettingsManager.Save();
+                ManageIntegratedTaskbar();
+            };
+            cms.Items.Add(integratedItem);
 
             cms.Items.Add(new Forms.ToolStripSeparator());
             cms.Items.Add("Exit", null, (s, e) => System.Windows.Application.Current.Shutdown());
@@ -132,6 +144,7 @@ namespace DailyPrayerTime.Native
             cms.Opening += (s, e) => {
                 overlayItem.Checked = SettingsManager.Current.ShowOverlay;
                 deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
+                integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
             };
 
             _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
@@ -176,8 +189,6 @@ namespace DailyPrayerTime.Native
         
         private void ManageOverlay()
         {
-            // Now independent as per user feedback
-            bool shouldShowDeskBand = SettingsManager.Current.UseDeskBand;
             bool shouldShowOverlay = SettingsManager.Current.ShowOverlay;
 
             if (shouldShowOverlay && _overlay == null)
@@ -190,9 +201,22 @@ namespace DailyPrayerTime.Native
                 _overlay.Close();
                 _overlay = null;
             }
+        }
 
-            // The JSON data for DeskBand is written in UpdateOverlay() ticker 
-            // as long as UseDeskBand is enabled.
+        private void ManageIntegratedTaskbar()
+        {
+            bool shouldShow = SettingsManager.Current.UseIntegratedTaskbar;
+
+            if (shouldShow && _taskbarWindow == null)
+            {
+                _taskbarWindow = new TaskbarWindow();
+                _taskbarWindow.Show();
+            }
+            else if (!shouldShow && _taskbarWindow != null)
+            {
+                _taskbarWindow.Close();
+                _taskbarWindow = null;
+            }
         }
 
         private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -825,7 +849,14 @@ namespace DailyPrayerTime.Native
                 DeskBandDataWriter.Write(data);
             }
 
-            // 2. Update Overlay Window (UI)
+            // 2. Update Integrated Taskbar Window
+            if (_taskbarWindow != null)
+            {
+                string label = currentPrayer != Prayer.NONE ? curName : nextName;
+                _taskbarWindow.UpdateData(countStr, label);
+            }
+
+            // 3. Update Overlay Window (UI)
             if (_overlay == null) return;
 
             _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";

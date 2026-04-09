@@ -1,16 +1,24 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.6.5
+Version: 1.7.0
 
-A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay. Compatible with **Windows 10** and **Windows 11** (x64 & x86).
+## 🚀 Daily Prayer Timer (Native) - v1.7.0
 
-## 📸 App Preview
+A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
-![Daily Prayer Timer Preview](screenshots/preview.gif)
+---
 
-## 🚀 Key Features
+### 🔥 New in v1.7.0: Integrated Taskbar Timer (Win 11 Native)
+We have introduced a powerful new taskbar integration technique inspired by **TrafficMonitor**. 
+- **Truly Integrated**: Anchors directly into the Windows Taskbar (`Shell_TrayWnd`).
+- **Windows 11 Optimized**: Works natively on Windows 11 without requiring legacy DeskBand registration or third-party tools like ExplorerPatcher.
+- **Smart Positioning**: Automatically places itself next to the system tray icons.
+- **Independent Toggles**: Enable/disable the Floating Overlay and Taskbar Timer separately.
 
-- **Taskbar Overlay**: A minimal, non-intrusive widget that docks to your taskbar (DU Meter style).
+---
+
+### ✨ Key Features
+*   **Dual Taskbar Modes**: Choose between the **Integrated Taskbar Window** (Windows 11 Native Source) or the legacy **COM DeskBand**.
 - **Popup Expansion**: Hover over the overlay to see a smooth vertical "popup" growth with current and next prayer details.
 - **Glassmorphism UI**: Modern, premium design with semi-transparent backgrounds and vibrant Islamic Green gradients.
 - **Prohibited Time Alerts**: Automatic detection and visual warnings for sunrise, zawal, and sunset periods.
