@@ -99,6 +99,8 @@ Once installed, you can find **Daily Prayer Timer** on your Desktop or by search
 ### 🙏 Acknowledgements
 Special thanks to the entire open-source community. This project draws immense inspiration and ideas from numerous developers, and we are grateful for the help and foundation provided by their projects.
 
+A special thanks to the AI community and **Agentic AI coding assistants** for empowering the rapid development, debugging, and continuous refinement of this software.
+
 #### Special Thanks
 - **Islamic Audiobook**: [YouTube Channel](https://www.youtube.com/@islamicaudiobook)
 - **BB Podium (Book Reviews)**: [YouTube Channel](https://www.youtube.com/@BBPodium)
