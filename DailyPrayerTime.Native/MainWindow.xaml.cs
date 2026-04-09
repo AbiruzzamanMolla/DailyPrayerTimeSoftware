@@ -44,6 +44,7 @@ namespace DailyPrayerTime.Native
         private Prayer _lastEndNotificationID = Prayer.NONE;
         private UpdateInfo? _currentUpdate;
         
+        private bool IsWindows11 => Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000;
 
         public MainWindow()
         {
@@ -88,16 +89,21 @@ namespace DailyPrayerTime.Native
             _notifyIcon.Text = "Daily Prayer Timer";
 
             var cms = new Forms.ContextMenuStrip();
+            
             cms.Items.Add("Open", null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
-             cms.Items.Add("Settings", null, async (s, e) => { 
-                 var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
-                 if (sw.ShowDialog() == true) {
-                     ApplySettingsTheme();
-                     await CalculatePrayerTimes();
-                     ManageOverlay();
-                 }
-             });
-            var overlayItem = new Forms.ToolStripMenuItem("Show Overlay");
+            
+            cms.Items.Add("Settings", null, async (s, e) => { 
+                var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
+                if (sw.ShowDialog() == true) {
+                    ApplySettingsTheme();
+                    await CalculatePrayerTimes();
+                    ManageOverlay();
+                }
+            });
+
+            cms.Items.Add(new Forms.ToolStripSeparator());
+
+            var overlayItem = new Forms.ToolStripMenuItem("Show Floating Overlay");
             overlayItem.CheckOnClick = true;
             overlayItem.Checked = SettingsManager.Current.ShowOverlay;
             overlayItem.Click += (s, e) => {
@@ -106,9 +112,28 @@ namespace DailyPrayerTime.Native
                 ManageOverlay();
             };
             cms.Items.Add(overlayItem);
-            cms.Items.Add("-");
+
+            var deskbandItem = new Forms.ToolStripMenuItem("Show Taskbar Timer");
+            deskbandItem.CheckOnClick = true;
+            deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
+            deskbandItem.Click += (s, e) => {
+                SettingsManager.Current.UseDeskBand = deskbandItem.Checked;
+                SettingsManager.Save();
+                ManageOverlay();
+            };
+            cms.Items.Add(deskbandItem);
+
+            cms.Items.Add(new Forms.ToolStripSeparator());
             cms.Items.Add("Exit", null, (s, e) => System.Windows.Application.Current.Shutdown());
+
             _notifyIcon.ContextMenuStrip = cms;
+
+            // Ensure checkmarks stay in sync when menu opens
+            cms.Opening += (s, e) => {
+                overlayItem.Checked = SettingsManager.Current.ShowOverlay;
+                deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
+            };
+
             _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
             
             this.Closing += (s, e) =>
@@ -151,16 +176,23 @@ namespace DailyPrayerTime.Native
         
         private void ManageOverlay()
         {
-            if (SettingsManager.Current.ShowOverlay && _overlay == null)
+            // Now independent as per user feedback
+            bool shouldShowDeskBand = SettingsManager.Current.UseDeskBand;
+            bool shouldShowOverlay = SettingsManager.Current.ShowOverlay;
+
+            if (shouldShowOverlay && _overlay == null)
             {
                 _overlay = new OverlayWindow();
                 _overlay.Show();
             }
-            else if (!SettingsManager.Current.ShowOverlay && _overlay != null)
+            else if (!shouldShowOverlay && _overlay != null)
             {
                 _overlay.Close();
                 _overlay = null;
             }
+
+            // The JSON data for DeskBand is written in UpdateOverlay() ticker 
+            // as long as UseDeskBand is enabled.
         }
 
         private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -772,15 +804,32 @@ namespace DailyPrayerTime.Native
 
         private void UpdateOverlay(Prayer currentPrayer, string curName, string nextName, string countStr, DateTime nextTime)
         {
+            DateTime? currentStart = _todayPrayerTimes?.TimeForPrayer(_todayPrayerTimes.CurrentPrayer(DateTime.Now));
+            if (!currentStart.HasValue) currentStart = _todayPrayerTimes?.Isha;
+            string rangeStr = currentStart.HasValue ? $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}" : "N/A";
+
+            // 1. Sync Data for DeskBand (Background)
+            if (SettingsManager.Current.UseDeskBand)
+            {
+                var data = new DeskBandData
+                {
+                    Label = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:",
+                    Countdown = countStr,
+                    CurrentPrayer = curName,
+                    NextPrayer = nextName,
+                    NextTime = nextTime.ToString(GetTimeFmt()),
+                    PrimaryColor = SettingsManager.Current.PrimaryColor,
+                    IsNight = _currentBgName == "Moon",
+                    IsActive = true
+                };
+                DeskBandDataWriter.Write(data);
+            }
+
+            // 2. Update Overlay Window (UI)
             if (_overlay == null) return;
 
             _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";
             _overlay.OverlayCountdownText.Text = countStr;
-            
-            DateTime? currentStart = _todayPrayerTimes?.TimeForPrayer(_todayPrayerTimes.CurrentPrayer(DateTime.Now));
-            if (!currentStart.HasValue) currentStart = _todayPrayerTimes?.Isha;
-            
-            string rangeStr = currentStart.HasValue ? $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}" : "N/A";
             
             _overlay.ToolTipCurrentText.Text = $"Current: {curName} ({rangeStr})";
             _overlay.ToolTipNextText.Text = $"Next: {nextName} starts at {nextTime:hh:mm tt}";

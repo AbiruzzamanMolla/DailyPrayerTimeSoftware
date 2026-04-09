@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.5.7
+Version: 1.6.5
 
-A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay.
+A premium, glassmorphic Windows desktop application for Islamic prayer time tracking with a sleek taskbar-docked overlay. Compatible with **Windows 10** and **Windows 11** (x64 & x86).
 
 ## 📸 App Preview
 
@@ -17,7 +17,11 @@ A premium, glassmorphic Windows desktop application for Islamic prayer time trac
 - **Smart Congregation Entry**: Time selectors in Settings are now strictly filtered to each prayer's valid range (e.g., you can't set Fajr Jamaat at 10 AM).
 - **Adhan Sound Management**: Integrated downloader for default Adhan audio and built-in "Test Sound" for verification.
 - **Premium Themes**: Full control over primary/secondary colors and background gradients with a native color picker.
-- **Live Highlights Countdown**: Real-time countdowns for Suhur (Ends) and Iftar (Begins) with automatic "Passed" status tracking.
+- **Accurate Prayer Times:** Real-time countdowns for all five daily prayers.
+- **Sunnah Fasting Tracker:** Detection and highlighting for Sunnah fast days.
+- **Windows Taskbar Extension (DeskBand):** Persistent timer directly in your Windows 10 taskbar (Optional toggle).
+- **Floating Overlay Fallback:** Seamless fallback to a stylish floating overlay for Windows 11.
+- **Customization:** Support for various calculation methods, madhabs, and offsets.
 - **Smart Update System**: Automatic version checks on startup and a manual "Check for Updates" button in Settings.
 - **Tray Persistence**: Runs in the background with a system tray icon for quick access and settings.
 
@@ -26,6 +30,10 @@ A premium, glassmorphic Windows desktop application for Islamic prayer time trac
 Check out other versions of this tool:
 - **Chrome Extension**: [Prayer Time on GitHub](https://github.com/AbiruzzamanMolla/PrayerTime)
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
+
+### Taskbar DeskBand (Windows 10 & 11)
+On Windows 10, you can enable the Taskbar integration in Settings. This places the prayer timer directly next to your system tray. 
+*Note: On Windows 11, this requires third-party taskbar modification tools (like ExplorerPatcher) as Microsoft has hidden native DeskBand support.*
 
 ## 🛠️ Tech Stack
 
@@ -45,11 +53,15 @@ The app saves your preferences in `%APPDATA%\DailyPrayerTimeNative\settings.json
 - **Auto-Start**: Toggle to run on Windows startup.
 
 ## 📦 Installation
-The application comes with a professional Windows Installer (`.exe`) that handles shortcuts and uninstallation.
+The application comes with professional Windows Installers (`.exe`) for both 64-bit and 32-bit systems.
 
-1. Navigate to the `Output` folder.
-2. Run the latest installer (e.g., **`DailyPrayerTimer_Setup_v1.5.7.exe`**).
-3. Follow the installation wizard to create Desktop and Start Menu shortcuts.
+| Platform | Installer |
+|---|---|
+| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v{VERSION}_x64.exe` |
+| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v{VERSION}_x86.exe` |
+
+1. Download the installer matching your system architecture from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
+2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
 
 Once installed, you can find **Daily Prayer Timer** on your Desktop or by searching in the Windows Start Menu.
 
@@ -57,7 +69,13 @@ Once installed, you can find **Daily Prayer Timer** on your Desktop or by search
 
 1. Clone the repository.
 2. Open in Visual Studio 2022 or use CLI.
-3. Run `dotnet publish -c Release -r win-x64 --self-contained`.
+3. Build for your target architecture:
+   ```powershell
+   # 64-bit
+   dotnet publish DailyPrayerTime.Native -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
+   # 32-bit
+   dotnet publish DailyPrayerTime.Native -c Release -r win-x86 --self-contained -p:PublishSingleFile=true
+   ```
 
 ## 📜 Dev Info
 

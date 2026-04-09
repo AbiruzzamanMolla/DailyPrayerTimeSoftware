@@ -23,6 +23,7 @@ namespace DailyPrayerTime.Native
         public bool RamadanMode { get; set; } = false;
         
         public bool ShowOverlay { get; set; } = true;
+        public bool UseDeskBand { get; set; } = true;
         public bool AutoStart { get; set; } = false;
         public bool SilentStart { get; set; } = false;
 

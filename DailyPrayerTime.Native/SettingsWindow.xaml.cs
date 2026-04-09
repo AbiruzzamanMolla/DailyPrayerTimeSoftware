@@ -147,6 +147,7 @@ namespace DailyPrayerTime.Native
             MadhabInput.SelectedIndex = s.School == 1 ? 1 : 0;
             
             OverlayInput.IsChecked = s.ShowOverlay;
+            UseDeskBandInput.IsChecked = s.UseDeskBand;
             NotificationsInput.IsChecked = s.NotificationsEnabled;
             
             GradStartInput.Text = s.GradientStart;
@@ -294,6 +295,7 @@ namespace DailyPrayerTime.Native
             s.School = MadhabInput.SelectedIndex; // 0=Shafi, 1=Hanafi
             
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
+            s.UseDeskBand = UseDeskBandInput.IsChecked ?? true;
             s.NotificationsEnabled = NotificationsInput.IsChecked ?? true;
             
             bool newAutoStart = AutoStartInput.IsChecked ?? false;
