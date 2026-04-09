@@ -43,8 +43,8 @@
                 </Style>
             </TabControl.Resources>
 
-            <!-- TAB 1: GENERAL -->
-            <TabItem Header="General">
+            <!-- TAB 1: DAILY PRAYER -->
+            <TabItem Header="Daily Prayer">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
                         <!-- Location -->
@@ -116,91 +116,9 @@
                             <ComboBoxItem Content="24 Hours"/>
                         </ComboBox>
 
-                        <!-- Integrations -->
-                        <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
-                        <Grid Margin="0,0,0,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
-                            <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
-                        </Grid>
-                        <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,10" Foreground="#170939"/>
+                        <Rectangle Height="1" Fill="#ececec" Margin="0,15"/>
 
-                        <!-- Appearance -->
-                        <TextBlock Text="Appearance" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="GradStartInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
-                                </Grid>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Gradient End:" Foreground="#05813D"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="GradEndInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                        <Grid Margin="0,10,0,15">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="0">
-                                <TextBlock Text="Primary Color:" Foreground="#6f6885"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="PrimaryColorInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
-                                </Grid>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Text="Secondary Color:" Foreground="#6f6885"/>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox x:Name="SecondaryColorInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
-                                </Grid>
-                            </StackPanel>
-                        </Grid>
-                    </StackPanel>
-                </ScrollViewer>
-            </TabItem>
-
-            <!-- TAB 2: JAMAAT TIMES -->
-            <TabItem Header="Jamaat Times">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
-                    <StackPanel>
+                        <!-- Jamaat Times (Moved Back) -->
                         <TextBlock Text="Jamaat (Congregation) Times" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
                         <TextBlock Text="Set the actual fixed time for Jamaat (HH:mm):" FontSize="12" Foreground="#6f6885" FontStyle="Italic" Margin="0,0,0,10"/>
 
@@ -210,8 +128,6 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -290,14 +206,16 @@
                             </StackPanel>
                         </Grid>
 
-                        <TextBlock Text="Popup Alarm" FontWeight="SemiBold" Margin="0,15,0,5" Foreground="#10b981"/>
-                        <StackPanel Orientation="Horizontal">
+                        <Rectangle Height="1" Fill="#ececec" Margin="0,15"/>
+
+                        <TextBlock Text="Popup Alarm" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#10b981"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Padding="5"/>
                             <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,0"/>
-                            <Button Content="Test Popup" Click="TestPopup_Click" Margin="10,0,0,0" Padding="8,2" FontSize="11" Background="#f3f4f6" BorderThickness="1" BorderBrush="#ccc"/>
+                            <Button Content="Test" Click="TestPopup_Click" Margin="10,0,0,0" Padding="8,2" FontSize="11" Background="#f3f4f6" BorderThickness="1" BorderBrush="#ccc"/>
                         </StackPanel>
 
-                        <TextBlock Text="Adhan Alarm" FontWeight="SemiBold" Margin="0,15,0,5" Foreground="#2563eb"/>
+                        <TextBlock Text="Adhan Alarm" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#2563eb"/>
                         <CheckBox x:Name="AdhanAlarmEnabledInput" Content="Enable Adhan sound before Jamaat" Foreground="#170939"/>
                         <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                             <TextBox x:Name="AdhanAlarmOffsetInput" Width="40" Padding="5"/>
@@ -313,10 +231,95 @@
                                 <Button Content="Browse..." Click="BrowseAdhan_Click" Padding="10,0" Cursor="Hand" Height="30"/>
                             </StackPanel>
                         </Grid>
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,15">
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,20">
                             <Button Content="Download Default" Click="DownloadDefault_Click" Padding="10,0" Cursor="Hand" Height="30" Background="#eff6ff" BorderBrush="#bfdbfe"/>
                             <Button Content="Test Sound" Click="TestAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="30" Background="#dcfce7" BorderBrush="#86efac"/>
                         </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- TAB 2: LAYOUT & THEME -->
+            <TabItem Header="Layout &amp; Theme">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
+                    <StackPanel>
+                        <!-- Integrations -->
+                        <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,10,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
+                            <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
+                        </Grid>
+                        <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,15" Foreground="#170939"/>
+
+                        <!-- Appearance -->
+                        <TextBlock Text="Appearance &amp; Colors" FontWeight="Bold" FontSize="16" Margin="0,15,0,5" Foreground="#170939"/>
+                        <Grid Margin="0,10,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="GradStartInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Gradient End:" Foreground="#05813D"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="GradEndInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Margin="0,10,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Primary Color:" Foreground="#6f6885"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="PrimaryColorInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Secondary Color:" Foreground="#6f6885"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="SecondaryColorInput" Padding="5"/>
+                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -325,18 +328,14 @@
             <TabItem Header="Support &amp; Contact">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
-                        <!-- Developer Info -->
-                        <TextBlock Text="Developer Info" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
-                        <Border Background="#f9f9f9" BorderBrush="#ececec" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
-                            <StackPanel>
-                                <TextBlock Text="Abiruzzaman Molla" Foreground="#333" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
-                                <TextBlock Foreground="#666" Margin="0,2,0,0">
-                                    GitHub: <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla" RequestNavigate="Hyperlink_RequestNavigate">
-                                        github.com/AbiruzzamanMolla
-                                    </Hyperlink>
-                                </TextBlock>
-                                <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.1" Foreground="#999" Margin="0,5,0,0" FontSize="11"/>
-                                <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="0,10,0,0" HorizontalAlignment="Left" Padding="10,4" Background="#170939" Foreground="White" BorderThickness="0">
+                        <!-- Updates Section -->
+                        <TextBlock Text="Updates" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#170939"/>
+                        <Border Background="#f9f9f9" BorderBrush="#ececec" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel VerticalAlignment="Center" Width="280">
+                                    <TextBlock Text="Check for application updates to get the latest features and bug fixes." TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
+                                </StackPanel>
+                                <Button Content="Check for Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="4"/>
@@ -346,9 +345,9 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Projects -->
-                        <TextBlock Text="Our Projects" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
-                        <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                        <!-- Projects Section -->
+                        <TextBlock Text="Our Projects" FontWeight="Bold" FontSize="16" Margin="0,5,0,5" Foreground="#170939"/>
+                        <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
                                 <TextBlock Margin="0,0,0,8">
                                     • <Bold>Windows App:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware" RequestNavigate="Hyperlink_RequestNavigate">GitHub Repo</Hyperlink>
@@ -362,8 +361,8 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Support Me -->
-                        <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
+                        <!-- Support Me Section -->
+                        <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,5,0,5" Foreground="#170939"/>
                         <Border Background="#fff9e6" BorderBrush="#fde68a" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
                                 <TextBlock Text="Buy Me a Coffee ☕" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
@@ -373,6 +372,34 @@
                                 <Button Cursor="Hand" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Click="SupportMe_Click">
                                     <Image Source="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Developer Profiles Section -->
+                        <TextBlock Text="Developer Profiles" FontWeight="Bold" FontSize="16" Margin="0,5,0,5" Foreground="#170939"/>
+                        <Border Background="#f3f4f6" BorderBrush="#e5e7eb" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="Abiruzzaman Molla" Foreground="#111827" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,8"/>
+                                
+                                <WrapPanel Margin="0,0,0,5">
+                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
+                                        🌍 <Hyperlink NavigateUri="https://abiruzzamanmolla.github.io/" RequestNavigate="Hyperlink_RequestNavigate">Portfolio</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
+                                        📦 <Hyperlink NavigateUri="https://www.npmjs.com/~azmolla" RequestNavigate="Hyperlink_RequestNavigate">npm</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
+                                        🧩 <Hyperlink NavigateUri="https://packagist.org/users/AbiruzzamanMolla/packages/" RequestNavigate="Hyperlink_RequestNavigate">Packagist</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
+                                        🛠️ <Hyperlink NavigateUri="https://marketplace.visualstudio.com/publishers/azmolla" RequestNavigate="Hyperlink_RequestNavigate">VS Marketplace</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
+                                        🚀 <Hyperlink NavigateUri="https://open-vsx.org/namespace/azmolla" RequestNavigate="Hyperlink_RequestNavigate">Open VSX</Hyperlink>
+                                    </TextBlock>
+                                </WrapPanel>
+                                
+                                <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.3" Foreground="#9ca3af" Margin="0,5,0,0" FontSize="11" FontStyle="Italic"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

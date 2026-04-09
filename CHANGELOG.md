@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.3] - 2026-04-09
+### Added
+- **Major UI Restructuring**: Reorganized Settings into three intuitive tabs:
+    - **Daily Prayer**: Consolidated Location, Calculation, and Jamaat settings.
+    - **Layout & Theme**: Dedicated section for Windows Integrations and Appearance.
+    - **Support & Contact**: Centralized project links and developer info.
+- Expanded **Developer Profiles** with links to Portfolio, npm, Packagist, and Marketplace.
+### Fixed
+- Fixed **Integrated Taskbar Timer (Win 11 Source)** not initializing on application startup.
+- Improved **DPI Awareness** for the Taskbar Timer, ensuring correct alignment on high-resolution displays.
+
 ## [1.7.1] - 2026-04-09
 
 ### Added

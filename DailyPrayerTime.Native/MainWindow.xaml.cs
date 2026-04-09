@@ -58,6 +58,7 @@ namespace DailyPrayerTime.Native
             Task.Run(async () => await DownloadDefaultAdhan());
             _ = CheckForUpdates();
             ManageOverlay();
+            ManageIntegratedTaskbar();
         }
 
         private async Task CheckForUpdates()

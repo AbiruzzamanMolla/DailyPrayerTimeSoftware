@@ -40,35 +40,44 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-On Windows 10, you can enable the Taskbar integration in Settings. This places the prayer timer directly next to your system tray. 
-*Note: On Windows 11, this requires third-party taskbar modification tools (like ExplorerPatcher) as Microsoft has hidden native DeskBand support.*
+[![Version](https://img.shields.io/badge/version-1.7.3-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
-## 🛠️ Tech Stack
+---
 
-- **Framework**: WPF (.NET 8.0)
-- **Styling**: Vanilla XAML with custom glassmorphism styles
-- **Library**: `Adhan` for prayer time calculations
-- **Notifications**: `Microsoft.Toolkit.Uwp.Notifications`
+<p align="center">
+  <img src="DailyPrayerTime.Native/icon.ico" width="80" height="80" alt="App Icon">
+  <br>
+  <b>Lightweight. Accurate. Native.</b>
+  <br>
+  Keep track of your daily prayers and Sunnah fasts directly from your Windows desktop.
+</p>
 
-## ⚙️ Configuration
+---
 
-The app saves your preferences in `%APPDATA%\DailyPrayerTimeNative\settings.json`. You can configure:
+## ✨ Features
 
-- **Location**: Search by city name (using LocationIQ API).
-- **Methods**: Karachi, UMM_AL_QURA, North America, etc.
-- **Madhab**: Standard (Shafi) or Hanafi.
-- **Theme**: Custom primary/secondary colors and background gradients.
-- **Auto-Start**: Toggle to run on Windows startup.
+- **Daily Prayer Times:** Accurate calculations based on your location (Latitude/Longitude).
+- **Tabbed Settings:** clean, organized interface for Daily Prayer, Layout & Theme, and Support.
+- **Jamaat (Congregation) Support:** Set and track fixed Jamaat times for your local Masjid.
+- **Integrated Taskbar Timer:** A TrafficMonitor-inspired native taskbar integration for Windows 11.
+- **Legacy DeskBand:** Support for Windows 10 and ExplorerPatcher users.
+- **Floating Overlay:** A modern, semi-transparent overlay to keep your prayers in view while you work.
+- **Sunnah Fasting Tracker:** Automatic detection and alerts for Monday/Thursday, Ayyam al-Bidh, and special Islamic dates.
+- **Prohibited Times (Makruh) Alerts:** Visual countdowns for Sunrise, Zawal, and Sunset.
+- **Adhan & Alarms:** Customizable sound alerts before Jamaat time.
 
-## 📦 Installation
-The application comes with professional Windows Installers (`.exe`) for both 64-bit and 32-bit systems.
+## 📸 Screenshots
+
+COMING SOON.
+
+## 💾 Installation
 
 | Platform | Installer |
 |---|---|
-| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v{VERSION}_x64.exe` |
-| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v{VERSION}_x86.exe` |
+| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.3_x64.exe` |
+| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.3_x86.exe` |
 
-1. Download the installer matching your system architecture from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
+1. Download the installer matching your system from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
 
 Once installed, you can find **Daily Prayer Timer** on your Desktop or by searching in the Windows Start Menu.
