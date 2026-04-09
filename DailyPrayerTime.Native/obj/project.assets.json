@@ -832,7 +832,7 @@
     "C:\\Users\\Abir\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "1.7.6",
+    "version": "1.7.7",
     "restore": {
       "projectUniqueName": "J:\\Web Development\\abir\\software\\DailyPrayerTime\\DailyPrayerTime.Native\\DailyPrayerTime.Native.csproj",
       "projectName": "DailyPrayerTime.Native",

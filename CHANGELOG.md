@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.7] - 2026-04-09
+### Fixed
+- **Improved Taskbar Persistence**: The Taskbar Timer now aggressively re-asserts its 'Topmost' status every second. This prevents it from being hidden when the Start menu or system tray flyouts are opened.
+- **Reliable Startup Data**: Implemented a handshake between the main app and the taskbar window to ensure prayer data appears instantly upon the first launch, eliminating the temporary `--:--:--` display.
+- **Click-Through Support**: Added `WS_EX_TRANSPARENT` to the taskbar window, allowing user clicks to pass through to the taskbar area behind the timer.
+
 ## [1.7.6] - 2026-04-09
 ### Fixed
 - **Taskbar Timer Flicker (Root Cause Fixed)**: Completely rewrote the Integrated Taskbar Timer to work as a standalone topmost window instead of using `SetParent` into `Shell_TrayWnd`. On Windows 11, the `SetParent` approach causes the taskbar to continuously repaint and fight the child window, resulting in constant flickering. The new approach positions the timer window over the taskbar using screen coordinates — the same method used by modern system tools.

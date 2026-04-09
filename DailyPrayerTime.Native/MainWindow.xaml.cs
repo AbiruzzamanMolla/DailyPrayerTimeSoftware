@@ -212,8 +212,9 @@ namespace DailyPrayerTime.Native
             if (shouldShow && _taskbarWindow == null)
             {
                 _taskbarWindow = new TaskbarWindow();
+                // Ensure data is pushed immediately as soon as the window handle is ready
+                _taskbarWindow.OnReady = () => Dispatcher.Invoke(() => UpdateCountdown());
                 _taskbarWindow.Show();
-                // Forces an immediate data refresh so it doesn't stay at "00:00:00 Asr" for 1s
                 UpdateCountdown();
             }
             else if (!shouldShow && _taskbarWindow != null)
