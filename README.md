@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.7.1
+Version: 1.7.4
 
-## 🚀 Daily Prayer Timer (Native) - v1.7.1
+## 🚀 Daily Prayer Timer (Native) - v1.7.4
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
@@ -40,7 +40,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.7.3-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.7.4-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -74,8 +74,8 @@ COMING SOON.
 
 | Platform | Installer |
 |---|---|
-| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.3_x64.exe` |
-| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.3_x86.exe` |
+| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.4_x64.exe` |
+| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.4_x86.exe` |
 
 1. Download the installer matching your system from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
@@ -98,6 +98,11 @@ Once installed, you can find **Daily Prayer Timer** on your Desktop or by search
 
 ### 🙏 Acknowledgements
 Special thanks to the entire open-source community. This project draws immense inspiration and ideas from numerous developers, and we are grateful for the help and foundation provided by their projects.
+
+#### Special Thanks
+- **Islamic Audiobook**: [YouTube Channel](https://www.youtube.com/@islamicaudiobook)
+- **BB Podium (Book Reviews)**: [YouTube Channel](https://www.youtube.com/@BBPodium)
+- **Audiobook Bangla**: [Website](https://audiobookbangla.com)
 
 ---
 

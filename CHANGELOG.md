@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.4] - 2026-04-09
+### Added
+- **Responsive Settings UI**: The settings window now scales beautifully with window resizing, using flexible layouts for various resolutions.
+- **Support & Contact Refresh**: Restructured the tab for better navigation:
+    - Moved version information to the Updates section.
+    - Added a new **Sponsors** section (Islamic Audiobook YT, Book Review YT, Audiobook Bangla).
+    - Integrated email contact in the developer profile.
+    - The "Save Settings" button now intelligently hides when viewing the Contact tab.
+### Fixed
+- Fixed synchronization between Floating Overlay and Integrated Taskbar Timer.
+- Resolved Taskbar Timer display issues by ensuring thread-safe UI updates.
+- Improved Taskbar Timer accuracy and DPI scaling awareness.
+
 ## [1.7.3] - 2026-04-09
 ### Added
 - **Major UI Restructuring**: Reorganized Settings into three intuitive tabs:

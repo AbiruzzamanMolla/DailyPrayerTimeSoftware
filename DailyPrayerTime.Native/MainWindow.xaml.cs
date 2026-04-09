@@ -281,9 +281,12 @@ namespace DailyPrayerTime.Native
             var parameters = CalculationMethodExtensions.GetParameters(CalculationMethod.MUSLIM_WORLD_LEAGUE); // Standard
             _tomorrowPrayerTimes = new CombinedPrayerTimes(new PrayerTimes(coordinates, nextDay, parameters));
             
-            EnglishDateDisplay.Text = DateTime.Now.ToString("dddd, MMM d");
-            HijriDateDisplay.Text = string.IsNullOrEmpty(_todayPrayerTimes.HijriDate) ? GetHijriDate() : _todayPrayerTimes.HijriDate;
-            RefreshUIDisplay();
+            Dispatcher.Invoke(() =>
+            {
+                EnglishDateDisplay.Text = DateTime.Now.ToString("dddd, MMM d");
+                HijriDateDisplay.Text = string.IsNullOrEmpty(_todayPrayerTimes.HijriDate) ? GetHijriDate() : _todayPrayerTimes.HijriDate;
+                RefreshUIDisplay();
+            });
         }
 
         private static async Task DownloadDefaultAdhan()
@@ -343,53 +346,57 @@ namespace DailyPrayerTime.Native
         private void RefreshUIDisplay()
         {
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
-            string timeFmt = GetTimeFmt();
-            FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToString(timeFmt)} - {_todayPrayerTimes.Sunrise.ToString(timeFmt)}";
-            SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
-            DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
-            AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToString(timeFmt)} - {_todayPrayerTimes.Maghrib.ToString(timeFmt)}";
-            MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
-            IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
             
-            SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
-            IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
+            Dispatcher.Invoke(() =>
+            {
+                string timeFmt = GetTimeFmt();
+                FajrTimeText.Text = $"{_todayPrayerTimes.Fajr.ToString(timeFmt)} - {_todayPrayerTimes.Sunrise.ToString(timeFmt)}";
+                SunriseTimeText.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
+                DhuhrTimeText.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
+                AsrTimeText.Text = $"{_todayPrayerTimes.Asr.ToString(timeFmt)} - {_todayPrayerTimes.Maghrib.ToString(timeFmt)}";
+                MaghribTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
+                IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
+                
+                SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
+                IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
 
-            string todayDateShort = DateTime.Now.ToString("ddd, MMM d");
-            SuhurDateText.Text = todayDateShort;
-            IftarDateText.Text = todayDateShort;
-            
-            UpdateFastingHighlights();
-            
-            HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(timeFmt);
-            HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(timeFmt);
-            
-            DateTime sunrise = _todayPrayerTimes.Sunrise;
-            DateTime dhuhr = _todayPrayerTimes.Dhuhr;
-            DateTime maghrib = _todayPrayerTimes.Maghrib;
+                string todayDateShort = DateTime.Now.ToString("ddd, MMM d");
+                SuhurDateText.Text = todayDateShort;
+                IftarDateText.Text = todayDateShort;
+                
+                UpdateFastingHighlights();
+                
+                HeroSunriseText.Text = "☀ Sunrise: " + _todayPrayerTimes.Sunrise.ToString(timeFmt);
+                HeroSunsetText.Text = "🌆 Sunset: " + _todayPrayerTimes.Maghrib.ToString(timeFmt);
+                
+                DateTime sunrise = _todayPrayerTimes.Sunrise;
+                DateTime dhuhr = _todayPrayerTimes.Dhuhr;
+                DateTime maghrib = _todayPrayerTimes.Maghrib;
 
-            SunriseProhibRange.Text = $"{sunrise.ToString(TimeFmtShort)} - {sunrise.AddMinutes(15).ToString(TimeFmtShort)}";
-            ZawalProhibRange.Text = $"{dhuhr.AddMinutes(-30).ToString(TimeFmtShort)} - {dhuhr.ToString(TimeFmtShort)}";
-            SunsetProhibRange.Text = $"{maghrib.AddMinutes(-15).ToString(TimeFmtShort)} - {maghrib.ToString(TimeFmtShort)}";
+                SunriseProhibRange.Text = $"{sunrise.ToString(TimeFmtShort)} - {sunrise.AddMinutes(15).ToString(TimeFmtShort)}";
+                ZawalProhibRange.Text = $"{dhuhr.AddMinutes(-30).ToString(TimeFmtShort)} - {dhuhr.ToString(TimeFmtShort)}";
+                SunsetProhibRange.Text = $"{maghrib.AddMinutes(-15).ToString(TimeFmtShort)} - {maghrib.ToString(TimeFmtShort)}";
 
-            // Nafal Prayers Calculations
-            DateTime duhaStart = sunrise.AddMinutes(15);
-            DateTime duhaEnd = dhuhr.AddMinutes(-15);
-            DuhaTimeText.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
+                // Nafal Prayers Calculations
+                DateTime duhaStart = sunrise.AddMinutes(15);
+                DateTime duhaEnd = dhuhr.AddMinutes(-15);
+                DuhaTimeText.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
 
-            DateTime awwabinStart = maghrib.AddMinutes(15);
-            DateTime awwabinEnd = _todayPrayerTimes.Isha.AddMinutes(-15);
-            AwwabinTimeText.Text = $"{awwabinStart.ToString(timeFmt)} - {awwabinEnd.ToString(timeFmt)}";
+                DateTime awwabinStart = maghrib.AddMinutes(15);
+                DateTime awwabinEnd = _todayPrayerTimes.Isha.AddMinutes(-15);
+                AwwabinTimeText.Text = $"{awwabinStart.ToString(timeFmt)} - {awwabinEnd.ToString(timeFmt)}";
 
-            DateTime tahajjudStart = _todayPrayerTimes.Isha.AddMinutes(15);
-            DateTime tahajjudEnd = _tomorrowPrayerTimes.Fajr.AddMinutes(-10);
-            TahajjudTimeText.Text = $"{tahajjudStart.ToString(timeFmt)} - {tahajjudEnd.ToString(timeFmt)}";
+                DateTime tahajjudStart = _todayPrayerTimes.Isha.AddMinutes(15);
+                DateTime tahajjudEnd = _tomorrowPrayerTimes.Fajr.AddMinutes(-10);
+                TahajjudTimeText.Text = $"{tahajjudStart.ToString(timeFmt)} - {tahajjudEnd.ToString(timeFmt)}";
 
-            TimeSpan nightDuration = _tomorrowPrayerTimes.Fajr - maghrib;
-            TimeSpan oneThird = new TimeSpan(nightDuration.Ticks / 3);
-            DateTime lastThirdStart = _tomorrowPrayerTimes.Fajr - oneThird;
-            LastThirdTimeText.Text = $"Last 1/3 begins: {lastThirdStart.ToString(timeFmt)}";
+                TimeSpan nightDuration = _tomorrowPrayerTimes.Fajr - maghrib;
+                TimeSpan oneThird = new TimeSpan(nightDuration.Ticks / 3);
+                DateTime lastThirdStart = _tomorrowPrayerTimes.Fajr - oneThird;
+                LastThirdTimeText.Text = $"Last 1/3 begins: {lastThirdStart.ToString(timeFmt)}";
 
-            UpdateCountdown();
+                UpdateCountdown();
+            });
         }
 
         private void Timer_Tick(object? sender, EventArgs e)

@@ -574,5 +574,20 @@ namespace DailyPrayerTime.Native
             }
             catch { /* Ignore */ }
         }
+
+        private void SettingsTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (SettingsButtonsPanel == null) return;
+            
+            // Index 2 is "Support & Contact"
+            if (SettingsTabControl.SelectedIndex == 2)
+            {
+                SettingsButtonsPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                SettingsButtonsPanel.Visibility = Visibility.Visible;
+            }
+        }
     }
 }
