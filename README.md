@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.7.4
+Version: 1.7.5
 
-## 🚀 Daily Prayer Timer (Native) - v1.7.4
+## 🚀 Daily Prayer Timer (Native) - v1.7.5
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
@@ -40,7 +40,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.7.4-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.7.5-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -74,8 +74,8 @@ COMING SOON.
 
 | Platform | Installer |
 |---|---|
-| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.4_x64.exe` |
-| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.4_x86.exe` |
+| **Windows 10/11 (64-bit)** | `DailyPrayerTimer_Setup_v1.7.5_x64.exe` |
+| **Windows 10/11 (32-bit)** | `DailyPrayerTimer_Setup_v1.7.5_x86.exe` |
 
 1. Download the installer matching your system from the [Latest Release](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest).
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.

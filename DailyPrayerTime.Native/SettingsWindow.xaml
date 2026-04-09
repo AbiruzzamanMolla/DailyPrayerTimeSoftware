@@ -339,7 +339,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="Check for application updates to get the latest features and bug fixes." TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.4" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.5" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check for Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
                                         <Button.Resources>
@@ -390,7 +390,10 @@
                         <TextBlock Text="Developer Profile" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#f3f4f6" BorderBrush="#e5e7eb" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Abiruzzaman Molla" Foreground="#111827" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,8"/>
+                                <TextBlock Text="Abiruzzaman Molla" Foreground="#111827" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
+                                <TextBlock Foreground="#4b5563" Margin="0,0,15,10">
+                                    ✉️ <Hyperlink NavigateUri="mailto:abiruzzaman.molla@gmail.com">abiruzzaman.molla@gmail.com</Hyperlink>
+                                </TextBlock>
                                 <WrapPanel Margin="0,0,0,5">
                                     <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
                                         🌍 <Hyperlink NavigateUri="https://abiruzzamanmolla.github.io/" RequestNavigate="Hyperlink_RequestNavigate">Portfolio</Hyperlink>
@@ -406,9 +409,6 @@
                                     </TextBlock>
                                     <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
                                         🚀 <Hyperlink NavigateUri="https://open-vsx.org/namespace/azmolla" RequestNavigate="Hyperlink_RequestNavigate">Open VSX</Hyperlink>
-                                    </TextBlock>
-                                    <TextBlock Foreground="#4b5563" Margin="0,0,15,5">
-                                        ✉️ <Hyperlink NavigateUri="mailto:abiruzzaman.molla@gmail.com">abiruzzaman.molla@gmail.com</Hyperlink>
                                     </TextBlock>
                                 </WrapPanel>
                             </StackPanel>

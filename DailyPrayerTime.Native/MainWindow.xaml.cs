@@ -185,6 +185,7 @@ namespace DailyPrayerTime.Native
                 ApplySettingsTheme();
                 _ = CalculatePrayerTimes();
                 ManageOverlay();
+                ManageIntegratedTaskbar();
             }
         }
         
@@ -212,6 +213,8 @@ namespace DailyPrayerTime.Native
             {
                 _taskbarWindow = new TaskbarWindow();
                 _taskbarWindow.Show();
+                // Forces an immediate data refresh so it doesn't stay at "00:00:00 Asr" for 1s
+                UpdateCountdown();
             }
             else if (!shouldShow && _taskbarWindow != null)
             {
@@ -841,27 +844,41 @@ namespace DailyPrayerTime.Native
             string rangeStr = currentStart.HasValue ? $"{currentStart.Value:hh:mm tt} - {nextTime:hh:mm tt}" : "N/A";
 
             // 1. Sync Data for DeskBand (Background)
-            if (SettingsManager.Current.UseDeskBand)
+            try
             {
-                var data = new DeskBandData
+                if (SettingsManager.Current.UseDeskBand)
                 {
-                    Label = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:",
-                    Countdown = countStr,
-                    CurrentPrayer = curName,
-                    NextPrayer = nextName,
-                    NextTime = nextTime.ToString(GetTimeFmt()),
-                    PrimaryColor = SettingsManager.Current.PrimaryColor,
-                    IsNight = _currentBgName == "Moon",
-                    IsActive = true
-                };
-                DeskBandDataWriter.Write(data);
+                    var data = new DeskBandData
+                    {
+                        Label = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:",
+                        Countdown = countStr,
+                        CurrentPrayer = curName,
+                        NextPrayer = nextName,
+                        NextTime = nextTime.ToString(GetTimeFmt()),
+                        PrimaryColor = SettingsManager.Current.PrimaryColor,
+                        IsNight = _currentBgName == "Moon",
+                        IsActive = true
+                    };
+                    DeskBandDataWriter.Write(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("DeskBand update failed: " + ex.Message);
             }
 
             // 2. Update Integrated Taskbar Window
-            if (_taskbarWindow != null)
+            try
             {
-                string label = currentPrayer != Prayer.NONE ? curName : nextName;
-                _taskbarWindow.UpdateData(countStr, label);
+                if (_taskbarWindow != null)
+                {
+                    string label = currentPrayer != Prayer.NONE ? curName : nextName;
+                    _taskbarWindow.UpdateData(countStr, label);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Integrated Taskbar update failed: " + ex.Message);
             }
 
             // 3. Update Overlay Window (UI)

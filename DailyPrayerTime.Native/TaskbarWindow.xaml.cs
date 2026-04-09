@@ -43,11 +43,20 @@ namespace DailyPrayerTime.Native
 
         public void UpdateData(string time, string prayer)
         {
+            if (_myHwnd == IntPtr.Zero) return;
+
             Dispatcher.Invoke(() =>
             {
-                TimerText.Text = time;
-                PrayerLabel.Text = prayer;
-                Debug.WriteLine($"[TaskbarWindow] Updated: {prayer} - {time}");
+                try
+                {
+                    TimerText.Text = time;
+                    PrayerLabel.Text = prayer;
+                    Debug.WriteLine($"[TaskbarWindow] UI Updated successfully: {prayer} - {time}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"[TaskbarWindow] UI Update FAILED: {ex.Message}");
+                }
             });
         }
 

@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.5] - 2026-04-09
+### Added
+- **Developer Profile Polished**: Reordered information for better readability (Name -> Email -> Projects).
+### Fixed
+- **Integrated Taskbar Timer Reliability**: 
+    - Resolved the "00:00:00 Asr" freeze by forcing an immediate data sync upon window creation.
+    - Improved window lifecycle management to ensure the taskbar window correctly restarts after being toggled in Settings.
+    - Added error boundaries around integration updates (DeskBand/Taskbar) to prevent one failure from halting the entire sync loop.
+    - Enhanced logging and handle verification for safer reparenting to `Shell_TrayWnd`.
+
 ## [1.7.4] - 2026-04-09
 ### Added
 - **Responsive Settings UI**: The settings window now scales beautifully with window resizing, using flexible layouts for various resolutions.
