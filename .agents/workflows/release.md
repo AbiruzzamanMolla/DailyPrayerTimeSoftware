@@ -7,6 +7,11 @@ description: How to prepare and publish a new release for Daily Prayer Timer (Na
 Follow this checklist for updating the Daily Prayer Timer native application (.NET 8.0).
 Compatible with **Windows 10** and **Windows 11** (x64 & x86).
 
+## 0. Requirements
+
+To build the installers, you need **Inno Setup 6** installed.
+- **ISCC Path**: `C:\Program Files (x86)\Inno Setup 6\iscc.exe`
+
 ## 1. Prepare Release
 
 ### 1.1 Update Version Numbers
