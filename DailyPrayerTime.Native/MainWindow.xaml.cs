@@ -216,7 +216,7 @@ namespace DailyPrayerTime.Native
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Application.Current.Shutdown();
+            this.Close();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
