@@ -149,6 +149,7 @@ namespace DailyPrayerTime.Native
             OverlayInput.IsChecked = s.ShowOverlay;
             UseDeskBandInput.IsChecked = s.UseDeskBand;
             IntegratedTaskbarInput.IsChecked = s.UseIntegratedTaskbar;
+            ShowHeroGridInput.IsChecked = s.ShowHeroPrayerGrid;
             NotificationsInput.IsChecked = s.NotificationsEnabled;
             
             GradStartInput.Text = s.GradientStart;
@@ -302,6 +303,7 @@ namespace DailyPrayerTime.Native
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
             s.UseDeskBand = UseDeskBandInput.IsChecked ?? false;
             s.UseIntegratedTaskbar = IntegratedTaskbarInput.IsChecked ?? false;
+            s.ShowHeroPrayerGrid = ShowHeroGridInput.IsChecked ?? true;
             s.NotificationsEnabled = NotificationsInput.IsChecked ?? true;
             
             bool newAutoStart = AutoStartInput.IsChecked ?? false;

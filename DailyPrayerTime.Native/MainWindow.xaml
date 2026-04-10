@@ -13,6 +13,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
+        KeyDown="Window_KeyDown"
         Icon="pack://application:,,,/icon.ico">
 
     <WindowChrome.WindowChrome>
@@ -169,10 +170,33 @@
                     <!-- Time Until Label -->
                     <TextBlock x:Name="HeroTimeUntilLabel" Text="Calculating..." HorizontalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4,0,0"/>
                     
-                    <!-- Countdown Display -->
-                    <Viewbox MaxHeight="60" HorizontalAlignment="Center" Margin="0,2,0,0">
-                        <TextBlock x:Name="HeroCountdownText" Text="00:00:00" Foreground="White" FontSize="42" FontWeight="Bold"/>
-                    </Viewbox>
+                    <!-- Countdown Display with Sunrise/Sunset -->
+                    <Grid HorizontalAlignment="Center" Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Sunrise -->
+                        <StackPanel x:Name="HeroSunriseDisplay" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,15,0" Opacity="0.8">
+                            <Path Width="16" Height="16" Fill="White" Data="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z" Opacity="0.4" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="HeroSunriseTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            <TextBlock Text="Sunrise" Foreground="White" Opacity="0.6" FontSize="8" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Countdown -->
+                        <Viewbox Grid.Column="1" MaxHeight="60">
+                            <TextBlock x:Name="HeroCountdownText" Text="00:00:00" Foreground="White" FontSize="42" FontWeight="Bold"/>
+                        </Viewbox>
+
+                        <!-- Sunset -->
+                        <StackPanel x:Name="HeroSunsetDisplay" Grid.Column="2" VerticalAlignment="Center" Margin="15,0,0,0" Opacity="0.8">
+                            <Path Width="16" Height="16" Fill="White" Data="M10,2L12,4L10,6M21,14L19,12L21,10M12,21L10,19L12,17M3,10L5,12L3,14M12,6C8.7,6,6,8.7,6,12s2.7,6,6,6s6-2.7,6-6S15.3,6,12,6z" Opacity="0.4" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="HeroSunsetTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            <TextBlock Text="Sunset" Foreground="White" Opacity="0.6" FontSize="8" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
 
                     <!-- Context and Nafal Notices -->
                     <TextBlock x:Name="HeroContextNoteText" Text="" HorizontalAlignment="Center" Foreground="#FBBF24" FontSize="11" Margin="0,2,0,0" Visibility="Collapsed"/>
@@ -263,16 +287,10 @@
                                     </StackPanel>
                                 </Border>
 
-                                <!-- Sunrise (Sunrise label) -->
-                                <Border Grid.Row="0" Grid.Column="1" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
-                                    <StackPanel>
-                                        <TextBlock x:Name="SunriseLabel" Text="Sunrise" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
-                                        <TextBlock x:Name="SubShuruqTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                                    </StackPanel>
-                                </Border>
-
+                                <!-- Sunrise (Removed) -->
+                                
                                 <!-- Dhuhr Slot (Dynamic) -->
-                                <Border Grid.Row="0" Grid.Column="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="DhuhrLabel" Text="Dhuhr" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubDhuhrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
@@ -373,7 +391,7 @@
                         <TextBlock x:Name="FajrTimeText" Text="--:-- AM - --:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
                     </Grid>
                 </Border>
-                <Border x:Name="SunriseCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                <Border x:Name="SunriseCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6" Visibility="Collapsed">
                     <Grid>
                         <TextBlock x:Name="SunriseNameText" Text="Sunrise" FontSize="15" FontWeight="Medium" Foreground="White" HorizontalAlignment="Left"/>
                         <TextBlock x:Name="SunriseTimeText" Text="--:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
@@ -506,14 +524,14 @@
                 </Grid.ColumnDefinitions>
                 
                 <!-- Sunrise -->
-                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center" ToolTip="Prohibited prayer time (Makruh)">
                     <TextBlock Text="Sunrise (Tulu)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunriseProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                     <TextBlock x:Name="StickySunriseStatus" Text="Passed" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>
 &#160;
                 <!-- Noon (With Separators) -->
-                <Border Grid.Column="1" BorderBrush="#33FFFFFF" BorderThickness="1,0,1,0">
+                <Border Grid.Column="1" BorderBrush="#33FFFFFF" BorderThickness="1,0,1,0" ToolTip="Prohibited prayer time (Makruh)">
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="Noon (Zawal)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                         <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
@@ -522,7 +540,7 @@
                 </Border>
 
                 <!-- Sunset -->
-                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center" ToolTip="Prohibited prayer time (Makruh)">
                     <TextBlock Text="Sunset (Ghurub)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunsetProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                     <TextBlock x:Name="StickySunsetStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>

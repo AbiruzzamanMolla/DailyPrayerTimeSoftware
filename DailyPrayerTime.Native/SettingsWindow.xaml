@@ -289,6 +289,7 @@
                         <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,10,0,5" Foreground="#170939"/>
                         <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
                         <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="ShowHeroGridInput" Content="Show Prayer Times Grid in Hero Section" Margin="0,0,0,5" Foreground="#170939"/>
                         <Grid Margin="0,0,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -380,7 +381,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="Check for application updates to get the latest features and bug fixes." TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.8.3" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.8.4" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check for Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
                                         <Button.Resources>

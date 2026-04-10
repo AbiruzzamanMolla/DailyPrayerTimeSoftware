@@ -232,6 +232,15 @@ namespace DailyPrayerTime.Native
             RefreshUIDisplay();
         }
 
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.F11)
+            {
+                FullScreen_Click(this, new RoutedEventArgs());
+                e.Handled = true;
+            }
+        }
+
         private void FullScreen_Click(object sender, RoutedEventArgs e)
         {
             _isFullScreen = !_isFullScreen;
@@ -252,6 +261,10 @@ namespace DailyPrayerTime.Native
                 this.WindowState = WindowState.Normal;
                 this.WindowStyle = WindowStyle.None; // Maintain custom title bar style
                 this.ResizeMode = ResizeMode.CanResize;
+                
+                // Ensure it's large enough when coming out of full screen if it was resized
+                if (this.Width < 460) this.Width = 460;
+                if (this.Height < 480) this.Height = 480;
             }
         }
 
@@ -500,9 +513,6 @@ namespace DailyPrayerTime.Native
                 DateTime duhaStart = _todayPrayerTimes.Sunrise.AddMinutes(15);
                 DateTime duhaEnd = _todayPrayerTimes.Dhuhr.AddMinutes(-15);
                 
-                // Sunrise/Sunrise Translation
-                SunriseLabel.Text = "Sunrise";
-                
                 // Slot Swapping: Duha (After Fajr, before Dhuhr)
                 if (now > _todayPrayerTimes.Sunrise && now < _todayPrayerTimes.Dhuhr)
                 {
@@ -537,7 +547,6 @@ namespace DailyPrayerTime.Native
                 }
 
                 SubFajrTime.Text = $"{_todayPrayerTimes.Fajr.ToString(timeFmt)} - {_todayPrayerTimes.Sunrise.ToString(timeFmt)}";
-                SubShuruqTime.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
                 // SubDhuhr is handled above
                 SubAsrTime.Text = $"{_todayPrayerTimes.Asr.ToString(timeFmt)} - {_todayPrayerTimes.Maghrib.ToString(timeFmt)}";
                 SubMaghribTime.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
@@ -1100,6 +1109,14 @@ namespace DailyPrayerTime.Native
             
             if (_todayPrayerTimes != null && _tomorrowPrayerTimes != null)
             {
+                HeroSunriseTime.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
+                HeroSunsetTime.Text = _todayPrayerTimes.Maghrib.ToString(timeFmt);
+
+                // Visibility of Hero grids based on settings
+                bool showGrid = SettingsManager.Current.ShowHeroPrayerGrid;
+                HeroDefaultGrid.Visibility = (!_isRamadanMode && showGrid) ? Visibility.Visible : Visibility.Collapsed;
+                HeroRamadanGrid.Visibility = (_isRamadanMode && showGrid) ? Visibility.Visible : Visibility.Collapsed;
+
                 // Ramadan Hero Overrides
                 if (_isRamadanMode)
                 {

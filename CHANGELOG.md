@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.4] - 2026-04-10
+### Added
+- **Hero Grid Visibility Toggle**: Added a new setting in "Layout & Theme" to toggle the visibility of the prayer times grid in the Hero segment.
+- **F11 Keyboard Support**: Dedicated `F11` key binding for toggling full-screen mode instantly.
+- **Prohibited Time Guidance**: Added hover tooltips to the footer prohibited sections (Sunrise, Noon, Sunset) to clarify their purpose as Makruh times.
+
+### Changed
+- **Sunrise Relocation**: Moved Sunrise and Sunset times to the Hero card flanking the main timer, enhancing the focused UI.
+- **List Cleanup**: Removed redundant "Sunrise" entries from both the Hero grid and the main scrollable prayer list for a cleaner look.
+
 ## [1.8.3] - 2026-04-10
 ### Added
 - **Consolidated Notes**: Combined Friday Sunnahs and Fasting Highlights into a single, smart collapsible section that shows all relevant information together.

@@ -25,6 +25,7 @@ namespace DailyPrayerTime.Native
         public bool ShowOverlay { get; set; } = true;
         public bool UseDeskBand { get; set; } = false;
         public bool UseIntegratedTaskbar { get; set; } = false;
+        public bool ShowHeroPrayerGrid { get; set; } = true;
         public bool AutoStart { get; set; } = false;
         public bool SilentStart { get; set; } = false;
 

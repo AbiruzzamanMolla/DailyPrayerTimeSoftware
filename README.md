@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.8.3
+Version: 1.8.4
 
-## 🚀 Daily Prayer Timer (Native) - v1.8.3
+## 🚀 Daily Prayer Timer (Native) - v1.8.4
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
