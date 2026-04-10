@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.3] - 2026-04-10
+### Added
+- **Consolidated Notes**: Combined Friday Sunnahs and Fasting Highlights into a single, smart collapsible section that shows all relevant information together.
+- **Enhanced Footer**: Added vertical borders (left/right) to the Noon (Zawal) section for better visual separation.
+- **Dynamic Window Sizing**: Application now automatically adjusts to 85% of the screen height on launch, with a guaranteed minimum width of 460px.
+
+### Changed
+- **Footer Readability**: Updated all status text and time ranges in the prohibited footer to pure white for better contrast and legibility.
+
+### Fixed
+- **F11 Full Screen**: Refined the window state logic to ensure the taskbar is reliably hidden when entering full-screen mode.
+- **Notes Visibility**: Fixed an issue where the Friday note would suppress other fasting highlights.
+
 ## [1.8.2] - 2026-04-10
 ### Added
 - **Immersive Full Screen**: Fixed full-screen mode to correctly hide the Windows taskbar (F11 style), providing a truly distractions-free experience.

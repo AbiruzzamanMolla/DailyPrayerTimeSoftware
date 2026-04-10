@@ -1,8 +1,8 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.8.2
+Version: 1.8.3
 
-## 🚀 Daily Prayer Timer (Native) - v1.8.2
+## 🚀 Daily Prayer Timer (Native) - v1.8.3
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
@@ -43,7 +43,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.8.1-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -77,9 +77,9 @@ Check out other versions of this tool:
 
 | Platform | Link |
 |---|---|
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.8.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.3_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.3_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.8.3_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 ### 🚀 Portable Version
 The portable version is a single-file executable that stores all its settings and data in a `data` subfolder within the application directory. 

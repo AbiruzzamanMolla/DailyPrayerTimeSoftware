@@ -7,7 +7,7 @@
         Title="Daily Prayer Timer" 
         Height="600" 
         Width="450" 
-        MinWidth="320" 
+        MinWidth="460" 
         MinHeight="480"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -507,21 +507,23 @@
                 
                 <!-- Sunrise -->
                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                    <TextBlock Text="Sunrise (Tulu)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Sunrise (Tulu)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunriseProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                     <TextBlock x:Name="StickySunriseStatus" Text="Passed" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>
-
-                <!-- Noon -->
-                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                    <TextBlock Text="Noon (Zawal)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                    <TextBlock x:Name="StickyZawalStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
-                </StackPanel>
+&#160;
+                <!-- Noon (With Separators) -->
+                <Border Grid.Column="1" BorderBrush="#33FFFFFF" BorderThickness="1,0,1,0">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock Text="Noon (Zawal)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                        <TextBlock x:Name="StickyZawalStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
 
                 <!-- Sunset -->
                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
-                    <TextBlock Text="Sunset (Ghurub)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Sunset (Ghurub)" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunsetProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                     <TextBlock x:Name="StickySunsetStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>

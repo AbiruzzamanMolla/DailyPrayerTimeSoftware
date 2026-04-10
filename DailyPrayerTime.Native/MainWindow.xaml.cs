@@ -55,6 +55,7 @@ namespace DailyPrayerTime.Native
         {
             SettingsManager.Load();
             InitializeComponent();
+            this.Height = SystemParameters.WorkArea.Height * 0.85;
             ApplySettingsTheme();
             SetupTimer();
             SetupTrayIcon();
@@ -238,9 +239,10 @@ namespace DailyPrayerTime.Native
             
             if (_isFullScreen)
             {
+                // To reliably hide taskbar with AllowsTransparency="True"
                 this.WindowState = WindowState.Normal;
                 this.WindowStyle = WindowStyle.None;
-                this.ResizeMode = ResizeMode.NoResize; // Ensures taskbar is covered
+                this.ResizeMode = ResizeMode.NoResize;
                 this.Topmost = true;
                 this.WindowState = WindowState.Maximized;
             }
@@ -248,7 +250,7 @@ namespace DailyPrayerTime.Native
             {
                 this.Topmost = false;
                 this.WindowState = WindowState.Normal;
-                this.WindowStyle = WindowStyle.None;
+                this.WindowStyle = WindowStyle.None; // Maintain custom title bar style
                 this.ResizeMode = ResizeMode.CanResize;
             }
         }
@@ -1406,11 +1408,13 @@ namespace DailyPrayerTime.Native
                 if (hijriMonth == 1 && hijriDay == 10) generalHighlights.Add("Day of Ashura: Highly recommended fast.");
             }
 
-            // Friday Special Amal (Priority)
+            // Aggregate Titles and Details
+            var aggregatedTitles = new System.Collections.Generic.List<string>(generalHighlights);
+            
             if (isFriday)
             {
-                FastingNoteText.Text = "✨ Friday (Jumu'ah) Special Acts & Sunnahs";
-                details.Add("Physical Sunnahs:");
+                aggregatedTitles.Insert(0, "Friday (Jumu'ah) Special Acts");
+                details.Add("Friday (Jumu'ah) Sunnahs:");
                 details.Add("• Ghusl: Ritual bath to purify yourself.");
                 details.Add("• Cleaning: Clip nails and trim mustache.");
                 details.Add("• Miswak: Use a tooth-stick to clean teeth.");
@@ -1424,16 +1428,15 @@ namespace DailyPrayerTime.Native
                 details.Add("\nSpecial Dua Times:");
                 details.Add("• Pre-Maghrib: Last hour before sunset.");
                 details.Add("• During Khutbah: Between the two sermons.");
-                
-                FastingNoteDetailsText.Text = string.Join("\n", details);
-                FastingNoteToggleBtn.Visibility = Visibility.Visible;
-                FastingNoteBorder.Visibility = Visibility.Visible;
             }
-            else if (generalHighlights.Count > 0)
+
+            if (aggregatedTitles.Count > 0)
             {
-                FastingNoteText.Text = "✨ " + string.Join(" | ", generalHighlights);
-                FastingNoteDetailsText.Text = "";
-                FastingNoteToggleBtn.Visibility = Visibility.Collapsed;
+                FastingNoteText.Text = "✨ " + string.Join(" | ", aggregatedTitles);
+                FastingNoteDetailsText.Text = string.Join("\n", details);
+                
+                // Show toggle only if we have details
+                FastingNoteToggleBtn.Visibility = details.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
                 FastingNoteBorder.Visibility = Visibility.Visible;
             }
             else
