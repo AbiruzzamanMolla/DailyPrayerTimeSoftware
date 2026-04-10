@@ -45,6 +45,9 @@ namespace DailyPrayerTime.Native
         private Prayer _lastEndNotificationID = Prayer.NONE;
         private UpdateInfo? _currentUpdate;
         private bool _isZenMode = false;
+        private bool _isFullScreen = false;
+        private bool _isRamadanMode = false;
+        private bool _isFastingNoteExpanded = false;
         
         private bool IsWindows11 => Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000;
 
@@ -219,6 +222,42 @@ namespace DailyPrayerTime.Native
             this.Close();
         }
 
+        private void RamadanMode_Click(object sender, RoutedEventArgs e)
+        {
+            _isRamadanMode = !_isRamadanMode;
+            RamadanIcon.Opacity = _isRamadanMode ? 1.0 : 0.7;
+            HeroRamadanGrid.Visibility = _isRamadanMode ? Visibility.Visible : Visibility.Collapsed;
+            HeroDefaultGrid.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
+            RefreshUIDisplay();
+        }
+
+        private void FullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            _isFullScreen = !_isFullScreen;
+            FullScreenIcon.Opacity = _isFullScreen ? 1.0 : 0.7;
+            
+            if (_isFullScreen)
+            {
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.None;
+                this.Topmost = true;
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                this.Topmost = false;
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.None; // custom title bar handles this
+            }
+        }
+
+        private void FastingNote_Toggle_Click(object sender, RoutedEventArgs e)
+        {
+            _isFastingNoteExpanded = !_isFastingNoteExpanded;
+            FastingNoteToggleIcon.Text = _isFastingNoteExpanded ? "▲" : "▼";
+            FastingNoteExtraContent.Visibility = _isFastingNoteExpanded ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
@@ -238,7 +277,7 @@ namespace DailyPrayerTime.Native
             // 1. Visibility Toggles
             var visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
             PrayerListScroll.Visibility = visibility;
-            FooterBorder.Visibility = visibility;
+            StickyFooter.Visibility = visibility;
             UpdateBanner.Visibility = Visibility.Collapsed; // Hide banner in zen regardless
 
             // 2. Layout Adjustments
@@ -322,7 +361,7 @@ namespace DailyPrayerTime.Native
             
             // Hero section background
             HeroBorder.Background = primaryBrush;
-            FooterBorder.Background = primaryBrush;
+            StickyFooter.Background = primaryBrush;
 
             try 
             {
@@ -452,16 +491,65 @@ namespace DailyPrayerTime.Native
                     JumuahRakatNote.Text = "4 Sunnah, 2 Fard (Congregation), 4 Sunnah, 2 Sunnah, 2 Nafl (14 Total)";
                 }
                 
-                // Populate Sub-Card Prayer Grid
-                SubFajrTime.Text = _todayPrayerTimes.Fajr.ToString(timeFmt);
-                SubShuruqTime.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
-                SubDhuhrTime.Text = _todayPrayerTimes.Dhuhr.ToString(timeFmt);
-                SubAsrTime.Text = _todayPrayerTimes.Asr.ToString(timeFmt);
-                SubMaghribTime.Text = _todayPrayerTimes.Maghrib.ToString(timeFmt);
-                SubIshaTime.Text = _todayPrayerTimes.Isha.ToString(timeFmt);
+                // Hero Section Sub-Card (Slot Swapping & Ranges)
+                DateTime now = DateTime.Now;
+                DateTime duhaStart = _todayPrayerTimes.Sunrise.AddMinutes(15);
+                DateTime duhaEnd = _todayPrayerTimes.Dhuhr.AddMinutes(-15);
+                
+                // Sunrise/Sunrise Translation
+                SunriseLabel.Text = "Sunrise";
+                
+                // Slot Swapping: Duha (After Fajr, before Dhuhr)
+                if (now > _todayPrayerTimes.Sunrise && now < _todayPrayerTimes.Dhuhr)
+                {
+                    DhuhrLabel.Text = "Duha";
+                    SubDhuhrTime.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
+                    DhuhrLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
+                }
+                else
+                {
+                    DhuhrLabel.Text = isFriday ? "Jumu'ah" : "Dhuhr";
+                    SubDhuhrTime.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
+                    DhuhrLabel.Foreground = System.Windows.Media.Brushes.White;
+                }
 
+                // Slot Swapping: Tahajjud (After Midnight)
+                DateTime sunset = _todayPrayerTimes.Maghrib;
+                DateTime nextSunrise = _tomorrowPrayerTimes.Sunrise;
+                TimeSpan nightLength = nextSunrise - sunset;
+                DateTime midnight = sunset.AddTicks(nightLength.Ticks / 2);
+
+                if (now >= midnight && now < _tomorrowPrayerTimes.Fajr)
+                {
+                    IshaLabel.Text = "Tahajjud";
+                    IshaLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
+                    SubIshaTime.Text = $"{midnight.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
+                }
+                else
+                {
+                    IshaLabel.Text = "Isha";
+                    IshaLabel.Foreground = System.Windows.Media.Brushes.White;
+                    SubIshaTime.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
+                }
+
+                SubFajrTime.Text = $"{_todayPrayerTimes.Fajr.ToString(timeFmt)} - {_todayPrayerTimes.Sunrise.ToString(timeFmt)}";
+                SubShuruqTime.Text = _todayPrayerTimes.Sunrise.ToString(timeFmt);
+                // SubDhuhr is handled above
+                SubAsrTime.Text = $"{_todayPrayerTimes.Asr.ToString(timeFmt)} - {_todayPrayerTimes.Maghrib.ToString(timeFmt)}";
+                SubMaghribTime.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
+                SubIshaTime.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
+
+                // Ramadan Mode Hero Data
+                HeroSuhurTime.Text = _todayPrayerTimes.Suhur.ToString(timeFmt);
+                HeroIftarTime.Text = _todayPrayerTimes.Iftar.ToString(timeFmt);
+                
                 SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
                 IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
+
+                // Sticky Footer: Prohibited Times
+                StickySunriseProhibited.Text = $"{_todayPrayerTimes.Sunrise.AddMinutes(-1).ToString(GetTimeFmt())} - {_todayPrayerTimes.Sunrise.AddMinutes(15).ToString(GetTimeFmt())}";
+                StickyZawalProhibited.Text = $"{_todayPrayerTimes.Dhuhr.AddMinutes(-10).ToString(GetTimeFmt())} - {_todayPrayerTimes.Dhuhr.ToString(GetTimeFmt())}";
+                StickySunsetProhibited.Text = $"{_todayPrayerTimes.Maghrib.AddMinutes(-5).ToString(GetTimeFmt())} - {_todayPrayerTimes.Maghrib.ToString(GetTimeFmt())}";
 
                 string todayDateShort = DateTime.Now.ToString("ddd, MMM d");
                 SuhurDateText.Text = todayDateShort;
@@ -633,7 +721,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private string GetPrayerTimeRange(Prayer p, CombinedPrayerTimes t, CombinedPrayerTimes nextDay, string fmt)
+        private string GetPrayerTimeRange(Prayer p, CombinedPrayerTimes? t, CombinedPrayerTimes? nextDay, string fmt)
         {
             if (t == null) return "";
             return p switch
@@ -1229,65 +1317,70 @@ namespace DailyPrayerTime.Native
             int hijriDay = _todayPrayerTimes.HijriDay;
             int hijriMonth = _todayPrayerTimes.HijriMonth;
 
-            // Fallback if structured data is 0 (offline or API failed)
             if (hijriDay == 0 || hijriMonth == 0)
             {
                 try {
                     var calendar = new System.Globalization.UmAlQuraCalendar();
-                    var now = DateTime.Now;
-                    hijriDay = calendar.GetDayOfMonth(now);
-                    hijriMonth = calendar.GetMonth(now);
-                } catch { /* Silently fail and hide */ }
+                    var hijriNow = DateTime.Now;
+                    hijriDay = calendar.GetDayOfMonth(hijriNow);
+                    hijriMonth = calendar.GetMonth(hijriNow);
+                } catch { }
             }
 
-            var highlights = new System.Collections.Generic.List<string>();
+            var generalHighlights = new System.Collections.Generic.List<string>();
+            var details = new System.Collections.Generic.List<string>();
+            bool isFriday = DateTime.Now.DayOfWeek == DayOfWeek.Friday;
 
-            // 1. Prohibited Days (Check these first as they override Sunnah recommendations)
+            // 1. Prohibited Days
             bool isProhibited = false;
-            if (hijriMonth == 10 && hijriDay == 1) 
+            if (hijriMonth == 10 && hijriDay == 1) { generalHighlights.Add("Prohibited: Eid-ul-Fitr - Forbidden to fast today."); isProhibited = true; }
+            else if (hijriMonth == 12 && hijriDay == 10) { generalHighlights.Add("Prohibited: Eid-ul-Adha - Forbidden to fast today."); isProhibited = true; }
+            else if (hijriMonth == 12 && (hijriDay == 11 || hijriDay == 12 || hijriDay == 13)) { generalHighlights.Add("Prohibited: Days of Tashreeq - Forbidden to fast today."); isProhibited = true; }
+
+            if (!isProhibited)
             {
-                highlights.Add("Prohibited: Eid-ul-Fitr (First of Shawwal) - Forbidden to fast today.");
-                isProhibited = true;
-            }
-            else if (hijriMonth == 12 && hijriDay == 10)
-            {
-                highlights.Add("Prohibited: Eid-ul-Adha (10th of Dhul-Hijjah) - Forbidden to fast today.");
-                isProhibited = true;
-            }
-            else if (hijriMonth == 12 && (hijriDay == 11 || hijriDay == 12 || hijriDay == 13))
-            {
-                highlights.Add("Prohibited: Day of Tashreeq (Following Eid-ul-Adha) - Forbidden to fast today.");
-                isProhibited = true;
+                // 2. Weekly Sunnah Fasts
+                var dayOfWeek = DateTime.Now.DayOfWeek;
+                if (dayOfWeek == DayOfWeek.Monday) generalHighlights.Add("Monday Fast: The day the Prophet ﷺ was born and received revelation.");
+                else if (dayOfWeek == DayOfWeek.Thursday) generalHighlights.Add("Thursday Fast: The day deeds are presented to Allah.");
+
+                // 3. Monthly (White Days)
+                if (hijriDay == 13 || hijriDay == 14 || hijriDay == 15) generalHighlights.Add("Ayyam al-Bidh: The monthly Sunnah 'White Days'.");
+
+                // 4. Annual
+                if (hijriMonth == 10 && hijriDay > 1 && hijriDay <= 30) generalHighlights.Add("6 Days of Shawwal: Sunnah to fast this month.");
+                if (hijriMonth == 12 && hijriDay == 9) generalHighlights.Add("Day of Arafah: Highly recommended fast.");
+                if (hijriMonth == 1 && hijriDay == 10) generalHighlights.Add("Day of Ashura: Highly recommended fast.");
             }
 
-            if (isProhibited)
+            // Friday Special Amal (Priority)
+            if (isFriday)
             {
-                FastingNoteText.Text = string.Join("\n\n", highlights);
+                FastingNoteText.Text = "✨ Friday (Jumu'ah) Special Acts & Sunnahs";
+                details.Add("Physical Sunnahs:");
+                details.Add("• Ghusl: Ritual bath to purify yourself.");
+                details.Add("• Cleaning: Clip nails and trim mustache.");
+                details.Add("• Miswak: Use a tooth-stick to clean teeth.");
+                details.Add("• Best Dress: Wear your cleanest clothes.");
+                details.Add("• Attar: Apply perfume (for men).");
+                details.Add("\nSpiritual Deeds:");
+                details.Add("• Surah Al-Kahf: Recite for spiritual light.");
+                details.Add("• Salawat: Increase blessings upon the Prophet ﷺ.");
+                details.Add("• Early Arrival: Go to the Masjid early.");
+                details.Add("• Khutbah: Listen attentively (talking is prohibited).");
+                details.Add("\nSpecial Dua Times:");
+                details.Add("• Pre-Maghrib: Last hour before sunset.");
+                details.Add("• During Khutbah: Between the two sermons.");
+                
+                FastingNoteDetailsText.Text = string.Join("\n", details);
+                FastingNoteToggleBtn.Visibility = Visibility.Visible;
                 FastingNoteBorder.Visibility = Visibility.Visible;
-                return;
             }
-
-            // 2. Weekly Sunnah Fasts
-            var dayOfWeek = DateTime.Now.DayOfWeek;
-            if (dayOfWeek == DayOfWeek.Monday) highlights.Add("Monday Fast: The day the Prophet ﷺ was born and received revelation.");
-            else if (dayOfWeek == DayOfWeek.Thursday) highlights.Add("Thursday Fast: The day deeds are presented to Allah.");
-
-            // 3. Monthly Sunnah Fasts (Ayyam al-Bidh) - 13, 14, 15
-            if (hijriDay == 13 || hijriDay == 14 || hijriDay == 15)
+            else if (generalHighlights.Count > 0)
             {
-                 highlights.Insert(0, "Ayyam al-Bidh: The monthly Sunnah 'White Days' (13th, 14th, & 15th).");
-            }
-
-            // 4. Annual Special Fasts
-            if (hijriMonth == 10 && hijriDay > 1 && hijriDay <= 30) highlights.Add("6 Days of Shawwal: Sunnah to fast any six days in the month following Ramadan.");
-            if (hijriMonth == 12 && hijriDay == 9) highlights.Add("Day of Arafah: Highly recommended fast for those not performing Hajj.");
-            if (hijriMonth == 1 && hijriDay == 10) highlights.Add("Day of Ashura: Highly recommended fast. (Note: Recommend adding 9th or 11th).");
-            if (hijriMonth == 12 && hijriDay >= 1 && hijriDay <= 9) highlights.Add("Virtuous Days: Sunnah to fast during the first nine days of Dhul-Hijjah.");
-            if (hijriMonth == 8) highlights.Add("Month of Sha'ban: Increasing voluntary fasts is recommended this month.");
-
-            if (highlights.Count > 0)
-            {
-                FastingNoteText.Text = string.Join("\n\n", highlights);
+                FastingNoteText.Text = "✨ " + string.Join(" | ", generalHighlights);
+                FastingNoteDetailsText.Text = "";
+                FastingNoteToggleBtn.Visibility = Visibility.Collapsed;
                 FastingNoteBorder.Visibility = Visibility.Visible;
             }
             else
@@ -1298,7 +1391,7 @@ namespace DailyPrayerTime.Native
 
         private static string FormatPrayerName(Prayer p)
         {
-            if (p == Prayer.SUNRISE) return "Shuruq";
+            if (p == Prayer.SUNRISE) return "Sunrise";
             return char.ToUpper(p.ToString()[0]) + p.ToString().Substring(1).ToLower();
         }
 

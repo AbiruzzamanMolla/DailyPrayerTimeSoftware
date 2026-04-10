@@ -31,7 +31,7 @@ namespace DailyPrayerTime.Native
             _posTimer.Tick += (s, e) => RepositionOnTaskbar();
         }
 
-        private void TaskbarWindow_SourceInitialized(object sender, EventArgs e)
+        private void TaskbarWindow_SourceInitialized(object? sender, EventArgs e)
         {
             _myHwnd = new WindowInteropHelper(this).Handle;
 

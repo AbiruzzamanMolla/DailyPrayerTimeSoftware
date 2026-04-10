@@ -6,8 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.8.1] - 2026-04-10
+### Added
+- **Ramadan Mode**: One-tap toggle for spiritual focus, dynamically showing Suhur and Iftar in the Hero Card.
+- **Full Screen Mode**: Immersive view for both Zen and Normal modes.
+- **Dynamic Prayer Slots**: Context-aware UI that automatically shows Salat al-Duha (after Sunrise) and Tahajjud (after Midnight) in place of Dhuhr/Isha slots.
+- **Friday (Jumu'ah) Sunnahs**: Expanded collapsible notes with physical and spiritual Sunnahs for the day of Jumu'ah.
+- **Enhanced Card Design**: Improved readability with brighter text, lighter borders, and intuitive start/end times for each prayer.
+
 ### Fixed
-- **Close Button Behavior**: The close button on the main UI now hides the application to the system tray instead of terminating it, ensuring background alerts and timers continue to function.
+- **Close Button Behavior**: The close button now hides the application to the tray instead of exiting, maintaining background alarms.
+- **Build Warnings**: Resolved all nullability and delegate mismatch warnings for a clean, professional codebase.
+- **UI Label Clarity**: Renamed "Shuruq" to "Sunrise" and improved date/day alignment.
 
 ## [1.8.0] - 2026-04-10
 ### Added

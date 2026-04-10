@@ -96,9 +96,19 @@
 
                 <!-- Right: Window Controls -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
+                    <!-- Ramadan Mode Toggle -->
+                    <Button Click="RamadanMode_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="Toggle Ramadan View">
+                        <TextBlock x:Name="RamadanIcon" Text="🌙" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
+                    </Button>
+
+                    <!-- Full Screen Toggle -->
+                    <Button Click="FullScreen_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="Toggle Full Screen Mode">
+                        <TextBlock x:Name="FullScreenIcon" Text="⛶" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
+                    </Button>
+
                     <!-- Zen Mode Toggle -->
                     <Button Click="ZenMode_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="Toggle Zen Mode">
-                        <TextBlock Text="✨" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="ZenModeIcon" Text="✨" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
 
                     <!-- Settings (Relocated here for easy access) -->
@@ -204,17 +214,35 @@
                     <!-- Info Sub-Card -->
                     <Border Margin="0,15,0,0" Background="#14FFFFFF" CornerRadius="12" Padding="12,12">
                         <StackPanel>
-                             <!-- Date Row (Responsive Scaled) -->
-                            <Viewbox MaxHeight="18" Margin="0,0,0,10">
-                                <Grid MinWidth="260">
-                                    <TextBlock x:Name="HeroSubDate" Text="10 April 2026" Foreground="White" Opacity="0.8" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="HeroSubDay" Text="Friday" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="HeroSubHijri" Text="25 Shawwal 1447" Foreground="White" Opacity="0.8" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Viewbox>
+                             <!-- Date Row -->
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock x:Name="HeroSubDate" Text="10 April 2026" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroSubDay" Text="Friday" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroSubHijri" Text="25 Shawwal 1447" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
                             
-                            <!-- Prayer List Grid (Two Rows for Responsiveness) -->
-                            <Grid>
+                            <!-- Ramadan Specific View (Hidden by default) -->
+                            <Grid x:Name="HeroRamadanGrid" Visibility="Collapsed" Margin="0,5,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="15,10" Margin="0,0,5,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="Suhur Ends" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="HeroSuhurTime" Text="--:--" Foreground="#60a5fa" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                                <Border Grid.Column="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="15,10" Margin="5,0,0,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock Text="Iftar Begins" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="HeroIftarTime" Text="--:--" Foreground="#f87171" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- Default Prayer List Grid -->
+                            <Grid x:Name="HeroDefaultGrid">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -225,34 +253,53 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Row 1 -->
-                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,8">
-                                    <TextBlock Text="Fajr" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubFajrTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,8">
-                                    <TextBlock Text="Shuruq" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubShuruqTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,8" Visibility="Collapsed"> <!-- placeholder to maintain grid --> </StackPanel>
-                                <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
-                                    <TextBlock Text="Dhuhr" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubDhuhrTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
+                                <!-- Fajr -->
+                                <Border Grid.Row="0" Grid.Column="0" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock Text="Fajr" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubFajrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
 
-                                <!-- Row 2 -->
-                                <StackPanel Grid.Row="1" Grid.Column="0">
-                                    <TextBlock Text="Asr" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubAsrTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="1">
-                                    <TextBlock Text="Maghrib" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubMaghribTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
-                                <StackPanel Grid.Row="1" Grid.Column="2">
-                                    <TextBlock Text="Isha" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SubIshaTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="11" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                                </StackPanel>
+                                <!-- Sunrise (Sunrise label) -->
+                                <Border Grid.Row="0" Grid.Column="1" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="SunriseLabel" Text="Sunrise" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubShuruqTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Dhuhr Slot (Dynamic) -->
+                                <Border Grid.Row="0" Grid.Column="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="DhuhrLabel" Text="Dhuhr" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubDhuhrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Asr -->
+                                <Border Grid.Row="1" Grid.Column="0" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="AsrLabel" Text="Asr" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubAsrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Maghrib -->
+                                <Border Grid.Row="1" Grid.Column="1" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="MaghribLabel" Text="Maghrib" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubMaghribTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Isha / Tahajjud -->
+                                <Border Grid.Row="1" Grid.Column="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                    <StackPanel>
+                                        <TextBlock x:Name="IshaLabel" Text="Isha" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
+                                        <TextBlock x:Name="SubIshaTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                    </StackPanel>
+                                </Border>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -292,12 +339,17 @@
                 <!-- Fasting Highlights Note -->
                 <Border x:Name="FastingNoteBorder" Background="#33FFFFFF" BorderBrush="#4DFFFFFF" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,10" Visibility="Collapsed">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="✨" FontSize="14" VerticalAlignment="Center" Margin="0,0,8,0" />
-                        <TextBlock x:Name="FastingNoteText" Grid.Column="1" Text="Sunnah Fasting Today" Foreground="White" FontWeight="SemiBold" FontSize="11" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="FastingNoteText" Text="Sunnah Fasting Today" Foreground="White" FontWeight="SemiBold" FontSize="11" TextWrapping="Wrap" VerticalAlignment="Center" />
+                            <Button x:Name="FastingNoteToggleBtn" Click="FastingNote_Toggle_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Margin="10,0,0,0" Padding="5,0" Cursor="Hand">
+                                <TextBlock x:Name="FastingNoteToggleIcon" Text="▼" FontSize="10" Opacity="0.7"/>
+                            </Button>
+                        </StackPanel>
+                        
+                        <!-- Collapsable Content for Friday -->
+                        <StackPanel x:Name="FastingNoteExtraContent" Grid.Row="1" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed">
+                            <TextBlock x:Name="FastingNoteDetailsText" Foreground="White" Opacity="0.9" FontSize="10.5" TextWrapping="Wrap" LineHeight="16"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
 
@@ -435,9 +487,30 @@
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Footer -->
-        <Border x:Name="FooterBorder" Grid.Row="4" Background="#170939" Padding="10">
-            <TextBlock Text="© 2026 Abiruzzaman Molla. All Rights Reserved." Foreground="White" Opacity="0.85" FontSize="11" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!-- Sticky Prohibited Times (Replacing Footer) -->
+        <Border x:Name="StickyFooter" Grid.Row="4" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0" Padding="15,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Sunrise (Tulu)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StickySunriseProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Noon (Zawal)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="Sunset (Ghurub)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StickySunsetProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </Border>
