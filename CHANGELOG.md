@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-04-10
+### Added
+- **Complete UI Redesign**: A modern, premium aesthetics overhaul with custom layouts and immersive glassmorphism.
+- **Custom Navigation Bar**: Replaced standard Windows title bars with a sleek, integrated navigation and menu system.
+- **Hero Card Enhancement**: Added live prayer timers and expanded prayer data directly into the hero card for better at-a-glance awareness.
+- **Zen Mode**: A minimalist, immersive UI toggle (`✨` icon) that hides distractions and focuses entirely on the current prayer countdown.
+- **Adhan Preset Selection**: High-quality built-in Adhan tracks (Makkah, Madinah, Alafasi, etc.) now available in Settings.
+- **Tahajjud Adhan**: Dedicated alarm support for the last third of the night, helping users catch the most blessed time for worship.
+- **Improved Adhan Popup**: A professional overlay for Adhan alarms featuring **Mute** and **Dismiss** controls.
+- **Prayer Rakat Notes**: Detailed Rakat counts (Sunnah, Fard, Nafl) integrated directly into the UI for all 5 prayers and Jumu'ah.
+- **Portable Mode Robustness**: Automatic Registry synchronization and path resolution (`Environment.ProcessPath`) ensures auto-start works even if the portable folder is moved.
+- **Jumu'ah (Friday) Support**: Dynamic display logic specifically for Friday congregational prayers.
+
+### Fixed
+- **Taskbar Integration Stability**: Resolved flickering and disappearance issues on Windows 11.
+- **Initialization Sync**: Fixed the slight lag in prayer data synchronization during application startup.
+
 ## [1.7.8] - 2026-04-09
 ### Added
 - **Portable Version Support**: Introduced a self-contained portable mode. The application now checks for a `.portable` flag file in its directory; if found, all settings and data are stored in a local `data/` folder instead of `%APPDATA%`.

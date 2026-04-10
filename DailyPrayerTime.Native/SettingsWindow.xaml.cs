@@ -179,6 +179,10 @@ namespace DailyPrayerTime.Native
             AdhanAlarmEnabledInput.IsChecked = s.AdhanAlarmEnabled;
             AdhanAlarmOffsetInput.Text = s.AdhanAlarmOffset.ToString();
             AdhanSoundPathInput.Text = s.AdhanSoundPath;
+            AdhanPopupEnabledInput.IsChecked = s.AdhanPopupEnabled;
+            FajrAdhanSoundPathInput.Text = s.FajrAdhanSoundPath;
+            TahajjudAdhanEnabledInput.IsChecked = s.TahajjudAdhanEnabled;
+            TahajjudAdhanSoundPathInput.Text = s.TahajjudAdhanSoundPath;
 
             PopulateHints();
         }
@@ -333,6 +337,10 @@ namespace DailyPrayerTime.Native
             s.AdhanAlarmEnabled = AdhanAlarmEnabledInput.IsChecked ?? false;
             if (int.TryParse(AdhanAlarmOffsetInput.Text, out int aao)) s.AdhanAlarmOffset = aao;
             s.AdhanSoundPath = AdhanSoundPathInput.Text;
+            s.AdhanPopupEnabled = AdhanPopupEnabledInput.IsChecked ?? true;
+            s.FajrAdhanSoundPath = FajrAdhanSoundPathInput.Text;
+            s.TahajjudAdhanEnabled = TahajjudAdhanEnabledInput.IsChecked ?? false;
+            s.TahajjudAdhanSoundPath = TahajjudAdhanSoundPathInput.Text;
 
             SettingsManager.Save();
             this.DialogResult = true;
@@ -364,16 +372,18 @@ namespace DailyPrayerTime.Native
             }
         }
         
-        private static void SetAutoStart(bool enable, bool silentStart = false)
+        public static void SetAutoStart(bool enable, bool silentStart = false)
         {
             try
             {
                 using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true)!;
                 if (enable)
                 {
-                    string exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule!.FileName;
+                    string? exePath = Environment.ProcessPath;
+                    if (string.IsNullOrEmpty(exePath)) return;
+
                     string args = silentStart ? " -silent" : "";
-                    key.SetValue("DailyPrayerTimeNative", "\"" + exePath + "\"" + args);
+                    key.SetValue("DailyPrayerTimeNative", $"\"{exePath}\"{args}");
                 }
                 else
                 {
@@ -429,24 +439,6 @@ namespace DailyPrayerTime.Native
                 if (btn != null) btn.Content = "Search";
             }
         }
-        private void TestAdhan_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(AdhanSoundPathInput.Text) || !System.IO.File.Exists(AdhanSoundPathInput.Text))
-            {
-                System.Windows.MessageBox.Show("Please select a valid Adhan sound file first.", "Test Sound", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            try
-            {
-                _testPlayer.Open(new Uri(AdhanSoundPathInput.Text));
-                _testPlayer.Play();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         private void TestPopup_Click(object sender, RoutedEventArgs e)
         {
@@ -482,39 +474,86 @@ namespace DailyPrayerTime.Native
                 }
             }
         }
-        private async void DownloadDefault_Click(object sender, RoutedEventArgs e)
+
+        private void AdhanPresetCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var btn = sender as System.Windows.Controls.Button;
-            if (btn == null) return;
-
-            string originalContent = btn.Content.ToString() ?? "Download Default";
-            btn.Content = "Downloading...";
-            btn.IsEnabled = false;
-
-            try
+            if (AdhanPresetCombo.SelectedItem is ComboBoxItem item && item.Tag is string fileName && !string.IsNullOrEmpty(fileName))
             {
-                string appData = StorageService.GetAppDataPath();
-                string assets = Path.Combine(appData, "assets");
-                if (!Directory.Exists(assets)) Directory.CreateDirectory(assets);
+                if (fileName == "CUSTOM") return;
 
-                string destPath = Path.Combine(assets, "default_adhan.mp3");
-                string adhanUrl = "https://www.islamcan.com/audio/adhan/azan1.mp3"; 
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                string targetPath = Path.Combine(baseDir, "Assets", "Adhan", fileName);
 
-                using var client = new HttpClient();
-                var data = await client.GetByteArrayAsync(adhanUrl);
-                await File.WriteAllBytesAsync(destPath, data);
-
-                AdhanSoundPathInput.Text = destPath;
-                System.Windows.MessageBox.Show("Default Adhan downloaded successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (File.Exists(targetPath))
+                {
+                    AdhanSoundPathInput.Text = targetPath;
+                    
+                    // If it's a Fajr track, set it for Fajr too
+                    if (fileName.ToLower().Contains("fajer"))
+                    {
+                        FajrAdhanSoundPathInput.Text = targetPath;
+                    }
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Selected built-in adhan file not found in Assets/Adhan folder.", "File Missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (Exception ex)
+        }
+
+        private void FajrBrowseAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Audio files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true) FajrAdhanSoundPathInput.Text = openFileDialog.FileName;
+        }
+
+        private void TahajjudBrowseAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Audio files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true) TahajjudAdhanSoundPathInput.Text = openFileDialog.FileName;
+        }
+
+        private void TestAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            PlayTestSound(AdhanSoundPathInput.Text, "General Adhan", "Start - End", "00:00 AM");
+        }
+
+        private void TestFajrAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            PlayTestSound(FajrAdhanSoundPathInput.Text, "Fajr Adhan", "Start - End", "00:00 AM");
+        }
+
+        private void TestTahajjudAdhan_Click(object sender, RoutedEventArgs e)
+        {
+            PlayTestSound(TahajjudAdhanSoundPathInput.Text, "Tahajjud", "Start - End", "N/A");
+        }
+
+        private void PlayTestSound(string path, string prayerName = "Test Prayer", string range = "00:00 - 00:00", string jamaat = "00:00")
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
-                System.Windows.MessageBox.Show("Failed to download Adhan: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Please select a valid sound file first.", "Test Sound", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
-            finally
+
+            if (AdhanPopupEnabledInput.IsChecked == true)
             {
-                btn.Content = originalContent;
-                btn.IsEnabled = true;
+                var popup = new AdhanNotificationWindow(prayerName, range, jamaat, path);
+                popup.Show();
+            }
+            else
+            {
+                try
+                {
+                    _testPlayer.Open(new Uri(path));
+                    _testPlayer.Play();
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}");
+                }
             }
         }
 

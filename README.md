@@ -1,19 +1,22 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.7.8
+Version: 1.8.0
 
-## 🚀 Daily Prayer Timer (Native) - v1.7.8
+## 🚀 Daily Prayer Timer (Native) - v1.8.0
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
 ---
 
-### 🔥 New in v1.7.0: Integrated Taskbar Timer (Win 11 Native)
-We have introduced a powerful new taskbar integration technique inspired by **TrafficMonitor**. 
-- **Truly Integrated**: Anchors directly into the Windows Taskbar (`Shell_TrayWnd`).
-- **Windows 11 Optimized**: Works natively on Windows 11 without requiring legacy DeskBand registration or third-party tools like ExplorerPatcher.
-- **Smart Positioning**: Automatically places itself next to the system tray icons.
-- **Independent Toggles**: Enable/disable the Floating Overlay and Taskbar Timer separately.
+### 🔥 New in v1.8.0: Immersive UI & Enhanced Adhan
+We have pushed the boundaries of the Native experience with a top-to-bottom redesign.
+- **Custom Navigation**: A premium, titlebar-less design with integrated menu navigation.
+- **Zen Mode**: Immersive focus mode that strips away the UI to leave only the beautiful prayer countdown.
+- **Hero Card 2.0**: The main prayer card now features live countdown timers and expanded prayer data.
+- **Adhan Presets**: Choose from high-quality recorded adhans (Makkah, Madinah, Alafasi) natively.
+- **Tahajjud Support**: Dedicated Tahajjud adhan/alarm for the most blessed time of the night.
+- **Prayer Notes**: Rakat counts (Fard, Sunnah, Nafl) integrated directly into the prayer list.
+- **Portable Stability**: High-reliability process path resolution for portable installations.
 
 ---
 
@@ -40,7 +43,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.7.8-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -74,9 +77,9 @@ Check out other versions of this tool:
 
 | Platform | Link |
 |---|---|
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.7.8_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.7.8_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.7.8_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.8.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 ### 🚀 Portable Version
 The portable version is a single-file executable that stores all its settings and data in a `data` subfolder within the application directory. 

@@ -49,6 +49,10 @@ namespace DailyPrayerTime.Native
         public bool AdhanAlarmEnabled { get; set; } = false;
         public int AdhanAlarmOffset { get; set; } = 10; // Minutes before Jamaat
         public string AdhanSoundPath { get; set; } = "";
+        public string FajrAdhanSoundPath { get; set; } = "";
+        public bool TahajjudAdhanEnabled { get; set; } = false;
+        public string TahajjudAdhanSoundPath { get; set; } = "";
+        public bool AdhanPopupEnabled { get; set; } = true;
         public bool UseExternalApi { get; set; } = true;
     }
 
@@ -67,9 +71,43 @@ namespace DailyPrayerTime.Native
                 {
                     string json = File.ReadAllText(SettingsFile);
                     var settings = JsonConvert.DeserializeObject<AppSettings>(json);
-                    if (settings != null) Current = settings;
+                    if (settings != null)
+                    {
+                        Current = settings;
+                        // Initialize local defaults if empty
+                        InitializeLocalAdhanDefaults();
+                    }
                 }
                 catch { /* Ignore and use defaults */ }
+            }
+            else
+            {
+                // No settings file, set initial defaults
+                InitializeLocalAdhanDefaults();
+            }
+        }
+
+        private static void InitializeLocalAdhanDefaults()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string adhanDir = Path.Combine(baseDir, "Assets", "Adhan");
+
+            if (string.IsNullOrEmpty(Current.AdhanSoundPath))
+            {
+                string makkah = Path.Combine(adhanDir, "Athan_Makkah.mp3");
+                if (File.Exists(makkah)) Current.AdhanSoundPath = makkah;
+            }
+
+            if (string.IsNullOrEmpty(Current.FajrAdhanSoundPath))
+            {
+                string fajr = Path.Combine(adhanDir, "Athan_Al-fajer_-_Malek_chebae.mp3");
+                if (File.Exists(fajr)) Current.FajrAdhanSoundPath = fajr;
+            }
+
+            if (string.IsNullOrEmpty(Current.TahajjudAdhanSoundPath))
+            {
+                string makkah = Path.Combine(adhanDir, "Athan_Makkah.mp3");
+                if (File.Exists(makkah)) Current.TahajjudAdhanSoundPath = makkah;
             }
         }
 

@@ -215,25 +215,66 @@
                             <Button Content="Test" Click="TestPopup_Click" Margin="10,0,0,0" Padding="8,2" FontSize="11" Background="#f3f4f6" BorderThickness="1" BorderBrush="#ccc"/>
                         </StackPanel>
 
-                        <TextBlock Text="Adhan Alarm" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#2563eb"/>
-                        <CheckBox x:Name="AdhanAlarmEnabledInput" Content="Enable Adhan sound before Jamaat" Foreground="#170939"/>
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock Text="Adhan &amp; Night Prayer Alarms" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#2563eb"/>
+                        <CheckBox x:Name="AdhanAlarmEnabledInput" Content="Enable Adhan sound before Jamaat" Foreground="#170939" Margin="0,0,0,5"/>
+                        <CheckBox x:Name="AdhanPopupEnabledInput" Content="Enable Visual Adhan Popup Window" Foreground="#170939" Margin="0,0,0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
                             <TextBox x:Name="AdhanAlarmOffsetInput" Width="40" Padding="5"/>
                             <TextBlock Text="mins before Jamaat" VerticalAlignment="Center" Foreground="#666" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <Grid Margin="0,5,0,0">
+
+                        <!-- Preset Selection -->
+                        <TextBlock Text="Select Adhan Preset:" FontSize="12" Foreground="#6f6885" Margin="0,0,0,3"/>
+                        <ComboBox x:Name="AdhanPresetCombo" Margin="0,0,0,10" Padding="5" SelectionChanged="AdhanPresetCombo_SelectionChanged" ToolTip="Select from high-quality built-in adhans">
+                            <ComboBoxItem Content="-- Select Built-in Adhan track --" Tag=""/>
+                            <ComboBoxItem Content="Makkah (Al-Haram)" Tag="Athan_Makkah.mp3"/>
+                            <ComboBoxItem Content="Madinah (Al-Nabawi)" Tag="Athan_Madinah_-_Alafasi.mp3"/>
+                            <ComboBoxItem Content="Mishary Alafasi" Tag="Athan_Mishary_Alafasi.mp3"/>
+                            <ComboBoxItem Content="Abdul Basit" Tag="Athan_Abed_Albase6.mp3"/>
+                            <ComboBoxItem Content="Fajr (Malek Chebae)" Tag="Athan_Al-fajer_-_Malek_chebae.mp3"/>
+                            <ComboBoxItem Content="Nasser Alqatami" Tag="Athan_Nasser_Alqatami.mp3"/>
+                            <ComboBoxItem Content="Mohammad Almenshawy" Tag="Athan_Mohammad_Almenshawy.mp3"/>
+                            <ComboBoxItem Content="Custom (Select below)" Tag="CUSTOM"/>
+                        </ComboBox>
+
+                        <!-- General sound -->
+                        <TextBlock Text="General Adhan Sound:" FontSize="12" Foreground="#6f6885" Margin="0,0,0,3"/>
+                        <Grid Margin="0,0,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected Adhan sound file" Grid.Column="0"/>
-                            <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,0">
-                                <Button Content="Browse..." Click="BrowseAdhan_Click" Padding="10,0" Cursor="Hand" Height="30"/>
-                            </StackPanel>
+                            <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected General Adhan sound" Grid.Column="0"/>
+                            <Button Grid.Column="1" Content="Browse..." Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="30"/>
                         </Grid>
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,20">
-                            <Button Content="Download Default" Click="DownloadDefault_Click" Padding="10,0" Cursor="Hand" Height="30" Background="#eff6ff" BorderBrush="#bfdbfe"/>
-                            <Button Content="Test Sound" Click="TestAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="30" Background="#dcfce7" BorderBrush="#86efac"/>
+
+                        <!-- Fajr sound -->
+                        <TextBlock Text="Fajr-Specific Adhan (Optional):" FontSize="12" Foreground="#6f6885" Margin="0,10,0,3"/>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="FajrAdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected Fajr Adhan sound" Grid.Column="0"/>
+                            <Button Grid.Column="1" Content="Browse..." Click="FajrBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="30"/>
+                        </Grid>
+
+                        <!-- Tahajjud sound -->
+                        <TextBlock Text="Tahajjud &amp; Night Prayer" FontWeight="SemiBold" FontSize="14" Margin="0,15,0,5" Foreground="#7c3aed"/>
+                        <CheckBox x:Name="TahajjudAdhanEnabledInput" Content="Enable Alarm for Tahajjud (Best Time / Last Third)" Foreground="#170939" Margin="0,0,0,5"/>
+                        <Grid Margin="0,0,15,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TahajjudAdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" ToolTip="Selected Tahajjud sound" Grid.Column="0"/>
+                            <Button Grid.Column="1" Content="Browse..." Click="TahajjudBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="30"/>
+                        </Grid>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,20" HorizontalAlignment="Right">
+                             <Button x:Name="TestStandardBtn" Content="Test Gen." Click="TestAdhan_Click" Padding="8,0" Cursor="Hand" Height="30" Background="#f3f4f6" BorderBrush="#ccc"/>
+                             <Button x:Name="TestFajrBtn" Content="Test Fajr" Click="TestFajrAdhan_Click" Margin="5,0,0,0" Padding="8,0" Cursor="Hand" Height="30" Background="#f3f4f6" BorderBrush="#ccc"/>
+                             <Button x:Name="TestTahajjudBtn" Content="Test Tahaj." Click="TestTahajjudAdhan_Click" Margin="5,0,0,0" Padding="8,0" Cursor="Hand" Height="30" Background="#f3f4f6" BorderBrush="#ccc"/>
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
@@ -339,7 +380,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="Check for application updates to get the latest features and bug fixes." TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.7.7" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.8.0" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check for Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
                                         <Button.Resources>
