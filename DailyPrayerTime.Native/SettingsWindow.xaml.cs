@@ -33,8 +33,9 @@ namespace DailyPrayerTime.Native
         private void MethodInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ManualParamsPanel == null) return;
-            string method = (MethodInput.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "";
-            ManualParamsPanel.Visibility = (method == "Manual") ? Visibility.Visible : Visibility.Collapsed;
+            var item = MethodInput.SelectedItem as ComboBoxItem;
+            string tag = item?.Tag?.ToString()?.ToUpper() ?? "";
+            ManualParamsPanel.Visibility = (tag == "MANUAL") ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void InitializeTimeInputs()
@@ -130,7 +131,7 @@ namespace DailyPrayerTime.Native
                 h.SelectedItem = h12.ToString("D2");
                 foreach (System.Windows.Controls.ComboBoxItem item in ampm.Items)
                 {
-                    if (item.Content.ToString() == ap) { ampm.SelectedItem = item; break; }
+                    if (item != null && item.Content?.ToString() == ap) { ampm.SelectedItem = item; break; }
                 }
             }
             m.SelectedItem = mm;
@@ -142,11 +143,14 @@ namespace DailyPrayerTime.Native
             LocationNameInput.Text = s.LocationName;
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
+            
+            // Set Version Label
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "1.9.0");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {
-                if (item.Content.ToString()!.ToUpper() == s.Method.ToUpper())
+                if (item.Tag?.ToString()?.ToUpper() == s.Method.ToUpper())
                 {
                     MethodInput.SelectedItem = item;
                 }
@@ -177,7 +181,7 @@ namespace DailyPrayerTime.Native
             // Load Method and toggle manual panel
             for (int i = 0; i < MethodInput.Items.Count; i++)
             {
-                if ((MethodInput.Items[i] as ComboBoxItem)?.Content.ToString()?.ToUpper() == s.Method.ToUpper())
+                if ((MethodInput.Items[i] as ComboBoxItem)?.Tag?.ToString()?.ToUpper() == s.Method.ToUpper())
                 {
                     MethodInput.SelectedIndex = i;
                     break;
@@ -247,6 +251,16 @@ namespace DailyPrayerTime.Native
             TahajjudAdhanEnabledInput.IsChecked = s.TahajjudAdhanEnabled;
             TahajjudAdhanSoundPathInput.Text = s.TahajjudAdhanSoundPath;
 
+            // Load Language
+            foreach (ComboBoxItem item in LanguageSelector.Items)
+            {
+                if (item.Tag?.ToString() == s.Language)
+                {
+                    LanguageSelector.SelectedItem = item;
+                    break;
+                }
+            }
+
             PopulateHints();
         }
 
@@ -254,14 +268,14 @@ namespace DailyPrayerTime.Native
         {
             if (_today == null || _tomorrow == null) return;
             var selectedItem = TimeFormatInput?.SelectedItem as System.Windows.Controls.ComboBoxItem;
-            bool is24h = selectedItem?.Content.ToString()?.Contains("24") ?? false;
+            bool is24h = selectedItem?.Tag?.ToString() == "24h";
             string fmt = is24h ? "HH:mm" : "hh:mm tt";
 
-            FajrRangeHint.Text = $"Today: {_today.Fajr.ToString(fmt)} - {_today.Sunrise.ToString(fmt)}";
-            DhuhrRangeHint.Text = $"Today: {_today.Dhuhr.ToString(fmt)} - {_today.Asr.ToString(fmt)}";
-            AsrRangeHint.Text = $"Today: {_today.Asr.ToString(fmt)} - {_today.Maghrib.ToString(fmt)}";
-            MaghribRangeHint.Text = $"Today: {_today.Maghrib.ToString(fmt)} - {_today.Isha.ToString(fmt)}";
-            IshaRangeHint.Text = $"Today: {_today.Isha.ToString(fmt)} - {_tomorrow.Fajr.ToString(fmt)}";
+            FajrRangeHint.Text = string.Format(LocalizationManager.Instance.GetString("Hint_Today"), _today.Fajr.ToString(fmt), _today.Sunrise.ToString(fmt));
+            DhuhrRangeHint.Text = string.Format(LocalizationManager.Instance.GetString("Hint_Today"), _today.Dhuhr.ToString(fmt), _today.Asr.ToString(fmt));
+            AsrRangeHint.Text = string.Format(LocalizationManager.Instance.GetString("Hint_Today"), _today.Asr.ToString(fmt), _today.Maghrib.ToString(fmt));
+            MaghribRangeHint.Text = string.Format(LocalizationManager.Instance.GetString("Hint_Today"), _today.Maghrib.ToString(fmt), _today.Isha.ToString(fmt));
+            IshaRangeHint.Text = string.Format(LocalizationManager.Instance.GetString("Hint_Today"), _today.Isha.ToString(fmt), _tomorrow.Fajr.ToString(fmt));
 
             FilterCombo(FajrHourInput, FajrMinuteInput, FajrAmPmInput, _today.Fajr, _today.Sunrise, is24h);
             FilterCombo(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, _today.Dhuhr, _today.Asr, is24h);
@@ -307,7 +321,7 @@ namespace DailyPrayerTime.Native
         {
             if (_today == null || _tomorrow == null) return;
             var selectedItem = TimeFormatInput?.SelectedItem as System.Windows.Controls.ComboBoxItem;
-            bool is24h = selectedItem?.Content.ToString()?.Contains("24") ?? false;
+            bool is24h = selectedItem?.Tag?.ToString() == "24h";
 
             if (sender == FajrHourInput || sender == FajrAmPmInput) UpdateMinuteCombo(FajrHourInput, FajrMinuteInput, FajrAmPmInput, _today.Fajr, _today.Sunrise, is24h);
             else if (sender == DhuhrHourInput || sender == DhuhrAmPmInput) UpdateMinuteCombo(DhuhrHourInput, DhuhrMinuteInput, DhuhrAmPmInput, _today.Dhuhr, _today.Asr, is24h);
@@ -357,7 +371,7 @@ namespace DailyPrayerTime.Native
 
             if (MethodInput.SelectedItem is System.Windows.Controls.ComboBoxItem methodItem)
             {
-                s.Method = methodItem.Content.ToString()!.ToUpper();
+                s.Method = methodItem.Tag?.ToString() ?? "MWL";
             }
 
             if (s.Method == "MANUAL")
@@ -445,6 +459,11 @@ namespace DailyPrayerTime.Native
             if (int.TryParse(SuhurOffsetInput.Text, out int soff)) s.SuhurOffset = soff;
             if (int.TryParse(IftarOffsetInput.Text, out int ioff)) s.IftarOffset = ioff;
 
+            if (LanguageSelector.SelectedItem is ComboBoxItem langItem && langItem.Tag is string lang)
+            {
+                s.Language = lang;
+            }
+
             SettingsManager.Save();
             this.DialogResult = true;
             this.Close();
@@ -501,7 +520,7 @@ namespace DailyPrayerTime.Native
             string query = LocationNameInput.Text.Trim();
             if (query.Length < 3)
             {
-                System.Windows.MessageBox.Show("Please enter at least 3 characters to search.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_SearchMinChars"), LocalizationManager.Instance.GetString("Title_Validation"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -529,17 +548,17 @@ namespace DailyPrayerTime.Native
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("No results found.", "Search", MessageBoxButton.OK, MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_NoResults"), LocalizationManager.Instance.GetString("Title_Search"), MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Search failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show(string.Format(LocalizationManager.Instance.GetString("Msg_SearchFailed"), ex.Message), LocalizationManager.Instance.GetString("Title_Error"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
                 var btn = sender as System.Windows.Controls.Button;
-                if (btn != null) btn.Content = "Search";
+                if (btn != null) btn.Content = LocalizationManager.Instance.GetString("Btn_Search");
             }
         }
 
@@ -599,7 +618,7 @@ namespace DailyPrayerTime.Native
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show("Selected built-in adhan file not found in Assets/Adhan folder.", "File Missing", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_AdhanFileNotFound"), LocalizationManager.Instance.GetString("Title_FileMissing"), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -620,24 +639,24 @@ namespace DailyPrayerTime.Native
 
         private void TestAdhan_Click(object sender, RoutedEventArgs e)
         {
-            PlayTestSound(AdhanSoundPathInput.Text, "General Adhan", "Start - End", "00:00 AM");
+            PlayTestSound(AdhanSoundPathInput.Text, LocalizationManager.Instance.GetString("Label_TestPrayer"), LocalizationManager.Instance.GetString("Label_TestRange"), "00:00 AM");
         }
 
         private void TestFajrAdhan_Click(object sender, RoutedEventArgs e)
         {
-            PlayTestSound(FajrAdhanSoundPathInput.Text, "Fajr Adhan", "Start - End", "00:00 AM");
+            PlayTestSound(FajrAdhanSoundPathInput.Text, LocalizationManager.Instance.GetString("Prayer_Fajr"), LocalizationManager.Instance.GetString("Label_TestRange"), "00:00 AM");
         }
 
         private void TestTahajjudAdhan_Click(object sender, RoutedEventArgs e)
         {
-            PlayTestSound(TahajjudAdhanSoundPathInput.Text, "Tahajjud", "Start - End", "N/A");
+            PlayTestSound(TahajjudAdhanSoundPathInput.Text, LocalizationManager.Instance.GetString("Prayer_Tahajjud"), LocalizationManager.Instance.GetString("Label_TestRange"), LocalizationManager.Instance.GetString("Label_NA"));
         }
 
         private void PlayTestSound(string path, string prayerName = "Test Prayer", string range = "00:00 - 00:00", string jamaat = "00:00")
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
-                System.Windows.MessageBox.Show("Please select a valid sound file first.", "Test Sound", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_InvalidSoundFile"), LocalizationManager.Instance.GetString("Title_TestSound"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -657,7 +676,7 @@ namespace DailyPrayerTime.Native
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}");
+                    System.Windows.MessageBox.Show(string.Format(LocalizationManager.Instance.GetString("Msg_PlayFailed"), ex.Message));
                 }
             }
         }
@@ -667,7 +686,7 @@ namespace DailyPrayerTime.Native
             var btn = sender as System.Windows.Controls.Button;
             if (btn == null) return;
 
-            btn.Content = "Checking...";
+            btn.Content = LocalizationManager.Instance.GetString("Btn_Checking");
             btn.IsEnabled = false;
 
             try
@@ -676,8 +695,8 @@ namespace DailyPrayerTime.Native
                 if (updateInfo.IsUpdateAvailable)
                 {
                     var result = System.Windows.MessageBox.Show(
-                        $"A new version ({updateInfo.LatestVersion}) is available!\n\nWould you like to open the download page?",
-                        "Update Available",
+                        string.Format(LocalizationManager.Instance.GetString("Msg_UpdateAvailable"), updateInfo.LatestVersion),
+                        LocalizationManager.Instance.GetString("Title_UpdateAvailable"),
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Information);
 
@@ -689,8 +708,8 @@ namespace DailyPrayerTime.Native
                 else
                 {
                     System.Windows.MessageBox.Show(
-                        "You are already using the latest version.",
-                        "Check for Updates",
+                        LocalizationManager.Instance.GetString("Msg_UpToDate"),
+                        LocalizationManager.Instance.GetString("Title_CheckUpdates"),
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 }
@@ -698,14 +717,14 @@ namespace DailyPrayerTime.Native
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(
-                    $"Failed to check for updates: {ex.Message}",
-                    "Error",
+                    string.Format(LocalizationManager.Instance.GetString("Msg_SearchFailed"), ex.Message), // Reusing SearchFailed for generic error
+                    LocalizationManager.Instance.GetString("Title_Error"),
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             finally
             {
-                btn.Content = "Check for Updates";
+                btn.Content = LocalizationManager.Instance.GetString("Title_CheckUpdates");
                 btn.IsEnabled = true;
             }
         }
@@ -723,8 +742,8 @@ namespace DailyPrayerTime.Native
         {
             if (SettingsButtonsPanel == null) return;
             
-            // Index 2 is "Support & Contact"
-            if (SettingsTabControl.SelectedIndex == 2)
+            // Index 3 is "Support & Contact"
+            if (SettingsTabControl.SelectedIndex == 3)
             {
                 SettingsButtonsPanel.Visibility = Visibility.Collapsed;
             }
@@ -732,6 +751,23 @@ namespace DailyPrayerTime.Native
             {
                 SettingsButtonsPanel.Visibility = Visibility.Visible;
             }
+        }
+
+        private void LanguageSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LanguageSelector.SelectedItem is ComboBoxItem item && item.Tag is string lang)
+            {
+                LocalizationManager.Instance.SetLanguage(lang);
+            }
+        }
+
+        private void ResetColors_Click(object sender, RoutedEventArgs e)
+        {
+            // Defaults from AppSettings.cs
+            GradStartInput.Text = "#064e3b";
+            GradEndInput.Text = "#022c22";
+            PrimaryColorInput.Text = "#10b981";
+            SecondaryColorInput.Text = "#34d399";
         }
     }
 }

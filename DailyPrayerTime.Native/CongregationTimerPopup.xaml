@@ -1,7 +1,7 @@
 <Window x:Class="DailyPrayerTime.Native.CongregationTimerPopup"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Jamaat Alarm" Height="280" Width="400"
+        Title="{DynamicResource i18n_Title_JamaatAlarm}" Height="280" Width="400"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     
@@ -21,9 +21,9 @@
                 <TextBlock x:Name="PrayerNameText" Text="Fajr Jamaat" FontSize="18" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
                 <TextBlock x:Name="TargetTimeText" Text="Starts at 05:15 PM" FontSize="14" Foreground="White" Opacity="0.6" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                 <TextBlock x:Name="TimerText" Text="05:00" FontSize="64" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,-5,0,0"/>
-                <TextBlock Text="minutes remaining" FontSize="12" Foreground="White" Opacity="0.6" HorizontalAlignment="Center" Margin="0,-10,0,15"/>
+                <TextBlock Text="{DynamicResource i18n_Label_MinutesRemaining}" FontSize="12" Foreground="White" Opacity="0.6" HorizontalAlignment="Center" Margin="0,-10,0,15"/>
                 
-                <Button Content="Dismiss" Click="Dismiss_Click" 
+                <Button Content="{DynamicResource i18n_Btn_Dismiss}" Click="Dismiss_Click" 
                         Background="#34d399" Foreground="#022c22" 
                         Padding="20,8" HorizontalAlignment="Center" 
                         BorderThickness="0" FontWeight="Bold">

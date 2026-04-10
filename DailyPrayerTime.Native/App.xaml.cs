@@ -6,11 +6,18 @@ namespace DailyPrayerTime.Native
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            SettingsManager.Load();
+            LocalizationManager.Instance.SetLanguage(SettingsManager.Current.Language);
+            
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             
             this.DispatcherUnhandledException += (s, args) =>
             {
-                System.Windows.MessageBox.Show("An unexpected error occurred: " + args.Exception.Message, "Crash Avoided", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show(
+                    string.Format(LocalizationManager.Instance.GetString("Msg_PlayFailed"), args.Exception.Message), 
+                    LocalizationManager.Instance.GetString("Title_AppCrash"), 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Error);
                 args.Handled = true; // Prevents the app from crashing completely
             };
 

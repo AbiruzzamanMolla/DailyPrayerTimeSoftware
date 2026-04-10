@@ -38,15 +38,21 @@
                 <!-- Main compact row (Always at bottom) -->
                 <StackPanel x:Name="MainInfo" Orientation="Horizontal" VerticalAlignment="Bottom" Height="32" Margin="8,0">
                     <Border Width="3" Height="14" Background="#10b981" CornerRadius="1" Margin="0,0,8,0"/>
-                    <TextBlock x:Name="OverlayNameText" Text="Fajr ends in:" Foreground="#A0A0A0" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="OverlayNameText" Text="{DynamicResource i18n_Label_Calculating}" Foreground="#A0A0A0" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0" TextTrimming="CharacterEllipsis"/>
                     <TextBlock x:Name="OverlayCountdownText" Text="00:00:00" Foreground="#2ECC71" FontSize="12" FontWeight="Bold" FontFamily="Consolas" VerticalAlignment="Center" />
                 </StackPanel>
 
                 <!-- Expanded Details (Above) -->
-                <StackPanel x:Name="ExtraDetails" Orientation="Vertical" Opacity="0" Margin="10,5,10,35" VerticalAlignment="Bottom">
-                    <TextBlock x:Name="ToolTipCurrentText" Text="Current: --" Foreground="#B0B0B0" FontSize="10" Margin="0,0,0,2" TextTrimming="CharacterEllipsis"/>
-                    <TextBlock x:Name="ToolTipNextText" Text="Next: --" Foreground="#B0B0B0" FontSize="10" TextTrimming="CharacterEllipsis"/>
-                </StackPanel>
+                    <StackPanel x:Name="ExtraDetails" Orientation="Vertical" Opacity="0" Margin="10,5,10,35" VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource i18n_Label_Current}" Foreground="#B0B0B0" FontSize="10" Margin="0,0,3,2"/>
+                            <TextBlock x:Name="ToolTipCurrentText" Text="--" Foreground="#B0B0B0" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{DynamicResource i18n_Label_Upcoming}" Foreground="#B0B0B0" FontSize="10" Margin="0,0,3,0"/>
+                            <TextBlock x:Name="ToolTipNextText" Text="--" Foreground="#B0B0B0" FontSize="10" TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+                    </StackPanel>
             </Grid>
         </Border>
     </Grid>

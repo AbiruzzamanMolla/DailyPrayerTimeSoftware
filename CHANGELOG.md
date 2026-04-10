@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.0] - 2026-04-10
+### Added
+- **Multi-Language Support**: Complete localization architecture for the entire application.
+- **Dynamic Language Switching**: Toggle between English and Bangla (with support for more) instantly from Settings.
+- **Localized UI Windows**: Standardized Adhan Notification, Jamaat Alarm, and Taskbar Timer with the new i18n system.
+- **Adhan Dua Localization**: Fully localized Adhan Dua including Arabic text, Transliteration, and Accurate Translations.
+- **Localization Contributor Guide**: Added `CONTRIBUTING_I18N.md` to help open-source contributors easily add new languages.
+- **Automatic String Prefixing**: Robust `LocalizationManager` that handles resource mapping and prefixing automatically for developers — all keys are registered in both bare and `i18n_` prefixed forms so XAML `DynamicResource` and C# `GetString()` calls both work seamlessly.
+- **Localized Prayer Names**: All prayer names (Fajr, Sunrise, Dhuhr, Asr, Maghrib, Isha, Nafal) fully localized in hero, prayer list, and nafal sections.
+- **Localized Date & Day Names**: Gregorian month names (January → জানুয়ারি) and day names (Friday → শুক্রবার) fully localized via `Month_Gregorian_*` and `Day_*` keys.
+- **Localized Countdown Units**: Countdown timer now shows `ঘ মি স` in Bangla (was `h m s` hardcoded) via `Unit_Hour_Short`, `Unit_Min_Short`, `Unit_Sec_Short` keys.
+- **Localized Hijri Date**: Hijri calendar always uses localized month names; forces local calculation for non-English locales instead of using the English API response. `Label_HijriSuffix` key added (`AH` / `হিজরি`).
+- **Arabic Hamd Header**: Added interactive "إِنَّ الْحَمْدَ لِلَّهِ..." header at the very top of the hero section. Hovering smoothly crossfades (0.3s CubicEase) to the localized translation. Tooltip mode is disabled in Arabic locale to avoid redundancy.
+- **i18n Workflow Checklist**: Added `.agent/workflows/i18n-checklist.md` — a mandatory developer guide documenting all localization rules and conventions for future feature development.
+
+### Changed
+- **UI Standardization**: Replaced all hardcoded UI strings across the application with dynamic resource bindings.
+- **Hero Section Layout**: Arabic Hamd text is now the topmost element inside the hero card.
+- **Version Milestone**: Bumped to v1.9.0 to mark the major localization integration.
+
+### Fixed
+- **XAML DynamicResource Key Mismatch**: Fixed critical bug where `LocalizationManager` stored keys with `i18n_` prefix only, causing XAML `{DynamicResource Prayer_Fajr}` bindings to never find translations — all keys are now registered in both forms.
+- **Hardcoded Countdown Format**: Replaced `"{0}h {1}m {2}s"` string constant with `FormatCountdown()` helper.
+- **Hardcoded Date Formatting**: Replaced `DateTime.ToString("dddd")` / `"dd MMMM yyyy"` with localized helpers `GetLocalizedDayName()` and `GetLocalizedDate()`.
+- **API Hijri Month Name**: API returns English Hijri month names; now always uses local calculation in non-English mode.
+
 ## [1.8.5] - 2026-04-10
 ### Added
 - **Granular Notification Controls**: Individual toggles for Adhan sounds, Pre-Adhan reminders, and Jamaat (Established) popups per prayer (Fajr, Dhuhr, Asr, Maghrib, Isha, Shuruq).

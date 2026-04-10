@@ -14,10 +14,10 @@ namespace DailyPrayerTime.Native
         {
             InitializeComponent();
             _targetTime = targetTime;
-            PrayerNameText.Text = $"{prayerName} Congregation";
+            PrayerNameText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_Label"), prayerName);
             
             string timeFmt = SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
-            TargetTimeText.Text = $"Starts at {targetTime.ToString(timeFmt)}";
+            TargetTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_StartsAt"), targetTime.ToString(timeFmt));
             
             ApplyTheme();
             

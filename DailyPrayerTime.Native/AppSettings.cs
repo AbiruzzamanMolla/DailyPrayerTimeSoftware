@@ -91,6 +91,7 @@ namespace DailyPrayerTime.Native
         // Suhur and Iftar Offsets
         public int SuhurOffset { get; set; } = 0;
         public int IftarOffset { get; set; } = 0;
+        public string Language { get; set; } = "en";
     }
 
     public static class SettingsManager

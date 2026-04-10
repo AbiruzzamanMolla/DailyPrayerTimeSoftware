@@ -19,9 +19,9 @@ namespace DailyPrayerTime.Native
         {
             InitializeComponent();
             
-            PrayerTitleText.Text = $"It's time for {prayerName}";
+            PrayerTitleText.Text = string.Format(LocalizationManager.Instance.GetString("Adhan_Title"), prayerName);
             PrayerTimeRangeText.Text = timeRange;
-            JamaatTimeText.Text = $"Jamaat: {jamaatTime}";
+            JamaatTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Adhan_Jamaat"), jamaatTime);
 
             // Center at the top
             this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;

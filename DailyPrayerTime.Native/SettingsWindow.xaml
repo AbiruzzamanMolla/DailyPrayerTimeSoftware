@@ -1,21 +1,22 @@
 <Window x:Class="DailyPrayerTime.Native.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Settings" Height="650" Width="500"
-        WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
+        Title="{DynamicResource i18n_Settings}" Height="550" Width="520"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
         MinWidth="450" MinHeight="600"
-        Background="White">
+        Background="#f8f7ff">
     
-    <Grid Margin="15">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <DockPanel LastChildFill="True" Margin="20">
 
-        <TextBlock Text="Settings" FontSize="26" FontWeight="Bold" Foreground="#170939" Margin="0,0,0,15"/>
+        <TextBlock DockPanel.Dock="Top" Text="{DynamicResource i18n_Settings}" FontSize="26" FontWeight="Bold" Foreground="#170939" Margin="0,0,0,15"/>
+
+        <!-- Buttons -->
+        <StackPanel x:Name="SettingsButtonsPanel" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+            <Button Content="{DynamicResource i18n_Cancel}" Click="Cancel_Click" Width="80" Padding="8" Background="Transparent" Foreground="#6f6885" BorderThickness="0" Margin="0,0,10,0"/>
+            <Button Content="{DynamicResource i18n_SaveSettings}" Click="Save_Click" Width="120" Padding="8" Background="#170939" Foreground="White" BorderThickness="0"/>
+        </StackPanel>
         
-        <TabControl x:Name="SettingsTabControl" Grid.Row="1" Background="Transparent" BorderThickness="0,1,0,0" BorderBrush="#ececec" SelectionChanged="SettingsTabControl_SelectionChanged">
+        <TabControl x:Name="SettingsTabControl" Background="Transparent" BorderThickness="0,1,0,0" BorderBrush="#ececec" SelectionChanged="SettingsTabControl_SelectionChanged">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Padding" Value="10,5"/>
@@ -44,19 +45,19 @@
             </TabControl.Resources>
 
             <!-- TAB 1: DAILY PRAYER -->
-            <TabItem Header="Daily Prayer">
+            <TabItem Header="{DynamicResource i18n_DailyPrayer_Tab}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
                         <!-- Location -->
-                        <TextBlock Text="Location" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
-                        <TextBlock Text="Name:" Foreground="#6f6885"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Location}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_LocationName}" Foreground="#6f6885"/>
                         <Grid Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBox x:Name="LocationNameInput" Padding="5" Margin="0,0,5,0" />
-                            <Button Grid.Column="1" Content="Search" Width="60" Click="SearchLocation_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
+                            <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Search}" Width="60" Click="SearchLocation_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
                         </Grid>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -65,49 +66,49 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Latitude:" Foreground="#6f6885"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_Latitude}" Foreground="#6f6885"/>
                                 <TextBox x:Name="LatInput" Padding="5"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Longitude:" Foreground="#6f6885"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_Longitude}" Foreground="#6f6885"/>
                                 <TextBox x:Name="LngInput" Padding="5"/>
                             </StackPanel>
                         </Grid>
 
                         <!-- Calculation Preferences -->
-                        <TextBlock Text="Calculation" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
-                        <TextBlock Text="Calculation Method:" Foreground="#6f6885"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Calculation}" FontWeight="Bold" FontSize="16" Margin="0,20,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_Method}" Foreground="#6f6885"/>
                         <ComboBox x:Name="MethodInput" Margin="0,0,0,10" Padding="5">
-                            <ComboBoxItem Content="Shia"/>
-                            <ComboBoxItem Content="Karachi"/>
-                            <ComboBoxItem Content="ISNA"/>
-                            <ComboBoxItem Content="MWL"/>
-                            <ComboBoxItem Content="Makkah"/>
-                            <ComboBoxItem Content="Egypt"/>
-                            <ComboBoxItem Content="Tehran"/>
-                            <ComboBoxItem Content="Gulf"/>
-                            <ComboBoxItem Content="Kuwait"/>
-                            <ComboBoxItem Content="Qatar"/>
-                            <ComboBoxItem Content="Singapore"/>
-                            <ComboBoxItem Content="France"/>
-                            <ComboBoxItem Content="Turkey"/>
-                            <ComboBoxItem Content="Russia"/>
-                            <ComboBoxItem Content="Moonsighting"/>
-                            <ComboBoxItem Content="Dubai"/>
-                            <ComboBoxItem Content="JAKIM"/>
-                            <ComboBoxItem Content="Tunisia"/>
-                            <ComboBoxItem Content="Algeria"/>
-                            <ComboBoxItem Content="KEMENAG"/>
-                            <ComboBoxItem Content="Morocco"/>
-                            <ComboBoxItem Content="Brazil"/>
-                            <ComboBoxItem Content="Portugal"/>
-                            <ComboBoxItem Content="Jordan"/>
-                            <ComboBoxItem Content="Manual"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Shia}" Tag="SHIA"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Karachi}" Tag="KARACHI"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_ISNA}" Tag="ISNA"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_MWL}" Tag="MWL"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Makkah}" Tag="MAKKAH"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Egypt}" Tag="EGYPT"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Tehran}" Tag="TEHRAN"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Gulf}" Tag="GULF"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Kuwait}" Tag="KUWAIT"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Qatar}" Tag="QATAR"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Singapore}" Tag="SINGAPORE"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_France}" Tag="FRANCE"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Turkey}" Tag="TURKEY"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Russia}" Tag="RUSSIA"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Moonsighting}" Tag="MOONSIGHTING"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Dubai}" Tag="DUBAI"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_JAKIM}" Tag="JAKIM"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Tunisia}" Tag="TUNISIA"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Algeria}" Tag="ALGERIA"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_KEMENAG}" Tag="KEMENAG"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Morocco}" Tag="MOROCCO"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Brazil}" Tag="BRAZIL"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Portugal}" Tag="PORTUGAL"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Jordan}" Tag="JORDAN"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Method_Manual}" Tag="MANUAL"/>
                         </ComboBox>
 
                         <!-- Advanced Manual Calculation Settings -->
                         <StackPanel x:Name="ManualParamsPanel" Visibility="Collapsed" Margin="0,0,0,10">
-                            <TextBlock Text="Advanced Manual Parameters" FontWeight="SemiBold" Foreground="#2563eb" Margin="0,5,0,5"/>
+                            <TextBlock Text="{DynamicResource i18n_Section_ManualParams}" FontWeight="SemiBold" Foreground="#2563eb" Margin="0,5,0,5"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -115,41 +116,41 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Fajr Angle:" Foreground="#6f6885" FontSize="11"/>
+                                    <TextBlock Text="{DynamicResource i18n_Label_FajrAngle}" Foreground="#6f6885" FontSize="11"/>
                                     <TextBox x:Name="FajrAngleInput" Padding="5" Text="18.0"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Isha Angle:" Foreground="#6f6885" FontSize="11"/>
+                                    <TextBlock Text="{DynamicResource i18n_Label_IshaAngle}" Foreground="#6f6885" FontSize="11"/>
                                     <TextBox x:Name="IshaAngleInput" Padding="5" Text="18.0"/>
                                 </StackPanel>
                             </Grid>
-                            <TextBlock Text="High Latitude Rule:" Foreground="#6f6885" FontSize="11" Margin="0,5,0,0"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_HighLat}" Foreground="#6f6885" FontSize="11" Margin="0,5,0,0"/>
                             <ComboBox x:Name="HighLatRuleInput" Padding="5">
-                                <ComboBoxItem Content="None"/>
-                                <ComboBoxItem Content="Night Middle"/>
-                                <ComboBoxItem Content="Seventh of Night"/>
-                                <ComboBoxItem Content="Twilight Angle"/>
+                                <ComboBoxItem Content="{DynamicResource i18n_HighLat_None}"/>
+                                <ComboBoxItem Content="{DynamicResource i18n_HighLat_NightMiddle}"/>
+                                <ComboBoxItem Content="{DynamicResource i18n_HighLat_Seventh}"/>
+                                <ComboBoxItem Content="{DynamicResource i18n_HighLat_Twilight}"/>
                             </ComboBox>
                         </StackPanel>
                         
-                        <TextBlock Text="Madhab (Asr):" Foreground="#6f6885"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_School}" Foreground="#6f6885"/>
                         <ComboBox x:Name="MadhabInput" Margin="0,0,0,10" Padding="5">
-                            <ComboBoxItem Content="Shafi (Standard)"/>
-                            <ComboBoxItem Content="Hanafi"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Madhab_Shafi}"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Madhab_Hanafi}"/>
                         </ComboBox>
 
-                        <TextBlock Text="Time Format:" Foreground="#6f6885"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_TimeFormat}" Foreground="#6f6885"/>
                         <ComboBox x:Name="TimeFormatInput" Margin="0,0,0,10" Padding="5">
-                            <ComboBoxItem Content="12 Hours (AM/PM)"/>
-                            <ComboBoxItem Content="24 Hours"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Format_12h}" Tag="12h"/>
+                            <ComboBoxItem Content="{DynamicResource i18n_Format_24h}" Tag="24h"/>
                         </ComboBox>
 
                         <Rectangle Height="1" Fill="#ececec" Margin="0,10"/>
 
                         <!-- Hijri Adjustment -->
-                        <TextBlock Text="Hijri Date Adjustment" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Hijri}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                            <TextBlock Text="Adjustment (Days):" VerticalAlignment="Center" Foreground="#6f6885" Margin="0,0,10,0"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_HijriAdj}" VerticalAlignment="Center" Foreground="#6f6885" Margin="0,0,10,0"/>
                             <ComboBox x:Name="HijriAdjInput" Width="60" Padding="5">
                                 <ComboBoxItem Content="-2"/>
                                 <ComboBoxItem Content="-1"/>
@@ -157,11 +158,11 @@
                                 <ComboBoxItem Content="+1"/>
                                 <ComboBoxItem Content="+2"/>
                             </ComboBox>
-                            <TextBlock Text="(Fixes discrepancies)" FontStyle="Italic" FontSize="11" VerticalAlignment="Center" Foreground="#999" Margin="10,0,0,0"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_FixesDiscrepancies}" FontStyle="Italic" FontSize="11" VerticalAlignment="Center" Foreground="#999" Margin="10,0,0,0"/>
                         </StackPanel>
 
                         <!-- Suhur/Iftar Adjustments -->
-                        <TextBlock Text="Suhur &amp; Iftar Adjustment" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_SuhurIftar}" FontWeight="Bold" FontSize="16" Margin="0,10,0,5" Foreground="#170939"/>
                         <Grid Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -169,11 +170,11 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Suhur Offset (min):" Foreground="#6f6885" FontSize="12"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_SuhurOffset}" Foreground="#6f6885" FontSize="12"/>
                                 <TextBox x:Name="SuhurOffsetInput" Padding="5" ToolTip="Add/subtract minutes from Suhur time"/>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Iftar Offset (min):" Foreground="#6f6885" FontSize="12"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_IftarOffset}" Foreground="#6f6885" FontSize="12"/>
                                 <TextBox x:Name="IftarOffsetInput" Padding="5" ToolTip="Add/subtract minutes from Iftar time"/>
                             </StackPanel>
                         </Grid>
@@ -181,8 +182,8 @@
                         <Rectangle Height="1" Fill="#ececec" Margin="0,15"/>
 
                         <!-- Jamaat Times (Moved Back) -->
-                        <TextBlock Text="Jamaat (Congregation) Times" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
-                        <TextBlock Text="Set the actual fixed time for Jamaat (HH:mm):" FontSize="12" Foreground="#6f6885" FontStyle="Italic" Margin="0,0,0,10"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Jamaat}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_JamaatDesc}" FontSize="12" Foreground="#6f6885" FontStyle="Italic" Margin="0,0,0,10"/>
 
                         <Grid Margin="0,0,0,5">
                             <Grid.ColumnDefinitions>
@@ -197,7 +198,7 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
-                            <TextBlock Text="Fajr Time:" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_FajrTime}" VerticalAlignment="Center" Foreground="#6f6885"/>
                             <StackPanel Grid.Column="1" Margin="0,5">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox x:Name="FajrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
@@ -211,7 +212,7 @@
                                 <TextBlock x:Name="FajrRangeHint" Text="Today: 04:30 - 05:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
                             </StackPanel>
 
-                            <TextBlock Text="Dhuhr Time:" Grid.Row="1" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_DhuhrTime}" Grid.Row="1" VerticalAlignment="Center" Foreground="#6f6885"/>
                             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox x:Name="DhuhrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
@@ -225,7 +226,7 @@
                                 <TextBlock x:Name="DhuhrRangeHint" Text="Today: 12:05 - 16:30" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
                             </StackPanel>
 
-                            <TextBlock Text="Asr Time:" Grid.Row="2" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_AsrTime}" Grid.Row="2" VerticalAlignment="Center" Foreground="#6f6885"/>
                             <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox x:Name="AsrHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
@@ -239,7 +240,7 @@
                                 <TextBlock x:Name="AsrRangeHint" Text="Today: 16:30 - 18:15" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
                             </StackPanel>
 
-                            <TextBlock Text="Maghrib Time:" Grid.Row="3" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_MaghribTime}" Grid.Row="3" VerticalAlignment="Center" Foreground="#6f6885"/>
                             <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox x:Name="MaghribHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
@@ -253,7 +254,7 @@
                                 <TextBlock x:Name="MaghribRangeHint" Text="Today: 18:15 - 19:45" FontSize="11" Foreground="#999" Margin="0,2,0,0"/>
                             </StackPanel>
 
-                            <TextBlock Text="Isha Time:" Grid.Row="4" VerticalAlignment="Center" Foreground="#6f6885"/>
+                            <TextBlock Text="{DynamicResource i18n_Label_IshaTime}" Grid.Row="4" VerticalAlignment="Center" Foreground="#6f6885"/>
                             <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,5">
                                 <StackPanel Orientation="Horizontal">
                                     <ComboBox x:Name="IshaHourInput" Width="50" Margin="0,2" SelectionChanged="HourInput_SelectionChanged"/>
@@ -272,25 +273,25 @@
             </TabItem>
 
             <!-- TAB 2: NOTIFICATIONS -->
-            <TabItem Header="Notifications">
+            <TabItem Header="{DynamicResource i18n_Notifications_Tab}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
                         <!-- Adhan Controls -->
                         <Border Background="#f8fafc" BorderBrush="#e2e8f0" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Adhan Notifications" FontWeight="Bold" FontSize="16" Foreground="#1e293b" Margin="0,0,0,10"/>
-                                <TextBlock Text="Enable sound and visual popup for each prayer:" FontSize="12" Foreground="#64748b" Margin="0,0,0,10"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_Notifications}" FontWeight="Bold" FontSize="16" Foreground="#1e293b" Margin="0,0,0,10"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_EnableSound}" FontSize="12" Foreground="#64748b" Margin="0,0,0,10"/>
                                 
                                 <UniformGrid Columns="3" Margin="0,0,0,15">
-                                    <CheckBox x:Name="AdhanFajrInput" Content="Fajr" Foreground="#1e293b" Margin="0,5"/>
-                                    <CheckBox x:Name="AdhanDhuhrInput" Content="Dhuhr" Foreground="#1e293b" Margin="0,5"/>
-                                    <CheckBox x:Name="AdhanAsrInput" Content="Asr" Foreground="#1e293b" Margin="0,5"/>
-                                    <CheckBox x:Name="AdhanMaghribInput" Content="Maghrib" Foreground="#1e293b" Margin="0,5"/>
-                                    <CheckBox x:Name="AdhanIshaInput" Content="Isha" Foreground="#1e293b" Margin="0,5"/>
-                                    <CheckBox x:Name="AdhanPopupEnabledInput" Content="Visual Popup" Foreground="#2563eb" FontWeight="SemiBold" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanFajrInput" Content="{DynamicResource i18n_Prayer_Fajr}" Foreground="#1e293b" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanDhuhrInput" Content="{DynamicResource i18n_Prayer_Dhuhr}" Foreground="#1e293b" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanAsrInput" Content="{DynamicResource i18n_Prayer_Asr}" Foreground="#1e293b" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanMaghribInput" Content="{DynamicResource i18n_Prayer_Maghrib}" Foreground="#1e293b" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanIshaInput" Content="{DynamicResource i18n_Prayer_Isha}" Foreground="#1e293b" Margin="0,5"/>
+                                    <CheckBox x:Name="AdhanPopupEnabledInput" Content="{DynamicResource i18n_Adhan_VisualPopup}" Foreground="#2563eb" FontWeight="SemiBold" Margin="0,5"/>
                                 </UniformGrid>
 
-                                <TextBlock Text="Adhan Volume:" FontSize="12" Foreground="#64748b" Margin="0,5,0,0"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_Volume}" FontSize="12" Foreground="#64748b" Margin="0,5,0,0"/>
                                 <Grid Margin="0,5,0,15">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -301,17 +302,17 @@
                                 </Grid>
 
                                 <!-- Audio Selection (Moved here) -->
-                                <TextBlock Text="Adhan Sound Selection" FontWeight="SemiBold" Margin="0,10,0,5" Foreground="#1e293b"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_SoundSelection}" FontWeight="SemiBold" Margin="0,10,0,5" Foreground="#1e293b"/>
                                 <ComboBox x:Name="AdhanPresetCombo" Margin="0,0,0,5" Padding="5" SelectionChanged="AdhanPresetCombo_SelectionChanged" ToolTip="Select built-in audio">
-                                    <ComboBoxItem Content="-- Select Built-in Adhan track --" Tag=""/>
-                                    <ComboBoxItem Content="Makkah (Al-Haram)" Tag="Athan_Makkah.mp3"/>
-                                    <ComboBoxItem Content="Madinah (Al-Nabawi)" Tag="Athan_Madinah_-_Alafasi.mp3"/>
-                                    <ComboBoxItem Content="Mishary Alafasi" Tag="Athan_Mishary_Alafasi.mp3"/>
-                                    <ComboBoxItem Content="Abdul Basit" Tag="Athan_Abed_Albase6.mp3"/>
-                                    <ComboBoxItem Content="Fajr (Malek Chebae)" Tag="Athan_Al-fajer_-_Malek_chebae.mp3"/>
-                                    <ComboBoxItem Content="Nasser Alqatami" Tag="Athan_Nasser_Alqatami.mp3"/>
-                                    <ComboBoxItem Content="Mohammad Almenshawy" Tag="Athan_Mohammad_Almenshawy.mp3"/>
-                                    <ComboBoxItem Content="Custom (Select below)" Tag="CUSTOM"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_SelectBuiltin}" Tag=""/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Makkah}" Tag="Athan_Makkah.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Madinah}" Tag="Athan_Madinah_-_Alafasi.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Alafasi}" Tag="Athan_Mishary_Alafasi.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Basit}" Tag="Athan_Abed_Albase6.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_FajrChebae}" Tag="Athan_Al-fajer_-_Malek_chebae.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Qatami}" Tag="Athan_Nasser_Alqatami.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Menshawy}" Tag="Athan_Mohammad_Almenshawy.mp3"/>
+                                    <ComboBoxItem Content="{DynamicResource i18n_Adhan_Custom}" Tag="CUSTOM"/>
                                 </ComboBox>
                                 
                                 <Grid Margin="0,5,0,0">
@@ -320,17 +321,17 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" Grid.Column="0"/>
-                                    <Button Grid.Column="1" Content="Browse..." Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Browse}" Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
                                 </Grid>
 
-                                <TextBlock Text="Fajr-Specific Audio:" FontSize="11" Foreground="#64748b" Margin="0,10,0,2"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_FajrSpecific}" FontSize="11" Foreground="#64748b" Margin="0,10,0,2"/>
                                 <Grid Margin="0,0,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="FajrAdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" Grid.Column="0"/>
-                                    <Button Grid.Column="1" Content="Browse..." Click="FajrBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Browse}" Click="FajrBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -338,22 +339,22 @@
                         <!-- Pre-Adhan Reminders -->
                         <Border Background="#fffbeb" BorderBrush="#fef3c7" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Reminders &amp; Windows Notifications" FontWeight="Bold" FontSize="16" Foreground="#92400e" Margin="0,0,0,5"/>
-                                <TextBlock Text="Notify before prayer start (10 mins default):" FontSize="12" Foreground="#b45309" Margin="0,0,0,10"/>
+                                <TextBlock Text="{DynamicResource i18n_Reminders_Title}" FontWeight="Bold" FontSize="16" Foreground="#92400e" Margin="0,0,0,5"/>
+                                <TextBlock Text="{DynamicResource i18n_Reminders_PreAdhan}" FontSize="12" Foreground="#b45309" Margin="0,0,0,10"/>
                                 
                                 <UniformGrid Columns="3" Margin="0,0,0,10">
-                                    <CheckBox x:Name="ReminderFajrInput" Content="Fajr" Foreground="#92400e" Margin="0,5"/>
-                                    <CheckBox x:Name="ReminderShuruqInput" Content="Sunrise" Foreground="#92400e" Margin="0,5"/>
-                                    <CheckBox x:Name="ReminderDhuhrInput" Content="Dhuhr" Foreground="#92400e" Margin="0,5"/>
-                                    <CheckBox x:Name="ReminderAsrInput" Content="Asr" Foreground="#92400e" Margin="0,5"/>
-                                    <CheckBox x:Name="ReminderMaghribInput" Content="Maghrib" Foreground="#92400e" Margin="0,5"/>
-                                    <CheckBox x:Name="ReminderIshaInput" Content="Isha" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderFajrInput" Content="{DynamicResource i18n_Prayer_Fajr}" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderShuruqInput" Content="{DynamicResource Prayer_Sunrise}" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderDhuhrInput" Content="{DynamicResource i18n_Prayer_Dhuhr}" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderAsrInput" Content="{DynamicResource i18n_Prayer_Asr}" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderMaghribInput" Content="{DynamicResource i18n_Prayer_Maghrib}" Foreground="#92400e" Margin="0,5"/>
+                                    <CheckBox x:Name="ReminderIshaInput" Content="{DynamicResource i18n_Prayer_Isha}" Foreground="#92400e" Margin="0,5"/>
                                 </UniformGrid>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Notify" VerticalAlignment="Center" Foreground="#92400e"/>
+                                    <TextBlock Text="{DynamicResource i18n_Label_Notify}" VerticalAlignment="Center" Foreground="#92400e"/>
                                     <TextBox x:Name="PreAdhanOffsetInput" Width="40" Margin="10,0" Padding="5"/>
-                                    <TextBlock Text="minutes before start" VerticalAlignment="Center" Foreground="#92400e"/>
+                                    <TextBlock Text="{DynamicResource i18n_Reminders_MinutesBefore}" VerticalAlignment="Center" Foreground="#92400e"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -361,21 +362,21 @@
                         <!-- Jamaat (Established) Reminders -->
                         <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Prayer Established Reminders (Popup)" FontWeight="Bold" FontSize="16" Foreground="#166534" Margin="0,0,0,5"/>
-                                <TextBlock Text="Show popup before congregation time at the Mosque:" FontSize="12" Foreground="#15803d" Margin="0,0,0,10"/>
+                                <TextBlock Text="{DynamicResource i18n_Established_Title}" FontWeight="Bold" FontSize="16" Foreground="#166534" Margin="0,0,0,5"/>
+                                <TextBlock Text="{DynamicResource i18n_Established_Desc}" FontSize="12" Foreground="#15803d" Margin="0,0,0,10"/>
                                 
                                 <UniformGrid Columns="3" Margin="0,0,0,10">
-                                    <CheckBox x:Name="EstablishedFajrInput" Content="Fajr" Foreground="#166534" Margin="0,5"/>
-                                    <CheckBox x:Name="EstablishedDhuhrInput" Content="Dhuhr" Foreground="#166534" Margin="0,5"/>
-                                    <CheckBox x:Name="EstablishedAsrInput" Content="Asr" Foreground="#166534" Margin="0,5"/>
-                                    <CheckBox x:Name="EstablishedMaghribInput" Content="Maghrib" Foreground="#166534" Margin="0,5"/>
-                                    <CheckBox x:Name="EstablishedIshaInput" Content="Isha" Foreground="#166534" Margin="0,5"/>
+                                    <CheckBox x:Name="EstablishedFajrInput" Content="{DynamicResource i18n_Prayer_Fajr}" Foreground="#166534" Margin="0,5"/>
+                                    <CheckBox x:Name="EstablishedDhuhrInput" Content="{DynamicResource i18n_Prayer_Dhuhr}" Foreground="#166534" Margin="0,5"/>
+                                    <CheckBox x:Name="EstablishedAsrInput" Content="{DynamicResource i18n_Prayer_Asr}" Foreground="#166534" Margin="0,5"/>
+                                    <CheckBox x:Name="EstablishedMaghribInput" Content="{DynamicResource i18n_Prayer_Maghrib}" Foreground="#166534" Margin="0,5"/>
+                                    <CheckBox x:Name="EstablishedIshaInput" Content="{DynamicResource i18n_Prayer_Isha}" Foreground="#166534" Margin="0,5"/>
                                 </UniformGrid>
                                 
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Show" VerticalAlignment="Center" Foreground="#166534"/>
+                                    <TextBlock Text="{DynamicResource i18n_Label_EstablishedShow}" VerticalAlignment="Center" Foreground="#166534"/>
                                     <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Margin="10,0" Padding="5"/>
-                                    <TextBlock Text="minutes before Jamaat" VerticalAlignment="Center" Foreground="#166534"/>
+                                    <TextBlock Text="{DynamicResource i18n_Established_MinutesBefore}" VerticalAlignment="Center" Foreground="#166534"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -383,8 +384,8 @@
                         <!-- Night Prayer / Tahajjud -->
                         <Border Background="#f5f3ff" BorderBrush="#ede9fe" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Tahajjud &amp; Night Prayer" FontWeight="Bold" FontSize="16" Foreground="#5b21b6" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="TahajjudAdhanEnabledInput" Content="Enable Alarm for Tahajjud (Last Third of Night)" Foreground="#5b21b6" Margin="0,0,0,10"/>
+                                <TextBlock Text="{DynamicResource i18n_Tahajjud_Title}" FontWeight="Bold" FontSize="16" Foreground="#5b21b6" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="TahajjudAdhanEnabledInput" Content="{DynamicResource i18n_Tahajjud_Enable}" Foreground="#5b21b6" Margin="0,0,0,10"/>
                                 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -392,12 +393,12 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="TahajjudAdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" Grid.Column="0"/>
-                                    <Button Grid.Column="1" Content="Browse..." Click="TahajjudBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Browse}" Click="TahajjudBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
                                 </Grid>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Right">
-                                     <Button x:Name="TestStandardBtn" Content="Test Adhan" Click="TestAdhan_Click" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
-                                     <Button x:Name="TestTahajjudBtn" Content="Test Tahaj." Click="TestTahajjudAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
+                                     <Button x:Name="TestStandardBtn" Content="{DynamicResource i18n_Test_Adhan}" Click="TestAdhan_Click" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
+                                     <Button x:Name="TestTahajjudBtn" Content="{DynamicResource i18n_Test_Tahajjud}" Click="TestTahajjudAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -406,29 +407,37 @@
             </TabItem>
 
             <!-- TAB 2: LAYOUT & THEME -->
-            <TabItem Header="Layout &amp; Theme">
+            <TabItem Header="{DynamicResource i18n_Layout_Tab}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
                         <!-- Integrations -->
-                        <TextBlock Text="Windows Integration" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="OverlayInput" Content="Show Floating Prayer Overlay" Margin="0,10,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="UseDeskBandInput" Content="Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="IntegratedTaskbarInput" Content="Show Integrated Taskbar Timer (Win 11 Source)" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="ShowHeroGridInput" Content="Show Prayer Times Grid in Hero Section" Margin="0,0,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_WindowsIntegration}" FontWeight="Bold" FontSize="16" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="OverlayInput" Content="{DynamicResource i18n_Check_Overlay}" Margin="0,10,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="UseDeskBandInput" Content="{DynamicResource i18n_Check_DeskBand}" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="IntegratedTaskbarInput" Content="{DynamicResource i18n_Check_IntegratedTaskbar}" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="ShowHeroGridInput" Content="{DynamicResource i18n_Check_HeroGrid}" Margin="0,0,0,5" Foreground="#170939"/>
                         <Grid Margin="0,0,0,5">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <CheckBox x:Name="NotificationsInput" Content="Enable Prayer Notifications" VerticalAlignment="Center" Foreground="#170939"/>
-                            <Button Grid.Column="1" Content="Test" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
+                            <CheckBox x:Name="NotificationsInput" Content="{DynamicResource i18n_Check_Notifications}" VerticalAlignment="Center" Foreground="#170939"/>
+                            <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Test}" Width="50" Click="TestNotification_Click" Background="#f0f0f0" BorderThickness="1" BorderBrush="#ccc" />
                         </Grid>
-                        <CheckBox x:Name="AutoStartInput" Content="Run on Windows Startup" Margin="0,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="SilentStartInput" Content="Run silently on startup (hide main window)" Margin="20,0,0,5" Foreground="#170939"/>
-                        <CheckBox x:Name="ExternalApiInput" Content="Use External API for accuracy (requires internet)" Margin="0,0,0,15" Foreground="#170939"/>
+                        <CheckBox x:Name="AutoStartInput" Content="{DynamicResource i18n_Check_AutoStart}" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="SilentStartInput" Content="{DynamicResource i18n_Check_SilentStart}" Margin="20,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="ExternalApiInput" Content="{DynamicResource i18n_Check_ExternalApi}" Margin="0,0,0,15" Foreground="#170939"/>
+
+                        <!-- Language -->
+                        <TextBlock Text="{DynamicResource i18n_Section_Language}" FontWeight="Bold" FontSize="16" Margin="0,15,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Label_InterfaceLanguage}" Foreground="#6f6885" Margin="0,5,0,5"/>
+                        <ComboBox x:Name="LanguageSelector" Margin="0,0,0,15" Padding="5" SelectionChanged="LanguageSelector_SelectionChanged">
+                            <ComboBoxItem Content="English" Tag="en"/>
+                            <ComboBoxItem Content="বাংলা (Bangla)" Tag="bn"/>
+                        </ComboBox>
 
                         <!-- Appearance -->
-                        <TextBlock Text="Appearance &amp; Colors" FontWeight="Bold" FontSize="16" Margin="0,15,0,5" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Appearance}" FontWeight="Bold" FontSize="16" Margin="0,15,0,5" Foreground="#170939"/>
                         <Grid Margin="0,10,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -436,25 +445,25 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Gradient Start:" Foreground="#3CDA6B"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_GradStart}" Foreground="#3CDA6B"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="GradStartInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Pick}" Click="PickColor_Click" Tag="GradStart" Padding="5,0" Margin="2,0,0,0"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Gradient End:" Foreground="#05813D"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_GradEnd}" Foreground="#05813D"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="GradEndInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Pick}" Click="PickColor_Click" Tag="GradEnd" Padding="5,0" Margin="2,0,0,0"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -465,25 +474,25 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Primary Color:" Foreground="#6f6885"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_PrimaryColor}" Foreground="#6f6885"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="PrimaryColorInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Pick}" Click="PickColor_Click" Tag="Primary" Padding="5,0" Margin="2,0,0,0"/>
                                 </Grid>
                             </StackPanel>
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Secondary Color:" Foreground="#6f6885"/>
+                                <TextBlock Text="{DynamicResource i18n_Label_SecondaryColor}" Foreground="#6f6885"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="SecondaryColorInput" Padding="5"/>
-                                    <Button Grid.Column="1" Content="Pick" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Pick}" Click="PickColor_Click" Tag="Secondary" Padding="5,0" Margin="2,0,0,0"/>
                                 </Grid>
                             </StackPanel>
                         </Grid>
@@ -492,11 +501,11 @@
             </TabItem>
 
             <!-- TAB 3: SUPPORT & CONTACT -->
-            <TabItem Header="Support &amp; Contact">
+            <TabItem Header="{DynamicResource i18n_Support_Tab}">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
                     <StackPanel>
                         <!-- Section 1: Updates & Version -->
-                        <TextBlock Text="Updates" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Updates}" FontWeight="Bold" FontSize="16" Margin="0,0,0,10" Foreground="#170939"/>
                         <Border Background="#f9f9f9" BorderBrush="#ececec" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
                                 <Grid>
@@ -505,10 +514,10 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
-                                        <TextBlock Text="Check for application updates to get the latest features and bug fixes." TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: Native Release 1.8.5" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{DynamicResource i18n_Updates_Desc}" TextWrapping="Wrap" Foreground="#666" FontSize="11"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="{DynamicResource i18n_Version_Label}" Foreground="#170939" Margin="0,5,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
-                                    <Button Grid.Column="1" Content="Check for Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
+                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_CheckUpdates}" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="15,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="4"/>
@@ -520,7 +529,7 @@
                         </Border>
 
                         <!-- Section 2: Our Projects -->
-                        <TextBlock Text="Our Projects" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Projects}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <WrapPanel>
                                 <TextBlock Margin="0,0,20,8">
@@ -536,7 +545,7 @@
                         </Border>
 
                         <!-- Section 3: Sponsors -->
-                        <TextBlock Text="Sponsors" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_Sponsors}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#f5f3ff" BorderBrush="#ede9fe" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
                                 <WrapPanel>
@@ -554,7 +563,7 @@
                         </Border>
 
                         <!-- Section 4: Developer Profile -->
-                        <TextBlock Text="Developer Profile" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_DevProfile}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#f3f4f6" BorderBrush="#e5e7eb" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
                                 <TextBlock Text="Abiruzzaman Molla" Foreground="#111827" FontWeight="Bold" FontSize="15" Margin="0,0,0,5"/>
@@ -582,13 +591,11 @@
                         </Border>
 
                         <!-- Section 5: Support Me (Bottom) -->
-                        <TextBlock Text="Support Me" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
+                        <TextBlock Text="{DynamicResource i18n_Section_SupportMe}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#fff9e6" BorderBrush="#fde68a" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <StackPanel>
-                                <TextBlock Text="Buy Me a Coffee ☕" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
-                                <TextBlock Foreground="#78350f" TextWrapping="Wrap" Margin="0,0,0,10">
-                                    If you find this application helpful, please consider supporting its development.
-                                </TextBlock>
+                                <TextBlock Text="{DynamicResource i18n_SupportMe_Coffee}" Foreground="#b45309" FontWeight="SemiBold" FontSize="14" Margin="0,0,0,4"/>
+                                <TextBlock Foreground="#78350f" TextWrapping="Wrap" Margin="0,0,0,10" Text="{DynamicResource i18n_SupportMe_Desc}"/>
                                 <Button Cursor="Hand" Padding="0" BorderThickness="0" Background="Transparent" HorizontalAlignment="Left" Click="SupportMe_Click">
                                     <Image Source="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" Height="40" RenderOptions.BitmapScalingMode="HighQuality"/>
                                 </Button>
@@ -598,11 +605,5 @@
                 </ScrollViewer>
             </TabItem>
         </TabControl>
-
-        <!-- Buttons -->
-        <StackPanel x:Name="SettingsButtonsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="Cancel" Click="Cancel_Click" Width="80" Padding="8" Background="Transparent" Foreground="#6f6885" BorderThickness="0" Margin="0,0,10,0"/>
-            <Button Content="Save Settings" Click="Save_Click" Width="120" Padding="8" Background="#170939" Foreground="White" BorderThickness="0"/>
-        </StackPanel>
-    </Grid>
+    </DockPanel>
 </Window>

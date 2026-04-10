@@ -20,7 +20,6 @@ namespace DailyPrayerTime.Native
     {
         private const string TimeFmtFull = "hh:mm tt";
         private const string TimeFmtShort = "hh:mm";
-        private const string CountdownFmt = "{0}h {1}m {2}s";
 
         private DispatcherTimer? _timer;
         private CombinedPrayerTimes? _todayPrayerTimes;
@@ -73,6 +72,8 @@ namespace DailyPrayerTime.Native
             {
                 SettingsWindow.SetAutoStart(true, SettingsManager.Current.SilentStart);
             }
+
+            InitBasmalaHeader();
         }
 
         private async Task CheckForUpdates()
@@ -84,7 +85,7 @@ namespace DailyPrayerTime.Native
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        UpdateVersionText.Text = $"Version v{_currentUpdate.LatestVersion} is now available.";
+                        UpdateVersionText.Text = string.Format(LocalizationManager.Instance.GetString("Update_VersionAvailable"), _currentUpdate.LatestVersion);
                         UpdateBanner.Visibility = Visibility.Visible;
                     });
                 }
@@ -102,13 +103,13 @@ namespace DailyPrayerTime.Native
                 _notifyIcon.Icon = System.Drawing.Icon.ExtractAssociatedIcon(Process.GetCurrentProcess().MainModule?.FileName ?? "icon.ico");
             } catch { /* Fallback */ }
             _notifyIcon.Visible = true;
-            _notifyIcon.Text = "Daily Prayer Timer";
+            _notifyIcon.Text = LocalizationManager.Instance.GetString("AppTitle");
 
             var cms = new Forms.ContextMenuStrip();
             
-            cms.Items.Add("Open", null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
+            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Open"), null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
             
-            cms.Items.Add("Settings", null, async (s, e) => { 
+            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Settings"), null, async (s, e) => { 
                 var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
                 if (sw.ShowDialog() == true) {
                     ApplySettingsTheme();
@@ -120,7 +121,7 @@ namespace DailyPrayerTime.Native
 
             cms.Items.Add(new Forms.ToolStripSeparator());
 
-            var overlayItem = new Forms.ToolStripMenuItem("Show Floating Overlay");
+            var overlayItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowOverlay"));
             overlayItem.CheckOnClick = true;
             overlayItem.Checked = SettingsManager.Current.ShowOverlay;
             overlayItem.Click += (s, e) => {
@@ -130,7 +131,7 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
-            var deskbandItem = new Forms.ToolStripMenuItem("Show DeskBand (Legacy)");
+            var deskbandItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowDeskBand"));
             deskbandItem.CheckOnClick = true;
             deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
             deskbandItem.Click += (s, e) => {
@@ -140,7 +141,7 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(deskbandItem);
 
-            var integratedItem = new Forms.ToolStripMenuItem("Show Integrated Taskbar Timer (Win 11 Source)");
+            var integratedItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowIntegratedTaskbar"));
             integratedItem.CheckOnClick = true;
             integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
             integratedItem.Click += (s, e) => {
@@ -151,7 +152,7 @@ namespace DailyPrayerTime.Native
             cms.Items.Add(integratedItem);
 
             cms.Items.Add(new Forms.ToolStripSeparator());
-            cms.Items.Add("Exit", null, (s, e) => System.Windows.Application.Current.Shutdown());
+            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Exit"), null, (s, e) => System.Windows.Application.Current.Shutdown());
 
             _notifyIcon.ContextMenuStrip = cms;
 
@@ -185,7 +186,7 @@ namespace DailyPrayerTime.Native
                 this.Hide();
                 if (_notifyIcon != null)
                 {
-                    _notifyIcon.ShowBalloonTip(2000, "Daily Prayer Timer", "App is running in the background.", Forms.ToolTipIcon.Info);
+                    _notifyIcon.ShowBalloonTip(2000, LocalizationManager.Instance.GetString("AppTitle"), LocalizationManager.Instance.GetString("Tray_RunningInBackground"), Forms.ToolTipIcon.Info);
                 }
             }
             base.OnStateChanged(e);
@@ -367,7 +368,11 @@ namespace DailyPrayerTime.Native
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.MessageBox.Show("Could not open the update link: " + ex.Message);
+                    System.Windows.MessageBox.Show(
+                        string.Format(LocalizationManager.Instance.GetString("Msg_UpdateLinkFailed"), ex.Message), 
+                        LocalizationManager.Instance.GetString("Title_Error"), 
+                        MessageBoxButton.OK, 
+                        MessageBoxImage.Warning);
                 }
             }
         }
@@ -390,6 +395,48 @@ namespace DailyPrayerTime.Native
                 mainBrush.GradientStops[1].Color = (WColor)WColorConverter.ConvertFromString(s.GradientEnd);
             } 
             catch (Exception) { /* Invalid color format */ }
+
+            // Refresh basmala translation any time settings (language) change
+            InitBasmalaHeader();
+        }
+
+        private void InitBasmalaHeader()
+        {
+            string lang = LocalizationManager.Instance.CurrentLanguage;
+            // Set the translation text from localization
+            BasmalaTranslationText.Text = LocalizationManager.Instance.GetString("Header_Basmala_Translation");
+            // In Arabic mode, disable hover interaction entirely (text is already Arabic)
+            BasmalaHeaderGrid.Cursor = lang == "ar" ? System.Windows.Input.Cursors.Arrow : System.Windows.Input.Cursors.Hand;
+            BasmalaHeaderGrid.IsEnabled = lang != "ar";
+            // Reset to default state
+            BasmalaArabicText.Opacity = 0.8;
+            BasmalaTranslationText.Opacity = 0;
+        }
+
+        private void BasmalaHeader_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (LocalizationManager.Instance.CurrentLanguage == "ar") return;
+            AnimateOpacity(BasmalaArabicText, 0.8, 0.0, 300);
+            AnimateOpacity(BasmalaTranslationText, 0.0, 1.0, 300);
+        }
+
+        private void BasmalaHeader_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (LocalizationManager.Instance.CurrentLanguage == "ar") return;
+            AnimateOpacity(BasmalaArabicText, 0.0, 0.8, 300);
+            AnimateOpacity(BasmalaTranslationText, 1.0, 0.0, 300);
+        }
+
+        private static void AnimateOpacity(System.Windows.UIElement element, double from, double to, int durationMs)
+        {
+            var anim = new System.Windows.Media.Animation.DoubleAnimation
+            {
+                From = from,
+                To = to,
+                Duration = TimeSpan.FromMilliseconds(durationMs),
+                EasingFunction = new System.Windows.Media.Animation.CubicEase { EasingMode = System.Windows.Media.Animation.EasingMode.EaseInOut }
+            };
+            element.BeginAnimation(System.Windows.UIElement.OpacityProperty, anim);
         }
 
         private void SetupTimer()
@@ -414,11 +461,11 @@ namespace DailyPrayerTime.Native
             
             Dispatcher.Invoke(() =>
             {
-                HeroSubDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
-                HeroSubDay.Text = DateTime.Now.ToString("dddd");
+                HeroSubDate.Text = GetLocalizedDate(DateTime.Now);
+                HeroSubDay.Text = GetLocalizedDayName(DateTime.Now);
                 
-                // Use local Hijri calculation if adjustment is set, otherwise prefer API data if available
-                HeroSubHijri.Text = (SettingsManager.Current.HijriAdjustment != 0 || string.IsNullOrEmpty(_todayPrayerTimes.HijriDate)) 
+                // Force local Hijri calculation for non-English locales (API returns English month names)
+                HeroSubHijri.Text = (LocalizationManager.Instance.CurrentLanguage != "en" || SettingsManager.Current.HijriAdjustment != 0 || string.IsNullOrEmpty(_todayPrayerTimes.HijriDate)) 
                     ? GetHijriDate() 
                     : _todayPrayerTimes.HijriDate;
                 RefreshUIDisplay();
@@ -476,12 +523,22 @@ namespace DailyPrayerTime.Native
                 int day = hijri.GetDayOfMonth(now);
 
                 string[] months = {
-                    "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
-                    "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
-                    "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
+                    LocalizationManager.Instance.GetString("Month_Hijri_1"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_2"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_3"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_4"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_5"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_6"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_7"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_8"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_9"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_10"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_11"),
+                    LocalizationManager.Instance.GetString("Month_Hijri_12")
                 };
 
-                return $"{day} {months[month - 1]} {year} AH";
+                string suffix = LocalizationManager.Instance.GetString("Label_HijriSuffix");
+                return $"{day} {months[month - 1]} {year} {suffix}";
             } catch { return "Hijri Date N/A"; }
         }
 
@@ -500,11 +557,11 @@ namespace DailyPrayerTime.Native
                 IshaTimeText.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
 
                 // Populate Rakat Notes
-                FajrRakatNote.Text = "2 Sunnah (Mu'akkadah), 2 Fard (4 Total)";
-                DhuhrRakatNote.Text = "4 Sunnah, 4 Fard, 2 Sunnah, 2 Nafl (12 Total)";
-                AsrRakatNote.Text = "4 Sunnah (Ghair Mu'akkadah), 4 Fard (8 Total)";
-                MaghribRakatNote.Text = "3 Fard, 2 Sunnah (Mu'akkadah), 2 Nafl (7 Total)";
-                IshaRakatNote.Text = "4 Sunnah, 4 Fard, 2 Sunnah, 2 Nafl, 3 Witr (Wajib), 2 Nafl (17 Total)";
+                FajrRakatNote.Text = LocalizationManager.Instance.GetString("Note_Fajr");
+                DhuhrRakatNote.Text = LocalizationManager.Instance.GetString("Note_Dhuhr");
+                AsrRakatNote.Text = LocalizationManager.Instance.GetString("Note_Asr");
+                MaghribRakatNote.Text = LocalizationManager.Instance.GetString("Note_Maghrib");
+                IshaRakatNote.Text = LocalizationManager.Instance.GetString("Note_Isha");
 
                 // Friday Jumu'ah Support
                 bool isFriday = DateTime.Now.DayOfWeek == DayOfWeek.Friday;
@@ -512,7 +569,7 @@ namespace DailyPrayerTime.Native
                 if (isFriday)
                 {
                     JumuahTimeText.Text = DhuhrTimeText.Text;
-                    JumuahRakatNote.Text = "4 Sunnah, 2 Fard (Congregation), 4 Sunnah, 2 Sunnah, 2 Nafl (14 Total)";
+                    JumuahRakatNote.Text = LocalizationManager.Instance.GetString("Note_Jumuah");
                 }
                 
                 // Hero Section Sub-Card (Slot Swapping & Ranges)
@@ -523,13 +580,13 @@ namespace DailyPrayerTime.Native
                 // Slot Swapping: Duha (After Fajr, before Dhuhr)
                 if (now > _todayPrayerTimes.Sunrise && now < _todayPrayerTimes.Dhuhr)
                 {
-                    DhuhrLabel.Text = "Duha";
+                    DhuhrLabel.Text = LocalizationManager.Instance.GetString("Prayer_Duha");
                     SubDhuhrTime.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
                     DhuhrLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
                 }
                 else
                 {
-                    DhuhrLabel.Text = isFriday ? "Jumu'ah" : "Dhuhr";
+                    DhuhrLabel.Text = isFriday ? LocalizationManager.Instance.GetString("Prayer_Jumuah") : LocalizationManager.Instance.GetString("Prayer_Dhuhr");
                     SubDhuhrTime.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
                     DhuhrLabel.Foreground = System.Windows.Media.Brushes.White;
                 }
@@ -542,13 +599,13 @@ namespace DailyPrayerTime.Native
 
                 if (now >= midnight && now < _tomorrowPrayerTimes.Fajr)
                 {
-                    IshaLabel.Text = "Tahajjud";
+                    IshaLabel.Text = LocalizationManager.Instance.GetString("Prayer_Tahajjud");
                     IshaLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
                     SubIshaTime.Text = $"{midnight.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
                 }
                 else
                 {
-                    IshaLabel.Text = "Isha";
+                    IshaLabel.Text = LocalizationManager.Instance.GetString("Prayer_Isha");
                     IshaLabel.Foreground = System.Windows.Media.Brushes.White;
                     SubIshaTime.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
                 }
@@ -596,26 +653,26 @@ namespace DailyPrayerTime.Native
             DateTime duhaStart = _todayPrayerTimes.Sunrise.AddMinutes(15);
             DateTime duhaEnd = _todayPrayerTimes.Dhuhr.AddMinutes(-15);
             DuhaTimeText.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
-            DuhaRakatNote.Text = "Min 2, up to 12 Rakats (Sets of 2). 4 or 8 emphasized.";
+            DuhaRakatNote.Text = LocalizationManager.Instance.GetString("Note_Duha");
 
             // 2. Awwabin
             // Between Maghrib and Isha
             AwwabinTimeText.Text = $"{_todayPrayerTimes.Maghrib.ToString(timeFmt)} - {_todayPrayerTimes.Isha.ToString(timeFmt)}";
-            AwwabinRakatNote.Text = "Min 2, typically 6 Rakats. After Maghrib Sunnah.";
+            AwwabinRakatNote.Text = LocalizationManager.Instance.GetString("Note_Awwabin");
 
             // 3. Tahajjud
             // After Isha until Fajr. Optimized after 1/2 or 1/3 of the night.
             DateTime nightStart = _todayPrayerTimes.Isha;
             DateTime nightEnd = _tomorrowPrayerTimes.Fajr;
             TahajjudTimeText.Text = $"{nightStart.ToString(timeFmt)} - {nightEnd.ToString(timeFmt)}";
-            TahajjudRakatNote.Text = "Min 2, typically 8 Rakats. Witr delay is Sunnah.";
+            TahajjudRakatNote.Text = LocalizationManager.Instance.GetString("Note_Tahajjud");
 
             // Last 1/3 calculation
             TimeSpan nightDuration = nightEnd - nightStart;
             TimeSpan oneThird = new TimeSpan(nightDuration.Ticks / 3);
             DateTime lastThirdStart = nightEnd - oneThird;
-            LastThirdTimeText.Text = $"Last 1/3: {lastThirdStart.ToString(timeFmt)}";
-            NightThirdNote.Text = "Highest reward time for Tahajjud";
+            LastThirdTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Label_LastThird"), lastThirdStart.ToString(timeFmt));
+            NightThirdNote.Text = LocalizationManager.Instance.GetString("Note_NightThird");
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
@@ -643,7 +700,10 @@ namespace DailyPrayerTime.Native
             {
                 if (IsReminderEnabled(currentPrayer, s))
                 {
-                    ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now.ToString(GetTimeFmt())}).");
+                    ShowNotification(
+                        string.Format(LocalizationManager.Instance.GetString("Notify_PrayerStarted"), FormatPrayerName(currentPrayer)),
+                        string.Format(LocalizationManager.Instance.GetString("Notify_PrayerStartedMsg"), FormatPrayerName(currentPrayer), now.ToString(GetTimeFmt()))
+                    );
                 }
                 _lastStartNotificationPrayer = currentPrayer;
             }
@@ -657,7 +717,11 @@ namespace DailyPrayerTime.Native
                 {
                     if (IsReminderEnabled(nextResult.nextPrayer, s))
                     {
-                        ShowNotification($"{FormatPrayerName(nextResult.nextPrayer)} starting soon", $"{FormatPrayerName(nextResult.nextPrayer)} will start in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.", true);
+                        ShowNotification(
+                            string.Format(LocalizationManager.Instance.GetString("Notify_StartingSoon"), FormatPrayerName(nextResult.nextPrayer)),
+                            string.Format(LocalizationManager.Instance.GetString("Notify_StartingSoonMsg"), FormatPrayerName(nextResult.nextPrayer), Math.Ceiling(timeToNext.TotalMinutes)),
+                            true
+                        );
                     }
                     _lastPreAdhanNotificationID = nextResult.nextPrayer;
                 }
@@ -672,14 +736,20 @@ namespace DailyPrayerTime.Native
                 TimeSpan timeToSunrise = _todayPrayerTimes!.Sunrise - now;
                 if (timeToSunrise.TotalMinutes > 0 && timeToSunrise.TotalMinutes <= 10 && _lastShuruqWarningDate != today)
                 {
-                    ShowNotification("Fajr ending soon", $"Sunrise will be at {_todayPrayerTimes.Sunrise.ToString(GetTimeFmt())}. Fajr ends in {Math.Ceiling(timeToSunrise.TotalMinutes)} minutes.");
+                    ShowNotification(
+                        LocalizationManager.Instance.GetString("Notify_FajrEnding"),
+                        string.Format(LocalizationManager.Instance.GetString("Notify_FajrEndingMsg"), _todayPrayerTimes.Sunrise.ToString(GetTimeFmt()), Math.Ceiling(timeToSunrise.TotalMinutes))
+                    );
                     _lastShuruqWarningDate = today;
                 }
 
                 // Notification: Sunrise started
                 if (currentPrayer == Prayer.SUNRISE && _lastSunriseNotificationDate != today)
                 {
-                    ShowNotification("Sunrise started", $"The sun has risen ({now.ToString(GetTimeFmt())}). Prohibited time (15 mins) active.");
+                    ShowNotification(
+                        LocalizationManager.Instance.GetString("Notify_SunriseStarted"),
+                        string.Format(LocalizationManager.Instance.GetString("Notify_SunriseStartedMsg"), now.ToString(GetTimeFmt()))
+                    );
                     _lastSunriseNotificationDate = today;
                 }
             }
@@ -692,7 +762,10 @@ namespace DailyPrayerTime.Native
                 {
                     if (IsEstablishedEnabled(currentPrayer, s))
                     {
-                        ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value.ToString(GetTimeFmt())}.");
+                        ShowNotification(
+                            string.Format(LocalizationManager.Instance.GetString("Notify_JamaatNow"), FormatPrayerName(currentPrayer)),
+                            string.Format(LocalizationManager.Instance.GetString("Notify_JamaatNowMsg"), FormatPrayerName(currentPrayer), jamaatTime.Value.ToString(GetTimeFmt()))
+                        );
                     }
                     _lastJamaatNotificationID = currentPrayer;
                 }
@@ -707,7 +780,10 @@ namespace DailyPrayerTime.Native
                     // For Fajr, we already handled Shuruq warning above
                     if (currentPrayer != Prayer.FAJR)
                     {
-                        ShowNotification($"{FormatPrayerName(currentPrayer)} ending soon", $"{FormatPrayerName(currentPrayer)} time will end in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.");
+                        ShowNotification(
+                            string.Format(LocalizationManager.Instance.GetString("Notify_EndingSoon"), FormatPrayerName(currentPrayer)),
+                            string.Format(LocalizationManager.Instance.GetString("Notify_EndingSoonMsg"), FormatPrayerName(currentPrayer), Math.Ceiling(timeToNext.TotalMinutes))
+                        );
                     }
                     _lastEndNotificationID = currentPrayer;
                 }
@@ -802,7 +878,7 @@ namespace DailyPrayerTime.Native
                 Prayer.DHUHR => $"{t.Dhuhr.ToString(fmt)} - {t.Asr.ToString(fmt)}",
                 Prayer.ASR => $"{t.Asr.ToString(fmt)} - {t.Maghrib.ToString(fmt)}",
                 Prayer.MAGHRIB => $"{t.Maghrib.ToString(fmt)} - {t.Isha.ToString(fmt)}",
-                Prayer.ISHA => $"{t.Isha.ToString(fmt)} - {(nextDay != null ? nextDay.Fajr.ToString(fmt) : "Fajr")}",
+                Prayer.ISHA => $"{t.Isha.ToString(fmt)} - {(nextDay != null ? nextDay.Fajr.ToString(fmt) : LocalizationManager.Instance.GetString("Prayer_Fajr"))}",
                 _ => ""
             };
         }
@@ -836,7 +912,7 @@ namespace DailyPrayerTime.Native
                     string range = $"{lastThirdStart.ToString(timeFmt)} - {nightEnd.ToString(timeFmt)}";
                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
-                        var popup = new AdhanNotificationWindow("Tahajjud", range, "N/A", soundPath);
+                        var popup = new AdhanNotificationWindow(LocalizationManager.Instance.GetString("Prayer_Tahajjud"), range, "N/A", soundPath);
                         popup.Show();
                     });
                     _lastTahajjudAdhanDate = today;
@@ -963,20 +1039,24 @@ namespace DailyPrayerTime.Native
                 if (now < start)
                 {
                     TimeSpan rem = start - now;
-                    string t = rem.TotalHours < 24 ? $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s" : "Upcoming";
+                    string t = rem.TotalHours < 24 
+                        ? $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}" 
+                        : LocalizationManager.Instance.GetString("Label_Upcoming");
                     timerText.Text = t;
                     if (stickyStatus != null)
                     {
-                        stickyStatus.Text = rem.TotalHours < 24 ? $"Starts in {rem.Hours}h {rem.Minutes}m" : "Upcoming";
+                        stickyStatus.Text = rem.TotalHours < 24 
+                            ? string.Format(LocalizationManager.Instance.GetString("Label_StartsInShort"), rem.Hours, rem.Minutes) 
+                            : LocalizationManager.Instance.GetString("Label_Upcoming");
                         stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
                     }
                 }
                 else
                 {
-                    timerText.Text = "Passed";
+                    timerText.Text = LocalizationManager.Instance.GetString("Label_Passed");
                     if (stickyStatus != null)
                     {
-                        stickyStatus.Text = "Passed";
+                        stickyStatus.Text = LocalizationManager.Instance.GetString("Label_Passed");
                         stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.5 };
                     }
                 }
@@ -1000,7 +1080,7 @@ namespace DailyPrayerTime.Native
                  return;
             }
 
-            string countStr = string.Format(CountdownFmt, remaining.Hours, remaining.Minutes, remaining.Seconds);
+            string countStr = FormatCountdown(remaining.Hours, remaining.Minutes, remaining.Seconds);
             var nextName = FormatPrayerName(nextPrayer);
             
             var currentPrayer = _todayPrayerTimes.CurrentPrayer(now);
@@ -1082,13 +1162,13 @@ namespace DailyPrayerTime.Native
         {
             if (now > target)
             {
-                textBlock.Text = "Passed";
+                textBlock.Text = LocalizationManager.Instance.GetString("Label_Passed");
                 textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(156, 163, 175)); // slate-400
             }
             else
             {
                 TimeSpan rem = target - now;
-                textBlock.Text = $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+                textBlock.Text = $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}";
                 textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(255, 255, 255)); // white
             }
         }
@@ -1110,7 +1190,9 @@ namespace DailyPrayerTime.Native
 
         private void UpdateHeroSection(Prayer currentPrayer, string curName, string nextName, string countStr, DateTime nextTime)
         {
-            HeroTimeUntilLabel.Text = currentPrayer != Prayer.NONE ? $"Time Left for {curName}" : $"Time Until {nextName}";
+            HeroTimeUntilLabel.Text = currentPrayer != Prayer.NONE 
+                ? string.Format(LocalizationManager.Instance.GetString("Hero_TimeLeft"), curName) 
+                : string.Format(LocalizationManager.Instance.GetString("Hero_TimeUntil"), nextName);
             HeroCountdownText.Text = countStr;
             
             // Update Rakat Note for Hero Section
@@ -1119,7 +1201,7 @@ namespace DailyPrayerTime.Native
             // If it's Friday and the current/next is Dhuhr, use Jumu'ah notes
             if (isFriday && (noteP == Prayer.DHUHR || (currentPrayer == Prayer.NONE && nextName == "Dhuhr")))
             {
-                HeroPrayerNote.Text = "Jumu'ah: 4 Sunnah, 2 Fard (Congregation), 4 Sunnah, 2 Sunnah, 2 Nafl (14 Total)";
+                HeroPrayerNote.Text = LocalizationManager.Instance.GetString("Note_Jumuah");
             }
             else
             {
@@ -1184,26 +1266,26 @@ namespace DailyPrayerTime.Native
                     if (now < suhur)
                     {
                         TimeSpan rem = suhur - now;
-                        HeroSuhurStatus.Text = $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
-                        HeroIftarStatus.Text = "Upcoming";
+                        HeroSuhurStatus.Text = $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}";
+                        HeroIftarStatus.Text = LocalizationManager.Instance.GetString("Status_Upcoming");
                     }
                     else if (now < iftar)
                     {
-                        HeroSuhurStatus.Text = "Completed";
+                        HeroSuhurStatus.Text = LocalizationManager.Instance.GetString("Status_Completed");
                         TimeSpan rem = iftar - now;
-                        HeroIftarStatus.Text = $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+                        HeroIftarStatus.Text = $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}";
 
                         // NEW: Swap Asr countdown to Iftar if active
                         if (currentPrayer == Prayer.ASR || nextName == "Maghrib")
                         {
-                            HeroTimeUntilLabel.Text = "Time Left for Iftar";
-                            HeroCountdownText.Text = string.Format(CountdownFmt, rem.Hours, rem.Minutes, rem.Seconds);
+                            HeroTimeUntilLabel.Text = string.Format(LocalizationManager.Instance.GetString("Hero_TimeLeft"), LocalizationManager.Instance.GetString("Prayer_Maghrib"));
+                            HeroCountdownText.Text = FormatCountdown(rem.Hours, rem.Minutes, rem.Seconds);
                         }
                     }
                     else
                     {
-                        HeroSuhurStatus.Text = "Done";
-                        HeroIftarStatus.Text = "Current";
+                        HeroSuhurStatus.Text = LocalizationManager.Instance.GetString("Label_Done");
+                        HeroIftarStatus.Text = LocalizationManager.Instance.GetString("Label_Current");
                     }
                 }
 
@@ -1227,7 +1309,7 @@ namespace DailyPrayerTime.Native
                     DateTime tahajjudWindowEnd = nightEnd.AddMinutes(-10);
                     if (now < islamicMidnight && now >= nightStart)
                     {
-                        HeroContextNoteText.Text = $"⚠️ Makruh begins at {islamicMidnight.ToString(GetTimeFmt())}";
+                        HeroContextNoteText.Text = string.Format(LocalizationManager.Instance.GetString("Label_MakruhStarts"), islamicMidnight.ToString(GetTimeFmt()));
                         HeroContextNoteText.Visibility = Visibility.Visible;
                     }
                     else if (now >= lastThirdStart && now < tahajjudWindowEnd)
@@ -1235,11 +1317,11 @@ namespace DailyPrayerTime.Native
                         // Dedicated Tahajjud Timer
                         TahajjudHeroDisplay.Visibility = Visibility.Visible;
                         TimeSpan rem = tahajjudWindowEnd - now;
-                        TahajjudHeroTimerText.Text = string.Format(CountdownFmt, rem.Hours, rem.Minutes, rem.Seconds);
+                        TahajjudHeroTimerText.Text = FormatCountdown(rem.Hours, rem.Minutes, rem.Seconds);
                     }
                     else
                     {
-                        HeroContextNoteText.Text = "✨ Tahajjud time is currently active";
+                        HeroContextNoteText.Text = LocalizationManager.Instance.GetString("Label_TahajjudActive");
                         HeroContextNoteText.Foreground = new SolidColorBrush(Colors.White);
                         HeroContextNoteText.Visibility = Visibility.Visible;
                     }
@@ -1247,13 +1329,13 @@ namespace DailyPrayerTime.Native
                 // Salat al-Duha (Notice Card)
                 else if (now > _todayPrayerTimes.Sunrise.AddMinutes(15) && now < _todayPrayerTimes.Dhuhr.AddMinutes(-5))
                 {
-                    NafalNoticeText.Text = $"Salat al-Duha is active until {_todayPrayerTimes.Dhuhr.AddMinutes(-15).ToString(GetTimeFmt())}";
+                    NafalNoticeText.Text = string.Format(LocalizationManager.Instance.GetString("Label_DuhaActive"), _todayPrayerTimes.Dhuhr.AddMinutes(-15).ToString(GetTimeFmt()));
                     NafalNoticeHero.Visibility = Visibility.Visible;
                 }
                 // Salat al-Awwabin (Notice Card)
                 else if (now > _todayPrayerTimes.Maghrib.AddMinutes(15) && now < _todayPrayerTimes.Isha.AddMinutes(-15))
                 {
-                    NafalNoticeText.Text = "Salat al-Awwabin time is currently active";
+                    NafalNoticeText.Text = LocalizationManager.Instance.GetString("Label_AwwabinActive");
                     NafalNoticeHero.Visibility = Visibility.Visible;
                 }
                 else
@@ -1276,7 +1358,9 @@ namespace DailyPrayerTime.Native
                 {
                     var data = new DeskBandData
                     {
-                        Label = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:",
+                        Label = currentPrayer != Prayer.NONE 
+                            ? string.Format(LocalizationManager.Instance.GetString("Label_EndsIn"), curName) 
+                            : string.Format(LocalizationManager.Instance.GetString("Label_StartsIn"), nextName),
                         Countdown = countStr,
                         CurrentPrayer = curName,
                         NextPrayer = nextName,
@@ -1310,11 +1394,13 @@ namespace DailyPrayerTime.Native
             // 3. Update Overlay Window (UI)
             if (_overlay == null) return;
 
-            _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE ? $"{curName} ends in:" : $"{nextName} starts in:";
+            _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE 
+                ? string.Format(LocalizationManager.Instance.GetString("Label_EndsIn"), curName)
+                : string.Format(LocalizationManager.Instance.GetString("Label_StartsIn"), nextName);
             _overlay.OverlayCountdownText.Text = countStr;
             
-            _overlay.ToolTipCurrentText.Text = $"Current: {curName} ({rangeStr})";
-            _overlay.ToolTipNextText.Text = $"Next: {nextName} starts at {nextTime:hh:mm tt}";
+            _overlay.ToolTipCurrentText.Text = string.Format(LocalizationManager.Instance.GetString("Label_CurrentWithRange"), curName, rangeStr);
+            _overlay.ToolTipNextText.Text = string.Format(LocalizationManager.Instance.GetString("Label_NextStartsAt"), nextName, nextTime.ToString(GetTimeFmt()));
             _overlay.ForceTopmost();
         }
 
@@ -1411,9 +1497,9 @@ namespace DailyPrayerTime.Native
             // Handle Notifications
             if (s.NotificationsEnabled)
             {
-                CheckProhibNotify("Sunrise Prohibited", now, sunrStart, sunrEnd, ref _sunriseProhibActive);
-                CheckProhibNotify("Zawal Prohibited", now, zawlStart, zawlEnd, ref _zawalProhibActive);
-                CheckProhibNotify("Sunset Prohibited", now, sunsStart, sunsEnd, ref _sunsetProhibActive);
+                CheckProhibNotify("Prohibited_Sunrise", now, sunrStart, sunrEnd, ref _sunriseProhibActive);
+                CheckProhibNotify("Prohibited_Zawl", now, zawlStart, zawlEnd, ref _zawalProhibActive);
+                CheckProhibNotify("Prohibited_Sunset", now, sunsStart, sunsEnd, ref _sunsetProhibActive);
             }
 
             bool isProhib = (now >= sunrStart && now <= sunrEnd) ||
@@ -1423,19 +1509,25 @@ namespace DailyPrayerTime.Native
             ProhibitedWarning.Visibility = isProhib ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private static void CheckProhibNotify(string name, DateTime now, DateTime start, DateTime end, ref bool isActive)
+        private static void CheckProhibNotify(string nameKey, DateTime now, DateTime start, DateTime end, ref bool isActive)
         {
             if (now >= start && now <= end)
             {
                 if (!isActive)
                 {
-                    ShowNotification($"{name} Started", $"Prayer is prohibited until {end.ToString(GetTimeFmt())}.");
+                    ShowNotification(
+                        string.Format(LocalizationManager.Instance.GetString("Notify_ProhibitedStarted"), LocalizationManager.Instance.GetString(nameKey)),
+                        string.Format(LocalizationManager.Instance.GetString("Notify_ProhibitedStartedMsg"), end.ToString(GetTimeFmt()))
+                    );
                     isActive = true;
                 }
             }
             else if (now > end && isActive)
             {
-                ShowNotification($"{name} Ended", $"Prohibited time has passed. You can pray now.");
+                ShowNotification(
+                    string.Format(LocalizationManager.Instance.GetString("Notify_ProhibitedEnded"), LocalizationManager.Instance.GetString(nameKey)),
+                    LocalizationManager.Instance.GetString("Notify_ProhibitedEndedMsg")
+                );
                 isActive = false;
             }
         }
@@ -1463,24 +1555,24 @@ namespace DailyPrayerTime.Native
 
             // 1. Prohibited Days
             bool isProhibited = false;
-            if (hijriMonth == 10 && hijriDay == 1) { generalHighlights.Add("Prohibited: Eid-ul-Fitr - Forbidden to fast today."); isProhibited = true; }
-            else if (hijriMonth == 12 && hijriDay == 10) { generalHighlights.Add("Prohibited: Eid-ul-Adha - Forbidden to fast today."); isProhibited = true; }
-            else if (hijriMonth == 12 && (hijriDay == 11 || hijriDay == 12 || hijriDay == 13)) { generalHighlights.Add("Prohibited: Days of Tashreeq - Forbidden to fast today."); isProhibited = true; }
+            if (hijriMonth == 10 && hijriDay == 1) { generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_EidFitr")); isProhibited = true; }
+            else if (hijriMonth == 12 && hijriDay == 10) { generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_EidAdha")); isProhibited = true; }
+            else if (hijriMonth == 12 && (hijriDay == 11 || hijriDay == 12 || hijriDay == 13)) { generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Tashreeq")); isProhibited = true; }
 
             if (!isProhibited)
             {
                 // 2. Weekly Sunnah Fasts
                 var dayOfWeek = DateTime.Now.DayOfWeek;
-                if (dayOfWeek == DayOfWeek.Monday) generalHighlights.Add("Monday Fast: The day the Prophet ﷺ was born and received revelation.");
-                else if (dayOfWeek == DayOfWeek.Thursday) generalHighlights.Add("Thursday Fast: The day deeds are presented to Allah.");
+                if (dayOfWeek == DayOfWeek.Monday) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Monday"));
+                else if (dayOfWeek == DayOfWeek.Thursday) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Thursday"));
 
                 // 3. Monthly (White Days)
-                if (hijriDay == 13 || hijriDay == 14 || hijriDay == 15) generalHighlights.Add("Ayyam al-Bidh: The monthly Sunnah 'White Days'.");
+                if (hijriDay == 13 || hijriDay == 14 || hijriDay == 15) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_WhiteDays"));
 
                 // 4. Annual
-                if (hijriMonth == 10 && hijriDay > 1 && hijriDay <= 30) generalHighlights.Add("6 Days of Shawwal: Sunnah to fast this month.");
-                if (hijriMonth == 12 && hijriDay == 9) generalHighlights.Add("Day of Arafah: Highly recommended fast.");
-                if (hijriMonth == 1 && hijriDay == 10) generalHighlights.Add("Day of Ashura: Highly recommended fast.");
+                if (hijriMonth == 10 && hijriDay > 1 && hijriDay <= 30) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Shawwal"));
+                if (hijriMonth == 12 && hijriDay == 9) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Arafah"));
+                if (hijriMonth == 1 && hijriDay == 10) generalHighlights.Add(LocalizationManager.Instance.GetString("Fasting_Ashura"));
             }
 
             // Aggregate Titles and Details
@@ -1488,21 +1580,21 @@ namespace DailyPrayerTime.Native
             
             if (isFriday)
             {
-                aggregatedTitles.Insert(0, "Friday (Jumu'ah) Special Acts");
-                details.Add("Friday (Jumu'ah) Sunnahs:");
-                details.Add("• Ghusl: Ritual bath to purify yourself.");
-                details.Add("• Cleaning: Clip nails and trim mustache.");
-                details.Add("• Miswak: Use a tooth-stick to clean teeth.");
-                details.Add("• Best Dress: Wear your cleanest clothes.");
-                details.Add("• Attar: Apply perfume (for men).");
-                details.Add("\nSpiritual Deeds:");
-                details.Add("• Surah Al-Kahf: Recite for spiritual light.");
-                details.Add("• Salawat: Increase blessings upon the Prophet ﷺ.");
-                details.Add("• Early Arrival: Go to the Masjid early.");
-                details.Add("• Khutbah: Listen attentively (talking is prohibited).");
-                details.Add("\nSpecial Dua Times:");
-                details.Add("• Pre-Maghrib: Last hour before sunset.");
-                details.Add("• During Khutbah: Between the two sermons.");
+                aggregatedTitles.Insert(0, LocalizationManager.Instance.GetString("Sunnah_Friday_Title"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Friday_Header"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Ghusl"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Cleaning"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Miswak"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Dress"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Attar"));
+                details.Add("\n" + LocalizationManager.Instance.GetString("Sunnah_Spiritual_Header"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Kahf"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Salawat"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_EarlyArrival"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_Khutbah"));
+                details.Add("\n" + LocalizationManager.Instance.GetString("Sunnah_Dua_Header"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_PreMaghrib"));
+                details.Add(LocalizationManager.Instance.GetString("Sunnah_DuringKhutbah"));
             }
 
             if (aggregatedTitles.Count > 0)
@@ -1562,8 +1654,13 @@ namespace DailyPrayerTime.Native
 
         private static string FormatPrayerName(Prayer p)
         {
-            if (p == Prayer.SUNRISE) return "Sunrise";
-            return char.ToUpper(p.ToString()[0]) + p.ToString().Substring(1).ToLower();
+            if (p == Prayer.SUNRISE) return LocalizationManager.Instance.GetString("Prayer_Sunrise");
+            if (p == Prayer.FAJR) return LocalizationManager.Instance.GetString("Prayer_Fajr");
+            if (p == Prayer.DHUHR) return LocalizationManager.Instance.GetString("Prayer_Dhuhr");
+            if (p == Prayer.ASR) return LocalizationManager.Instance.GetString("Prayer_Asr");
+            if (p == Prayer.MAGHRIB) return LocalizationManager.Instance.GetString("Prayer_Maghrib");
+            if (p == Prayer.ISHA) return LocalizationManager.Instance.GetString("Prayer_Isha");
+            return p.ToString();
         }
 
         private Prayer GetPreviousPrayer(DateTime now)
@@ -1636,13 +1733,32 @@ namespace DailyPrayerTime.Native
         {
             return p switch
             {
-                Prayer.FAJR => "2 Sunnah (Mu'akkadah), 2 Fard (4 Total)",
-                Prayer.DHUHR => "4 Sunnah, 4 Fard, 2 Sunnah, 2 Nafl (12 Total)",
-                Prayer.ASR => "4 Sunnah (Ghair Mu'akkadah), 4 Fard (8 Total)",
-                Prayer.MAGHRIB => "3 Fard, 2 Sunnah (Mu'akkadah), 2 Nafl (7 Total)",
-                Prayer.ISHA => "4 Sunnah, 4 Fard, 2 Sunnah, 2 Nafl, 3 Witr (Wajib), 2 Nafl (17 Total)",
+                Prayer.FAJR => LocalizationManager.Instance.GetString("Note_Fajr"),
+                Prayer.DHUHR => LocalizationManager.Instance.GetString("Note_Dhuhr"),
+                Prayer.ASR => LocalizationManager.Instance.GetString("Note_Asr"),
+                Prayer.MAGHRIB => LocalizationManager.Instance.GetString("Note_Maghrib"),
+                Prayer.ISHA => LocalizationManager.Instance.GetString("Note_Isha"),
                 _ => ""
             };
+        }
+
+        // --- Localization Helpers ---
+
+        private static string FormatCountdown(int hours, int minutes, int seconds)
+        {
+            var lm = LocalizationManager.Instance;
+            return $"{hours}{lm.GetString("Unit_Hour_Short")} {minutes}{lm.GetString("Unit_Min_Short")} {seconds}{lm.GetString("Unit_Sec_Short")}";
+        }
+
+        private static string GetLocalizedDate(DateTime dt)
+        {
+            string month = LocalizationManager.Instance.GetString($"Month_Gregorian_{dt.Month}");
+            return $"{dt.Day} {month} {dt.Year}";
+        }
+
+        private static string GetLocalizedDayName(DateTime dt)
+        {
+            return LocalizationManager.Instance.GetString($"Day_{(int)dt.DayOfWeek}");
         }
     }
 }
