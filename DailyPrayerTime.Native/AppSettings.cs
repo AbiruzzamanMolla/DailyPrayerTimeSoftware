@@ -25,9 +25,17 @@ namespace DailyPrayerTime.Native
         public bool ShowOverlay { get; set; } = true;
         public bool UseDeskBand { get; set; } = false;
         public bool UseIntegratedTaskbar { get; set; } = false;
-        public bool ShowHeroPrayerGrid { get; set; } = true;
+        public bool ShowHeroPrayerGrid { get; set; } = false;
         public bool AutoStart { get; set; } = false;
         public bool SilentStart { get; set; } = false;
+
+        // Manual Calculation Parameters
+        public double FajrAngle { get; set; } = 18.0;
+        public double IshaAngle { get; set; } = 17.5;
+        public int HighLatitudeRule { get; set; } = 0; // 0 = MiddleOfTheNight, 1 = SeventhOfTheNight, 2 = TwilightAngle
+
+        // Hijri Adjustment
+        public int HijriAdjustment { get; set; } = 0;
 
         public double Latitude { get; set; } = 23.8103;
         public double Longitude { get; set; } = 90.4125;
@@ -55,6 +63,34 @@ namespace DailyPrayerTime.Native
         public string TahajjudAdhanSoundPath { get; set; } = "";
         public bool AdhanPopupEnabled { get; set; } = true;
         public bool UseExternalApi { get; set; } = true;
+
+        // Granular Adhan Control
+        public bool AdhanFajr { get; set; } = true;
+        public bool AdhanDhuhr { get; set; } = true;
+        public bool AdhanAsr { get; set; } = true;
+        public bool AdhanMaghrib { get; set; } = true;
+        public bool AdhanIsha { get; set; } = true;
+        public int AdhanVolume { get; set; } = 100;
+
+        // Granular Pre-Adhan Reminder Control
+        public bool ReminderFajr { get; set; } = true;
+        public bool ReminderShuruq { get; set; } = true;
+        public bool ReminderDhuhr { get; set; } = true;
+        public bool ReminderAsr { get; set; } = true;
+        public bool ReminderMaghrib { get; set; } = true;
+        public bool ReminderIsha { get; set; } = true;
+        public int PreAdhanOffset { get; set; } = 10;
+
+        // Granular Jamaat (Established) Reminder Control
+        public bool EstablishedFajr { get; set; } = true;
+        public bool EstablishedDhuhr { get; set; } = true;
+        public bool EstablishedAsr { get; set; } = true;
+        public bool EstablishedMaghrib { get; set; } = true;
+        public bool EstablishedIsha { get; set; } = true;
+
+        // Suhur and Iftar Offsets
+        public int SuhurOffset { get; set; } = 0;
+        public int IftarOffset { get; set; } = 0;
     }
 
     public static class SettingsManager

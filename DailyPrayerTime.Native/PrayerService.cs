@@ -33,8 +33,8 @@ namespace DailyPrayerTime.Native
             Asr = local.Asr.ToLocalTime();
             Maghrib = local.Maghrib.ToLocalTime();
             Isha = local.Isha.ToLocalTime();
-            Suhur = local.Fajr.ToLocalTime(); // Fallback for local
-            Iftar = local.Maghrib.ToLocalTime();
+            Suhur = local.Fajr.ToLocalTime().AddMinutes(SettingsManager.Current.SuhurOffset);
+            Iftar = local.Maghrib.ToLocalTime().AddMinutes(SettingsManager.Current.IftarOffset);
         }
 
         public Prayer CurrentPrayer(DateTime now)
@@ -85,7 +85,7 @@ namespace DailyPrayerTime.Native
             string appData = StorageService.GetAppDataPath();
             string cachePath = Path.Combine(appData, "prayer_cache.json");
 
-            if (s.UseExternalApi)
+            if (s.UseExternalApi && methodStr.ToUpper() != "MANUAL")
             {
                 try
                 {
@@ -124,8 +124,8 @@ namespace DailyPrayerTime.Native
                             Asr = ParseApiTime(timings.Asr.ToString()),
                             Maghrib = ParseApiTime(timings.Maghrib.ToString()),
                             Isha = ParseApiTime(timings.Isha.ToString()),
-                            Suhur = ParseApiTime(timings.Imsak.ToString()),
-                            Iftar = ParseApiTime(timings.Maghrib.ToString()),
+                            Suhur = ParseApiTime(timings.Imsak.ToString()).AddMinutes(s.SuhurOffset),
+                            Iftar = ParseApiTime(timings.Maghrib.ToString()).AddMinutes(s.IftarOffset),
                             HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH",
                             HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
                             HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0
@@ -149,12 +149,24 @@ namespace DailyPrayerTime.Native
                 catch { /* Fallback to local */ }
             }
 
-            // Local Fallback
+            // Local Fallback or Manual
             var coordinates = new Coordinates(lat, lon);
             var date = DateComponents.From(DateTime.Now);
-            var parameters = CalculationMethodExtensions.GetParameters(MapMethodToLocal(methodStr));
+
+            CalculationParameters parameters;
+            if (methodStr.ToUpper() == "MANUAL")
+            {
+                parameters = new CalculationParameters(s.FajrAngle, s.IshaAngle);
+                parameters.Method = CalculationMethod.OTHER;
+            }
+            else
+            {
+                parameters = CalculationMethodExtensions.GetParameters(MapMethodToLocal(methodStr));
+            }
+
             parameters.Madhab = school == 1 ? Madhab.HANAFI : Madhab.SHAFI;
-            
+            parameters.HighLatitudeRule = (HighLatitudeRule)s.HighLatitudeRule;
+
             var local = new PrayerTimes(coordinates, date, parameters);
             return new CombinedPrayerTimes(local);
         }
@@ -212,6 +224,7 @@ namespace DailyPrayerTime.Native
                 "KUWAIT" => CalculationMethod.KUWAIT,
                 "SINGAPORE" => CalculationMethod.SINGAPORE,
                 "DUBAI" => CalculationMethod.DUBAI,
+                "MANUAL" => CalculationMethod.OTHER,
                 _ => CalculationMethod.MUSLIM_WORLD_LEAGUE
             };
         }

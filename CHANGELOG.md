@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.5] - 2026-04-10
+### Added
+- **Granular Notification Controls**: Individual toggles for Adhan sounds, Pre-Adhan reminders, and Jamaat (Established) popups per prayer (Fajr, Dhuhr, Asr, Maghrib, Isha, Shuruq).
+- **Pre-Adhan Reminders**: Toast notifications with sound triggered at a configurable offset before each prayer time.
+- **Shuruq Dual Notifications**: "Fajr ending soon" warning (10 min before sunrise) and "Sunrise started" alert at the exact time.
+- **Adhan Volume Control**: Global volume slider (0–100%) affecting both background playback and the Adhan popup window.
+- **Custom Suhur/Iftar Offsets**: User-configurable minute adjustments (+/-) applied globally to Suhur and Iftar times across Hero card, countdowns, and notifications.
+- **Notifications Settings Tab**: Dedicated tab in the Settings window for managing all notification preferences.
+- **Manual Calculation System**: Custom Fajr/Isha angles and High Latitude rules for regions where standard timing calculations fail.
+- **Hijri Date Adjustment**: Configurable Hijri offset (+/- days) in Settings to align the Islamic date with local moon sightings.
+
+### Changed
+- **Stable Hero Layout**: Refactored the Hero card XAML to anchor Sunrise and Sunset displays to the far edges with fixed positions.
+- **Default Visibility**: Set the Hero prayer grid to hidden by default for new installations.
+- **Test Sound Integration**: "Test Adhan" buttons now respect the Volume slider setting.
+
+### Fixed
+- **Version Metadata**: Unified version numbering across project files and assembly metadata.
+
 ## [1.8.4] - 2026-04-10
 ### Added
 - **Hero Grid Visibility Toggle**: Added a new setting in "Layout & Theme" to toggle the visibility of the prayer times grid in the Hero segment.

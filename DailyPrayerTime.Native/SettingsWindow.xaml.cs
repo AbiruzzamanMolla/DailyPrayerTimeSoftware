@@ -27,6 +27,14 @@ namespace DailyPrayerTime.Native
             
             // Wire up time format change event
             TimeFormatInput.SelectionChanged += TimeFormatInput_SelectionChanged;
+            MethodInput.SelectionChanged += MethodInput_SelectionChanged;
+        }
+
+        private void MethodInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ManualParamsPanel == null) return;
+            string method = (MethodInput.SelectedItem as ComboBoxItem)?.Content.ToString() ?? "";
+            ManualParamsPanel.Visibility = (method == "Manual") ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void InitializeTimeInputs()
@@ -166,6 +174,34 @@ namespace DailyPrayerTime.Native
 
             ExternalApiInput.IsChecked = s.UseExternalApi;
 
+            // Load Method and toggle manual panel
+            for (int i = 0; i < MethodInput.Items.Count; i++)
+            {
+                if ((MethodInput.Items[i] as ComboBoxItem)?.Content.ToString()?.ToUpper() == s.Method.ToUpper())
+                {
+                    MethodInput.SelectedIndex = i;
+                    break;
+                }
+            }
+            ManualParamsPanel.Visibility = (s.Method == "MANUAL") ? Visibility.Visible : Visibility.Collapsed;
+            FajrAngleInput.Text = s.FajrAngle.ToString();
+            IshaAngleInput.Text = s.IshaAngle.ToString();
+            
+            // Map HighLatRule
+            HighLatRuleInput.SelectedIndex = (int)s.HighLatitudeRule;
+
+            // Load Hijri Adjustment
+            string adjStr = s.HijriAdjustment >= 0 ? "+" + s.HijriAdjustment : s.HijriAdjustment.ToString();
+            for (int i = 0; i < HijriAdjInput.Items.Count; i++)
+            {
+                if ((HijriAdjInput.Items[i] as ComboBoxItem)?.Content.ToString() == adjStr)
+                {
+                    HijriAdjInput.SelectedIndex = i;
+                    break;
+                }
+            }
+            if (HijriAdjInput.SelectedIndex == -1) HijriAdjInput.SelectedIndex = 2; // Default to 0
+
             bool is24h = s.TimeFormat == "24h";
             TimeFormatInput.SelectedIndex = is24h ? 1 : 0;
             
@@ -177,8 +213,34 @@ namespace DailyPrayerTime.Native
 
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
 
-            AdhanAlarmEnabledInput.IsChecked = s.AdhanAlarmEnabled;
-            AdhanAlarmOffsetInput.Text = s.AdhanAlarmOffset.ToString();
+            // Load Granular Adhan
+            AdhanFajrInput.IsChecked = s.AdhanFajr;
+            AdhanDhuhrInput.IsChecked = s.AdhanDhuhr;
+            AdhanAsrInput.IsChecked = s.AdhanAsr;
+            AdhanMaghribInput.IsChecked = s.AdhanMaghrib;
+            AdhanIshaInput.IsChecked = s.AdhanIsha;
+            AdhanVolumeInput.Value = s.AdhanVolume;
+
+            // Load Granular Reminders
+            ReminderFajrInput.IsChecked = s.ReminderFajr;
+            ReminderShuruqInput.IsChecked = s.ReminderShuruq;
+            ReminderDhuhrInput.IsChecked = s.ReminderDhuhr;
+            ReminderAsrInput.IsChecked = s.ReminderAsr;
+            ReminderMaghribInput.IsChecked = s.ReminderMaghrib;
+            ReminderIshaInput.IsChecked = s.ReminderIsha;
+            PreAdhanOffsetInput.Text = s.PreAdhanOffset.ToString();
+
+            // Load Granular Established
+            EstablishedFajrInput.IsChecked = s.EstablishedFajr;
+            EstablishedDhuhrInput.IsChecked = s.EstablishedDhuhr;
+            EstablishedAsrInput.IsChecked = s.EstablishedAsr;
+            EstablishedMaghribInput.IsChecked = s.EstablishedMaghrib;
+            EstablishedIshaInput.IsChecked = s.EstablishedIsha;
+
+            // Load Offsets
+            SuhurOffsetInput.Text = s.SuhurOffset.ToString();
+            IftarOffsetInput.Text = s.IftarOffset.ToString();
+            
             AdhanSoundPathInput.Text = s.AdhanSoundPath;
             AdhanPopupEnabledInput.IsChecked = s.AdhanPopupEnabled;
             FajrAdhanSoundPathInput.Text = s.FajrAdhanSoundPath;
@@ -298,6 +360,19 @@ namespace DailyPrayerTime.Native
                 s.Method = methodItem.Content.ToString()!.ToUpper();
             }
 
+            if (s.Method == "MANUAL")
+            {
+                if (double.TryParse(FajrAngleInput.Text, out double fa)) s.FajrAngle = fa;
+                if (double.TryParse(IshaAngleInput.Text, out double ia)) s.IshaAngle = ia;
+                s.HighLatitudeRule = HighLatRuleInput.SelectedIndex;
+            }
+
+            if (HijriAdjInput.SelectedItem is ComboBoxItem hijriItem)
+            {
+                string val = hijriItem.Content.ToString()!.Replace("+", "");
+                if (int.TryParse(val, out int adj)) s.HijriAdjustment = adj;
+            }
+
             s.School = MadhabInput.SelectedIndex; // 0=Shafi, 1=Hanafi
             
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
@@ -335,14 +410,40 @@ namespace DailyPrayerTime.Native
             s.IshaJamaatTime = GetTimeFromInputs(IshaHourInput, IshaMinuteInput, IshaAmPmInput, !is24h);
 
             if (int.TryParse(JamaatPopupOffsetInput.Text, out int offset)) s.JamaatPopupOffset = offset;
-
-            s.AdhanAlarmEnabled = AdhanAlarmEnabledInput.IsChecked ?? false;
-            if (int.TryParse(AdhanAlarmOffsetInput.Text, out int aao)) s.AdhanAlarmOffset = aao;
+            
             s.AdhanSoundPath = AdhanSoundPathInput.Text;
             s.AdhanPopupEnabled = AdhanPopupEnabledInput.IsChecked ?? true;
             s.FajrAdhanSoundPath = FajrAdhanSoundPathInput.Text;
             s.TahajjudAdhanEnabled = TahajjudAdhanEnabledInput.IsChecked ?? false;
             s.TahajjudAdhanSoundPath = TahajjudAdhanSoundPathInput.Text;
+
+            // Save Granular Adhan
+            s.AdhanFajr = AdhanFajrInput.IsChecked ?? true;
+            s.AdhanDhuhr = AdhanDhuhrInput.IsChecked ?? true;
+            s.AdhanAsr = AdhanAsrInput.IsChecked ?? true;
+            s.AdhanMaghrib = AdhanMaghribInput.IsChecked ?? true;
+            s.AdhanIsha = AdhanIshaInput.IsChecked ?? true;
+            s.AdhanVolume = (int)AdhanVolumeInput.Value;
+
+            // Save Granular Reminders
+            s.ReminderFajr = ReminderFajrInput.IsChecked ?? true;
+            s.ReminderShuruq = ReminderShuruqInput.IsChecked ?? true;
+            s.ReminderDhuhr = ReminderDhuhrInput.IsChecked ?? true;
+            s.ReminderAsr = ReminderAsrInput.IsChecked ?? true;
+            s.ReminderMaghrib = ReminderMaghribInput.IsChecked ?? true;
+            s.ReminderIsha = ReminderIshaInput.IsChecked ?? true;
+            if (int.TryParse(PreAdhanOffsetInput.Text, out int pao)) s.PreAdhanOffset = pao;
+
+            // Save Granular Established
+            s.EstablishedFajr = EstablishedFajrInput.IsChecked ?? true;
+            s.EstablishedDhuhr = EstablishedDhuhrInput.IsChecked ?? true;
+            s.EstablishedAsr = EstablishedAsrInput.IsChecked ?? true;
+            s.EstablishedMaghrib = EstablishedMaghribInput.IsChecked ?? true;
+            s.EstablishedIsha = EstablishedIshaInput.IsChecked ?? true;
+
+            // Save Offsets
+            if (int.TryParse(SuhurOffsetInput.Text, out int soff)) s.SuhurOffset = soff;
+            if (int.TryParse(IftarOffsetInput.Text, out int ioff)) s.IftarOffset = ioff;
 
             SettingsManager.Save();
             this.DialogResult = true;
@@ -543,6 +644,7 @@ namespace DailyPrayerTime.Native
             if (AdhanPopupEnabledInput.IsChecked == true)
             {
                 var popup = new AdhanNotificationWindow(prayerName, range, jamaat, path);
+                popup.Volume = AdhanVolumeInput.Value / 100.0;
                 popup.Show();
             }
             else
@@ -550,6 +652,7 @@ namespace DailyPrayerTime.Native
                 try
                 {
                     _testPlayer.Open(new Uri(path));
+                    _testPlayer.Volume = AdhanVolumeInput.Value / 100.0;
                     _testPlayer.Play();
                 }
                 catch (Exception ex)

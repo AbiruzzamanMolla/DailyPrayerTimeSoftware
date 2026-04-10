@@ -9,6 +9,12 @@ namespace DailyPrayerTime.Native
     {
         private MediaPlayer _player = new MediaPlayer();
         
+        public double Volume
+        {
+            get => _player.Volume;
+            set => _player.Volume = value;
+        }
+
         public AdhanNotificationWindow(string prayerName, string timeRange, string jamaatTime, string soundPath)
         {
             InitializeComponent();

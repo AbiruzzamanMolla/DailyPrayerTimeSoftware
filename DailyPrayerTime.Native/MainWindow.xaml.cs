@@ -43,6 +43,9 @@ namespace DailyPrayerTime.Native
         private Prayer _lastStartNotificationPrayer = Prayer.NONE;
         private Prayer _lastJamaatNotificationID = Prayer.NONE;
         private Prayer _lastEndNotificationID = Prayer.NONE;
+        private Prayer _lastPreAdhanNotificationID = Prayer.NONE;
+        private string _lastShuruqWarningDate = "";
+        private string _lastSunriseNotificationDate = "";
         private UpdateInfo? _currentUpdate;
         private bool _isZenMode = false;
         private bool _isFullScreen = false;
@@ -413,7 +416,11 @@ namespace DailyPrayerTime.Native
             {
                 HeroSubDate.Text = DateTime.Now.ToString("dd MMMM yyyy");
                 HeroSubDay.Text = DateTime.Now.ToString("dddd");
-                HeroSubHijri.Text = string.IsNullOrEmpty(_todayPrayerTimes.HijriDate) ? GetHijriDate() : _todayPrayerTimes.HijriDate;
+                
+                // Use local Hijri calculation if adjustment is set, otherwise prefer API data if available
+                HeroSubHijri.Text = (SettingsManager.Current.HijriAdjustment != 0 || string.IsNullOrEmpty(_todayPrayerTimes.HijriDate)) 
+                    ? GetHijriDate() 
+                    : _todayPrayerTimes.HijriDate;
                 RefreshUIDisplay();
                 
                 // Force an explicit update to the taskbar window now that data is loaded
@@ -462,7 +469,7 @@ namespace DailyPrayerTime.Native
         private static string GetHijriDate()
         {
             try {
-                var now = DateTime.Now;
+                var now = DateTime.Now.AddDays(SettingsManager.Current.HijriAdjustment);
                 var hijri = new System.Globalization.UmAlQuraCalendar();
                 int year = hijri.GetYear(now);
                 int month = hijri.GetMonth(now);
@@ -628,58 +635,104 @@ namespace DailyPrayerTime.Native
 
         private void CheckEnhancedNotifications(DateTime now, Prayer currentPrayer)
         {
-            if (!SettingsManager.Current.NotificationsEnabled) return;
+            var s = SettingsManager.Current;
+            if (!s.NotificationsEnabled) return;
 
             // 1. Prayer Start Notification
-            if (currentPrayer != _lastStartNotificationPrayer && currentPrayer != Prayer.NONE)
+            if (currentPrayer != _lastStartNotificationPrayer && currentPrayer != Prayer.NONE && currentPrayer != Prayer.SUNRISE)
             {
-                ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now.ToString(GetTimeFmt())}).");
+                if (IsReminderEnabled(currentPrayer, s))
+                {
+                    ShowNotification($"{FormatPrayerName(currentPrayer)} time started", $"The time for {FormatPrayerName(currentPrayer)} has begun ({now.ToString(GetTimeFmt())}).");
+                }
                 _lastStartNotificationPrayer = currentPrayer;
             }
 
-            // 2. Jamaat Notification
-            var jamaatTime = GetJamaatTime(currentPrayer, SettingsManager.Current, now);
+            // 2. Pre-Adhan Reminder
+            var nextResult = GetNextPrayerInfo(now);
+            if (nextResult.nextTime != DateTime.MinValue && _lastPreAdhanNotificationID != nextResult.nextPrayer)
+            {
+                TimeSpan timeToNext = nextResult.nextTime - now;
+                if (timeToNext.TotalMinutes > 0 && timeToNext.TotalMinutes <= s.PreAdhanOffset)
+                {
+                    if (IsReminderEnabled(nextResult.nextPrayer, s))
+                    {
+                        ShowNotification($"{FormatPrayerName(nextResult.nextPrayer)} starting soon", $"{FormatPrayerName(nextResult.nextPrayer)} will start in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.", true);
+                    }
+                    _lastPreAdhanNotificationID = nextResult.nextPrayer;
+                }
+            }
+            if (currentPrayer == nextResult.nextPrayer) _lastPreAdhanNotificationID = Prayer.NONE;
+
+            // 3. Shuruq / Sunrise Notifications
+            string today = now.ToShortDateString();
+            if (s.ReminderShuruq)
+            {
+                // Warning: Fajr ending soon (10 mins before sunrise)
+                TimeSpan timeToSunrise = _todayPrayerTimes!.Sunrise - now;
+                if (timeToSunrise.TotalMinutes > 0 && timeToSunrise.TotalMinutes <= 10 && _lastShuruqWarningDate != today)
+                {
+                    ShowNotification("Fajr ending soon", $"Sunrise will be at {_todayPrayerTimes.Sunrise.ToString(GetTimeFmt())}. Fajr ends in {Math.Ceiling(timeToSunrise.TotalMinutes)} minutes.");
+                    _lastShuruqWarningDate = today;
+                }
+
+                // Notification: Sunrise started
+                if (currentPrayer == Prayer.SUNRISE && _lastSunriseNotificationDate != today)
+                {
+                    ShowNotification("Sunrise started", $"The sun has risen ({now.ToString(GetTimeFmt())}). Prohibited time (15 mins) active.");
+                    _lastSunriseNotificationDate = today;
+                }
+            }
+
+            // 4. Jamaat Notification
+            var jamaatTime = GetJamaatTime(currentPrayer, s, now);
             if (jamaatTime.HasValue && _lastJamaatNotificationID != currentPrayer)
             {
-                // Trigger exactly at jamaat time or within 1 minute
                 if (now >= jamaatTime.Value && now < jamaatTime.Value.AddMinutes(1))
                 {
-                    ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value.ToString(GetTimeFmt())}.");
+                    if (IsEstablishedEnabled(currentPrayer, s))
+                    {
+                        ShowNotification($"{FormatPrayerName(currentPrayer)} Jamaat Now", $"Congregation for {FormatPrayerName(currentPrayer)} is starting at {jamaatTime.Value.ToString(GetTimeFmt())}.");
+                    }
                     _lastJamaatNotificationID = currentPrayer;
                 }
             }
 
-            // 3. Prayer End Warning (10 mins before)
-            var nextResult = GetNextPrayerInfo(now);
-            if (nextResult.nextTime != DateTime.MinValue && _lastEndNotificationID != currentPrayer)
+            // 5. Prayer End Warning (Generic, 10 mins before)
+            if (nextResult.nextTime != DateTime.MinValue && _lastEndNotificationID != currentPrayer && currentPrayer != Prayer.NONE)
             {
                 TimeSpan timeToNext = nextResult.nextTime - now;
                 if (timeToNext.TotalMinutes > 0 && timeToNext.TotalMinutes <= 10)
                 {
-                    ShowNotification($"{FormatPrayerName(currentPrayer)} ending soon", $"{FormatPrayerName(currentPrayer)} time will end in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.");
+                    // For Fajr, we already handled Shuruq warning above
+                    if (currentPrayer != Prayer.FAJR)
+                    {
+                        ShowNotification($"{FormatPrayerName(currentPrayer)} ending soon", $"{FormatPrayerName(currentPrayer)} time will end in {Math.Ceiling(timeToNext.TotalMinutes)} minutes.");
+                    }
                     _lastEndNotificationID = currentPrayer;
                 }
             }
-            
-            // Reset "End Notification" state when prayer changes to allow next one
-            if (currentPrayer != _lastEndNotificationID && currentPrayer != Prayer.NONE)
-            {
-                // This logic is handled by the ID check above, but we ensure consistency
-            }
         }
 
-        private static void ShowNotification(string title, string message)
+        private static void ShowNotification(string title, string message, bool withSound = false)
         {
-            new ToastContentBuilder()
+            var builder = new ToastContentBuilder()
                 .AddText(title)
-                .AddText(message)
-                .Show();
+                .AddText(message);
+
+            if (withSound)
+            {
+                builder.AddAudio(new Uri("ms-winsoundevent:Notification.Default"));
+            }
+
+            builder.Show();
         }
 
         private void CheckAndPlayAdhanAlarm(Prayer currentPrayer)
         {
             var s = SettingsManager.Current;
-            if (!s.AdhanAlarmEnabled || string.IsNullOrEmpty(s.AdhanSoundPath)) return;
+            if (string.IsNullOrEmpty(s.AdhanSoundPath)) return;
+            if (!IsAdhanEnabled(currentPrayer, s)) return;
 
             // Only trigger if we haven't played it for this prayer today
             string today = DateTime.Now.ToShortDateString();
@@ -713,6 +766,7 @@ namespace DailyPrayerTime.Native
                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
                         var popup = new AdhanNotificationWindow(prayerName, range, jt, soundPath);
+                        popup.Volume = s.AdhanVolume / 100.0;
                         popup.Show();
                     });
                     _lastAdhanPrayer = currentPrayer;
@@ -725,6 +779,7 @@ namespace DailyPrayerTime.Native
                         if (System.IO.File.Exists(soundPath))
                         {
                             _adhanPlayer.Open(new Uri(soundPath));
+                            _adhanPlayer.Volume = s.AdhanVolume / 100.0;
                             _adhanPlayer.Play();
                             _lastAdhanPrayer = currentPrayer;
                             _lastAdhanDate = today;
@@ -814,7 +869,10 @@ namespace DailyPrayerTime.Native
 
             foreach (var p in prayers)
             {
-                if (CheckAndShowJamaatAlarm(p, now, s)) return;
+                if (IsEstablishedEnabled(p, s))
+                {
+                    if (CheckAndShowJamaatAlarm(p, now, s)) return;
+                }
             }
 
             ResetJamaatAlarmState(now, s);
@@ -1393,7 +1451,7 @@ namespace DailyPrayerTime.Native
             {
                 try {
                     var calendar = new System.Globalization.UmAlQuraCalendar();
-                    var hijriNow = DateTime.Now;
+                    var hijriNow = DateTime.Now.AddDays(SettingsManager.Current.HijriAdjustment);
                     hijriDay = calendar.GetDayOfMonth(hijriNow);
                     hijriMonth = calendar.GetMonth(hijriNow);
                 } catch { }
@@ -1460,6 +1518,46 @@ namespace DailyPrayerTime.Native
             {
                 FastingNoteBorder.Visibility = Visibility.Collapsed;
             }
+        }
+
+        private bool IsReminderEnabled(Prayer p, AppSettings s)
+        {
+            return p switch
+            {
+                Prayer.FAJR => s.ReminderFajr,
+                Prayer.SUNRISE => s.ReminderShuruq,
+                Prayer.DHUHR => s.ReminderDhuhr,
+                Prayer.ASR => s.ReminderAsr,
+                Prayer.MAGHRIB => s.ReminderMaghrib,
+                Prayer.ISHA => s.ReminderIsha,
+                _ => false
+            };
+        }
+
+        private bool IsAdhanEnabled(Prayer p, AppSettings s)
+        {
+            return p switch
+            {
+                Prayer.FAJR => s.AdhanFajr,
+                Prayer.DHUHR => s.AdhanDhuhr,
+                Prayer.ASR => s.AdhanAsr,
+                Prayer.MAGHRIB => s.AdhanMaghrib,
+                Prayer.ISHA => s.AdhanIsha,
+                _ => false
+            };
+        }
+
+        private bool IsEstablishedEnabled(Prayer p, AppSettings s)
+        {
+            return p switch
+            {
+                Prayer.FAJR => s.EstablishedFajr,
+                Prayer.DHUHR => s.EstablishedDhuhr,
+                Prayer.ASR => s.EstablishedAsr,
+                Prayer.MAGHRIB => s.EstablishedMaghrib,
+                Prayer.ISHA => s.EstablishedIsha,
+                _ => false
+            };
         }
 
         private static string FormatPrayerName(Prayer p)

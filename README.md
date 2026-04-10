@@ -1,21 +1,25 @@
 # Daily Prayer Timer (Native)
 
-Version: 1.8.4
+Version: 1.8.5
 
-## 🚀 Daily Prayer Timer (Native) - v1.8.4
+## 🚀 Daily Prayer Timer (Native) - v1.8.5
 
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI and deep taskbar integration.
 
 ---
 
-### 🔥 New in v1.8.1: Close to Tray Fix & Immersive UI
-We have pushed the boundaries of the Native experience with a top-to-bottom redesign.
+### 🔥 New in v1.8.5: Granular Notification Controls & Custom Offsets
+Complete control over every alert in your prayer experience.
+- **Per-Prayer Notification Toggles**: Individually enable/disable Adhan, Pre-Adhan reminders, and Jamaat popups for each prayer.
+- **Volume Control**: Global Adhan volume slider (0–100%) for both background playback and popup.
+- **Custom Suhur/Iftar Offsets**: Adjustable minute offsets applied to all calculations and displays.
+- **Shuruq Alerts**: Dual-purpose sunrise notifications (Fajr ending + Sunrise started).
+- **Manual Calculation**: Custom Fajr/Isha angles and High Latitude rules for specialized regions.
+
+### 🏛️ Legacy Highlights (v1.8.1 - v1.8.4)
 - **Custom Navigation**: A premium, titlebar-less design with integrated menu navigation.
 - **Zen Mode**: Immersive focus mode that strips away the UI to leave only the beautiful prayer countdown.
-- **Hero Card 2.0**: The main prayer card now features live countdown timers and expanded prayer data.
-- **Adhan Presets**: Choose from high-quality recorded adhans (Makkah, Madinah, Alafasi) natively.
-- **Tahajjud Support**: Dedicated Tahajjud adhan/alarm for the most blessed time of the night.
-- **Prayer Notes**: Rakat counts (Fard, Sunnah, Nafl) integrated directly into the prayer list.
+- **Adhan Presets**: Choose from high-quality recorded adhans (Makkah, Madinah, Alafasi).
 - **Portable Stability**: High-reliability process path resolution for portable installations.
 
 ---
@@ -43,7 +47,7 @@ Check out other versions of this tool:
 - **VS Code Extension**: [Prayer Timer (Bangladesh) on Marketplace](https://marketplace.visualstudio.com/items?itemName=azmolla.prayer-timer-bangladesh)
 
 ### Taskbar DeskBand (Windows 10 & 11)
-[![Version](https://img.shields.io/badge/version-1.8.3-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
+[![Version](https://img.shields.io/badge/version-1.8.5-blue.svg)](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases)
 
 ---
 
@@ -77,9 +81,9 @@ Check out other versions of this tool:
 
 | Platform | Link |
 |---|---|
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.3_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.3_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.8.3_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.5_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.8.5_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.8.5_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 ### 🚀 Portable Version
 The portable version is a single-file executable that stores all its settings and data in a `data` subfolder within the application directory. 

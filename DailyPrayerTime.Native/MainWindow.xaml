@@ -170,28 +170,28 @@
                     <!-- Time Until Label -->
                     <TextBlock x:Name="HeroTimeUntilLabel" Text="Calculating..." HorizontalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4,0,0"/>
                     
-                    <!-- Countdown Display with Sunrise/Sunset -->
-                    <Grid HorizontalAlignment="Center" Margin="0,5,0,0">
+                    <!-- Countdown Display with Sunrise/Sunset (Anchored to edges) -->
+                    <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="Auto" MinWidth="150" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <!-- Sunrise -->
-                        <StackPanel x:Name="HeroSunriseDisplay" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,15,0" Opacity="0.8">
+                        <!-- Sunrise (Left) -->
+                        <StackPanel x:Name="HeroSunriseDisplay" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Opacity="0.8">
                             <Path Width="16" Height="16" Fill="White" Data="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z" Opacity="0.4" HorizontalAlignment="Center"/>
                             <TextBlock x:Name="HeroSunriseTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                             <TextBlock Text="Sunrise" Foreground="White" Opacity="0.6" FontSize="8" HorizontalAlignment="Center"/>
                         </StackPanel>
 
-                        <!-- Countdown -->
-                        <Viewbox Grid.Column="1" MaxHeight="60">
+                        <!-- Countdown (Center) -->
+                        <Viewbox Grid.Column="1" MaxHeight="60" HorizontalAlignment="Center">
                             <TextBlock x:Name="HeroCountdownText" Text="00:00:00" Foreground="White" FontSize="42" FontWeight="Bold"/>
                         </Viewbox>
 
-                        <!-- Sunset -->
-                        <StackPanel x:Name="HeroSunsetDisplay" Grid.Column="2" VerticalAlignment="Center" Margin="15,0,0,0" Opacity="0.8">
+                        <!-- Sunset (Right) -->
+                        <StackPanel x:Name="HeroSunsetDisplay" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Opacity="0.8">
                             <Path Width="16" Height="16" Fill="White" Data="M10,2L12,4L10,6M21,14L19,12L21,10M12,21L10,19L12,17M3,10L5,12L3,14M12,6C8.7,6,6,8.7,6,12s2.7,6,6,6s6-2.7,6-6S15.3,6,12,6z" Opacity="0.4" HorizontalAlignment="Center"/>
                             <TextBlock x:Name="HeroSunsetTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                             <TextBlock Text="Sunset" Foreground="White" Opacity="0.6" FontSize="8" HorizontalAlignment="Center"/>
