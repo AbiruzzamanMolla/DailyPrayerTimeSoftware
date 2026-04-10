@@ -1,7 +1,7 @@
 # publish_portable.ps1
 # This script generates a portable, single-file, self-contained executable for Daily Prayer Time (Native).
 
-$Version = "1.8.1" # Should match csproj
+$Version = "1.8.2" # Should match csproj
 $Runtime = "win-x64"
 $ProjectDir = "./DailyPrayerTime.Native"
 $OutputDir = "./Output/Portable"

@@ -227,16 +227,18 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="15,10" Margin="0,0,5,0">
+                                <Border Grid.Column="0" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,5,0">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="Suhur Ends" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
-                                        <TextBlock x:Name="HeroSuhurTime" Text="--:--" Foreground="#60a5fa" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <TextBlock x:Name="HeroSuhurTime" Text="--:--" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <TextBlock x:Name="HeroSuhurStatus" Text="--:--:--" Foreground="White" Opacity="0.8" FontSize="9" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Column="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="15,10" Margin="5,0,0,0">
+                                <Border Grid.Column="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="5,0,0,0">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="Iftar Begins" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="HeroIftarTime" Text="--:--" Foreground="#f87171" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                                        <TextBlock x:Name="HeroIftarStatus" Text="--:--:--" Foreground="White" Opacity="0.8" FontSize="9" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                     </StackPanel>
                                 </Border>
                             </Grid>
@@ -336,50 +338,29 @@
                     </Border>
                 </UniformGrid>
                 
-                <!-- Fasting Highlights Note -->
+                <!-- Fasting Highlights Note (Restructured to prevent overlap) -->
                 <Border x:Name="FastingNoteBorder" Background="#33FFFFFF" BorderBrush="#4DFFFFFF" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,10" Visibility="Collapsed">
                     <Grid>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock x:Name="FastingNoteText" Text="Sunnah Fasting Today" Foreground="White" FontWeight="SemiBold" FontSize="11" TextWrapping="Wrap" VerticalAlignment="Center" />
-                            <Button x:Name="FastingNoteToggleBtn" Click="FastingNote_Toggle_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Margin="10,0,0,0" Padding="5,0" Cursor="Hand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Header Row -->
+                        <Grid Grid.Row="0">
+                            <TextBlock x:Name="FastingNoteText" Text="Sunnah Fasting Today" Foreground="White" FontWeight="SemiBold" FontSize="11" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,40,0"/>
+                            <Button x:Name="FastingNoteToggleBtn" Click="FastingNote_Toggle_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Padding="5,0" Cursor="Hand" HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <TextBlock x:Name="FastingNoteToggleIcon" Text="▼" FontSize="10" Opacity="0.7"/>
                             </Button>
-                        </StackPanel>
+                        </Grid>
                         
-                        <!-- Collapsable Content for Friday -->
-                        <StackPanel x:Name="FastingNoteExtraContent" Grid.Row="1" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed">
+                        <!-- Collapsable Content for Friday (Row 1 ensures overlap prevention) -->
+                        <StackPanel x:Name="FastingNoteExtraContent" Grid.Row="1" Margin="0,8,0,0" Visibility="Collapsed">
                             <TextBlock x:Name="FastingNoteDetailsText" Foreground="White" Opacity="0.9" FontSize="10.5" TextWrapping="Wrap" LineHeight="16"/>
                         </StackPanel>
                     </Grid>
                 </Border>
 
-                <!-- Prohibited Times (Now below highlights) -->
-                <TextBlock Text="Prohibited Times" FontWeight="Bold" FontSize="13" Margin="0,6,0,4" Foreground="White" Opacity="0.8"/>
-                <UniformGrid Columns="3" Margin="0,0,0,8">
-                    <Border x:Name="SunriseProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8" Margin="0,0,3,0">
-                        <StackPanel>
-                             <TextBlock Text="Sunrise" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="SunriseProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="SunriseProhibRange" Text="--:-- AM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border x:Name="ZawalProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8" Margin="0,0,3,0">
-                        <StackPanel>
-                             <TextBlock Text="Zawal" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="ZawalProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="ZawalProhibRange" Text="--:-- AM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border x:Name="SunsetProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8">
-                        <StackPanel>
-                             <TextBlock Text="Sunset" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="SunsetProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                             <TextBlock x:Name="SunsetProhibRange" Text="--:-- PM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                </UniformGrid>
 
                 <!-- Prayer List with Ranges -->
                 <TextBlock Text="Today's Prayer Times" FontWeight="Bold" FontSize="13" Margin="0,6,0,4" Foreground="White" Opacity="0.8"/>
@@ -484,11 +465,39 @@
                         </Grid>
                     </Border>
                 </StackPanel>
+
+                <!-- Prohibited Times (Relocated) -->
+                <TextBlock Text="Prohibited Times" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8"/>
+                <UniformGrid Columns="3" Margin="0,0,0,8">
+                    <Border x:Name="SunriseProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8" Margin="0,0,3,0">
+                        <StackPanel>
+                            <TextBlock Text="Sunrise" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="SunriseProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="SunriseProhibRange" Text="--:-- AM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border x:Name="ZawalProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8" Margin="0,0,3,0">
+                        <StackPanel>
+                            <TextBlock Text="Zawal" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="ZawalProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="ZawalProhibRange" Text="--:-- AM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border x:Name="SunsetProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8">
+                        <StackPanel>
+                            <TextBlock Text="Sunset" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="SunsetProhibTimer" Text="--:--:--" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="SunsetProhibRange" Text="--:-- PM" FontSize="9" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </UniformGrid>
             </StackPanel>
         </ScrollViewer>
 
-        <!-- Sticky Prohibited Times (Replacing Footer) -->
-        <Border x:Name="StickyFooter" Grid.Row="4" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0" Padding="15,8">
+        <!-- Sticky Prohibited Times (Enhanced for Readability) -->
+        <Border x:Name="StickyFooter" Grid.Row="4" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0" Padding="10,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -496,19 +505,25 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
+                <!-- Sunrise -->
                 <StackPanel Grid.Column="0" HorizontalAlignment="Center">
                     <TextBlock Text="Sunrise (Tulu)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunriseProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                    <TextBlock x:Name="StickySunriseStatus" Text="Passed" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>
 
+                <!-- Noon -->
                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                     <TextBlock Text="Noon (Zawal)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                    <TextBlock x:Name="StickyZawalStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>
 
+                <!-- Sunset -->
                 <StackPanel Grid.Column="2" HorizontalAlignment="Center">
                     <TextBlock Text="Sunset (Ghurub)" Foreground="#f87171" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
                     <TextBlock x:Name="StickySunsetProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
+                    <TextBlock x:Name="StickySunsetStatus" Text="Upcoming" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>

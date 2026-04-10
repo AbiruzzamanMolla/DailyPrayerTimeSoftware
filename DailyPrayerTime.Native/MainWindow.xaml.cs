@@ -240,6 +240,7 @@ namespace DailyPrayerTime.Native
             {
                 this.WindowState = WindowState.Normal;
                 this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize; // Ensures taskbar is covered
                 this.Topmost = true;
                 this.WindowState = WindowState.Maximized;
             }
@@ -247,7 +248,8 @@ namespace DailyPrayerTime.Native
             {
                 this.Topmost = false;
                 this.WindowState = WindowState.Normal;
-                this.WindowStyle = WindowStyle.None; // custom title bar handles this
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.CanResize;
             }
         }
 
@@ -545,6 +547,10 @@ namespace DailyPrayerTime.Native
                 
                 SuhurTimeText.Text = $"{_todayPrayerTimes.Suhur.ToString(timeFmt)}";
                 IftarTimeText.Text = $"{_todayPrayerTimes.Iftar.ToString(timeFmt)}";
+
+                // Hide cards if redundant in Ramadan mode
+                SuhurCard.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
+                IftarCard.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
 
                 // Sticky Footer: Prohibited Times
                 StickySunriseProhibited.Text = $"{_todayPrayerTimes.Sunrise.AddMinutes(-1).ToString(GetTimeFmt())} - {_todayPrayerTimes.Sunrise.AddMinutes(15).ToString(GetTimeFmt())}";
@@ -868,13 +874,19 @@ namespace DailyPrayerTime.Native
         }
 
 
-        private static void UpdateProhibCard(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock timerText, DateTime now, DateTime start, DateTime end)
+        private static void UpdateProhibCard(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock timerText, System.Windows.Controls.TextBlock? stickyStatus, DateTime now, DateTime start, DateTime end)
         {
             if (now >= start && now <= end)
             {
                 card.Background = new SolidColorBrush(WColor.FromArgb(150, 239, 68, 68)); // semi-transparent red
                 TimeSpan rem = end - now;
-                timerText.Text = $"{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+                string t = $"{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+                timerText.Text = t;
+                if (stickyStatus != null)
+                {
+                    stickyStatus.Text = "ACTIVE";
+                    stickyStatus.Foreground = new SolidColorBrush(WColor.FromRgb(248, 113, 113)); // red-400
+                }
             }
             else
             {
@@ -882,11 +894,22 @@ namespace DailyPrayerTime.Native
                 if (now < start)
                 {
                     TimeSpan rem = start - now;
-                    timerText.Text = rem.TotalHours < 24 ? $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s" : "Upcoming";
+                    string t = rem.TotalHours < 24 ? $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s" : "Upcoming";
+                    timerText.Text = t;
+                    if (stickyStatus != null)
+                    {
+                        stickyStatus.Text = rem.TotalHours < 24 ? $"Starts in {rem.Hours}h {rem.Minutes}m" : "Upcoming";
+                        stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
+                    }
                 }
                 else
                 {
                     timerText.Text = "Passed";
+                    if (stickyStatus != null)
+                    {
+                        stickyStatus.Text = "Passed";
+                        stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.5 };
+                    }
                 }
             }
         }
@@ -1075,8 +1098,38 @@ namespace DailyPrayerTime.Native
             
             if (_todayPrayerTimes != null && _tomorrowPrayerTimes != null)
             {
-                // Usage of existing 'now' variable from outer scope
-                
+                // Ramadan Hero Overrides
+                if (_isRamadanMode)
+                {
+                    DateTime suhur = _todayPrayerTimes.Suhur;
+                    DateTime iftar = _todayPrayerTimes.Iftar;
+                    
+                    if (now < suhur)
+                    {
+                        TimeSpan rem = suhur - now;
+                        HeroSuhurStatus.Text = $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+                        HeroIftarStatus.Text = "Upcoming";
+                    }
+                    else if (now < iftar)
+                    {
+                        HeroSuhurStatus.Text = "Completed";
+                        TimeSpan rem = iftar - now;
+                        HeroIftarStatus.Text = $"-{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
+
+                        // NEW: Swap Asr countdown to Iftar if active
+                        if (currentPrayer == Prayer.ASR || nextName == "Maghrib")
+                        {
+                            HeroTimeUntilLabel.Text = "Time Left for Iftar";
+                            HeroCountdownText.Text = string.Format(CountdownFmt, rem.Hours, rem.Minutes, rem.Seconds);
+                        }
+                    }
+                    else
+                    {
+                        HeroSuhurStatus.Text = "Done";
+                        HeroIftarStatus.Text = "Current";
+                    }
+                }
+
                 // Makruh or Tahajjud (During Isha)
                 if (curName.Equals("Isha", StringComparison.OrdinalIgnoreCase) || currentPrayer == Prayer.ISHA)
                 {
@@ -1268,9 +1321,9 @@ namespace DailyPrayerTime.Native
             DateTime zawlStart = dhuhr.AddMinutes(-30), zawlEnd = dhuhr;
             DateTime sunsStart = maghrib.AddMinutes(-15), sunsEnd = maghrib;
 
-            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, now, sunrStart, sunrEnd);
-            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, now, zawlStart, zawlEnd);
-            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, now, sunsStart, sunsEnd);
+            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, StickySunriseStatus, now, sunrStart, sunrEnd);
+            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, StickyZawalStatus, now, zawlStart, zawlEnd);
+            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, StickySunsetStatus, now, sunsStart, sunsEnd);
             
             // Populate Range Labels
             var timeFmt = GetTimeFmt();

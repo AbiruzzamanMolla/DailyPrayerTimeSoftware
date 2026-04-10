@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2026-04-10
+### Added
+- **Immersive Full Screen**: Fixed full-screen mode to correctly hide the Windows taskbar (F11 style), providing a truly distractions-free experience.
+- **Context-Aware Ramadan Hero**: Hero card now intelligently switches to "Time Left for Iftar" (counting down to Maghrib) during Asr prayer when Ramadan mode is active.
+- **Dynamic Prohibited Status**: The sticky footer now features live status labels ("ACTIVE", "Starts in...", "Passed") for Sunrise, Zawal, and Sunset prohibited windows.
+
+### Changed
+- **Information Hierarchy**: Relocated the Prohibited Times list to below the Nafal prayers in the scroll view for a more logical flow.
+- **Clean Ramadan UI**: Automatically hides the Suhur/Iftar highlight cards when Ramadan mode is active to reduce screen clutter.
+
+### Fixed
+- **Note Overlap**: Restructured the XAML grid for collapsible notes to prevent layout overlapping when expanded.
+- **Ramadan Visibility**: Changed Suhur time color in Hero Card to white for better visibility against the Ramadan theme background.
+
 ## [1.8.1] - 2026-04-10
 ### Added
 - **Ramadan Mode**: One-tap toggle for spiritual focus, dynamically showing Suhur and Iftar in the Hero Card.
