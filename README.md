@@ -125,7 +125,7 @@ A special thanks to the AI community and **Agentic AI coding assistants** for em
 - **Developer**: Abiruzzaman Molla
 - **GitHub**: [github.com/AbiruzzamanMolla](https://github.com/AbiruzzamanMolla)
 - **Support Me**: [SupportKori](https://www.supportkori.com/abiruzzaman)
-- **Telegram**: [Join Now]([https://www.supportkori.com/abiruzzaman](https://t.me/dailyprayertimersoftware))
+- **Telegram**: [Join Now](https://t.me/dailyprayertimersoftware)
 - 
 ---
 
