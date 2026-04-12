@@ -40,6 +40,8 @@ namespace DailyPrayerTime.Native
         private Prayer _lastAdhanPrayer = Prayer.NONE;
         private string _lastAdhanDate = "";
         private Prayer _lastStartNotificationPrayer = Prayer.NONE;
+        private Prayer _lastEndSoundPrayer = Prayer.NONE;
+        private string _lastTahajjudSoundDate = "";
         private Prayer _lastJamaatNotificationID = Prayer.NONE;
         private Prayer _lastEndNotificationID = Prayer.NONE;
         private Prayer _lastPreAdhanNotificationID = Prayer.NONE;
@@ -684,15 +686,33 @@ namespace DailyPrayerTime.Native
 
             UpdateCountdown();
             CheckEnhancedNotifications(now, currentPrayer);
+            CheckTahajjudStartSound(now);
             CheckProhibitedTimes();
             CheckAndShowJamaatAlarm();
             CheckAndPlayAdhanAlarm(currentPrayer);
-            CheckTahajjudAdhanAlarm(now);
         }
 
         private void CheckEnhancedNotifications(DateTime now, Prayer currentPrayer)
         {
             var s = SettingsManager.Current;
+
+            // 0. Sound Notification Transitions
+            if (s.PrayerSoundEnabled && currentPrayer != _lastEndSoundPrayer)
+            {
+                if (currentPrayer == Prayer.SUNRISE) 
+                    NotificationSoundService.PlayPrayerSound(Prayer.FAJR, "end");
+                else if (currentPrayer == Prayer.ASR) 
+                    NotificationSoundService.PlayPrayerSound(Prayer.DHUHR, "end");
+                else if (currentPrayer == Prayer.MAGHRIB) 
+                    NotificationSoundService.PlayPrayerSound(Prayer.ASR, "end");
+                else if (currentPrayer == Prayer.ISHA) 
+                    NotificationSoundService.PlayPrayerSound(Prayer.MAGHRIB, "end");
+                else if (currentPrayer == Prayer.FAJR && _lastEndSoundPrayer == Prayer.ISHA) 
+                    NotificationSoundService.PlayPrayerSound(Prayer.ISHA, "end");
+
+                _lastEndSoundPrayer = currentPrayer;
+            }
+
             if (!s.NotificationsEnabled) return;
 
             // 1. Prayer Start Notification
@@ -705,6 +725,13 @@ namespace DailyPrayerTime.Native
                         string.Format(LocalizationManager.Instance.GetString("Notify_PrayerStartedMsg"), FormatPrayerName(currentPrayer), now.ToString(GetTimeFmt()))
                     );
                 }
+                
+                // Sound
+                if (s.PrayerSoundEnabled)
+                {
+                    NotificationSoundService.PlayPrayerSound(currentPrayer, "start");
+                }
+
                 _lastStartNotificationPrayer = currentPrayer;
             }
 
@@ -930,6 +957,34 @@ namespace DailyPrayerTime.Native
                         Debug.WriteLine("Tahajjud Adhan play failed: " + ex.Message);
                     }
                 }
+            }
+        }
+
+        private void CheckTahajjudStartSound(DateTime now)
+        {
+            var s = SettingsManager.Current;
+            if (!s.PrayerSoundEnabled || _todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
+
+            string today = now.ToShortDateString();
+            if (_lastTahajjudSoundDate == today) return;
+
+            // Islamic Midnight (Halfway between Maghrib/Sunset and Fajr)
+            DateTime nightStart = _todayPrayerTimes.Maghrib;
+            DateTime nightEnd = _tomorrowPrayerTimes.Fajr;
+            
+            // Cross-over handling
+            if (now.Hour < 12) nightStart = nightStart.AddDays(-1);
+            else nightEnd = nightEnd.AddDays(1);
+
+            TimeSpan nightDuration = nightEnd - nightStart;
+            TimeSpan halfNight = new TimeSpan(nightDuration.Ticks / 2);
+            DateTime islamicMidnight = nightStart + halfNight;
+
+            // Trigger at Midnight (within 30s window)
+            if (now >= islamicMidnight && now < islamicMidnight.AddSeconds(30))
+            {
+                NotificationSoundService.PlayTahajjudSound();
+                _lastTahajjudSoundDate = today;
             }
         }
     

@@ -92,6 +92,8 @@ namespace DailyPrayerTime.Native
         public int SuhurOffset { get; set; } = 0;
         public int IftarOffset { get; set; } = 0;
         public string Language { get; set; } = "en";
+        public bool PrayerSoundEnabled { get; set; } = true;
+        public string PrayerSoundLanguage { get; set; } = "en";
     }
 
     public static class SettingsManager

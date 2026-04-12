@@ -321,7 +321,10 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#f3f4f6" Grid.Column="0"/>
-                                    <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Browse}" Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button Content="{DynamicResource i18n_Btn_Browse}" Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28"/>
+                                        <Button Content="{DynamicResource i18n_Test_Adhan}" Click="TestAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1" Cursor="Hand" ToolTip="Test Adhan Playback"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <TextBlock Text="{DynamicResource i18n_Adhan_FajrSpecific}" FontSize="11" Foreground="#64748b" Margin="0,10,0,2"/>
@@ -355,6 +358,7 @@
                                     <TextBlock Text="{DynamicResource i18n_Label_Notify}" VerticalAlignment="Center" Foreground="#92400e"/>
                                     <TextBox x:Name="PreAdhanOffsetInput" Width="40" Margin="10,0" Padding="5"/>
                                     <TextBlock Text="{DynamicResource i18n_Reminders_MinutesBefore}" VerticalAlignment="Center" Foreground="#92400e"/>
+                                    <Button Content="{DynamicResource i18n_Test_Reminder}" Click="TestReminder_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#fffbeb" BorderBrush="#fef3c7" Foreground="#92400e" Cursor="Hand"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -377,6 +381,23 @@
                                     <TextBlock Text="{DynamicResource i18n_Label_EstablishedShow}" VerticalAlignment="Center" Foreground="#166534"/>
                                     <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Margin="10,0" Padding="5"/>
                                     <TextBlock Text="{DynamicResource i18n_Established_MinutesBefore}" VerticalAlignment="Center" Foreground="#166534"/>
+                                    <Button Content="{DynamicResource i18n_Test_Established}" Click="TestEstablished_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#f0fdf4" BorderBrush="#dcfce7" Foreground="#166534" Cursor="Hand"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Prayer Notification Sounds (Start/End) -->
+                        <Border Background="#f0f9ff" BorderBrush="#bae6fd" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource i18n_PrayerSounds_Title}" FontWeight="Bold" FontSize="16" Foreground="#0369a1" Margin="0,0,0,5"/>
+                                <TextBlock Text="{DynamicResource i18n_PrayerSounds_Desc}" FontSize="12" Foreground="#0284c7" Margin="0,0,0,10"/>
+                                
+                                <CheckBox x:Name="PrayerSoundEnabledInput" Content="{DynamicResource i18n_PrayerSounds_Enable}" Foreground="#0369a1" Margin="0,5"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                    <TextBlock Text="{DynamicResource i18n_PrayerSounds_Language}" VerticalAlignment="Center" Foreground="#0369a1" Margin="0,0,10,0"/>
+                                    <ComboBox x:Name="PrayerSoundLanguageInput" Width="120" Padding="5"/>
+                                    <Button Content="{DynamicResource i18n_Test_PrayerSound}" Click="TestPrayerSound_Click" Margin="10,0,0,0" Padding="10,0" Height="28" Background="#f0f9ff" BorderBrush="#bae6fd" Foreground="#0369a1" Cursor="Hand"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -397,8 +418,7 @@
                                 </Grid>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,15,0,0" HorizontalAlignment="Right">
-                                     <Button x:Name="TestStandardBtn" Content="{DynamicResource i18n_Test_Adhan}" Click="TestAdhan_Click" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
-                                     <Button x:Name="TestTahajjudBtn" Content="{DynamicResource i18n_Test_Tahajjud}" Click="TestTahajjudAdhan_Click" Margin="5,0,0,0" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1"/>
+                                     <Button x:Name="TestTahajjudBtn" Content="{DynamicResource i18n_Test_Tahajjud}" Padding="10,0" Cursor="Hand" Height="28" Background="#f8fafc" BorderBrush="#cbd5e1" Click="TestTahajjudAdhan_Click"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

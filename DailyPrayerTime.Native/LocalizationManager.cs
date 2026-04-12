@@ -100,5 +100,23 @@ namespace DailyPrayerTime.Native
         }
 
         public string CurrentLanguage => _currentLanguage;
+        
+        public List<string> GetAvailableSoundLanguages()
+        {
+            var langs = new List<string>();
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "prayer_notificaitons");
+                if (Directory.Exists(path))
+                {
+                    foreach (var dir in Directory.GetDirectories(path))
+                    {
+                        langs.Add(Path.GetFileName(dir));
+                    }
+                }
+            }
+            catch { }
+            return langs.Count > 0 ? langs : new List<string> { "en" };
+        }
     }
 }

@@ -245,6 +245,9 @@
   "Adhan_FajrSpecific": "Fajr-Specific Audio:",
   "Test_Adhan": "Test Adhan",
   "Test_Tahajjud": "Test Tahaj.",
+  "Test_Reminder": "Test Reminder",
+  "Test_Established": "Test Popup",
+  "Test_PrayerSound": "Test Sound",
   
   "Reminders_Title": "Reminders & Windows Notifications",
   "Reminders_PreAdhan": "Notify before prayer start (10 mins default):",
@@ -261,6 +264,11 @@
   
   "Tahajjud_Title": "Tahajjud & Night Prayer",
   "Tahajjud_Enable": "Enable Alarm for Tahajjud (Last Third of Night)",
+  
+  "i18n_PrayerSounds_Title": "Prayer Notification Sounds (Start/End)",
+  "i18n_PrayerSounds_Desc": "Play voice/sound notifications when a prayer time starts or ends.",
+  "i18n_PrayerSounds_Enable": "Enable Prayer Start & End Sounds",
+  "i18n_PrayerSounds_Language": "Voice Language:",
   
   "Update_CheckTitle": "Updates",
   "Update_Btn": "Check for Updates",

@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest">
-    <img src="https://img.shields.io/badge/version-1.9.0-blue.svg?style=flat-square" alt="Version 1.9.0">
+    <img src="https://img.shields.io/badge/version-1.9.1-blue.svg?style=flat-square" alt="Version 1.9.1">
   </a>
 </p>
 
@@ -21,9 +21,9 @@
 
 | Platform | Link |
 |---|---|
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
-| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.9.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Portable)** | [DailyPrayerTimer_v1.9.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 1. Download the installer matching your system.
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
@@ -35,12 +35,11 @@
   <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
 </p>
 
-## 🔥 What's New in v1.9.0
-- **Multi-Language Support**: Complete localization architecture for the entire application.
-- **Dynamic Language Switching**: Instantly toggle between English and Bangla from Settings.
-- **Localized Adhan Dua**: Fully localized Adhan Dua including Arabic text, Transliteration, and Translations.
-- **Arabic Hamd Header**: Features an interactive "إِنَّ الْحَمْدَ لِلَّهِ..." header with smooth crossfade to localized translation.
-- **Localized Dates & Countdowns**: Fully localized standard dates, Hijri dates, and countdown units.
+## 🔥 What's New in v1.9.1
+- **Notification Test System**: Added "Test" buttons for all notification types in Settings for immediate verification.
+- **Localized Prayer Sounds**: Multi-language support for prayer start and end voice notifications.
+- **Tahajjud Midnight Sound**: Precise notification sound at the start of Islamic Midnight (Tahajjud start).
+- **Improved UI Consistency**: Re-organized settings for better accessibility and clearer notification management.
 
 *(See the `CHANGELOG.md` for a full history of updates including v1.8.x features like Custom Offsets, Granular Notifications, Zen Mode, and Ramadan Mode.)*
 

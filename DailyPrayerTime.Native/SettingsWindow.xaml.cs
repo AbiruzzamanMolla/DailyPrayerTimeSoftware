@@ -23,6 +23,7 @@ namespace DailyPrayerTime.Native
             _tomorrow = tomorrow;
             InitializeComponent();
             InitializeTimeInputs();
+            PopulateSoundLanguages();
             LoadForm();
             
             // Wire up time format change event
@@ -36,6 +37,13 @@ namespace DailyPrayerTime.Native
             var item = MethodInput.SelectedItem as ComboBoxItem;
             string tag = item?.Tag?.ToString()?.ToUpper() ?? "";
             ManualParamsPanel.Visibility = (tag == "MANUAL") ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void PopulateSoundLanguages()
+        {
+            var langs = LocalizationManager.Instance.GetAvailableSoundLanguages();
+            PrayerSoundLanguageInput.ItemsSource = langs;
+            if (langs.Count > 0) PrayerSoundLanguageInput.SelectedIndex = 0;
         }
 
         private void InitializeTimeInputs()
@@ -145,7 +153,7 @@ namespace DailyPrayerTime.Native
             LngInput.Text = s.Longitude.ToString();
             
             // Set Version Label
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "1.9.0");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "1.9.1");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
@@ -259,6 +267,14 @@ namespace DailyPrayerTime.Native
                     LanguageSelector.SelectedItem = item;
                     break;
                 }
+            }
+            
+            // Load Prayer Sound Settings
+            PrayerSoundEnabledInput.IsChecked = s.PrayerSoundEnabled;
+            if (PrayerSoundLanguageInput.ItemsSource is List<string> soundLangs)
+            {
+                int idx = soundLangs.IndexOf(s.PrayerSoundLanguage);
+                PrayerSoundLanguageInput.SelectedIndex = idx != -1 ? idx : 0;
             }
 
             PopulateHints();
@@ -464,6 +480,12 @@ namespace DailyPrayerTime.Native
                 s.Language = lang;
             }
 
+            s.PrayerSoundEnabled = PrayerSoundEnabledInput.IsChecked ?? true;
+            if (PrayerSoundLanguageInput.SelectedItem is string soundLang)
+            {
+                s.PrayerSoundLanguage = soundLang;
+            }
+
             SettingsManager.Save();
             this.DialogResult = true;
             this.Close();
@@ -650,6 +672,27 @@ namespace DailyPrayerTime.Native
         private void TestTahajjudAdhan_Click(object sender, RoutedEventArgs e)
         {
             PlayTestSound(TahajjudAdhanSoundPathInput.Text, LocalizationManager.Instance.GetString("Prayer_Tahajjud"), LocalizationManager.Instance.GetString("Label_TestRange"), LocalizationManager.Instance.GetString("Label_NA"));
+        }
+
+        private void TestReminder_Click(object sender, RoutedEventArgs e)
+        {
+            new ToastContentBuilder()
+                .AddText(LocalizationManager.Instance.GetString("Notify_StartingSoon").Replace("{0}", "Test Prayer"))
+                .AddText(LocalizationManager.Instance.GetString("Notify_StartingSoonMsg").Replace("{0}", "Test Prayer").Replace("{1}", "10"))
+                .Show();
+        }
+
+        private void TestEstablished_Click(object sender, RoutedEventArgs e)
+        {
+            var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
+            popup.Owner = this;
+            popup.Show();
+        }
+
+        private void TestPrayerSound_Click(object sender, RoutedEventArgs e)
+        {
+            // Trigger a sample start sound for Dhuhr in the current selected language
+            NotificationSoundService.PlayPrayerSound(Prayer.DHUHR, "start");
         }
 
         private void PlayTestSound(string path, string prayerName = "Test Prayer", string range = "00:00 - 00:00", string jamaat = "00:00")
