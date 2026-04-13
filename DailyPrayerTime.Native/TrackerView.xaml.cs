@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using WColor = System.Windows.Media.Color;
 using WColorConverter = System.Windows.Media.ColorConverter;
 using DailyPrayerTime.Native.Models;
@@ -357,58 +358,112 @@ namespace DailyPrayerTime.Native
             for (int d = 1; d <= daysInMonth; d++)
             {
                 var date = new DateTime(year, month, d);
-                bool isPast = date <= today;
-                
+                bool isToday = date == today;
+                bool isPast = date < today;
+                bool isFuture = date > today;
+
                 int prog = 0;
-                if (isPast)
+                if (isPast || isToday)
                 {
                     var deeds = TrackerService.Instance.LoadDay(date);
                     prog = CalculateProgress(deeds);
                 }
 
-                var btn = new System.Windows.Controls.Button
+                // Determine cell background color
+                SolidColorBrush cellBg;
+                SolidColorBrush cellBorder;
+                Thickness cellBorderThickness;
+
+                if (isToday)
                 {
-                    Tag = date,
-                    Margin = new Thickness(2),
-                    Padding = new Thickness(0),
-                    BorderThickness = new Thickness(0),
-                    Background = System.Windows.Media.Brushes.Transparent,
-                    Height = 45,
-                    IsEnabled = isPast
-                };
+                    // Today: solid emerald pill — unmistakable
+                    cellBg = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
+                    cellBorder = new SolidColorBrush(WColor.FromArgb(0, 0, 0, 0));
+                    cellBorderThickness = new Thickness(0);
+                }
+                else if (isPast && prog > 50)
+                {
+                    // Good progress: subtle emerald tint
+                    cellBg = new SolidColorBrush(WColor.FromArgb((byte)(prog * 0.6 + 15), 52, 211, 153));
+                    cellBorder = new SolidColorBrush(WColor.FromArgb(50, 52, 211, 153));
+                    cellBorderThickness = new Thickness(1);
+                }
+                else if (isPast)
+                {
+                    // Past with little/no progress: glass
+                    cellBg = new SolidColorBrush(WColor.FromArgb(20, 255, 255, 255));
+                    cellBorder = new SolidColorBrush(WColor.FromArgb(18, 255, 255, 255));
+                    cellBorderThickness = new Thickness(1);
+                }
+                else
+                {
+                    // Future: totally transparent — just the number
+                    cellBg = new SolidColorBrush(WColor.FromArgb(0, 0, 0, 0));
+                    cellBorder = new SolidColorBrush(WColor.FromArgb(0, 0, 0, 0));
+                    cellBorderThickness = new Thickness(0);
+                }
 
                 var border = new Border
                 {
-                    CornerRadius = new CornerRadius(8),
-                    Background = new SolidColorBrush(WColor.FromArgb(isPast ? (byte)26 : (byte)10, 255, 255, 255)),
-                    BorderBrush = date == today ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent,
-                    BorderThickness = date == today ? new Thickness(1.5) : new Thickness(0)
+                    CornerRadius = new CornerRadius(10),
+                    Background = cellBg,
+                    BorderBrush = cellBorder,
+                    BorderThickness = cellBorderThickness,
+                    Margin = new Thickness(2)
+                };
+
+                var numBlock = new TextBlock
+                {
+                    Text = d.ToString(),
+                    FontSize = isToday ? 13 : 11,
+                    FontWeight = isToday ? FontWeights.Bold : FontWeights.Normal,
+                    Foreground = isToday
+                        ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#064E3B"))
+                        : System.Windows.Media.Brushes.White,
+                    Opacity = isFuture ? 0.25 : 1.0,
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
                 };
 
                 var stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
-                stack.Children.Add(new TextBlock 
-                { 
-                    Text = d.ToString(), 
-                    Foreground = System.Windows.Media.Brushes.White, 
-                    FontSize = 11, 
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    Opacity = isPast ? 1.0 : 0.3
-                });
+                stack.Children.Add(numBlock);
 
+                // Progress dot for past days with some completion
                 if (isPast && prog > 0)
                 {
-                    border.Background = new SolidColorBrush(WColor.FromArgb((byte)(prog * 0.8 + 20), 52, 211, 153)); // Tint based on progress
-                    stack.Children.Add(new Border 
-                    { 
-                        Width = 4, Height = 4, CornerRadius = new CornerRadius(2), 
-                        Background = System.Windows.Media.Brushes.White, Margin = new Thickness(0,2,0,0) 
-                    });
+                    var dot = new Ellipse
+                    {
+                        Width = 4,
+                        Height = 4,
+                        Fill = prog > 50
+                            ? System.Windows.Media.Brushes.White
+                            : new SolidColorBrush(WColor.FromArgb(120, 255, 255, 255)),
+                        HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                        Margin = new Thickness(0, 3, 0, 0)
+                    };
+                    stack.Children.Add(dot);
                 }
 
                 border.Child = stack;
-                btn.Content = border;
-                btn.Click += HistoryItem_Click;
 
+                var btn = new System.Windows.Controls.Button
+                {
+                    Tag = date,
+                    Padding = new Thickness(0),
+                    BorderThickness = new Thickness(0),
+                    Background = System.Windows.Media.Brushes.Transparent,
+                    Height = 50,
+                    IsEnabled = !isFuture,
+                    Content = border,
+                    Cursor = isFuture ? System.Windows.Input.Cursors.Arrow : System.Windows.Input.Cursors.Hand
+                };
+
+                btn.Template = new ControlTemplate(typeof(System.Windows.Controls.Button))
+                {
+                    VisualTree = new FrameworkElementFactory(typeof(ContentPresenter))
+                };
+
+                btn.Click += HistoryItem_Click;
                 CalendarGrid.Children.Add(btn);
             }
         }
@@ -418,9 +473,10 @@ namespace DailyPrayerTime.Native
             if (sender is System.Windows.Controls.Button btn && btn.Tag is DateTime targetDate)
             {
                 // Logic based on current view level
-                if (TrackerTabList.SelectedIndex == 3) // Yearly Tab
+                // If we are in the Yearly Tab AND the HistoryList is visible, we clicked a Month.
+                if (TrackerTabList.SelectedIndex == 3 && HistoryList.Visibility == Visibility.Visible)
                 {
-                    // If in Yearly tab, clicking a month should show its calendar
+                    // If in Yearly tab, clicking a month shows its calendar
                     HistorySectionTitle.Text = targetDate.ToString("MMMM yyyy").ToUpper();
                     HistoryList.Visibility = Visibility.Collapsed;
                     CalendarGrid.Visibility = Visibility.Visible;
@@ -429,8 +485,8 @@ namespace DailyPrayerTime.Native
                 }
                 else
                 {
-                    // Navigate to daily view
-                    TrackerTabList.SelectedIndex = 0; // Switching to Daily triggers LoadData in UpdateViewForTab logic if we refine it
+                    // We clicked a Day in the calendar (or from Monthly/Weekly list). Navigate to daily view.
+                    TrackerTabList.SelectedIndex = 0; // Switching to Daily
                     LoadData(_enabledPrayers, targetDate);
                 }
             }

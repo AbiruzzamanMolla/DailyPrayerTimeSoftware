@@ -348,16 +348,31 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-
+            
             <!-- History Aggregate Title -->
-            <StackPanel x:Name="HistoryHeader" Visibility="Collapsed" Margin="4,10,0,12">
-                <Button x:Name="TrackerBackButton" Click="TrackerBack_Click" Style="{DynamicResource ToolbarButtonStyle}" HorizontalAlignment="Left" Margin="0,0,0,8" Visibility="Collapsed">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="←" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="BACK" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
-                    </StackPanel>
+            <StackPanel x:Name="HistoryHeader" Visibility="Collapsed" Margin="0,10,0,14">
+                <Button x:Name="TrackerBackButton" Click="TrackerBack_Click" Visibility="Collapsed"
+                        HorizontalAlignment="Left" Margin="0,0,0,10"
+                        Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="BackBorder" Background="#15FFFFFF" CornerRadius="20"
+                                    BorderBrush="#25FFFFFF" BorderThickness="1" Padding="10,5">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock Text="&#x2190;" Foreground="#34D399" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                    <TextBlock Text="BACK" Foreground="#D1D5DB" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="BackBorder" Property="Background" Value="#25FFFFFF"/>
+                                    <Setter TargetName="BackBorder" Property="BorderBrush" Value="#40FFFFFF"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
                 </Button>
-                <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold"/>
+                <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold"/>
             </StackPanel>
 
             <!-- Calendar Grid (For Monthly/Yearly detailed views) -->
