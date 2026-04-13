@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using WColor = System.Windows.Media.Color;
+using WColorConverter = System.Windows.Media.ColorConverter;
 using DailyPrayerTime.Native.Models;
 using DailyPrayerTime.Native.Services;
 
@@ -191,23 +194,35 @@ namespace DailyPrayerTime.Native
             {
                 string tab = selected.Content.ToString();
                 DailySection.Visibility = tab == "Daily" ? Visibility.Visible : Visibility.Collapsed;
-                HistoryList.Visibility = tab != "Daily" ? Visibility.Visible : Visibility.Collapsed;
-                HistorySectionTitle.Visibility = HistoryList.Visibility;
+                HistoryHeader.Visibility = tab != "Daily" ? Visibility.Visible : Visibility.Collapsed;
+                
+                // Hide both initially, then show based on tab
+                HistoryList.Visibility = Visibility.Collapsed;
+                CalendarGrid.Visibility = Visibility.Collapsed;
+                TrackerBackButton.Visibility = Visibility.Collapsed;
 
                 switch (tab)
                 {
                     case "Daily":
+                        // If coming from another tab, reset to today if needed, but usually we just stay on _currentDeeds
+                        if (_currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
+                        {
+                            LoadData(_enabledPrayers, DateTime.Today);
+                        }
                         break;
                     case "Weekly":
                         HistorySectionTitle.Text = "THIS WEEK (SAT - FRI)";
+                        HistoryList.Visibility = Visibility.Visible;
                         LoadWeeklyHistory();
                         break;
                     case "Monthly":
-                        HistorySectionTitle.Text = "LAST 30 DAYS";
-                        LoadHistory(30);
+                        HistorySectionTitle.Text = DateTime.Today.ToString("MMMM yyyy").ToUpper();
+                        CalendarGrid.Visibility = Visibility.Visible;
+                        LoadMonthlyCalendar(DateTime.Today.Year, DateTime.Today.Month);
                         break;
                     case "Yearly":
                         HistorySectionTitle.Text = DateTime.Today.Year + " SUMMARY";
+                        HistoryList.Visibility = Visibility.Visible;
                         LoadYearlyHistory();
                         break;
                 }
@@ -308,12 +323,122 @@ namespace DailyPrayerTime.Native
             HistoryList.ItemsSource = history;
         }
 
+        private void LoadMonthlyCalendar(int year, int month)
+        {
+            CalendarGrid.Children.Clear();
+            var firstDay = new DateTime(year, month, 1);
+            int daysInMonth = DateTime.DaysInMonth(year, month);
+            int startOffset = ((int)firstDay.DayOfWeek + 1) % 7; // Offset for Sunday start if desired, or adjust for Sat
+
+            // Header for Days of Week
+            string[] weekDays = { "S", "M", "T", "W", "T", "F", "S" };
+            foreach (var day in weekDays)
+            {
+                CalendarGrid.Children.Add(new TextBlock 
+                { 
+                    Text = day, 
+                    Foreground = System.Windows.Media.Brushes.White, 
+                    Opacity = 0.5, 
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    FontSize = 10,
+                    FontWeight = FontWeights.Bold,
+                    Margin = new Thickness(0,0,0,10)
+                });
+            }
+
+            // Empty slots for offset
+            for (int i = 0; i < startOffset; i++)
+            {
+                CalendarGrid.Children.Add(new Border());
+            }
+
+            // Month Days
+            var today = DateTime.Today;
+            for (int d = 1; d <= daysInMonth; d++)
+            {
+                var date = new DateTime(year, month, d);
+                bool isPast = date <= today;
+                
+                int prog = 0;
+                if (isPast)
+                {
+                    var deeds = TrackerService.Instance.LoadDay(date);
+                    prog = CalculateProgress(deeds);
+                }
+
+                var btn = new System.Windows.Controls.Button
+                {
+                    Tag = date,
+                    Margin = new Thickness(2),
+                    Padding = new Thickness(0),
+                    BorderThickness = new Thickness(0),
+                    Background = System.Windows.Media.Brushes.Transparent,
+                    Height = 45,
+                    IsEnabled = isPast
+                };
+
+                var border = new Border
+                {
+                    CornerRadius = new CornerRadius(8),
+                    Background = new SolidColorBrush(WColor.FromArgb(isPast ? (byte)26 : (byte)10, 255, 255, 255)),
+                    BorderBrush = date == today ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent,
+                    BorderThickness = date == today ? new Thickness(1.5) : new Thickness(0)
+                };
+
+                var stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
+                stack.Children.Add(new TextBlock 
+                { 
+                    Text = d.ToString(), 
+                    Foreground = System.Windows.Media.Brushes.White, 
+                    FontSize = 11, 
+                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                    Opacity = isPast ? 1.0 : 0.3
+                });
+
+                if (isPast && prog > 0)
+                {
+                    border.Background = new SolidColorBrush(WColor.FromArgb((byte)(prog * 0.8 + 20), 52, 211, 153)); // Tint based on progress
+                    stack.Children.Add(new Border 
+                    { 
+                        Width = 4, Height = 4, CornerRadius = new CornerRadius(2), 
+                        Background = System.Windows.Media.Brushes.White, Margin = new Thickness(0,2,0,0) 
+                    });
+                }
+
+                border.Child = stack;
+                btn.Content = border;
+                btn.Click += HistoryItem_Click;
+
+                CalendarGrid.Children.Add(btn);
+            }
+        }
+
         private void HistoryItem_Click(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button btn && btn.Tag is DateTime targetDate)
             {
-                LoadData(_enabledPrayers, targetDate);
+                // Logic based on current view level
+                if (TrackerTabList.SelectedIndex == 3) // Yearly Tab
+                {
+                    // If in Yearly tab, clicking a month should show its calendar
+                    HistorySectionTitle.Text = targetDate.ToString("MMMM yyyy").ToUpper();
+                    HistoryList.Visibility = Visibility.Collapsed;
+                    CalendarGrid.Visibility = Visibility.Visible;
+                    TrackerBackButton.Visibility = Visibility.Visible;
+                    LoadMonthlyCalendar(targetDate.Year, targetDate.Month);
+                }
+                else
+                {
+                    // Navigate to daily view
+                    TrackerTabList.SelectedIndex = 0; // Switching to Daily triggers LoadData in UpdateViewForTab logic if we refine it
+                    LoadData(_enabledPrayers, targetDate);
+                }
             }
+        }
+
+        private void TrackerBack_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateViewForTab(); // Resets to current tab default
         }
 
         private int CalculateProgress(DailyDeeds deeds)

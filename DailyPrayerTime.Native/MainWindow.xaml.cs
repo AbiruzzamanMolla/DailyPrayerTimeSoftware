@@ -84,6 +84,7 @@ namespace DailyPrayerTime.Native
             }
 
             InitBasmalaHeader();
+            SyncToolbarIcons();
         }
 
         private async Task CheckForUpdates()
@@ -231,10 +232,7 @@ namespace DailyPrayerTime.Native
         private void RamadanMode_Click(object sender, RoutedEventArgs e)
         {
             _isRamadanMode = !_isRamadanMode;
-            RamadanBtn.Background = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
-            RamadanIcon.Foreground = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
-            RamadanIcon.Opacity = 1.0;
-            RamadanIcon.Effect = null;
+            SyncToolbarIcons();
             HeroRamadanGrid.Visibility = _isRamadanMode ? Visibility.Visible : Visibility.Collapsed;
             HeroDefaultGrid.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
             RefreshUIDisplay();
@@ -295,15 +293,13 @@ namespace DailyPrayerTime.Native
                 ManageOverlay();
                 ManageIntegratedTaskbar();
             }
-            SettingsIcon.Foreground = System.Windows.Media.Brushes.White;
+            SyncToolbarIcons();
         }
 
         private void ZenMode_Click(object sender, RoutedEventArgs e)
         {
             _isZenMode = !_isZenMode;
-            ZenModeBtn.Background = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
-            ZenModeIcon.Foreground = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
-            ZenModeIcon.Effect = null;
+            SyncToolbarIcons();
 
             // 1. Visibility Toggles
             var visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
@@ -1887,10 +1883,9 @@ namespace DailyPrayerTime.Native
         public void TrackerToggle_Click(object sender, RoutedEventArgs e)
         {
             _isTrackerMode = !_isTrackerMode;
-            HeaderTrackerToggleBtn.Background = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
+            SyncToolbarIcons();
+            
             TrackerToggleIcon.Text = _isTrackerMode ? "✕" : "☷";
-            TrackerToggleIcon.Foreground = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
-            TrackerToggleIcon.Opacity = 1.0;
 
             TrackerViewControl.Visibility = _isTrackerMode ? Visibility.Visible : Visibility.Collapsed;
             PrayerListScroll.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
@@ -1902,11 +1897,35 @@ namespace DailyPrayerTime.Native
             // Hide/Show Sticky Footer
             StickyFooter.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
 
-            if (_isTrackerMode) 
-            {
                 var enabledPrayers = GetEnabledTrackerPrayers();
                 TrackerViewControl.LoadData(enabledPrayers);
-            }
+        }
+
+        private void SyncToolbarIcons()
+        {
+            var activeBg = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
+            var transBg = System.Windows.Media.Brushes.Transparent;
+            var darkFg = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827"));
+            var whiteFg = System.Windows.Media.Brushes.White;
+
+            // 1. Ramadan Icon
+            RamadanBtn.Background = _isRamadanMode ? activeBg : transBg;
+            RamadanIcon.Foreground = _isRamadanMode ? darkFg : whiteFg;
+            RamadanIcon.Opacity = 1.0;
+
+            // 2. Tracker Icon
+            HeaderTrackerToggleBtn.Background = _isTrackerMode ? activeBg : transBg;
+            TrackerToggleIcon.Foreground = _isTrackerMode ? darkFg : whiteFg;
+            TrackerToggleIcon.Opacity = 1.0;
+
+            // 3. Zen Mode Icon
+            ZenModeBtn.Background = _isZenMode ? activeBg : transBg;
+            ZenModeIcon.Foreground = _isZenMode ? darkFg : whiteFg;
+            ZenModeIcon.Opacity = 1.0;
+
+            // 4. Settings & System Icons (Always White/Visible)
+            SettingsIcon.Foreground = whiteFg;
+            SettingsIcon.Opacity = 1.0;
         }
 
         private HashSet<string> GetEnabledTrackerPrayers()
