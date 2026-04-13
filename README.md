@@ -11,9 +11,9 @@
 
 <p align="center">
   <a href="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest">
-    <img src="https://img.shields.io/badge/version-1.9.1-blue.svg?style=flat-square" alt="Version 1.9.1">
+    <img src="https://img.shields.io/github/v/release/AbiruzzamanMolla/DailyPrayerTimeSoftware" alt="Latest Release">
   </a>
-  <img src="https://img.shields.io/github/downloads/AbiruzzamanMolla/DailyPrayerTimeSoftware/total?style=for-the-badge&color=brightgreen" alt="Version 1.9.1">
+  <img src="https://img.shields.io/github/downloads/AbiruzzamanMolla/DailyPrayerTimeSoftware/total?style=for-the-badge&color=brightgreen" alt="Total Downloads">
 
 </p>
 
