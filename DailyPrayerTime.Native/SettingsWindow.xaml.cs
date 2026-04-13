@@ -154,8 +154,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            // Set Version Label
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "1.9.1");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.0.0");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)

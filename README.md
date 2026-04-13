@@ -37,12 +37,13 @@
   <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
 </p>
 
-## 🔥 What's New in v1.9.1
+## 🔥 What's New in v2.0.0 (Generation 2 Tracker)
 
-- **Notification Test System**: Added "Test" buttons for all notification types in Settings for immediate verification.
-- **Localized Prayer Sounds**: Multi-language support for prayer start and end voice notifications.
-- **Tahajjud Midnight Sound**: Precise notification sound at the start of Islamic Midnight (Tahajjud start).
-- **Improved UI Consistency**: Re-organized settings for better accessibility and clearer notification management.
+- **Bi-Directional Tracker Sync**: Instant synchronization between the Tracker popup and the Hero Tracker dashboard.
+- **Precision Progress Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
+- **Nafal & Sawm Integration**: Progress now tracks Nafal prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
+- **Improved Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
+- **UI/UX Refinement**: Case-standardized labels and optimized Tracker settings layout.
 
 _(See the `CHANGELOG.md` for a full history of updates including v1.8.x features like Custom Offsets, Granular Notifications, Zen Mode, and Ramadan Mode.)_
 
