@@ -10,6 +10,7 @@ namespace DailyPrayerTime.Native
     public static class NotificationSoundService
     {
         private static MediaPlayer _player = new MediaPlayer();
+        private static MediaPlayer _instantPlayer = new MediaPlayer();
         private static Queue<string> _soundQueue = new Queue<string>();
         private static bool _isPlaying = false;
         private static readonly object _lock = new object();
@@ -98,6 +99,31 @@ namespace DailyPrayerTime.Native
             // User suggested 20-40 seconds. 30 seconds is a good middle ground.
             await Task.Delay(TimeSpan.FromSeconds(30));
             PlayNext();
+        }
+
+        public static void PlayRandomTestSound(string lang)
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "prayer_notificaitons", lang);
+                if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*.wav");
+                    if (files.Length > 0)
+                    {
+                        var rand = new Random();
+                        string randomFile = files[rand.Next(files.Length)];
+                        
+                        // Use the instant player to bypass the 30s notification queue delay
+                        _instantPlayer.Open(new Uri(randomFile));
+                        _instantPlayer.Play();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error playing random test sound: {ex.Message}");
+            }
         }
     }
 }

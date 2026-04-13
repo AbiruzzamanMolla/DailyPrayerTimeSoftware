@@ -7,6 +7,12 @@ using WpfApp = System.Windows.Application;
 
 namespace DailyPrayerTime.Native
 {
+    public class SoundLanguage
+    {
+        public string Code { get; set; } = "en";
+        public string DisplayName { get; set; } = "English";
+    }
+
     public class LocalizationManager
     {
         private static LocalizationManager? _instance;
@@ -101,9 +107,9 @@ namespace DailyPrayerTime.Native
 
         public string CurrentLanguage => _currentLanguage;
         
-        public List<string> GetAvailableSoundLanguages()
+        public List<SoundLanguage> GetAvailableSoundLanguages()
         {
-            var langs = new List<string>();
+            var langs = new List<SoundLanguage>();
             try
             {
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "prayer_notificaitons");
@@ -111,12 +117,20 @@ namespace DailyPrayerTime.Native
                 {
                     foreach (var dir in Directory.GetDirectories(path))
                     {
-                        langs.Add(Path.GetFileName(dir));
+                        string code = Path.GetFileName(dir);
+                        string displayName = code switch
+                        {
+                            "en" => "English",
+                            "bn" => "বাংলা",
+                            "ar" => "العربية",
+                            _ => code
+                        };
+                        langs.Add(new SoundLanguage { Code = code, DisplayName = displayName });
                     }
                 }
             }
             catch { }
-            return langs.Count > 0 ? langs : new List<string> { "en" };
+            return langs.Count > 0 ? langs : new List<SoundLanguage> { new SoundLanguage { Code = "en", DisplayName = "English" } };
         }
     }
 }

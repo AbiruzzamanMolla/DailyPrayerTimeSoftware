@@ -23,9 +23,9 @@
 
 | Platform                       | Link                                                                                                                    |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v1.9.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v1.9.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.1.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.1.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.1.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 1. Download the installer matching your system.
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
@@ -37,13 +37,18 @@
   <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
 </p>
 
+## 🔥 What's New in v2.1.0 (Multi-Language Audio)
+
+- **Native Arabic & Bangla Voice**: Added high-quality voice notifications for Arabic (العربية) and Bangla (বাংলা).
+- **Localized Audio Settings**: Selection menu now uses native language names for better clarity.
+- **Random Sound Audition**: Instant test button to hear random prayer sounds in your selected language.
+
 ## 🔥 What's New in v2.0.0 (Generation 2 Tracker)
 
 - **Bi-Directional Tracker Sync**: Instant synchronization between the Tracker popup and the Hero Tracker dashboard.
 - **Precision Progress Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
 - **Nafal & Sawm Integration**: Progress now tracks Nafal prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
 - **Improved Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
-- **UI/UX Refinement**: Case-standardized labels and optimized Tracker settings layout.
 
 _(See the `CHANGELOG.md` for a full history of updates including v1.8.x features like Custom Offsets, Granular Notifications, Zen Mode, and Ramadan Mode.)_
 

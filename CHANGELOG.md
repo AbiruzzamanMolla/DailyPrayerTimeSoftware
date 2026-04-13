@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0] - 2026-04-14
+### Added
+- **Multi-Language Audio Notifications**: Added native support for Arabic (العربية) and Bangla (বাংলা) voice notifications.
+- **Enhanced Voice Selection**: Settings now features localized display names for audio languages.
+- **Random Test Playback**: The "Test Prayer Sound" button now plays a random audio sample from the selected language to provide a quick preview of all notification voices.
+
+### Changed
+- **Localized Settings UI**: Improved the prayer sound language dropdown to display native language names instead of folder codes.
+
 ## [2.0.0] - 2026-04-13
 ### Added
 - **Tracker Generation 2 Completion**: Finalized the bi-directional synchronization engine between the Tracker popup and the Hero Tracker dashboard.
