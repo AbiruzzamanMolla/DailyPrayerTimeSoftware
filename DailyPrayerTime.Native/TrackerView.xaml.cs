@@ -18,24 +18,50 @@ namespace DailyPrayerTime.Native
         {
             InitializeComponent();
             PrayerList.ItemsSource = PrayerItems;
+            TrackerTabList.SelectedIndex = 0; // Default to Daily
         }
 
         private HashSet<string> _enabledPrayers = new HashSet<string>();
 
-        public void LoadData(HashSet<string> enabledPrayers = null)
+        public void LoadData(HashSet<string> enabledPrayers = null, DateTime? specificDate = null)
         {
+            DateTime targetDate = specificDate ?? DateTime.Today;
             _enabledPrayers = enabledPrayers ?? new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
-            _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
+            _currentDeeds = TrackerService.Instance.LoadDay(targetDate);
             
             // Sync UI
-            CurrentDateLabel.Text = DateTime.Today.ToString("dd MMM").ToUpper();
+            UpdateDateDisplay(targetDate);
             SawmToggle.IsChecked = _currentDeeds.Sawm;
             SawmIndicator.Visibility = _currentDeeds.Sawm ? Visibility.Visible : Visibility.Collapsed;
             
             UpdateNafalUI();
             RefreshPrayerList();
             UpdateOverallProgress();
-            LoadHistory();
+            
+            // If we are looking at today, show the tab system. If a specific past date, maybe go to Daily tab.
+            if (specificDate.HasValue && specificDate != DateTime.Today)
+            {
+                TrackerTabList.SelectedIndex = 0; // Force Daily
+            }
+            UpdateViewForTab();
+        }
+
+        private void UpdateDateDisplay(DateTime date)
+        {
+            CurrentDateLabel.Text = date.ToString("dd MMM").ToUpper();
+            
+            try
+            {
+                var calendar = new System.Globalization.UmAlQuraCalendar();
+                var hijriDate = date.AddDays(SettingsManager.Current.HijriAdjustment);
+                int d = calendar.GetDayOfMonth(hijriDate);
+                int m = calendar.GetMonth(hijriDate);
+                int y = calendar.GetYear(hijriDate);
+                
+                string[] months = { "", "Muharram", "Safar", "Rabi' al-awwal", "Rabi' al-thani", "Jumada al-ula", "Jumada al-akhira", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah" };
+                HijriDateLabel.Text = $"{d} {months[m].ToUpper()} {y} AH";
+            }
+            catch { HijriDateLabel.Text = ""; }
         }
 
         public void UpdateMiniStatus(string name, string countdown)
@@ -123,7 +149,7 @@ namespace DailyPrayerTime.Native
         {
             TrackerService.Instance.SaveDay(_currentDeeds);
             UpdateOverallProgress();
-            LoadHistory();
+            UpdateViewForTab();
             foreach (var item in PrayerItems) item.Refresh();
         }
 
@@ -150,30 +176,144 @@ namespace DailyPrayerTime.Native
                 UpdateNafalUI();
                 TrackerService.Instance.SaveDay(_currentDeeds);
                 UpdateOverallProgress();
-                LoadHistory();
+                UpdateViewForTab();
             }
         }
 
-        private void LoadHistory()
+        private void TrackerTab_Changed(object sender, SelectionChangedEventArgs e)
+        {
+            if (IsLoaded) UpdateViewForTab();
+        }
+
+        private void UpdateViewForTab()
+        {
+            if (TrackerTabList.SelectedItem is ListBoxItem selected)
+            {
+                string tab = selected.Content.ToString();
+                DailySection.Visibility = tab == "Daily" ? Visibility.Visible : Visibility.Collapsed;
+                HistoryList.Visibility = tab != "Daily" ? Visibility.Visible : Visibility.Collapsed;
+                HistorySectionTitle.Visibility = HistoryList.Visibility;
+
+                switch (tab)
+                {
+                    case "Daily":
+                        break;
+                    case "Weekly":
+                        HistorySectionTitle.Text = "THIS WEEK (SAT - FRI)";
+                        LoadWeeklyHistory();
+                        break;
+                    case "Monthly":
+                        HistorySectionTitle.Text = "LAST 30 DAYS";
+                        LoadHistory(30);
+                        break;
+                    case "Yearly":
+                        HistorySectionTitle.Text = DateTime.Today.Year + " SUMMARY";
+                        LoadYearlyHistory();
+                        break;
+                }
+            }
+        }
+
+        private void LoadHistory(int days)
         {
             var today = DateTime.Today;
             var history = new List<HistoryItem>();
             
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < days; i++)
             {
                 var date = today.AddDays(-i);
                 var deeds = TrackerService.Instance.LoadDay(date);
                 int prog = CalculateProgress(deeds);
                 
+                string label = i switch
+                {
+                    0 => "Today",
+                    1 => "Yesterday",
+                    _ => date.ToString("MMM dd")
+                };
+
                 history.Add(new HistoryItem 
                 { 
-                    DateLabel = i == 0 ? "Today" : (i == 1 ? "Yesterday" : date.ToString("MMM dd")),
+                    DateLabel = label,
                     ProgressValue = prog,
-                    ProgressText = $"{prog}%"
+                    ProgressText = $"{prog}%",
+                    FullDate = date
                 });
             }
             
             HistoryList.ItemsSource = history;
+        }
+
+        private void LoadWeeklyHistory()
+        {
+            var today = DateTime.Today;
+            // Saturday is DayOfWeek.Saturday (6), Friday is DayOfWeek.Friday (5)
+            // We find the most recent Saturday
+            int diff = (7 + (int)today.DayOfWeek - (int)DayOfWeek.Saturday) % 7;
+            var startOfWeek = today.AddDays(-diff);
+            
+            var history = new List<HistoryItem>();
+            for (int i = 0; i < 7; i++)
+            {
+                var date = startOfWeek.AddDays(i);
+                if (date > today) break;
+
+                var deeds = TrackerService.Instance.LoadDay(date);
+                int prog = CalculateProgress(deeds);
+                
+                history.Add(new HistoryItem 
+                { 
+                    DateLabel = date.DayOfWeek.ToString() + (date == today ? " (TODAY)" : ""),
+                    ProgressValue = prog,
+                    ProgressText = $"{prog}%",
+                    FullDate = date
+                });
+            }
+            // Reverse so latest is on top
+            history.Reverse();
+            HistoryList.ItemsSource = history;
+        }
+
+        private void LoadYearlyHistory()
+        {
+            // Group by month for the current year
+            var currentYear = DateTime.Today.Year;
+            var history = new List<HistoryItem>();
+
+            for (int m = 12; m >= 1; m--)
+            {
+                if (currentYear == DateTime.Today.Year && m > DateTime.Today.Month) continue;
+
+                // Simple aggregation: average of the month
+                int daysInMonth = DateTime.DaysInMonth(currentYear, m);
+                if (currentYear == DateTime.Today.Year && m == DateTime.Today.Month) daysInMonth = DateTime.Today.Day;
+
+                long totalProg = 0;
+                for (int d = 1; d <= daysInMonth; d++)
+                {
+                    var date = new DateTime(currentYear, m, d);
+                    var deeds = TrackerService.Instance.LoadDay(date);
+                    totalProg += CalculateProgress(deeds);
+                }
+
+                int avgProg = (int)(totalProg / daysInMonth);
+                history.Add(new HistoryItem
+                {
+                    DateLabel = new DateTime(currentYear, m, 1).ToString("MMMM").ToUpper(),
+                    ProgressValue = avgProg,
+                    ProgressText = $"{avgProg}%",
+                    FullDate = new DateTime(currentYear, m, 1) // For yearly, clicking a month could go to first day of month or a month view
+                });
+            }
+            HistoryList.ItemsSource = history;
+        }
+
+        private void HistoryItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button btn && btn.Tag is DateTime targetDate)
+            {
+                LoadData(_enabledPrayers, targetDate);
+            }
         }
 
         private int CalculateProgress(DailyDeeds deeds)
@@ -214,6 +354,7 @@ namespace DailyPrayerTime.Native
         public string DateLabel { get; set; } = "";
         public double ProgressValue { get; set; } = 0;
         public string ProgressText { get; set; } = "";
+        public DateTime FullDate { get; set; }
     }
 
     public class PrayerTrackItem : System.ComponentModel.INotifyPropertyChanged

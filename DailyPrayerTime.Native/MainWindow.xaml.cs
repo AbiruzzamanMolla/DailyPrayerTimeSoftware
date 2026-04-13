@@ -202,11 +202,7 @@ namespace DailyPrayerTime.Native
             base.OnStateChanged(e);
         }
 
-        private void MainWindow_StateChanged(object? sender, EventArgs e)
-        {
-            if (MaximizeIcon == null) return;
-            MaximizeIcon.Text = WindowState == WindowState.Maximized ? "❐" : "▢";
-        }
+
 
         private void Support_Click(object sender, RoutedEventArgs e)
         {
@@ -227,11 +223,6 @@ namespace DailyPrayerTime.Native
             this.WindowState = WindowState.Minimized;
         }
 
-        private void Maximize_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        }
-
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -240,8 +231,9 @@ namespace DailyPrayerTime.Native
         private void RamadanMode_Click(object sender, RoutedEventArgs e)
         {
             _isRamadanMode = !_isRamadanMode;
-            RamadanIcon.Opacity = _isRamadanMode ? 1.0 : 0.7;
-            RamadanIcon.Foreground = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
+            RamadanBtn.Background = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
+            RamadanIcon.Foreground = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
+            RamadanIcon.Opacity = 1.0;
             RamadanIcon.Effect = null;
             HeroRamadanGrid.Visibility = _isRamadanMode ? Visibility.Visible : Visibility.Collapsed;
             HeroDefaultGrid.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
@@ -309,7 +301,8 @@ namespace DailyPrayerTime.Native
         private void ZenMode_Click(object sender, RoutedEventArgs e)
         {
             _isZenMode = !_isZenMode;
-            ZenModeIcon.Foreground = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
+            ZenModeBtn.Background = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
+            ZenModeIcon.Foreground = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
             ZenModeIcon.Effect = null;
 
             // 1. Visibility Toggles
@@ -1894,9 +1887,10 @@ namespace DailyPrayerTime.Native
         public void TrackerToggle_Click(object sender, RoutedEventArgs e)
         {
             _isTrackerMode = !_isTrackerMode;
+            HeaderTrackerToggleBtn.Background = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.Transparent;
             TrackerToggleIcon.Text = _isTrackerMode ? "✕" : "☷";
-            TrackerToggleIcon.Foreground = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
-            TrackerToggleIcon.Effect = null;
+            TrackerToggleIcon.Foreground = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827")) : System.Windows.Media.Brushes.White;
+            TrackerToggleIcon.Opacity = 1.0;
 
             TrackerViewControl.Visibility = _isTrackerMode ? Visibility.Visible : Visibility.Collapsed;
             PrayerListScroll.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;

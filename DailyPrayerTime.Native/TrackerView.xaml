@@ -30,7 +30,7 @@
                                 <Border x:Name="BulletBorder" Width="18" Height="18" 
                                         CornerRadius="5" Background="#20FFFFFF" 
                                         BorderBrush="#40FFFFFF" BorderThickness="1.5">
-                                    <TextBlock x:Name="CheckMark" Text="✓" Foreground="#34D399" 
+                                    <TextBlock x:Name="CheckMark" Text="✓" Foreground="White" 
                                                FontSize="12" FontWeight="Bold" 
                                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                Visibility="Collapsed"/>
@@ -40,7 +40,7 @@
                         </BulletDecorator>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="BulletBorder" Property="Background" Value="#3034D399"/>
+                                <Setter TargetName="BulletBorder" Property="Background" Value="#34D399"/>
                                 <Setter TargetName="BulletBorder" Property="BorderBrush" Value="#34D399"/>
                                 <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
                             </Trigger>
@@ -83,13 +83,64 @@
                         <TextBlock Text="Divine Tracker" Foreground="White" FontSize="24" FontWeight="Bold"/>
                         <TextBlock Text="Visualize your spiritual journey" Foreground="#D1D5DB" FontSize="12" Opacity="0.8" Margin="2,2,0,0"/>
                     </StackPanel>
-                    <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#10B981" CornerRadius="8" Padding="8,4">
-                        <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold"/>
-                    </Border>
+                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Border Background="#10B981" CornerRadius="8" Padding="8,4" Margin="0,0,0,4">
+                            <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Border>
+                        <TextBlock x:Name="HijriDateLabel" Text="24 RAMADAN 1445 AH" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                    </StackPanel>
                 </Grid>
 
-                <!-- Premium Horizontal Glass Progress Bar -->
-                <Border Style="{StaticResource GlassCard}" Background="#1F2937" Padding="20">
+                <!-- Tab Navigation -->
+                <ListBox x:Name="TrackerTabList" 
+                         Background="Transparent" BorderThickness="0" 
+                         SelectionChanged="TrackerTab_Changed" 
+                         Margin="0,0,0,20">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="TabBorder" Padding="15,8" CornerRadius="18" Margin="0,0,10,0" BorderThickness="1">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="TabBorder" Property="Background" Value="#10B981"/>
+                                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#34D399"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="False">
+                                                <Setter TargetName="TabBorder" Property="Background" Value="#10FFFFFF"/>
+                                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#20FFFFFF"/>
+                                                <Setter Property="Foreground" Value="#AFFFFFFF"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#40FFFFFF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBoxItem x:Name="TabDaily" Content="Daily" IsSelected="True"/>
+                    <ListBoxItem x:Name="TabWeekly" Content="Weekly"/>
+                    <ListBoxItem x:Name="TabMonthly" Content="Monthly"/>
+                    <ListBoxItem x:Name="TabYearly" Content="Yearly"/>
+                </ListBox>
+
+                <!-- Daily View Content -->
+                <StackPanel x:Name="DailySection">
+                    <!-- Premium Horizontal Glass Progress Bar -->
+                    <Border Style="{StaticResource GlassCard}" Background="#1F2937" Padding="20">
                     <StackPanel>
                         <Grid>
                             <TextBlock Text="DAILY COMPLETION" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
@@ -127,7 +178,6 @@
                         </Grid>
                     </StackPanel>
                 </Border>
-
                 <!-- Daily Prayers Grid -->
                 <TextBlock Text="MANDATORY PRAYERS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,8,0,12"/>
                 <ItemsControl x:Name="PrayerList">
@@ -297,25 +347,35 @@
                         </Grid>
                     </StackPanel>
                 </Border>
+            </StackPanel>
 
-                <!-- History View -->
-                <TextBlock Text="LAST 7 DAYS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,15,0,12"/>
-                <ItemsControl x:Name="HistoryList">
+            <!-- History Insights (Shows for Weekly/Monthly/Yearly) -->
+            <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,10,0,12" Visibility="Collapsed"/>
+            <ItemsControl x:Name="HistoryList" Visibility="Collapsed">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,12">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="85"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="45"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding DateLabel}" Foreground="#D1D5DB" FontSize="12" VerticalAlignment="Center"/>
-                                <Grid Grid.Column="1" Margin="10,0">
-                                    <Border Height="4" Background="#1AFFFFFF" CornerRadius="2"/>
-                                    <ProgressBar Value="{Binding ProgressValue}" Height="4" BorderThickness="0" Background="Transparent" Foreground="#34D399"/>
+                            <Button Background="Transparent" BorderThickness="0" Padding="0" Margin="0,0,0,12" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="HistoryItem_Click" Tag="{Binding FullDate}">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="Transparent">
+                                            <ContentPresenter />
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="85"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="45"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding DateLabel}" Foreground="#D1D5DB" FontSize="12" VerticalAlignment="Center"/>
+                                    <Grid Grid.Column="1" Margin="10,0">
+                                        <Border Height="4" Background="#1AFFFFFF" CornerRadius="2"/>
+                                        <ProgressBar Value="{Binding ProgressValue}" Height="4" BorderThickness="0" Background="Transparent" Foreground="#34D399"/>
+                                    </Grid>
+                                    <TextBlock Grid.Column="2" Text="{Binding ProgressText}" Foreground="White" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                                 </Grid>
-                                <TextBlock Grid.Column="2" Text="{Binding ProgressText}" Foreground="White" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                            </Grid>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
