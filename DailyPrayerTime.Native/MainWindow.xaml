@@ -14,7 +14,8 @@
         AllowsTransparency="True"
         Background="Transparent"
         KeyDown="Window_KeyDown"
-        Icon="pack://application:,,,/icon.ico">
+        Icon="pack://application:,,,/icon.ico"
+        xmlns:local="clr-namespace:DailyPrayerTime.Native">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="40" 
@@ -30,6 +31,54 @@
             <GradientStop Color="#d7bedc" Offset="0"/>
             <GradientStop Color="#ecdfee" Offset="1"/>
         </LinearGradientBrush>
+        <Style x:Key="HeroDeedChipStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border x:Name="ChipBorder" 
+                                Background="#1AFFFFFF" 
+                                BorderBrush="#25FFFFFF" 
+                                BorderThickness="1" 
+                                CornerRadius="8" 
+                                Padding="8,5"
+                                Margin="2">
+                            <Grid HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center">
+                                    <Border x:Name="CheckRect" CornerRadius="3" BorderBrush="#AFFFFFFF" BorderThickness="1.2"/>
+                                    <Path x:Name="CheckIcon" Data="M3,7 L5,9 L9,5" Stroke="#10B981" StrokeThickness="2" Visibility="Collapsed"/>
+                                </Grid>
+                                <ContentPresenter x:Name="Content" Grid.Column="1" VerticalAlignment="Center">
+                                    <ContentPresenter.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="ChipBorder" Property="Background" Value="#3310B981"/>
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#6010B981"/>
+                                <Setter TargetName="CheckRect" Property="BorderBrush" Value="#10B981"/>
+                                <Setter TargetName="CheckIcon" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ChipBorder" Property="Background" Value="#26FFFFFF"/>
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#48FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     
     <Border Background="#065F46" CornerRadius="15" BorderBrush="#20FFFFFF" BorderThickness="1">
@@ -162,19 +211,15 @@
                 </Viewbox>
                 
                 <StackPanel Margin="20,12">
-                    <!-- Arabic Hamd Header with Hover Translation (top of everything) -->
+                    <!-- Arabic Hamd Header with Hover Translation -->
                     <Grid x:Name="BasmalaHeaderGrid" HorizontalAlignment="Center" Margin="0,0,0,4"
-                          Cursor="Hand"
-                          MouseEnter="BasmalaHeader_MouseEnter"
-                          MouseLeave="BasmalaHeader_MouseLeave">
-                        <!-- Arabic text (default visible) -->
+                          Cursor="Hand" MouseEnter="BasmalaHeader_MouseEnter" MouseLeave="BasmalaHeader_MouseLeave">
                         <TextBlock x:Name="BasmalaArabicText"
                                    Text="إِنَّ الْحَمْدَ لِلَّهِ، وَالصَّلَاةُ وَالسَّلَامُ عَلَى رَسُولِ اللَّهِ"
                                    Foreground="White" Opacity="0.8" FontSize="13"
                                    HorizontalAlignment="Center" TextAlignment="Center"
                                    TextWrapping="Wrap" FontFamily="Traditional Arabic, Segoe UI"
                                    FlowDirection="RightToLeft"/>
-                        <!-- Translation text (default hidden, revealed on hover) -->
                         <TextBlock x:Name="BasmalaTranslationText"
                                    Text="" Foreground="White" Opacity="0"
                                    FontSize="11" HorizontalAlignment="Center"
@@ -182,15 +227,12 @@
                                    FontStyle="Italic"/>
                     </Grid>
 
-                    <!-- Location Name -->
                     <Viewbox MaxHeight="30" HorizontalAlignment="Center">
                         <TextBlock x:Name="HeroLocationText" Text="Loading..." Foreground="White" FontSize="18" FontWeight="Bold"/>
                     </Viewbox>
 
-                    <!-- Time Until Label -->
                     <TextBlock x:Name="HeroTimeUntilLabel" Text="{DynamicResource Label_Calculating}" HorizontalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4,0,0"/>
                     
-                    <!-- Countdown Display with Sunrise/Sunset (Anchored to edges) -->
                     <Grid Margin="0,10,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
@@ -198,19 +240,16 @@
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <!-- Sunrise (Left) -->
                         <StackPanel x:Name="HeroSunriseDisplay" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Opacity="0.8">
                             <Path Width="16" Height="16" Fill="White" Data="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z" Opacity="0.4" HorizontalAlignment="Center"/>
                             <TextBlock x:Name="HeroSunriseTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                             <TextBlock Text="{DynamicResource Prayer_Sunrise}" Foreground="White" Opacity="0.6" FontSize="8" HorizontalAlignment="Center"/>
                         </StackPanel>
 
-                        <!-- Countdown (Center) -->
                         <Viewbox Grid.Column="1" MaxHeight="60" HorizontalAlignment="Center">
-                            <TextBlock x:Name="HeroCountdownText" Text="00:00:00" Foreground="White" FontSize="42" FontWeight="Bold"/>
+                            <TextBlock x:Name="HeroCountdownText" Text="00:00:00" Foreground="White" FontSize="41" FontWeight="Bold"/>
                         </Viewbox>
 
-                        <!-- Sunset (Right) -->
                         <StackPanel x:Name="HeroSunsetDisplay" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Opacity="0.8">
                             <Path Width="16" Height="16" Fill="White" Data="M10,2L12,4L10,6M21,14L19,12L21,10M12,21L10,19L12,17M3,10L5,12L3,14M12,6C8.7,6,6,8.7,6,12s2.7,6,6,6s6-2.7,6-6S15.3,6,12,6z" Opacity="0.4" HorizontalAlignment="Center"/>
                             <TextBlock x:Name="HeroSunsetTime" Text="--:--" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
@@ -218,9 +257,9 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- Context and Nafal Notices -->
-                    <TextBlock x:Name="HeroContextNoteText" Text="" HorizontalAlignment="Center" Foreground="#FBBF24" FontSize="11" Margin="0,2,0,0" Visibility="Collapsed"/>
-                    <StackPanel x:Name="TahajjudHeroDisplay" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0" Visibility="Collapsed">
+                    <!-- Context and Notices -->
+                    <TextBlock x:Name="HeroContextNoteText" Text="" HorizontalAlignment="Center" Foreground="#FBBF24" FontSize="11" Margin="0,4,0,0" Visibility="Collapsed"/>
+                    <StackPanel x:Name="TahajjudHeroDisplay" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0" Visibility="Collapsed">
                         <TextBlock Text="{DynamicResource Tahajjud_EndsIn}" Foreground="White" Opacity="0.8" FontSize="11"/>
                         <TextBlock x:Name="TahajjudHeroTimerText" Text="00:00:00" Foreground="White" FontSize="11" FontWeight="Bold"/>
                     </StackPanel>
@@ -229,43 +268,34 @@
                     </Border>
 
                     <!-- Progress Row -->
-                    <Grid Margin="0,5,0,0">
+                    <Grid Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        
-                        <!-- Previous Prayer -->
                         <StackPanel Grid.Column="0">
                             <TextBlock x:Name="HeroPrevPrayerName" Text="Isha" Foreground="White" FontWeight="SemiBold" FontSize="11"/>
                             <TextBlock x:Name="HeroPrevPrayerTime" Text="7:34" Foreground="White" Opacity="0.7" FontSize="10"/>
                         </StackPanel>
-
-                        <!-- Progress Bar (Sleeker) -->
                         <ProgressBar x:Name="HeroProgressBar" Grid.Column="1" Height="5" Value="50" Margin="12,0" VerticalAlignment="Center" Background="#1AFFFFFF" Foreground="White" BorderThickness="0"/>
-
-                        <!-- Next Prayer -->
                         <StackPanel Grid.Column="2" HorizontalAlignment="Right">
                             <TextBlock x:Name="HeroNextPrayerName" Text="Fajr" Foreground="White" FontWeight="SemiBold" FontSize="11" HorizontalAlignment="Right"/>
                             <TextBlock x:Name="HeroNextPrayerTime" Text="4:23" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </Grid>
 
-                    <!-- Rakat Note for Current Prayer -->
-                    <TextBlock x:Name="HeroPrayerNote" Text="2 Sunnah (Mu'akkadah), 2 Fard (4 Total)" Foreground="White" Opacity="0.7" FontSize="12" HorizontalAlignment="Center" Margin="0,10,0,-8" TextWrapping="Wrap" MaxWidth="300" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="HeroPrayerNote" Text="" Foreground="White" Opacity="0.7" FontSize="12" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" MaxWidth="300" FontWeight="SemiBold"/>
 
                     <!-- Info Sub-Card -->
                     <Border Margin="0,15,0,0" Background="#14FFFFFF" CornerRadius="12" Padding="12,12">
                         <StackPanel>
-                             <!-- Date Row -->
                             <Grid Margin="0,0,0,12">
-                                <TextBlock x:Name="HeroSubDate" Text="10 April 2026" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="HeroSubDay" Text="Friday" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="HeroSubHijri" Text="25 Shawwal 1447" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroSubDate" Text="--" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroSubDay" Text="--" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroSubHijri" Text="--" Foreground="White" Opacity="0.9" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                             
-                            <!-- Ramadan Specific View (Hidden by default) -->
                             <Grid x:Name="HeroRamadanGrid" Visibility="Collapsed" Margin="0,5,0,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -287,7 +317,6 @@
                                 </Border>
                             </Grid>
 
-                            <!-- Default Prayer List Grid -->
                             <Grid x:Name="HeroDefaultGrid">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -298,42 +327,30 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-
-                                <!-- Fajr -->
                                 <Border Grid.Row="0" Grid.Column="0" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource Prayer_Fajr}" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubFajrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-
-                                <!-- Sunrise (Removed) -->
-                                
-                                <!-- Dhuhr Slot (Dynamic) -->
                                 <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="DhuhrLabel" Text="{DynamicResource Prayer_Dhuhr}" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubDhuhrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-
-                                <!-- Asr -->
                                 <Border Grid.Row="1" Grid.Column="0" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="AsrLabel" Text="Asr" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubAsrTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-
-                                <!-- Maghrib -->
                                 <Border Grid.Row="1" Grid.Column="1" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="MaghribLabel" Text="Maghrib" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubMaghribTime" Text="--:--" Foreground="White" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-
-                                <!-- Isha / Tahajjud -->
                                 <Border Grid.Row="1" Grid.Column="2" Background="#0AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="IshaLabel" Text="Isha" Foreground="White" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
@@ -343,8 +360,42 @@
                             </Grid>
                         </StackPanel>
                     </Border>
-                    
-                    <!-- Prohibited Times Warning (Inside Card) -->
+
+                    <!-- Tracker Box (Premium Chip Design, Moved Bottom) -->
+                    <Border x:Name="HeroTrackerBox" 
+                            Background="#26FFFFFF" 
+                            CornerRadius="12" 
+                            Padding="12,15" 
+                            Margin="0,15,0,0"
+                            BorderBrush="#33FFFFFF"
+                            BorderThickness="1"
+                            Visibility="Visible">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,10">
+                                <TextBlock x:Name="HeroTrackerTitle" Text="TRACKER" FontSize="11" Opacity="0.8" Foreground="White" Margin="4,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroTrackerProgress" Text="0/0 Completed" Foreground="White" Opacity="0.6" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ItemsControl x:Name="HeroRakatList" HorizontalContentAlignment="Stretch">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="3"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Label}" 
+                                                  IsChecked="{Binding IsChecked}" 
+                                                  Style="{StaticResource HeroDeedChipStyle}"
+                                                  Checked="RakatCheck_Changed" 
+                                                  Unchecked="RakatCheck_Changed"
+                                                  Tag="{Binding Key}"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Prohibited Times Warning -->
                     <Border x:Name="ProhibitedWarning" Background="#4dff0000" CornerRadius="6" Padding="8,4" Margin="0,10,0,0" Visibility="Collapsed">
                         <TextBlock x:Name="ProhibitedText" Text="{DynamicResource Prohibited_Warning}" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                     </Border>
@@ -356,8 +407,47 @@
         <ScrollViewer x:Name="PrayerListScroll" Grid.Row="3" VerticalScrollBarVisibility="Hidden" Margin="15,0,15,15">
             <StackPanel>
                 <!-- Daily Highlights: Suhur & Iftar -->
-                <TextBlock Text="{DynamicResource Section_Highlights}" FontWeight="Bold" FontSize="13" Margin="0,6,0,4" Foreground="White" Opacity="0.8"/>
-                <UniformGrid Columns="2" Margin="0,0,0,6">
+                <!-- Daily Highlights Header with Tracker Toggle -->
+                <Grid Margin="0,6,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{DynamicResource Section_Highlights}" FontWeight="Bold" FontSize="13" Foreground="White" Opacity="0.8" VerticalAlignment="Center"/>
+                    <Button x:Name="TrackerToggleBtn" Grid.Column="1" Click="TrackerToggle_Click" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#1AFFFFFF"/>
+                                <Setter Property="BorderBrush" Value="#25FFFFFF"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Setter Property="Padding" Value="8,4"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                                    CornerRadius="8">
+                                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#33FFFFFF"/>
+                                        <Setter Property="BorderBrush" Value="#50FFFFFF"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <StackPanel Orientation="Horizontal" Margin="8,4">
+                            <TextBlock x:Name="TrackerToggleIcon" Text="📊" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="TrackerToggleText" Text="TRACKER" Foreground="White" FontSize="9" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <UniformGrid Columns="3" Margin="0,0,0,6">
                     <Border x:Name="SuhurCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8" Margin="0,0,5,0">
                         <StackPanel>
                             <TextBlock x:Name="SuhurDateText" Text="Today, Apr 7" FontSize="9" Foreground="White" Opacity="0.6" Margin="0,0,0,2"/>
@@ -366,7 +456,7 @@
                             <TextBlock x:Name="SuhurCountdownText" Text="--:--:--" FontSize="10" Foreground="White" Opacity="0.8" Margin="0,1,0,0"/>
                         </StackPanel>
                     </Border>
-                    <Border x:Name="IftarCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8">
+                    <Border x:Name="IftarCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8" Margin="0,0,5,0">
                         <StackPanel>
                             <TextBlock x:Name="IftarDateText" Text="Today, Apr 7" FontSize="9" Foreground="White" Opacity="0.6" Margin="0,0,0,2"/>
                             <TextBlock x:Name="IftarNameText" Text="{DynamicResource Label_IftarBeginsShort}" FontSize="10" FontWeight="SemiBold" Foreground="White" Opacity="0.7"/>
@@ -374,6 +464,19 @@
                             <TextBlock x:Name="IftarCountdownText" Text="--:--:--" FontSize="10" Foreground="White" Opacity="0.8" Margin="0,1,0,0"/>
                         </StackPanel>
                     </Border>
+                    <CheckBox x:Name="HighlightsSawmTrack" 
+                              Style="{StaticResource HeroDeedChipStyle}"
+                              Margin="0"
+                              VerticalAlignment="Stretch"
+                              Padding="8"
+                              Checked="SawmTrack_Changed" 
+                              Unchecked="SawmTrack_Changed">
+                        <StackPanel>
+                            <TextBlock Text="TODAY" FontSize="9" Foreground="White" Opacity="0.6" Margin="0,0,0,2"/>
+                            <TextBlock Text="{DynamicResource Label_Fasting}" FontSize="10" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="INTENTION?" FontSize="9" Foreground="White" Opacity="0.7"/>
+                        </StackPanel>
+                    </CheckBox>
                 </UniformGrid>
                 
                 <!-- Fasting Highlights Note (Restructured to prevent overlap) -->
@@ -401,7 +504,6 @@
 
 
                 <!-- Prayer List with Ranges -->
-                <TextBlock Text="{DynamicResource Section_TodaysPrayer}" FontWeight="Bold" FontSize="13" Margin="0,6,0,4" Foreground="White" Opacity="0.8"/>
                 <Border x:Name="FajrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
                     <Grid>
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -566,6 +668,7 @@
                 </StackPanel>
             </Grid>
         </Border>
+        <local:TrackerView x:Name="TrackerViewControl" Grid.Row="3" Visibility="Collapsed" Margin="15,0,15,15"/>
     </Grid>
 </Border>
 </Window>

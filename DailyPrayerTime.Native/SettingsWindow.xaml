@@ -548,7 +548,20 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- Section 2: Our Projects -->
+                        <!-- Section 2: Official Resources -->
+                        <TextBlock Text="{DynamicResource Section_Official}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
+                        <Border Background="#f0f9ff" BorderBrush="#bae6fd" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
+                            <WrapPanel>
+                                <TextBlock Margin="0,0,20,8">
+                                    🌐 <Bold><Run Text="{DynamicResource Label_Website}"/>:</Bold> <Hyperlink NavigateUri="https://abiruzzamanmolla.github.io/DailyPrayerTimeSoftware/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{DynamicResource Btn_OfficialSite}"/></Hyperlink>
+                                </TextBlock>
+                                <TextBlock Margin="0,0,20,8">
+                                    📢 <Bold><Run Text="{DynamicResource Label_Telegram}"/>:</Bold> <Hyperlink NavigateUri="https://t.me/dailyprayertimersoftware" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{DynamicResource Btn_JoinChannel}"/></Hyperlink>
+                                </TextBlock>
+                            </WrapPanel>
+                        </Border>
+
+                        <!-- Section 3: Our Projects -->
                         <TextBlock Text="{DynamicResource i18n_Section_Projects}" FontWeight="Bold" FontSize="16" Margin="0,5,0,10" Foreground="#170939"/>
                         <Border Background="#f0fdf4" BorderBrush="#dcfce7" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,15">
                             <WrapPanel>
@@ -621,6 +634,44 @@
                                 </Button>
                             </StackPanel>
                         </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            
+            <!-- TAB 6: TRACKER -->
+            <TabItem Header="TRACKER">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,15,10,0">
+                    <StackPanel>
+                        <TextBlock Text="PRAYER &amp; SAWM TRACKER" FontWeight="Bold" FontSize="16" Foreground="#170939" Margin="0,0,0,10"/>
+                        
+                        <CheckBox x:Name="TrackerEnabledInput" Content="Enable Daily Tracker" Margin="0,5" FontWeight="SemiBold"/>
+                        <TextBlock Text="Turn on/off the tracking system on the dashboard." FontSize="11" Foreground="#6f6885" Margin="20,0,0,15"/>
+
+                        <CheckBox x:Name="DeedPopupEnabledInput" Content="Show Deed Popups after Jamaat" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
+                            <TextBlock Text="Show after" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
+                            <TextBox x:Name="TrackerPopupOffsetInput" Width="40" Margin="10,0" Padding="2" Text="15"/>
+                            <TextBlock Text="minutes of Jamaat time." VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="DailySummaryPopupEnabledInput" Content="Show Daily Summary at Night" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
+                            <TextBlock Text="Scheduled Time:" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
+                            <TextBox x:Name="DailySummaryPopupTimeInput" Width="60" Margin="10,0" Padding="2" Text="22:00"/>
+                            <TextBlock Text="(24h format, e.g. 22:00 for 10 PM)" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
+                        </StackPanel>
+
+                        <CheckBox x:Name="AutoTrackRamadanInput" Content="Auto-detect Ramadan &amp; Fasting" Margin="0,5"/>
+                        
+                        <Rectangle Height="1" Fill="#ececec" Margin="0,20"/>
+                        
+                        <TextBlock Text="DATA MANAGEMENT" FontWeight="Bold" FontSize="14" Foreground="#170939" Margin="0,0,0,10"/>
+                        <TextBlock Text="Export your history or restore from a previous backup." FontSize="11" Foreground="#6f6885" Margin="0,0,0,10"/>
+                        
+                        <UniformGrid Columns="2">
+                            <Button Content="BACKUP DATA" Click="BackupTracker_Click" Margin="0,0,5,0" Padding="10" Background="#f0f0f0" BorderBrush="#ccc" BorderThickness="1"/>
+                            <Button Content="RESTORE DATA" Click="RestoreTracker_Click" Margin="5,0,0,0" Padding="10" Background="#f0f0f0" BorderBrush="#ccc" BorderThickness="1"/>
+                        </UniformGrid>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

@@ -94,6 +94,14 @@ namespace DailyPrayerTime.Native
         public string Language { get; set; } = "en";
         public bool PrayerSoundEnabled { get; set; } = true;
         public string PrayerSoundLanguage { get; set; } = "en";
+
+        // Prayer Tracker Settings
+        public bool TrackerEnabled { get; set; } = true;
+        public bool DeedPopupEnabled { get; set; } = true;
+        public int DeedPopupOffsetMinutes { get; set; } = 15; // 15 mins after Jamaat
+        public bool DailySummaryPopupEnabled { get; set; } = true;
+        public string DailySummaryPopupTime { get; set; } = "22:00"; // 10 PM
+        public bool AutoTrackRamadan { get; set; } = true;
     }
 
     public static class SettingsManager

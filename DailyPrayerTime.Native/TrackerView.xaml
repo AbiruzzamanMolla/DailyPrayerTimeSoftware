@@ -1,0 +1,260 @@
+<UserControl x:Class="DailyPrayerTime.Native.TrackerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="400">
+    
+    <UserControl.Resources>
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="BorderBrush" Value="#2AFFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="Padding" Value="16"/>
+        </Style>
+
+        <Style TargetType="CheckBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="BulletBorder" Width="18" Height="18" 
+                                        CornerRadius="5" Background="#20FFFFFF" 
+                                        BorderBrush="#40FFFFFF" BorderThickness="1.5">
+                                    <TextBlock x:Name="CheckMark" Text="✓" Foreground="#34D399" 
+                                               FontSize="12" FontWeight="Bold" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                               Visibility="Collapsed"/>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="BulletBorder" Property="Background" Value="#3034D399"/>
+                                <Setter TargetName="BulletBorder" Property="BorderBrush" Value="#34D399"/>
+                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BulletBorder" Property="BorderBrush" Value="#34D399"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <StackPanel Margin="18">
+                
+                <!-- Mini Status Row (Appears when Hero is hidden) -->
+                <Border Style="{StaticResource GlassCard}" Padding="12,8" Margin="0,0,0,15" Background="#20111827">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="NOW:" Foreground="White" Opacity="0.6" FontSize="9" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock x:Name="MiniPrayerName" Text="DHUHR" Foreground="#34D399" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                             <TextBlock x:Name="MiniCountdown" Text="01:23:45" Foreground="White" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                             <TextBlock Text="LEFT" Foreground="White" Opacity="0.5" FontSize="9" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Page Header -->
+                <Grid Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Divine Tracker" Foreground="White" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Visualize your spiritual journey" Foreground="#D1D5DB" FontSize="12" Opacity="0.8" Margin="2,2,0,0"/>
+                    </StackPanel>
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Center" Background="#10B981" CornerRadius="8" Padding="8,4">
+                        <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold"/>
+                    </Border>
+                </Grid>
+
+                <!-- Premium Horizontal Glass Progress Bar -->
+                <Border Style="{StaticResource GlassCard}" Background="#1F2937" Padding="20">
+                    <StackPanel>
+                        <Grid>
+                            <TextBlock Text="DAILY COMPLETION" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
+                            <TextBlock x:Name="OverallProgressPercent" Text="0%" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,15,0,0">
+                            <!-- Background Bar -->
+                            <Border Height="12" Background="#20FFFFFF" CornerRadius="6"/>
+                            <!-- Glass Progress Fill -->
+                            <ProgressBar x:Name="MainProgressBar" Value="0" Height="12" BorderThickness="0" Background="Transparent" Foreground="#34D399">
+                                <ProgressBar.Template>
+                                    <ControlTemplate TargetType="ProgressBar">
+                                        <Grid>
+                                            <Border x:Name="PART_Indicator" HorizontalAlignment="Left" CornerRadius="6">
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                        <GradientStop Color="#10B981" Offset="0"/>
+                                                        <GradientStop Color="#34D399" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <Border Background="#40FFFFFF" Margin="0,1,0,3" CornerRadius="4" Opacity="0.5"/>
+                                            </Border>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ProgressBar.Template>
+                            </ProgressBar>
+                        </Grid>
+                        
+                        <Grid Margin="0,12,0,0">
+                            <StackPanel Orientation="Horizontal" x:Name="SawmIndicator">
+                                <Border Width="8" Height="8" CornerRadius="4" Background="#FBBF24" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="FASTING ACTIVE" Foreground="#FBBF24" FontSize="10" FontWeight="Bold"/>
+                            </StackPanel>
+                            <CheckBox x:Name="SawmToggle" Content="FASTING TODAY?" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" FontWeight="Bold"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Daily Prayers Grid -->
+                <TextBlock Text="MANDATORY PRAYERS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,8,0,12"/>
+                <ItemsControl x:Name="PrayerList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource GlassCard}">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,12">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding PrayerName}" Foreground="White" FontWeight="Bold" FontSize="15"/>
+                                            <Border Background="#20FFFFFF" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding CompletionText}" Foreground="#34D399" FontSize="9" FontWeight="Bold"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                    <ItemsControl ItemsSource="{Binding Deeds}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Content="{Binding Label}" IsChecked="{Binding IsChecked}" 
+                                                          Margin="0,0,16,10" 
+                                                          Checked="RakatCheck_Changed" Unchecked="RakatCheck_Changed"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Nafal Section -->
+                <TextBlock Text="EXTRA WORSHIP &amp; NAFAL" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,15,0,12"/>
+                
+                <!-- Specialized Nafal Card -->
+                <Border Style="{StaticResource GlassCard}">
+                    <StackPanel>
+                        <!-- Duha -->
+                        <Grid Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="DUHA / ISHRAQ" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="Sunnah Mu'akkadah" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:-2" Background="#1AFFFFFF">
+                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock x:Name="DuhaCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:2" Background="#1AFFFFFF">
+                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
+
+                        <!-- Awwabin -->
+                        <Grid Margin="0,0,0,15">
+                            <StackPanel>
+                                <TextBlock Text="AWWABIN" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="After Maghrib" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:-2" Background="#1AFFFFFF">
+                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock x:Name="AwwabinCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:2" Background="#1AFFFFFF">
+                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
+
+                        <!-- Tahajjud -->
+                        <Grid>
+                            <StackPanel>
+                                <TextBlock Text="TAHAJJUD" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="Night Prayer" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:-2" Background="#1AFFFFFF">
+                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                                <TextBlock x:Name="TahajjudCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:2" Background="#1AFFFFFF">
+                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- History View -->
+                <TextBlock Text="LAST 7 DAYS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,15,0,12"/>
+                <ItemsControl x:Name="HistoryList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="85"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="45"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding DateLabel}" Foreground="#D1D5DB" FontSize="12" VerticalAlignment="Center"/>
+                                <Grid Grid.Column="1" Margin="10,0">
+                                    <Border Height="4" Background="#1AFFFFFF" CornerRadius="2"/>
+                                    <ProgressBar Value="{Binding ProgressValue}" Height="4" BorderThickness="0" Background="Transparent" Foreground="#34D399"/>
+                                </Grid>
+                                <TextBlock Grid.Column="2" Text="{Binding ProgressText}" Foreground="White" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Footer Navigation -->
+                <Button x:Name="CloseBtn" Cursor="Hand" Background="#34D399" Margin="0,30,0,20" Click="Close_Click">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="0,14">
+                                <TextBlock Text="EXIT TRACKER" Foreground="#064E3B" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" FontSize="13"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

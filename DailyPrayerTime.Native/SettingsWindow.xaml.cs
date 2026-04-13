@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
+using DailyPrayerTime.Native.Services;
 
 namespace DailyPrayerTime.Native
 {
@@ -242,7 +243,15 @@ namespace DailyPrayerTime.Native
             ReminderIshaInput.IsChecked = s.ReminderIsha;
             PreAdhanOffsetInput.Text = s.PreAdhanOffset.ToString();
 
-            // Load Granular Established
+            // Tracker
+            TrackerEnabledInput.IsChecked = s.TrackerEnabled;
+            DeedPopupEnabledInput.IsChecked = s.DeedPopupEnabled;
+            TrackerPopupOffsetInput.Text = s.DeedPopupOffsetMinutes.ToString();
+            DailySummaryPopupEnabledInput.IsChecked = s.DailySummaryPopupEnabled;
+            DailySummaryPopupTimeInput.Text = s.DailySummaryPopupTime;
+            AutoTrackRamadanInput.IsChecked = s.AutoTrackRamadan;
+
+            UpdateManualParamsVisibility();
             EstablishedFajrInput.IsChecked = s.EstablishedFajr;
             EstablishedDhuhrInput.IsChecked = s.EstablishedDhuhr;
             EstablishedAsrInput.IsChecked = s.EstablishedAsr;
@@ -462,7 +471,15 @@ namespace DailyPrayerTime.Native
             s.ReminderAsr = ReminderAsrInput.IsChecked ?? true;
             s.ReminderMaghrib = ReminderMaghribInput.IsChecked ?? true;
             s.ReminderIsha = ReminderIshaInput.IsChecked ?? true;
-            if (int.TryParse(PreAdhanOffsetInput.Text, out int pao)) s.PreAdhanOffset = pao;
+            s.PreAdhanOffset = int.TryParse(PreAdhanOffsetInput.Text, out int pao) ? pao : 10;
+            
+            // Tracker
+            s.TrackerEnabled = TrackerEnabledInput.IsChecked ?? true;
+            s.DeedPopupEnabled = DeedPopupEnabledInput.IsChecked ?? true;
+            s.DeedPopupOffsetMinutes = int.TryParse(TrackerPopupOffsetInput.Text, out int tpo) ? tpo : 15;
+            s.DailySummaryPopupEnabled = DailySummaryPopupEnabledInput.IsChecked ?? true;
+            s.DailySummaryPopupTime = DailySummaryPopupTimeInput.Text;
+            s.AutoTrackRamadan = AutoTrackRamadanInput.IsChecked ?? true;
 
             // Save Granular Established
             s.EstablishedFajr = EstablishedFajrInput.IsChecked ?? true;
@@ -811,6 +828,61 @@ namespace DailyPrayerTime.Native
             GradEndInput.Text = "#022c22";
             PrimaryColorInput.Text = "#10b981";
             SecondaryColorInput.Text = "#34d399";
+        }
+        private void BackupTracker_Click(object sender, RoutedEventArgs e)
+        {
+            var sfd = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = $"Tracker_Backup_{DateTime.Now:yyyyMMdd}",
+                DefaultExt = ".zip",
+                Filter = "Zip Archive (.zip)|*.zip"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                try
+                {
+                    TrackerService.Instance.BackupData(sfd.FileName);
+                    System.Windows.MessageBox.Show("Backup completed successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Backup failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void RestoreTracker_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new Microsoft.Win32.OpenFileDialog
+            {
+                DefaultExt = ".zip",
+                Filter = "Zip Archive (.zip)|*.zip"
+            };
+
+            if (ofd.ShowDialog() == true)
+            {
+                if (System.Windows.MessageBox.Show("Warning: This will overwrite existing tracker data. Continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        TrackerService.Instance.RestoreData(ofd.FileName);
+                        System.Windows.MessageBox.Show("Restore completed! Restarting data sync...", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show($"Restore failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+        }
+        private void UpdateManualParamsVisibility()
+        {
+            if (ManualParamsPanel != null && MethodInput != null)
+            {
+                ManualParamsPanel.Visibility = (MethodInput.SelectedItem is ComboBoxItem item && item.Tag?.ToString() == "MANUAL") 
+                    ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
     }
 }

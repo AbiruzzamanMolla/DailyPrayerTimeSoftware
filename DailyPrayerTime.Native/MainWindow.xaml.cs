@@ -16,6 +16,8 @@ using System.Windows.Input;
 
 namespace DailyPrayerTime.Native
 {
+    using DailyPrayerTime.Native.Models;
+    using DailyPrayerTime.Native.Services;
     public partial class MainWindow : Window
     {
         private const string TimeFmtFull = "hh:mm tt";
@@ -44,6 +46,9 @@ namespace DailyPrayerTime.Native
         private string _lastTahajjudSoundDate = "";
         private Prayer _lastJamaatNotificationID = Prayer.NONE;
         private Prayer _lastEndNotificationID = Prayer.NONE;
+        private Prayer _lastDeedPopupPrayer = Prayer.NONE;
+        private string _lastDeedPopupDate = "";
+        private string _lastSummaryPopupDate = "";
         private Prayer _lastPreAdhanNotificationID = Prayer.NONE;
         private string _lastShuruqWarningDate = "";
         private string _lastSunriseNotificationDate = "";
@@ -52,13 +57,16 @@ namespace DailyPrayerTime.Native
         private bool _isFullScreen = false;
         private bool _isRamadanMode = false;
         private bool _isFastingNoteExpanded = false;
-        
+        private bool _isTrackerMode = false;
+        private DailyDeeds _currentDeeds;
+
         private bool IsWindows11 => Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000;
 
         public MainWindow()
         {
             SettingsManager.Load();
             InitializeComponent();
+            _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
             this.Height = SystemParameters.WorkArea.Height * 0.85;
             ApplySettingsTheme();
             SetupTimer();
@@ -584,7 +592,7 @@ namespace DailyPrayerTime.Native
                 {
                     DhuhrLabel.Text = LocalizationManager.Instance.GetString("Prayer_Duha");
                     SubDhuhrTime.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
-                    DhuhrLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
+                    DhuhrLabel.Foreground = new SolidColorBrush(WColor.FromRgb(251, 191, 36)); // amber-400
                 }
                 else
                 {
@@ -602,7 +610,7 @@ namespace DailyPrayerTime.Native
                 if (now >= midnight && now < _tomorrowPrayerTimes.Fajr)
                 {
                     IshaLabel.Text = LocalizationManager.Instance.GetString("Prayer_Tahajjud");
-                    IshaLabel.Foreground = new SolidColorBrush(WColor.FromRgb(96, 165, 250)); // blue-400
+                    IshaLabel.Foreground = new SolidColorBrush(WColor.FromRgb(52, 211, 153)); // emerald-400 (Tahajjud)
                     SubIshaTime.Text = $"{midnight.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
                 }
                 else
@@ -1003,9 +1011,11 @@ namespace DailyPrayerTime.Native
                 if (IsEstablishedEnabled(p, s))
                 {
                     if (CheckAndShowJamaatAlarm(p, now, s)) return;
+                    if (s.DeedPopupEnabled) CheckAndShowDeedPopup(p, now, s);
                 }
             }
 
+            if (s.DailySummaryPopupEnabled) CheckAndShowDailySummary(now, s);
             ResetJamaatAlarmState(now, s);
         }
 
@@ -1034,6 +1044,51 @@ namespace DailyPrayerTime.Native
                 return true;
             }
             return false;
+        }
+
+        private void CheckAndShowDeedPopup(Prayer p, DateTime now, AppSettings s)
+        {
+            if (_lastDeedPopupPrayer == p && _lastDeedPopupDate == now.ToString("yyyy-MM-dd")) return;
+
+            DateTime? jamaatTime = GetJamaatTime(p, s, now);
+            if (!jamaatTime.HasValue) return;
+
+            // Show popup some minutes after jamaat
+            DateTime popupTime = jamaatTime.Value.AddMinutes(s.DeedPopupOffsetMinutes);
+
+            if (now >= popupTime && now < popupTime.AddMinutes(30)) // 30 min window
+            {
+                // Map Prayer enum to string keys used in Tracker
+                string pKey = p.ToString();
+                if (p == Prayer.DHUHR && now.DayOfWeek == DayOfWeek.Friday) pKey = "Jumuah";
+
+                if (_currentDeeds.Prayers.TryGetValue(pKey, out var entries))
+                {
+                    _lastDeedPopupPrayer = p;
+                    _lastDeedPopupDate = now.ToString("yyyy-MM-dd");
+
+                    var popup = new DeedPopup(pKey, entries, _currentDeeds);
+                    popup.Owner = this;
+                    popup.Show();
+                }
+            }
+        }
+
+        private void CheckAndShowDailySummary(DateTime now, AppSettings s)
+        {
+            if (_lastSummaryPopupDate == now.ToString("yyyy-MM-dd")) return;
+
+            if (TimeSpan.TryParse(s.DailySummaryPopupTime, out var summaryTime))
+            {
+                DateTime target = now.Date.Add(summaryTime);
+                if (now >= target && now < target.AddMinutes(30))
+                {
+                    _lastSummaryPopupDate = now.ToString("yyyy-MM-dd");
+                    var summary = new DailySummaryPopup(_currentDeeds);
+                    summary.Owner = this;
+                    summary.Show();
+                }
+            }
         }
 
         private static DateTime? GetJamaatTime(Prayer p, AppSettings s, DateTime now)
@@ -1249,6 +1304,14 @@ namespace DailyPrayerTime.Native
                 ? string.Format(LocalizationManager.Instance.GetString("Hero_TimeLeft"), curName) 
                 : string.Format(LocalizationManager.Instance.GetString("Hero_TimeUntil"), nextName);
             HeroCountdownText.Text = countStr;
+
+            if (_isTrackerMode)
+            {
+                string miniName = currentPrayer != Prayer.NONE ? curName : nextName;
+                TrackerViewControl.UpdateMiniStatus(miniName, countStr);
+            }
+
+            SyncTrackerWithHero(currentPrayer);
             
             // Update Rakat Note for Hero Section
             bool isFriday = DateTime.Now.DayOfWeek == DayOfWeek.Friday;
@@ -1814,6 +1877,74 @@ namespace DailyPrayerTime.Native
         private static string GetLocalizedDayName(DateTime dt)
         {
             return LocalizationManager.Instance.GetString($"Day_{(int)dt.DayOfWeek}");
+        }
+
+        // --- Tracker Event Handlers ---
+
+        public void TrackerToggle_Click(object sender, RoutedEventArgs e)
+        {
+            _isTrackerMode = !_isTrackerMode;
+            TrackerToggleText.Text = _isTrackerMode ? "DASHBOARD" : "TRACKER";
+            TrackerToggleIcon.Text = _isTrackerMode ? "🏠" : "📊";
+
+            TrackerViewControl.Visibility = _isTrackerMode ? Visibility.Visible : Visibility.Collapsed;
+            PrayerListScroll.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
+
+            // Hide/Show Hero Section
+            HeroBorder.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
+            HeroRow.Height = _isTrackerMode ? new GridLength(0) : GridLength.Auto;
+
+            if (_isTrackerMode) TrackerViewControl.LoadData();
+        }
+
+        private void RakatCheck_Changed(object sender, RoutedEventArgs e)
+        {
+            if (HeroRakatList.ItemsSource is List<DeedEntry>)
+            {
+                TrackerService.Instance.SaveDay(_currentDeeds);
+                UpdateOverallTrackerProgress();
+            }
+        }
+
+        private void SawmTrack_Changed(object sender, RoutedEventArgs e)
+        {
+            _currentDeeds.Sawm = HighlightsSawmTrack.IsChecked ?? false;
+            TrackerService.Instance.SaveDay(_currentDeeds);
+        }
+
+        private void SyncTrackerWithHero(Prayer currentPrayer)
+        {
+            if (_currentDeeds == null) return;
+
+            // Map Prayer enum to string keys used in Tracker
+            string pKey = currentPrayer == Prayer.NONE ? "Fajr" : currentPrayer.ToString();
+            if (currentPrayer == Prayer.DHUHR && DateTime.Now.DayOfWeek == DayOfWeek.Friday) pKey = "Jumuah";
+
+            if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds))
+            {
+                HeroTrackerBox.Visibility = Visibility.Visible;
+                HeroTrackerTitle.Text = $"{pKey.ToUpper()} TRACKER";
+                HeroRakatList.ItemsSource = deeds;
+                UpdateOverallTrackerProgress();
+            }
+            else
+            {
+                HeroTrackerBox.Visibility = Visibility.Collapsed;
+            }
+
+            // Auto-Sawm detect
+            bool isSawmDay = TrackerService.Instance.IsSunnahSawmDay(DateTime.Today);
+            HighlightsSawmTrack.Visibility = isSawmDay ? Visibility.Visible : Visibility.Collapsed;
+            HighlightsSawmTrack.IsChecked = _currentDeeds.Sawm;
+        }
+
+        private void UpdateOverallTrackerProgress()
+        {
+            if (HeroRakatList.ItemsSource is List<DeedEntry> deeds)
+            {
+                int done = deeds.Count(d => d.IsChecked);
+                HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
+            }
         }
     }
 }
