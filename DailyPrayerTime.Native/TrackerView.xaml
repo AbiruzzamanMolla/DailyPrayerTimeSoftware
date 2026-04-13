@@ -185,7 +185,21 @@
                 <Border Style="{StaticResource GlassCard}">
                     <StackPanel>
                         <!-- Duha -->
-                        <Grid Margin="0,0,0,15">
+                        <Grid Margin="0,0,0,15" x:Name="DuhaGrid">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <BlurEffect Radius="3"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
                             <StackPanel>
                                 <TextBlock Text="DUHA / ISHRAQ" Foreground="White" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="Sunnah Mu'akkadah" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
@@ -204,7 +218,21 @@
                         <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
 
                         <!-- Awwabin -->
-                        <Grid Margin="0,0,0,15">
+                        <Grid Margin="0,0,0,15" x:Name="AwwabinGrid">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <BlurEffect Radius="3"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
                             <StackPanel>
                                 <TextBlock Text="AWWABIN" Foreground="White" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="After Maghrib" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
@@ -223,7 +251,21 @@
                         <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
 
                         <!-- Tahajjud -->
-                        <Grid>
+                        <Grid x:Name="TahajjudGrid">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Opacity" Value="0.6"/>
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <BlurEffect Radius="3"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
                             <StackPanel>
                                 <TextBlock Text="TAHAJJUD" Foreground="White" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="Night Prayer" Foreground="#34D399" FontSize="9" FontWeight="Bold" Opacity="0.8"/>

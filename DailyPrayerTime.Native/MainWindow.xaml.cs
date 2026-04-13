@@ -1917,14 +1917,42 @@ namespace DailyPrayerTime.Native
 
         private HashSet<string> GetEnabledTrackerPrayers()
         {
-            var enabled = new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud" };
+            var enabled = new HashSet<string>();
             if (_todayPrayerTimes == null) return enabled;
 
-            if (DateTime.Now >= _todayPrayerTimes.Fajr) enabled.Add("Fajr");
-            if (DateTime.Now >= _todayPrayerTimes.Dhuhr) enabled.Add("Dhuhr");
-            if (DateTime.Now >= _todayPrayerTimes.Asr) enabled.Add("Asr");
-            if (DateTime.Now >= _todayPrayerTimes.Maghrib) enabled.Add("Maghrib");
-            if (DateTime.Now >= _todayPrayerTimes.Isha) enabled.Add("Isha");
+            DateTime now = DateTime.Now;
+
+            // Fajr & Adhkar
+            if (now >= _todayPrayerTimes.Fajr) 
+            {
+                enabled.Add("Fajr");
+                enabled.Add("Adhkar"); // Morning Adhkar
+            }
+            
+            // Duha / Ishraq
+            if (now >= _todayPrayerTimes.Sunrise.AddMinutes(15))
+            {
+                enabled.Add("Ishraq");
+                enabled.Add("Duha");
+            }
+
+            if (now >= _todayPrayerTimes.Dhuhr) enabled.Add("Dhuhr");
+            if (now >= _todayPrayerTimes.Asr) enabled.Add("Asr");
+            
+            // Maghrib & Awwabin
+            if (now >= _todayPrayerTimes.Maghrib) 
+            {
+                enabled.Add("Maghrib");
+                enabled.Add("Awwabin");
+            }
+            
+            // Isha & Tahajjud
+            if (now >= _todayPrayerTimes.Isha) 
+            {
+                enabled.Add("Isha");
+                enabled.Add("Tahajjud");
+            }
+
             return enabled;
         }
 

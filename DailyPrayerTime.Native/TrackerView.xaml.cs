@@ -49,6 +49,10 @@ namespace DailyPrayerTime.Native
             DuhaCount.Text = GetNafalValue("Duha").ToString();
             AwwabinCount.Text = GetNafalValue("Awwabin").ToString();
             TahajjudCount.Text = GetNafalValue("Tahajjud").ToString();
+            
+            DuhaGrid.IsEnabled = _enabledPrayers.Contains("Duha") || _enabledPrayers.Contains("Ishraq");
+            AwwabinGrid.IsEnabled = _enabledPrayers.Contains("Awwabin");
+            TahajjudGrid.IsEnabled = _enabledPrayers.Contains("Tahajjud");
         }
 
         private int GetNafalValue(string name)
