@@ -7,16 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2026-04-13
 ### Added
-- **Tracker Generation 2 completion**: Finalized the bi-directional synchronization engine between the Tracker popup and the Hero Tracker dashboard.
-- **Precision Progress Logic**: Refactored calculation engine to use double-precision math, ensuring daily completion reaches 100%.
-- **Expanded Tracking**: Included Nafal prayers (Tahajjud, Duha, Awwabin) and Fasting (Sawm) bonus in the overall daily compilation percentage.
-- **Improved Historian Mode**: Removed the "upcoming" blur effect from past dates, allowing clear interaction with historical prayer records.
-- **Unified UI Alignment**: Synchronized Sawm status and Rakat/Nafal counts across all UI layers instantly.
-- **UI UX Polish**: Standardized Tracker settings labels to sentence case and improved tab ordering.
+- **Tracker Generation 2 Completion**: Finalized the bi-directional synchronization engine between the Tracker popup and the Hero Tracker dashboard.
+- **Spiritual Deed Logging**: Integrated a comprehensive deed tracking system into the Tracker, allowing users to log daily good deeds alongside prayers for a complete spiritual overview.
+- **Glassmorphism UI Overhaul**: Implemented premium glass-morphism effects for the TrackerView, providing a consistent, modern aesthetic that feels native to the new design system.
+- **Tabbed Tracker Navigation**: Introduced an intuitive tabbed interface for the Tracker popup, separating Prayer tracking, Deed logging, and Settings for streamlined interaction.
+- **Precision Progress Logic**: Refactored the calculation engine to use double-precision math, ensuring daily completion percentages reach 100% accurately.
+- **Expanded Tracking Capabilities**: Included Nafal prayers (Tahajjud, Duha, Awwabin) and Fasting (Sawm) status in the overall daily spiritual compilation.
+- **Improved Historian Mode**: Removed the "upcoming" blur effect from past dates, allowing users to clearly review and interact with historical spiritual records.
+- **Unified UI Alignment**: Synchronized Sawm status, Rakat counts, and Nafal data across all UI layers instantly without requiring manual refreshes.
+- **AI-Orchestrated Core (Graphify)**: Integrated specialized **Graphify** agent workflows to ensure high-performance logic and cross-module synchronization during development.
 
 ### Fixed
-- **Progress Calculation Bug**: Fixed integer division issue that prevented 100% completion display.
-- **Sync Lag**: Removed refresh delays between Tracker updates and Dashboard indicators.
+- **Progress Calculation Bug**: Fixed integer division issue that previously prevented 100% completion from displaying correctly.
+- **Sync Lag**: Removed refresh delays between Tracker updates and Dashboard indicators for a real-time experience.
+- **UI UX Polish**: Standardized Tracker settings labels to sentence case and optimized tab ordering for better flow.
 
 ## [1.9.1] - 2026-04-12
 ### Added
