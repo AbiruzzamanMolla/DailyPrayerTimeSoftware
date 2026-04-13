@@ -15,7 +15,7 @@ namespace DailyPrayerTime.Native
 {
     public partial class TrackerView : System.Windows.Controls.UserControl
     {
-        private DailyDeeds _currentDeeds;
+        private DailyDeeds _currentDeeds = null!;
         public ObservableCollection<PrayerTrackItem> PrayerItems { get; set; } = new ObservableCollection<PrayerTrackItem>();
 
         public TrackerView()
@@ -27,10 +27,20 @@ namespace DailyPrayerTime.Native
 
         private HashSet<string> _enabledPrayers = new HashSet<string>();
 
-        public void LoadData(HashSet<string> enabledPrayers = null, DateTime? specificDate = null)
+        public void LoadData(HashSet<string>? enabledPrayers = null, DateTime? specificDate = null)
         {
             DateTime targetDate = specificDate ?? DateTime.Today;
-            _enabledPrayers = enabledPrayers ?? new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
+            
+            // For past dates, all prayers should be considered "enabled" since the time has already passed.
+            if (targetDate.Date < DateTime.Today)
+            {
+                _enabledPrayers = new HashSet<string> { "Adhkar", "Adhkar_Morning", "Adhkar_Evening", "Ishraq", "Duha", "Awwabin", "Tahajjud", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumuah" };
+            }
+            else
+            {
+                _enabledPrayers = enabledPrayers ?? new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumuah" };
+            }
+            
             _currentDeeds = TrackerService.Instance.LoadDay(targetDate);
             
             // Sync UI
@@ -149,8 +159,52 @@ namespace DailyPrayerTime.Native
             MainProgressBar.Value = percent;
         }
 
-        private void RakatCheck_Changed(object sender, RoutedEventArgs e)
+        private bool ConfirmPastEdit()
         {
+            if (_currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
+            {
+                var result = System.Windows.MessageBox.Show(
+                    "You are modifying tracking data for a past date.\nAre you sure you want to change this record?", 
+                    "Edit Past Record", 
+                    System.Windows.MessageBoxButton.YesNo, 
+                    System.Windows.MessageBoxImage.Warning);
+                return result == System.Windows.MessageBoxResult.Yes;
+            }
+            return true;
+        }
+
+        private bool _isRevertingCheck = false;
+
+        private void SawmToggle_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isRevertingCheck || !IsLoaded) return;
+            
+            if (!ConfirmPastEdit())
+            {
+                _isRevertingCheck = true;
+                SawmToggle.IsChecked = !SawmToggle.IsChecked;
+                _isRevertingCheck = false;
+                return;
+            }
+            
+            _currentDeeds.Sawm = SawmToggle.IsChecked == true;
+            SawmIndicator.Visibility = _currentDeeds.Sawm ? Visibility.Visible : Visibility.Collapsed;
+            TrackerService.Instance.SaveDay(_currentDeeds);
+            UpdateOverallProgress();
+        }
+
+        private void RakatCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (_isRevertingCheck || !IsLoaded) return;
+
+            if (!ConfirmPastEdit())
+            {
+                _isRevertingCheck = true;
+                if (sender is System.Windows.Controls.CheckBox cb) cb.IsChecked = !cb.IsChecked;
+                _isRevertingCheck = false;
+                return;
+            }
+
             TrackerService.Instance.SaveDay(_currentDeeds);
             UpdateOverallProgress();
             UpdateViewForTab();
@@ -159,6 +213,8 @@ namespace DailyPrayerTime.Native
 
         private void NafalCount_Click(object sender, RoutedEventArgs e)
         {
+            if (!ConfirmPastEdit()) return;
+
             if (sender is System.Windows.Controls.Button btn && btn.Tag is string tag)
             {
                 var parts = tag.Split(':');
@@ -186,18 +242,22 @@ namespace DailyPrayerTime.Native
 
         private void TrackerTab_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (IsLoaded) UpdateViewForTab();
+            // Only respond to tab changes from the actual TrackerTabList, not nested elements
+            if (e.OriginalSource == TrackerTabList && IsLoaded)
+            {
+                UpdateViewForTab();
+            }
         }
 
         private void UpdateViewForTab()
         {
             if (TrackerTabList.SelectedItem is ListBoxItem selected)
             {
-                string tab = selected.Content.ToString();
+                string tab = selected.Content?.ToString() ?? "";
                 DailySection.Visibility = tab == "Daily" ? Visibility.Visible : Visibility.Collapsed;
                 HistoryHeader.Visibility = tab != "Daily" ? Visibility.Visible : Visibility.Collapsed;
                 
-                // Hide both initially, then show based on tab
+                // Hide components initially
                 HistoryList.Visibility = Visibility.Collapsed;
                 CalendarGrid.Visibility = Visibility.Collapsed;
                 TrackerBackButton.Visibility = Visibility.Collapsed;
@@ -205,10 +265,12 @@ namespace DailyPrayerTime.Native
                 switch (tab)
                 {
                     case "Daily":
-                        // If coming from another tab, reset to today if needed, but usually we just stay on _currentDeeds
                         if (_currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
                         {
-                            LoadData(_enabledPrayers, DateTime.Today);
+                            // We are viewing a past date, so show the History header with "PAST ACTIVITY" and display the Back button to let the user return
+                            HistoryHeader.Visibility = Visibility.Visible;
+                            TrackerBackButton.Visibility = Visibility.Visible;
+                            HistorySectionTitle.Text = "PAST ACTIVITY";
                         }
                         break;
                     case "Weekly":
@@ -486,15 +548,23 @@ namespace DailyPrayerTime.Native
                 else
                 {
                     // We clicked a Day in the calendar (or from Monthly/Weekly list). Navigate to daily view.
-                    TrackerTabList.SelectedIndex = 0; // Switching to Daily
                     LoadData(_enabledPrayers, targetDate);
+                    TrackerTabList.SelectedIndex = 0; // Switching to Daily
                 }
             }
         }
 
         private void TrackerBack_Click(object sender, RoutedEventArgs e)
         {
-            UpdateViewForTab(); // Resets to current tab default
+            if (TrackerTabList.SelectedIndex == 0 && _currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
+            {
+                // If in Daily tab viewing past date, go back to Today
+                LoadData(_enabledPrayers, DateTime.Today);
+            }
+            else
+            {
+                UpdateViewForTab(); // Resets to current tab default
+            }
         }
 
         private int CalculateProgress(DailyDeeds deeds)
@@ -525,7 +595,7 @@ namespace DailyPrayerTime.Native
         {
             if (System.Windows.Application.Current.MainWindow is MainWindow mw)
             {
-                mw.TrackerToggle_Click(this, null);
+                mw.TrackerToggle_Click(this, new RoutedEventArgs());
             }
         }
     }
@@ -540,15 +610,15 @@ namespace DailyPrayerTime.Native
 
     public class PrayerTrackItem : System.ComponentModel.INotifyPropertyChanged
     {
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
 
         public void Refresh()
         {
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof(CompletionText)));
         }
-        public string PrayerName { get; set; }
+        public string PrayerName { get; set; } = string.Empty;
         public bool IsEnabled { get; set; } = true;
-        public List<DeedEntry> Deeds { get; set; }
+        public List<DeedEntry> Deeds { get; set; } = new();
         public string CompletionText 
         {
             get

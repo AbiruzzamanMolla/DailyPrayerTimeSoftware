@@ -10,7 +10,7 @@ namespace DailyPrayerTime.Native.Services
 {
     public class TrackerService
     {
-        private static TrackerService _instance;
+        private static TrackerService? _instance;
         public static TrackerService Instance => _instance ??= new TrackerService();
 
         private string TrackerDir => Path.Combine(StorageService.GetAppDataPath(), "tracker");
@@ -27,7 +27,7 @@ namespace DailyPrayerTime.Native.Services
         {
             string fileName = $"{date:yyyy-MM-dd}.json";
             string path = Path.Combine(TrackerDir, fileName);
-            DailyDeeds deeds = null;
+            DailyDeeds? deeds = null;
 
             if (File.Exists(path))
             {
@@ -88,7 +88,7 @@ namespace DailyPrayerTime.Native.Services
             }
         }
 
-        public string BackupData(string destinationPath)
+        public string? BackupData(string destinationPath)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace DailyPrayerTime.Native.Services
             catch (Exception ex) { return ex.Message; }
         }
 
-        public string RestoreData(string sourceZipPath)
+        public string? RestoreData(string sourceZipPath)
         {
             try
             {
