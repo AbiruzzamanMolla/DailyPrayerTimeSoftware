@@ -408,6 +408,19 @@ namespace DailyPrayerTime.Native
 
             // Refresh basmala translation any time settings (language) change
             InitBasmalaHeader();
+
+            // Enforce tracker visibility
+            if (!s.TrackerEnabled)
+            {
+                HeroTrackerBox.Visibility = Visibility.Collapsed;
+                HighlightsSawmTrack.Visibility = Visibility.Collapsed;
+                if (HighlightsGrid != null) HighlightsGrid.Columns = 2;
+            }
+            else
+            {
+                // Refresh visibility based on active prayer/mode
+                UpdateCountdown();
+            }
         }
 
         private void InitBasmalaHeader()
@@ -1058,8 +1071,8 @@ namespace DailyPrayerTime.Native
 
             if (now >= popupTime && now < popupTime.AddMinutes(30)) // 30 min window
             {
-                // Map Prayer enum to string keys used in Tracker
-                string pKey = p.ToString();
+                // Map Prayer enum to title-case keys used in Deeds dictionary
+                string pKey = ToPrayerKey(p);
                 if (p == Prayer.DHUHR && now.DayOfWeek == DayOfWeek.Friday) pKey = "Jumuah";
 
                 if (_currentDeeds.Prayers.TryGetValue(pKey, out var entries))
@@ -1908,19 +1921,41 @@ namespace DailyPrayerTime.Native
 
         private void SawmTrack_Changed(object sender, RoutedEventArgs e)
         {
-            _currentDeeds.Sawm = HighlightsSawmTrack.IsChecked ?? false;
-            TrackerService.Instance.SaveDay(_currentDeeds);
+            if (_currentDeeds == null) return;
+            bool isChecked = (sender as System.Windows.Controls.CheckBox)?.IsChecked ?? false;
+            
+            if (_currentDeeds.Sawm != isChecked)
+            {
+                _currentDeeds.Sawm = isChecked;
+                TrackerService.Instance.SaveDay(_currentDeeds);
+                
+                // Sync UI
+                if (HighlightsSawmTrack != null && HighlightsSawmTrack.IsChecked != isChecked) HighlightsSawmTrack.IsChecked = isChecked;
+            }
+        }
+
+        private string ToPrayerKey(Prayer prayer)
+        {
+            return prayer switch
+            {
+                Prayer.FAJR    => "Fajr",
+                Prayer.DHUHR   => "Dhuhr",
+                Prayer.ASR     => "Asr",
+                Prayer.MAGHRIB => "Maghrib",
+                Prayer.ISHA    => "Isha",
+                _              => "Fajr"
+            };
         }
 
         private void SyncTrackerWithHero(Prayer currentPrayer)
         {
             if (_currentDeeds == null) return;
 
-            // Map Prayer enum to string keys used in Tracker
-            string pKey = currentPrayer == Prayer.NONE ? "Fajr" : currentPrayer.ToString();
+            // Map Prayer enum to title-case string keys used in the Deeds dictionary
+            string pKey = ToPrayerKey(currentPrayer == Prayer.NONE ? Prayer.FAJR : currentPrayer);
             if (currentPrayer == Prayer.DHUHR && DateTime.Now.DayOfWeek == DayOfWeek.Friday) pKey = "Jumuah";
 
-            if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds))
+            if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds) && SettingsManager.Current.TrackerEnabled)
             {
                 HeroTrackerBox.Visibility = Visibility.Visible;
                 HeroTrackerTitle.Text = $"{pKey.ToUpper()} TRACKER";
@@ -1933,9 +1968,17 @@ namespace DailyPrayerTime.Native
             }
 
             // Auto-Sawm detect
-            bool isSawmDay = TrackerService.Instance.IsSunnahSawmDay(DateTime.Today);
-            HighlightsSawmTrack.Visibility = isSawmDay ? Visibility.Visible : Visibility.Collapsed;
-            HighlightsSawmTrack.IsChecked = _currentDeeds.Sawm;
+            bool showHighlightsSawm = (_isRamadanMode && SettingsManager.Current.TrackerEnabled);
+            if (HighlightsSawmTrack != null)
+            {
+                HighlightsSawmTrack.Visibility = showHighlightsSawm ? Visibility.Visible : Visibility.Collapsed;
+                HighlightsSawmTrack.IsChecked = _currentDeeds.Sawm;
+            }
+
+            if (HighlightsGrid != null)
+            {
+                HighlightsGrid.Columns = showHighlightsSawm ? 3 : 2;
+            }
         }
 
         private void UpdateOverallTrackerProgress()

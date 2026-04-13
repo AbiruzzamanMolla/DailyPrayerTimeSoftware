@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
 using DailyPrayerTime.Native.Services;
+using DailyPrayerTime.Native.Models;
 
 namespace DailyPrayerTime.Native
 {
@@ -702,6 +703,23 @@ namespace DailyPrayerTime.Native
         private void TestEstablished_Click(object sender, RoutedEventArgs e)
         {
             var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
+            popup.Owner = this;
+            popup.Show();
+        }
+
+        private void TestDeedPopup_Click(object sender, RoutedEventArgs e)
+        {
+            var deeds = TrackerService.Instance.LoadDay(DateTime.Today);
+            var entries = deeds.Prayers.ContainsKey("Asr") ? deeds.Prayers["Asr"] : new List<DeedEntry> { new DeedEntry { Label = "Test Prayer", IsChecked = false } };
+            var popup = new DeedPopup("Asr", entries, deeds);
+            popup.Owner = this;
+            popup.Show();
+        }
+
+        private void TestDailySummary_Click(object sender, RoutedEventArgs e)
+        {
+            var deeds = TrackerService.Instance.LoadDay(DateTime.Today);
+            var popup = new DailySummaryPopup(deeds);
             popup.Owner = this;
             popup.Show();
         }

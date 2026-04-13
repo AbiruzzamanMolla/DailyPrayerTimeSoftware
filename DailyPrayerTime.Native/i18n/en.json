@@ -132,6 +132,8 @@
   "Jamaat_Label": "{0} Jamaat",
   "Jamaat_StartsAt": "Starts at {0}",
   "Label_MinutesRemaining": "minutes remaining",
+  "Label_MarkFasting": "Track your daily fast",
+  "Label_IAmFasting": "I am Fasting",
   "Label_Loading": "Loading...",
   "Label_NoPrayerData": "No prayer data available",
   "Label_DuaPlaceholder": "Dua is shown after Adhan",

@@ -24,27 +24,6 @@ namespace DailyPrayerTime.Native
         {
             _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
             
-            // Ensure mandatory prayers exist in the file
-            string[] mandatory = { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
-            foreach (var p in mandatory)
-            {
-                if (!_currentDeeds.Prayers.ContainsKey(p))
-                {
-                    string note = LocalizationManager.Instance.GetString($"Note_{p}");
-                    _currentDeeds.Prayers[p] = RakatParser.Parse(note);
-                }
-            }
-
-            // Ensure Adhkar
-            if (!_currentDeeds.Prayers.ContainsKey("Adhkar"))
-            {
-                _currentDeeds.Prayers["Adhkar"] = new List<DeedEntry>
-                {
-                    new DeedEntry { Label = "Morning Adhkar", Type = DeedType.Nafl },
-                    new DeedEntry { Label = "Evening Adhkar", Type = DeedType.Nafl }
-                };
-            }
-
             // Sync UI
             CurrentDateLabel.Text = DateTime.Today.ToString("dd MMM").ToUpper();
             SawmToggle.IsChecked = _currentDeeds.Sawm;

@@ -647,14 +647,20 @@
                         <CheckBox x:Name="TrackerEnabledInput" Content="Enable Daily Tracker" Margin="0,5" FontWeight="SemiBold"/>
                         <TextBlock Text="Turn on/off the tracking system on the dashboard." FontSize="11" Foreground="#6f6885" Margin="20,0,0,15"/>
 
-                        <CheckBox x:Name="DeedPopupEnabledInput" Content="Show Deed Popups after Jamaat" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="DeedPopupEnabledInput" Content="Show Deed Popups after Jamaat" VerticalAlignment="Center"/>
+                            <Button Content="TEST" Click="TestDeedPopup_Click" Margin="15,0,0,0" Padding="8,2" FontSize="10" Background="#f0f0f0" BorderBrush="#ccc" Cursor="Hand"/>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
                             <TextBlock Text="Show after" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
                             <TextBox x:Name="TrackerPopupOffsetInput" Width="40" Margin="10,0" Padding="2" Text="15"/>
                             <TextBlock Text="minutes of Jamaat time." VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
                         </StackPanel>
 
-                        <CheckBox x:Name="DailySummaryPopupEnabledInput" Content="Show Daily Summary at Night" Margin="0,5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <CheckBox x:Name="DailySummaryPopupEnabledInput" Content="Show Daily Summary at Night" VerticalAlignment="Center"/>
+                            <Button Content="TEST" Click="TestDailySummary_Click" Margin="15,0,0,0" Padding="8,2" FontSize="10" Background="#f0f0f0" BorderBrush="#ccc" Cursor="Hand"/>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
                             <TextBlock Text="Scheduled Time:" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
                             <TextBox x:Name="DailySummaryPopupTimeInput" Width="60" Margin="10,0" Padding="2" Text="22:00"/>

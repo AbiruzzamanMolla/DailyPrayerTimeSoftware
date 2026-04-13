@@ -132,6 +132,8 @@
   "Jamaat_Label": "{0} জামাত",
   "Jamaat_StartsAt": "{0} মিনিটে শুরু হবে",
   "Label_MinutesRemaining": "মিনিট বাকি",
+  "Label_MarkFasting": "রোজা ট্র্যাকার",
+  "Label_IAmFasting": "আজ আমি রোজা রেখেছি",
   "Label_Loading": "লোড হচ্ছে...",
   "Label_NoPrayerData": "নামাজের কোনো তথ্য পাওয়া যায়নি",
   "Label_DuaPlaceholder": "আজানের পর দোয়া দেখানো হয়",

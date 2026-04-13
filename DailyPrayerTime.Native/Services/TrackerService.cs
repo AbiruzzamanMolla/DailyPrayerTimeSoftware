@@ -41,10 +41,33 @@ namespace DailyPrayerTime.Native.Services
 
             if (deeds == null) deeds = new DailyDeeds { Date = date.ToString("yyyy-MM-dd") };
             
-            // Initialize default Nafal tracking
+            // Ensure mandatory prayers exist with default deeds from localization
+            string[] mandatory = { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Jumuah" };
+            foreach (var p in mandatory)
+            {
+                if (!deeds.Prayers.ContainsKey(p))
+                {
+                    string note = LocalizationManager.Instance.GetString($"Note_{p}");
+                    // Use RakatParser if available, or just empty list if localization fails initially
+                    try { deeds.Prayers[p] = RakatParser.Parse(note); } 
+                    catch { deeds.Prayers[p] = new List<DeedEntry>(); }
+                }
+            }
+
+            // Ensure special Nafal tracking
             deeds.EnsurePrayer("Tahajjud");
             deeds.EnsurePrayer("Duha");
             deeds.EnsurePrayer("Awwabin");
+            
+            // Ensure Adhkar
+            if (!deeds.Prayers.ContainsKey("Adhkar"))
+            {
+                deeds.Prayers["Adhkar"] = new List<DeedEntry>
+                {
+                    new DeedEntry { Label = "Morning Adhkar", Type = DeedType.Nafl },
+                    new DeedEntry { Label = "Evening Adhkar", Type = DeedType.Nafl }
+                };
+            }
             
             return deeds;
         }

@@ -308,7 +308,7 @@
                                         <TextBlock x:Name="HeroSuhurStatus" Text="--:--:--" Foreground="White" Opacity="0.8" FontSize="9" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Column="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="5,0,0,0">
+                                <Border Grid.Column="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="5,0,5,0">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="{DynamicResource Label_IftarBegins}" Foreground="White" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="HeroIftarTime" Text="--:--" Foreground="#f87171" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
@@ -316,8 +316,8 @@
                                     </StackPanel>
                                 </Border>
                             </Grid>
-
-                            <Grid x:Name="HeroDefaultGrid">
+                            
+                             <Grid x:Name="HeroDefaultGrid">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -447,7 +447,7 @@
                         </StackPanel>
                     </Button>
                 </Grid>
-                <UniformGrid Columns="3" Margin="0,0,0,6">
+                <UniformGrid x:Name="HighlightsGrid" Columns="3" Margin="0,0,0,6">
                     <Border x:Name="SuhurCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8" Margin="0,0,5,0">
                         <StackPanel>
                             <TextBlock x:Name="SuhurDateText" Text="Today, Apr 7" FontSize="9" Foreground="White" Opacity="0.6" Margin="0,0,0,2"/>
@@ -473,8 +473,8 @@
                               Unchecked="SawmTrack_Changed">
                         <StackPanel>
                             <TextBlock Text="TODAY" FontSize="9" Foreground="White" Opacity="0.6" Margin="0,0,0,2"/>
-                            <TextBlock Text="{DynamicResource Label_Fasting}" FontSize="10" FontWeight="SemiBold" Foreground="White"/>
-                            <TextBlock Text="INTENTION?" FontSize="9" Foreground="White" Opacity="0.7"/>
+                            <TextBlock Text="{DynamicResource Label_IAmFasting}" FontSize="10" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="{DynamicResource Label_MarkFasting}" FontSize="9" Foreground="White" Opacity="0.7"/>
                         </StackPanel>
                     </CheckBox>
                 </UniformGrid>
