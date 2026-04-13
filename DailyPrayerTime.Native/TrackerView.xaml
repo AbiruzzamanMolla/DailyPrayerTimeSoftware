@@ -168,7 +168,22 @@
                                                 <CheckBox Content="{Binding Label}" IsChecked="{Binding IsChecked}" 
                                                           IsEnabled="{Binding IsEnabled}"
                                                           Margin="0,0,16,10" 
-                                                          Checked="RakatCheck_Changed" Unchecked="RakatCheck_Changed"/>
+                                                          Checked="RakatCheck_Changed" Unchecked="RakatCheck_Changed">
+                                                    <CheckBox.Style>
+                                                        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsEnabled" Value="False">
+                                                                    <Setter Property="Opacity" Value="0.6"/>
+                                                                    <Setter Property="Effect">
+                                                                        <Setter.Value>
+                                                                            <BlurEffect Radius="2"/>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </CheckBox.Style>
+                                                </CheckBox>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

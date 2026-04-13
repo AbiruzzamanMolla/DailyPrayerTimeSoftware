@@ -71,7 +71,22 @@ namespace DailyPrayerTime.Native
                 if (_currentDeeds.Prayers.TryGetValue(p, out var deeds))
                 {
                     bool isEnabled = _enabledPrayers.Contains(p);
-                    foreach (var d in deeds) d.IsEnabled = isEnabled;
+                    foreach (var d in deeds)
+                    {
+                        if (p == "Adhkar")
+                        {
+                            if (d.Label.Contains("Morning", StringComparison.OrdinalIgnoreCase))
+                                d.IsEnabled = isEnabled; // Fajr
+                            else if (d.Label.Contains("Evening", StringComparison.OrdinalIgnoreCase))
+                                d.IsEnabled = _enabledPrayers.Contains("Adhkar_Evening"); // Asr
+                            else
+                                d.IsEnabled = isEnabled;
+                        }
+                        else
+                        {
+                            d.IsEnabled = isEnabled;
+                        }
+                    }
 
                     var item = new PrayerTrackItem
                     {

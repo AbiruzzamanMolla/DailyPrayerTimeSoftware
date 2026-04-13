@@ -1926,7 +1926,7 @@ namespace DailyPrayerTime.Native
             if (now >= _todayPrayerTimes.Fajr) 
             {
                 enabled.Add("Fajr");
-                enabled.Add("Adhkar"); // Morning Adhkar
+                enabled.Add("Adhkar"); // Card + Morning Adhkar
             }
             
             // Duha / Ishraq
@@ -1937,7 +1937,13 @@ namespace DailyPrayerTime.Native
             }
 
             if (now >= _todayPrayerTimes.Dhuhr) enabled.Add("Dhuhr");
-            if (now >= _todayPrayerTimes.Asr) enabled.Add("Asr");
+            
+            // Asr & Evening Adhkar
+            if (now >= _todayPrayerTimes.Asr) 
+            {
+                enabled.Add("Asr");
+                enabled.Add("Adhkar_Evening");
+            }
             
             // Maghrib & Awwabin
             if (now >= _todayPrayerTimes.Maghrib) 
