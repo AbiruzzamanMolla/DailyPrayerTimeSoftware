@@ -1928,7 +1928,7 @@ namespace DailyPrayerTime.Native
             SettingsIcon.Opacity = 1.0;
         }
 
-        private HashSet<string> GetEnabledTrackerPrayers()
+        public HashSet<string> GetEnabledTrackerPrayers()
         {
             var enabled = new HashSet<string>();
             if (_todayPrayerTimes == null) return enabled;
@@ -1981,6 +1981,35 @@ namespace DailyPrayerTime.Native
             {
                 TrackerService.Instance.SaveDay(_currentDeeds);
                 UpdateOverallTrackerProgress();
+                
+                if (TrackerViewControl != null)
+                {
+                    TrackerViewControl.ReloadCurrentDate();
+                }
+            }
+        }
+
+        public void ReloadHeroTrackerFromDisk()
+        {
+            if (_currentDeeds == null || HeroTrackerTitle == null || string.IsNullOrEmpty(HeroTrackerTitle.Text)) return;
+            
+            _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
+            string title = HeroTrackerTitle.Text; 
+            string pKey = title.Replace(" TRACKER", ""); 
+            
+            pKey = pKey.ToLower();
+            if (pKey == "fajr") pKey = "Fajr";
+            else if (pKey == "dhuhr") pKey = "Dhuhr";
+            else if (pKey == "jumu'ah" || pKey == "jumuah") pKey = "Jumuah";
+            else if (pKey == "asr") pKey = "Asr";
+            else if (pKey == "maghrib") pKey = "Maghrib";
+            else if (pKey == "isha") pKey = "Isha";
+
+            if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds))
+            {
+                HeroRakatList.ItemsSource = null;
+                HeroRakatList.ItemsSource = deeds;
+                UpdateOverallTrackerProgress();
             }
         }
 
@@ -1996,6 +2025,20 @@ namespace DailyPrayerTime.Native
                 
                 // Sync UI
                 if (HighlightsSawmTrack != null && HighlightsSawmTrack.IsChecked != isChecked) HighlightsSawmTrack.IsChecked = isChecked;
+                
+                if (TrackerViewControl != null)
+                {
+                    TrackerViewControl.SyncSawmRemote(isChecked);
+                }
+            }
+        }
+
+        public void SyncSawmRemote(bool isChecked)
+        {
+            if (_currentDeeds != null) _currentDeeds.Sawm = isChecked;
+            if (HighlightsSawmTrack != null)
+            {
+                HighlightsSawmTrack.IsChecked = isChecked;
             }
         }
 

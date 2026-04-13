@@ -101,10 +101,28 @@ namespace DailyPrayerTime.Native
             return _currentDeeds.Prayers[name].FirstOrDefault()?.Value ?? 0;
         }
 
+        public void ReloadCurrentDate()
+        {
+            if (_currentDeeds != null && _currentDeeds.Date == DateTime.Today.ToString("yyyy-MM-dd"))
+            {
+                _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
+                UpdateOverallProgress();
+                UpdateViewForTab();
+                foreach (var item in PrayerItems) item.Refresh();
+            }
+        }
+
         private void RefreshPrayerList()
         {
             PrayerItems.Clear();
-            string[] sections = { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Adhkar" };
+            
+            DateTime date;
+            if (!DateTime.TryParse(_currentDeeds.Date, out date)) date = DateTime.Today;
+            
+            bool isFriday = date.DayOfWeek == DayOfWeek.Friday;
+            string[] sections = isFriday 
+                ? new[] { "Fajr", "Jumuah", "Asr", "Maghrib", "Isha", "Adhkar" } 
+                : new[] { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha", "Adhkar" };
             
             foreach (var p in sections)
             {
@@ -130,7 +148,7 @@ namespace DailyPrayerTime.Native
 
                     var item = new PrayerTrackItem
                     {
-                        PrayerName = p == "Adhkar" ? "ADHKAR & DUAS" : p.ToUpper(),
+                        PrayerName = p == "Adhkar" ? "ADHKAR & DUAS" : (p == "Jumuah" ? "JUMU'AH" : p.ToUpper()),
                         Deeds = deeds,
                         IsEnabled = isEnabled
                     };
@@ -144,17 +162,20 @@ namespace DailyPrayerTime.Native
             int total = 0;
             int checkedCount = 0;
 
-            foreach (var p in _currentDeeds.Prayers.Values)
+            foreach (var item in PrayerItems)
             {
-                foreach (var d in p)
+                if (!item.IsEnabled) continue;
+
+                foreach (var d in item.Deeds)
                 {
+                    if (!d.IsEnabled) continue;
                     total++;
-                    if (d.IsChecked || (d.Type == DeedType.Nafl && d.Value > 0)) checkedCount++;
+                    if (d.IsChecked) checkedCount++;
                 }
             }
 
             if (total == 0) return;
-            int percent = (checkedCount * 100) / total;
+            int percent = Math.Min(100, (checkedCount * 100) / total);
             OverallProgressPercent.Text = $"{percent}%";
             MainProgressBar.Value = percent;
         }
@@ -191,6 +212,19 @@ namespace DailyPrayerTime.Native
             SawmIndicator.Visibility = _currentDeeds.Sawm ? Visibility.Visible : Visibility.Collapsed;
             TrackerService.Instance.SaveDay(_currentDeeds);
             UpdateOverallProgress();
+
+            if (System.Windows.Application.Current.MainWindow is MainWindow mw)
+            {
+                mw.SyncSawmRemote(_currentDeeds.Sawm);
+            }
+        }
+
+        public void SyncSawmRemote(bool isChecked)
+        {
+            if (_currentDeeds != null) _currentDeeds.Sawm = isChecked;
+            if (SawmToggle != null) SawmToggle.IsChecked = isChecked;
+            if (SawmIndicator != null) SawmIndicator.Visibility = isChecked ? Visibility.Visible : Visibility.Collapsed;
+            UpdateOverallProgress();
         }
 
         private void RakatCheck_Click(object sender, RoutedEventArgs e)
@@ -209,6 +243,11 @@ namespace DailyPrayerTime.Native
             UpdateOverallProgress();
             UpdateViewForTab();
             foreach (var item in PrayerItems) item.Refresh();
+
+            if (System.Windows.Application.Current.MainWindow is MainWindow mw)
+            {
+                mw.ReloadHeroTrackerFromDisk();
+            }
         }
 
         private void NafalCount_Click(object sender, RoutedEventArgs e)
@@ -237,6 +276,11 @@ namespace DailyPrayerTime.Native
                 TrackerService.Instance.SaveDay(_currentDeeds);
                 UpdateOverallProgress();
                 UpdateViewForTab();
+
+                if (System.Windows.Application.Current.MainWindow is MainWindow mw)
+                {
+                    mw.ReloadHeroTrackerFromDisk();
+                }
             }
         }
 
@@ -559,7 +603,12 @@ namespace DailyPrayerTime.Native
             if (TrackerTabList.SelectedIndex == 0 && _currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
             {
                 // If in Daily tab viewing past date, go back to Today
-                LoadData(_enabledPrayers, DateTime.Today);
+                HashSet<string>? currentEnabled = null;
+                if (System.Windows.Application.Current.MainWindow is MainWindow mw)
+                {
+                    currentEnabled = mw.GetEnabledTrackerPrayers();
+                }
+                LoadData(currentEnabled, DateTime.Today);
             }
             else
             {
