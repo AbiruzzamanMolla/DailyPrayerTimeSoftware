@@ -72,7 +72,8 @@ namespace DailyPrayerTime.Native
                     var item = new PrayerTrackItem
                     {
                         PrayerName = p == "Adhkar" ? "ADHKAR & DUAS" : p.ToUpper(),
-                        Deeds = deeds
+                        Deeds = deeds,
+                        IsEnabled = isEnabled
                     };
                     PrayerItems.Add(item);
                 }
@@ -205,6 +206,7 @@ namespace DailyPrayerTime.Native
             PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof(CompletionText)));
         }
         public string PrayerName { get; set; }
+        public bool IsEnabled { get; set; } = true;
         public List<DeedEntry> Deeds { get; set; }
         public string CompletionText 
         {
