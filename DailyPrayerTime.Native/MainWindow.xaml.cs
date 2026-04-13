@@ -241,6 +241,8 @@ namespace DailyPrayerTime.Native
         {
             _isRamadanMode = !_isRamadanMode;
             RamadanIcon.Opacity = _isRamadanMode ? 1.0 : 0.7;
+            RamadanIcon.Foreground = _isRamadanMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
+            RamadanIcon.Effect = null;
             HeroRamadanGrid.Visibility = _isRamadanMode ? Visibility.Visible : Visibility.Collapsed;
             HeroDefaultGrid.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
             RefreshUIDisplay();
@@ -258,7 +260,6 @@ namespace DailyPrayerTime.Native
         private void FullScreen_Click(object sender, RoutedEventArgs e)
         {
             _isFullScreen = !_isFullScreen;
-            FullScreenIcon.Opacity = _isFullScreen ? 1.0 : 0.7;
             
             if (_isFullScreen)
             {
@@ -289,8 +290,11 @@ namespace DailyPrayerTime.Native
             FastingNoteExtraContent.Visibility = _isFastingNoteExpanded ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void Settings_Click(object sender, RoutedEventArgs e)
+        private async void Settings_Click(object sender, RoutedEventArgs e)
         {
+            SettingsIcon.Foreground = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
+            await Task.Delay(50); // Yield cleanly to UI thread to render green color before blocking modal opens
+            
             var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
             if (sw.ShowDialog() == true)
             {
@@ -299,11 +303,14 @@ namespace DailyPrayerTime.Native
                 ManageOverlay();
                 ManageIntegratedTaskbar();
             }
+            SettingsIcon.Foreground = System.Windows.Media.Brushes.White;
         }
 
         private void ZenMode_Click(object sender, RoutedEventArgs e)
         {
             _isZenMode = !_isZenMode;
+            ZenModeIcon.Foreground = _isZenMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
+            ZenModeIcon.Effect = null;
 
             // 1. Visibility Toggles
             var visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
@@ -1887,8 +1894,9 @@ namespace DailyPrayerTime.Native
         public void TrackerToggle_Click(object sender, RoutedEventArgs e)
         {
             _isTrackerMode = !_isTrackerMode;
-            TrackerToggleText.Text = _isTrackerMode ? "DASHBOARD" : "TRACKER";
-            TrackerToggleIcon.Text = _isTrackerMode ? "🏠" : "📊";
+            TrackerToggleIcon.Text = _isTrackerMode ? "✕" : "☷";
+            TrackerToggleIcon.Foreground = _isTrackerMode ? new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399")) : System.Windows.Media.Brushes.White;
+            TrackerToggleIcon.Effect = null;
 
             TrackerViewControl.Visibility = _isTrackerMode ? Visibility.Visible : Visibility.Collapsed;
             PrayerListScroll.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;

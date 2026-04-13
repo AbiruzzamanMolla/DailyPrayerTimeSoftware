@@ -148,22 +148,22 @@
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                     <!-- Ramadan Mode Toggle -->
                     <Button Click="RamadanMode_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="{DynamicResource ToolTip_Ramadan}">
-                        <TextBlock x:Name="RamadanIcon" Text="🌙" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
+                        <TextBlock x:Name="RamadanIcon" Text="☾" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
                     </Button>
 
-                    <!-- Full Screen Toggle -->
-                    <Button Click="FullScreen_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="{DynamicResource ToolTip_FullScreen}">
-                        <TextBlock x:Name="FullScreenIcon" Text="⛶" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
+                    <!-- Dashboard / Tracker Toggle -->
+                    <Button Click="TrackerToggle_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="Toggle Tracker" x:Name="HeaderTrackerToggleBtn">
+                        <TextBlock x:Name="TrackerToggleIcon" Text="☷" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" Opacity="0.7"/>
                     </Button>
 
                     <!-- Zen Mode Toggle -->
                     <Button Click="ZenMode_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand" ToolTip="{DynamicResource ToolTip_ZenMode}">
-                        <TextBlock x:Name="ZenModeIcon" Text="✨" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="ZenModeIcon" Text="✦" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
 
                     <!-- Settings (Relocated here for easy access) -->
                     <Button Click="Settings_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" Width="30" Height="30" Cursor="Hand">
-                        <TextBlock Text="⚙" FontSize="16" />
+                        <TextBlock x:Name="SettingsIcon" Text="⚙" FontSize="16" />
                     </Button>
                     
                     <!-- Minimize -->
@@ -409,43 +409,7 @@
                 <!-- Daily Highlights: Suhur & Iftar -->
                 <!-- Daily Highlights Header with Tracker Toggle -->
                 <Grid Margin="0,6,0,6">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
                     <TextBlock Text="{DynamicResource Section_Highlights}" FontWeight="Bold" FontSize="13" Foreground="White" Opacity="0.8" VerticalAlignment="Center"/>
-                    <Button x:Name="TrackerToggleBtn" Grid.Column="1" Click="TrackerToggle_Click" Cursor="Hand">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#1AFFFFFF"/>
-                                <Setter Property="BorderBrush" Value="#25FFFFFF"/>
-                                <Setter Property="BorderThickness" Value="1"/>
-                                <Setter Property="Padding" Value="8,4"/>
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="Button">
-                                            <Border Background="{TemplateBinding Background}" 
-                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                                    CornerRadius="8">
-                                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#33FFFFFF"/>
-                                        <Setter Property="BorderBrush" Value="#50FFFFFF"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                        <StackPanel Orientation="Horizontal" Margin="8,4">
-                            <TextBlock x:Name="TrackerToggleIcon" Text="📊" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBlock x:Name="TrackerToggleText" Text="TRACKER" Foreground="White" FontSize="9" FontWeight="Bold" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
                 </Grid>
                 <UniformGrid x:Name="HighlightsGrid" Columns="3" Margin="0,0,0,6">
                     <Border x:Name="SuhurCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8" Margin="0,0,5,0">
