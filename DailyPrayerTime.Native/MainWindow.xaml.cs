@@ -409,18 +409,8 @@ namespace DailyPrayerTime.Native
             // Refresh basmala translation any time settings (language) change
             InitBasmalaHeader();
 
-            // Enforce tracker visibility
-            if (!s.TrackerEnabled)
-            {
-                HeroTrackerBox.Visibility = Visibility.Collapsed;
-                HighlightsSawmTrack.Visibility = Visibility.Collapsed;
-                if (HighlightsGrid != null) HighlightsGrid.Columns = 2;
-            }
-            else
-            {
-                // Refresh visibility based on active prayer/mode
-                UpdateCountdown();
-            }
+            // Enforce tracker visibility centralizing through countdown updates
+            UpdateCountdown();
         }
 
         private void InitBasmalaHeader()
@@ -1968,7 +1958,9 @@ namespace DailyPrayerTime.Native
             }
 
             // Auto-Sawm detect
-            bool showHighlightsSawm = (_isRamadanMode && SettingsManager.Current.TrackerEnabled);
+            bool isSawmDay = TrackerService.Instance.IsSunnahSawmDay(DateTime.Today);
+            bool showHighlightsSawm = SettingsManager.Current.TrackerEnabled && (_isRamadanMode || isSawmDay);
+            
             if (HighlightsSawmTrack != null)
             {
                 HighlightsSawmTrack.Visibility = showHighlightsSawm ? Visibility.Visible : Visibility.Collapsed;
@@ -1977,7 +1969,14 @@ namespace DailyPrayerTime.Native
 
             if (HighlightsGrid != null)
             {
-                HighlightsGrid.Columns = showHighlightsSawm ? 3 : 2;
+                if (_isRamadanMode) 
+                {
+                    HighlightsGrid.Columns = 1;
+                }
+                else 
+                {
+                    HighlightsGrid.Columns = showHighlightsSawm ? 3 : 2;
+                }
             }
         }
 
