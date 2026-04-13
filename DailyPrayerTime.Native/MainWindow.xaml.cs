@@ -1897,7 +1897,27 @@ namespace DailyPrayerTime.Native
             HeroBorder.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
             HeroRow.Height = _isTrackerMode ? new GridLength(0) : GridLength.Auto;
 
-            if (_isTrackerMode) TrackerViewControl.LoadData();
+            // Hide/Show Sticky Footer
+            StickyFooter.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
+
+            if (_isTrackerMode) 
+            {
+                var enabledPrayers = GetEnabledTrackerPrayers();
+                TrackerViewControl.LoadData(enabledPrayers);
+            }
+        }
+
+        private HashSet<string> GetEnabledTrackerPrayers()
+        {
+            var enabled = new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud" };
+            if (_todayPrayerTimes == null) return enabled;
+
+            if (DateTime.Now >= _todayPrayerTimes.Fajr) enabled.Add("Fajr");
+            if (DateTime.Now >= _todayPrayerTimes.Dhuhr) enabled.Add("Dhuhr");
+            if (DateTime.Now >= _todayPrayerTimes.Asr) enabled.Add("Asr");
+            if (DateTime.Now >= _todayPrayerTimes.Maghrib) enabled.Add("Maghrib");
+            if (DateTime.Now >= _todayPrayerTimes.Isha) enabled.Add("Isha");
+            return enabled;
         }
 
         private void RakatCheck_Changed(object sender, RoutedEventArgs e)
@@ -1984,8 +2004,16 @@ namespace DailyPrayerTime.Native
         {
             if (HeroRakatList.ItemsSource is List<DeedEntry> deeds)
             {
-                int done = deeds.Count(d => d.IsChecked);
-                HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
+                var fardDeed = deeds.FirstOrDefault(d => d.Type == DeedType.Fard);
+                if (fardDeed != null)
+                {
+                    HeroTrackerProgress.Text = fardDeed.IsChecked ? "1/1 Completed" : "0/1 Completed";
+                }
+                else
+                {
+                    int done = deeds.Count(d => d.IsChecked);
+                    HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
+                }
             }
         }
     }

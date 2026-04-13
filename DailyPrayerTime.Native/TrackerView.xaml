@@ -147,6 +147,7 @@
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <CheckBox Content="{Binding Label}" IsChecked="{Binding IsChecked}" 
+                                                          IsEnabled="{Binding IsEnabled}"
                                                           Margin="0,0,16,10" 
                                                           Checked="RakatCheck_Changed" Unchecked="RakatCheck_Changed"/>
                                             </DataTemplate>

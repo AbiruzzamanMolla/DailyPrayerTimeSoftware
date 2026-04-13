@@ -20,6 +20,9 @@ namespace DailyPrayerTime.Native.Models
         public bool IsChecked { get; set; }
         public DeedType Type { get; set; }
         public int Value { get; set; } // For counters (e.g., Rakat count for Nafal)
+        
+        [System.Text.Json.Serialization.JsonIgnore]
+        public bool IsEnabled { get; set; } = true;
     }
 
     public class DailyDeeds

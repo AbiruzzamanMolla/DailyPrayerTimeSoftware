@@ -20,8 +20,11 @@ namespace DailyPrayerTime.Native
             PrayerList.ItemsSource = PrayerItems;
         }
 
-        public void LoadData()
+        private HashSet<string> _enabledPrayers = new HashSet<string>();
+
+        public void LoadData(HashSet<string> enabledPrayers = null)
         {
+            _enabledPrayers = enabledPrayers ?? new HashSet<string> { "Adhkar", "Ishraq", "Duha", "Awwabin", "Tahajjud", "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
             _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
             
             // Sync UI
@@ -63,6 +66,9 @@ namespace DailyPrayerTime.Native
             {
                 if (_currentDeeds.Prayers.TryGetValue(p, out var deeds))
                 {
+                    bool isEnabled = _enabledPrayers.Contains(p);
+                    foreach (var d in deeds) d.IsEnabled = isEnabled;
+
                     var item = new PrayerTrackItem
                     {
                         PrayerName = p == "Adhkar" ? "ADHKAR & DUAS" : p.ToUpper(),
@@ -98,6 +104,7 @@ namespace DailyPrayerTime.Native
             TrackerService.Instance.SaveDay(_currentDeeds);
             UpdateOverallProgress();
             LoadHistory();
+            foreach (var item in PrayerItems) item.Refresh();
         }
 
         private void NafalCount_Click(object sender, RoutedEventArgs e)
@@ -111,7 +118,12 @@ namespace DailyPrayerTime.Native
                 if (!_currentDeeds.Prayers.ContainsKey(name))
                     _currentDeeds.Prayers[name] = new List<DeedEntry> { new DeedEntry { Label = name, Type = DeedType.Nafl } };
 
-                var entry = _currentDeeds.Prayers[name].First();
+                var entry = _currentDeeds.Prayers[name].FirstOrDefault();
+                if (entry == null)
+                {
+                    entry = new DeedEntry { Label = name, Type = DeedType.Nafl };
+                    _currentDeeds.Prayers[name].Add(entry);
+                }
                 entry.Value = Math.Max(0, entry.Value + delta);
                 entry.IsChecked = entry.Value > 0;
 
@@ -150,10 +162,19 @@ namespace DailyPrayerTime.Native
             int checkedCount = 0;
             foreach (var p in deeds.Prayers.Values)
             {
-                foreach (var d in p)
+                var fardDeed = p.FirstOrDefault(d => d.Type == DeedType.Fard);
+                if (fardDeed != null)
                 {
                     total++;
-                    if (d.IsChecked || (d.Type == DeedType.Nafl && d.Value > 0)) checkedCount++;
+                    if (fardDeed.IsChecked) checkedCount++;
+                }
+                else
+                {
+                    foreach (var d in p)
+                    {
+                        total++;
+                        if (d.IsChecked || (d.Type == DeedType.Nafl && d.Value > 0)) checkedCount++;
+                    }
                 }
             }
             return total == 0 ? 0 : (checkedCount * 100) / total;
@@ -175,10 +196,27 @@ namespace DailyPrayerTime.Native
         public string ProgressText { get; set; } = "";
     }
 
-    public class PrayerTrackItem
+    public class PrayerTrackItem : System.ComponentModel.INotifyPropertyChanged
     {
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        public void Refresh()
+        {
+            PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof(CompletionText)));
+        }
         public string PrayerName { get; set; }
         public List<DeedEntry> Deeds { get; set; }
-        public string CompletionText => $"{Deeds.Count(d => d.IsChecked)}/{Deeds.Count} Done";
+        public string CompletionText 
+        {
+            get
+            {
+                var fardDeed = Deeds.FirstOrDefault(d => d.Type == DeedType.Fard);
+                if (fardDeed != null)
+                {
+                    return fardDeed.IsChecked ? "1/1 Done" : "0/1 Done";
+                }
+                return $"{Deeds.Count(d => d.IsChecked)}/{Deeds.Count} Done";
+            }
+        }
     }
 }
