@@ -13,8 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Hybrid Hijri Calendar System**: Implemented a region-aware Hijri calendar that prioritizes accurate data from the AlAdhan API when online.
 - **Improved Hijri Accuracy**: Fixed discrepancies where the Hijri date was off by 1-2 days (e.g., in Bangladesh) by fetching real-time components (Day, Month, Year).
+- **Arabic Weekday Display**: Added support for showing the Arabic weekday name (e.g., الثلاثاء) alongside the Hijri date when online.
 - **Localized Hijri Months**: Appropriately translates Hijri month names into Bangla and Arabic based on the user's selected language.
 - **Smart Fallback**: Automatically reverts to the local UmAlQura calendar when offline or when API requests time out.
+
+### Fixed
+
+- **Settings Window Layout**: Restored visibility of the Save and Cancel buttons by fixing window dimension clipping and resolving a height/min-height mismatch.
+- **UI Responsiveness**: Ensured the Settings window scales correctly to accommodate new configuration items.
 
 ## [2.2.0] - 2026-04-14
 

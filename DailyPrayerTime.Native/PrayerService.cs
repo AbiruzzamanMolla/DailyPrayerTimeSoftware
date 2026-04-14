@@ -23,6 +23,7 @@ namespace DailyPrayerTime.Native
         public int HijriDay { get; set; } = 0;
         public int HijriMonth { get; set; } = 0;
         public int HijriYear { get; set; } = 0;
+        public string HijriWeekday { get; set; } = "";
 
         public CombinedPrayerTimes() { }
 
@@ -130,7 +131,8 @@ namespace DailyPrayerTime.Native
                             HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH",
                             HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
                             HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0,
-                            HijriYear = int.TryParse(hijri.year.ToString(), out int y) ? y : 0
+                            HijriYear = int.TryParse(hijri.year.ToString(), out int y) ? y : 0,
+                            HijriWeekday = hijri.weekday.ar.ToString()
                         };
 
                         // Save to cache

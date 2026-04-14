@@ -1,9 +1,9 @@
 <Window x:Class="DailyPrayerTime.Native.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="{DynamicResource i18n_Settings}" Height="550" Width="520"
+        Title="{DynamicResource i18n_Settings}" Height="650" Width="520"
         WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
-        MinWidth="450" MinHeight="600"
+        MinWidth="450" MinHeight="650"
         Background="#f8f7ff">
     
     <DockPanel LastChildFill="True" Margin="20">

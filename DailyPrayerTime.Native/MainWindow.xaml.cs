@@ -474,7 +474,7 @@ namespace DailyPrayerTime.Native
                 HeroSubDay.Text = GetLocalizedDayName(DateTime.Now);
                 
                 // Force local Hijri calculation for non-English locales (API returns English month names)
-                HeroSubHijri.Text = GetHijriDate(_todayPrayerTimes.HijriDay, _todayPrayerTimes.HijriMonth, _todayPrayerTimes.HijriYear);
+                HeroSubHijri.Text = GetHijriDate(_todayPrayerTimes.HijriDay, _todayPrayerTimes.HijriMonth, _todayPrayerTimes.HijriYear, _todayPrayerTimes.HijriWeekday);
                 RefreshUIDisplay();
                 
                 // Force an explicit update to the taskbar window now that data is loaded
@@ -520,7 +520,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private static string GetHijriDate(int d = 0, int m = 0, int y = 0)
+        private static string GetHijriDate(int d = 0, int m = 0, int y = 0, string wd = "")
         {
             try {
                 int day, month, year;
@@ -558,7 +558,8 @@ namespace DailyPrayerTime.Native
                 };
 
                 string suffix = LocalizationManager.Instance.GetString("Label_HijriSuffix");
-                return $"{day} {months[month - 1]} {year} {suffix}";
+                string datePart = $"{day} {months[month - 1]} {year} {suffix}";
+                return string.IsNullOrEmpty(wd) ? datePart : $"{wd}, {datePart}";
             } catch { return "Hijri Date N/A"; }
         }
 
