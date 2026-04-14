@@ -873,8 +873,8 @@ namespace DailyPrayerTime.Native
         {
             if (SettingsButtonsPanel == null) return;
             
-            // Index 3 is "Support & Contact"
-            if (SettingsTabControl.SelectedIndex == 3)
+            // Index 4 is "Support & Contact"
+            if (SettingsTabControl.SelectedIndex == 4)
             {
                 SettingsButtonsPanel.Visibility = Visibility.Collapsed;
             }

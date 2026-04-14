@@ -128,11 +128,11 @@ namespace DailyPrayerTime.Native
                             Isha = ParseApiTime(timings.Isha.ToString()),
                             Suhur = ParseApiTime(timings.Imsak.ToString()).AddMinutes(s.SuhurOffset),
                             Iftar = ParseApiTime(timings.Maghrib.ToString()).AddMinutes(s.IftarOffset),
-                            HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH",
-                            HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
-                            HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0,
-                            HijriYear = int.TryParse(hijri.year.ToString(), out int y) ? y : 0,
-                            HijriWeekday = hijri.weekday.ar.ToString()
+                            HijriDate = "",
+                            HijriDay = 0,
+                            HijriMonth = 0,
+                            HijriYear = 0,
+                            HijriWeekday = ""
                         };
 
                         // Save to cache
@@ -177,10 +177,20 @@ namespace DailyPrayerTime.Native
 
         private static DateTime ParseApiTime(string timeStr)
         {
-            // API returns "HH:mm"
+            // API returns "HH:mm" or "HH:mm (EDT)" etc.
             var parts = timeStr.Split(':');
             var now = DateTime.Now;
-            return new DateTime(now.Year, now.Month, now.Day, int.Parse(parts[0]), int.Parse(parts[1]), 0, DateTimeKind.Local);
+            
+            int hour = int.Parse(parts[0]);
+            
+            string minuteStr = parts[1].Trim();
+            if (minuteStr.Length > 2)
+            {
+                minuteStr = minuteStr.Substring(0, 2);
+            }
+            int minute = int.Parse(minuteStr);
+            
+            return new DateTime(now.Year, now.Month, now.Day, hour, minute, 0, DateTimeKind.Local);
         }
 
         private static int MapMethodToApi(string method)
