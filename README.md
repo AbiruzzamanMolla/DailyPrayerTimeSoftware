@@ -23,9 +23,9 @@
 
 | Platform                       | Link                                                                                                                    |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.1.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.1.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.1.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.3.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 1. Download the installer matching your system.
 2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
@@ -34,50 +34,47 @@
 ## 📸 UI Preview
 
 <p align="center">
-  <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/main/screenshots/preview.gif" alt="UI Preview" width="100%">
+  <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/main/screenshots/cover.png" alt="UI Preview" width="100%">
 </p>
-
-## 🔥 What's New in v2.2.0 (Divine Tracker Expansion)
-
-- **Divine Tracker Analytics**: New aggregate progress card in the Tracker tab showing Weekly, Monthly, and Yearly completion statistics.
-- **Automated Qadha Tracking**: Smart logic that calculates missed Fard prayers across all periods (Today, Week, Month, Year).
-- **Taskbar Jamat Times**: Prayer list now displays Jamat times alongside start times for better planning.
-- **Application Loader**: Enhanced startup experience with a sleek new loading screen.
-- **Automatic Data Backup**: Scheduled backups to your preferred directory to keep your progress safe.
-- **Fixed Night Logic & Notifications**: Perfected crossover handling for Tahajjud and Islamic Midnight during early morning hours, and resolved an issue with missed notification alerts.
-
-## 🔥 What's New in v2.0.0 (Generation 2 Tracker)
-
-- **Bi-Directional Tracker Sync**: Instant synchronization between the Tracker popup and the Hero Tracker dashboard.
-- **Precision Progress Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
-- **Nafal & Sawm Integration**: Progress now tracks Nafal prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
-- **Improved Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
-
-_(See the `CHANGELOG.md` for a full history of updates including v1.8.x features like Custom Offsets, Granular Notifications, Zen Mode, and Ramadan Mode.)_
 
 ## ✨ Key Features
 
 ### 🕌 Prayer Tracking & Alarms
+- **Accurate Prayer Times**: Real-time countdowns for all five daily prayers based on your exact location.
+- **Jamaat (Congregation) Support**: Set fixed times for your local Masjid; now displays in the Taskbar for better planning.
+- **Granular Notification Controls**: Individually enable/disable Adhan, Pre-Adhan reminders, and Jamaat popups.
+- **Adhan Sound Management**: Choose from high-quality recorded adhans (Makkah, Madinah, Alafasi) or use any custom MP3/WAV file.
+- **Sunnah Fasting Tracker**: Automatic detection and alerts for Monday/Thursday, Ayyam al-Bidh, and special Islamic dates.
+- **Precision Night Logic**: Perfected crossover handling for Tahajjud and Islamic Midnight during early morning hours.
+- **Prohibited Times (Makruh) Alerts**: Visual countdowns and warnings for Sunrise, Zawal, and Sunset.
+- **Manual Calculation Options**: Custom Fajr/Isha angles, High Latitude rules, Suhur/Iftar offsets, and Hijri adjustments.
 
-- **Accurate Prayer Times:** Real-time countdowns for all five daily prayers based on your exact location (Latitude/Longitude).
-- **Jamaat (Congregation) Support:** Set and track fixed Jamaat times for your local Masjid. Time selectors strictly filter to each prayer's valid range.
-- **Granular Notification Controls**: Individually enable/disable Adhan, Pre-Adhan reminders, and Jamaat popups for each prayer.
-- **Adhan Sound Management**: Choose from high-quality recorded adhans (Makkah, Madinah, Alafasi), adjust volume globally, or use any custom MP3/WAV file.
-- **Sunnah Fasting Tracker:** Automatic detection and alerts for Monday/Thursday, Ayyam al-Bidh, and special Islamic dates.
-- **Prohibited Times (Makruh) Alerts:** Visual countdowns and warnings for Sunrise, Zawal, and Sunset.
-- **Manual Calculation Options**: Custom Fajr/Isha angles and High Latitude rules, customizable Suhur/Iftar offsets, and Hijri date adjustments.
+### 📈 Spiritual Tracker & Analytics
+- **Divine Tracker Dashboard**: A comprehensive spiritual progress monitor with bi-directional sync between the Tracker popup and Hero dashboard.
+- **In-Depth Analytics**: Visualize your consistency with aggregate progress cards showing Weekly, Monthly, and Yearly statistics.
+- **Automated Qadha Tracking**: Smart logic that calculates missed Fard prayers across all periods (Today, Week, Month, Year).
+- **Nafal & Sawm Integration**: Progress now tracks Sunnah prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
+- **Interactive Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
+- **Double-Precision Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
 
 ### 💻 UI & Integration
-
 - **Premium Glassmorphism UI**: Modern design with semi-transparent backgrounds, vibrant Islamic Green gradients, and custom titlebar-less navigation.
-- **Zen & Full Screen Modes**: Immersive focus modes that strip away UI distractions to leave only the beautiful prayer countdown.
+- **Enhanced Startup Experience**: Sleek new application loader for a seamless transition from desktop to app.
 - **Dual Taskbar Modes**:
-  - **Integrated Taskbar Window**: A native, TrafficMonitor-inspired taskbar integration for Windows 11.
+  - **Integrated Taskbar Window**: Native, TrafficMonitor-inspired taskbar integration for Windows 11.
   - **Legacy COM DeskBand**: Support for Windows 10 and ExplorerPatcher users.
-- **Floating Overlay**: A stylish, semi-transparent fallback overlay to keep prayers in view while you work, featuring vertical "popup" expansion.
+- **Floating Overlay**: A stylish fallback overlay to keep prayers in view while you work, featuring vertical "popup" expansion.
+- **Zen & Full Screen Modes**: Immersive focus modes that strip away UI distractions for a beautiful prayer countdown.
 - **Theme Customization**: Full control over primary/secondary colors and background gradients.
-- **Smart Update System**: Automatic version checks on startup and a manual "Check for Updates" button.
-- **Tray Persistence**: Runs in the background with a system tray icon for quick access.
+- **Smart Update System**: Automatic version checks on startup with manual "Check for Updates" options.
+
+### 🛡️ Data & Reliability
+- **Automatic Data Backup**: Scheduled backups to your preferred directory to keep your progress and settings safe.
+- **Portable Mode Support**: Runs as a single-file executable with all settings stored in a local `data` subfolder.
+- **Tray Persistence**: Runs efficiently in the background with a system tray icon for instant access.
+
+_(See the `CHANGELOG.md` for a full history of updates including v1.8.x features like Custom Offsets, Zen Mode, and more.)_
+
 
 ## 🚀 Portable Version
 
