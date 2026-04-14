@@ -8,7 +8,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>AnyCPU</Platforms>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <Version>2.2.1</Version>
+    <Version>2.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

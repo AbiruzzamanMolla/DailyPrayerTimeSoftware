@@ -36,6 +36,35 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ModernScrollBar" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Border Background="Transparent">
+                            <Track x:Name="PART_Track" IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb>
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Border Background="#60FFFFFF" CornerRadius="3" Margin="0"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     
     <Border Background="{StaticResource MainGradient}" CornerRadius="15" BorderBrush="#20FFFFFF" BorderThickness="1" Margin="10">
@@ -56,17 +85,133 @@
             <!-- Separator -->
             <Border Height="1" Background="#20FFFFFF" Margin="0,0,0,20"/>
 
-            <!-- Dua Section -->
-            <TextBlock Text="{DynamicResource i18n_Label_AdhanDua}" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="#9ca3af" Margin="0,0,0,10" TextDecorations="Underline"/>
-            
-            <TextBlock Text="{DynamicResource i18n_Adhan_DuaArabic}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="18" Foreground="White" Margin="0,0,0,15" LineHeight="28"/>
-            
-            <TextBlock Text="{DynamicResource i18n_Adhan_DuaTransliteration}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="13" Foreground="White" Opacity="0.8" FontStyle="Italic" Margin="0,0,0,10" LineHeight="20"/>
+            <!-- Content Section -->
+            <Grid Margin="0,0,0,20">
+                <!-- Adhan Reply Guide -->
+                <ScrollViewer x:Name="AdhanReplyContent" MaxHeight="400" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,5,0">
+                    <ScrollViewer.Resources>
+                        <Style TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ModernScrollBar}"/>
+                    </ScrollViewer.Resources>
+                    <StackPanel>
+                        <TextBlock Text="عَنْ عُمَرَ بْنِ الْخَطَّابِ، قَالَ قَالَ رَسُولُ اللَّهِ صلى الله عليه وسلم: &quot;إِذَا قَالَ الْمُؤَذِّنُ: اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ، فَقَالَ أَحَدُكُمُ: اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ، ثُمَّ قَالَ: أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ، قَالَ: أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ، ثُمَّ قَالَ: أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، قَالَ: أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ، ثُمَّ قَالَ: حَىَّ عَلَى الصَّلاَةِ، قَالَ: لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، ثُمَّ قَالَ: حَىَّ عَلَى الْفَلاَحِ، قَالَ: لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ، ثُمَّ قَالَ: اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ، قَالَ: اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ، ثُمَّ قَالَ: لاَ إِلَهَ إِلاَّ اللَّهُ، قَالَ: لاَ إِلَهَ إِلاَّ اللَّهُ مِنْ قَلْبِهِ دَخَلَ الْجَنَّةَ&quot;" 
+                                   TextWrapping="Wrap" TextAlignment="Right" FontSize="16" Foreground="White" LineHeight="26" Margin="0,0,0,10" />
+                        <TextBlock Text="{DynamicResource i18n_Adhan_Reply_HadithRef}" 
+                                   TextWrapping="Wrap" TextAlignment="Left" FontSize="11" Foreground="#9ca3af" FontStyle="Italic" Margin="0,0,0,15" />
 
-            <TextBlock Text="{DynamicResource i18n_Adhan_DuaTranslation}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="12" Foreground="White" Opacity="0.6" Margin="0,0,0,25" LineHeight="18"/>
+                        <!-- Explanation Table -->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="4*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Styles -->
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock" x:Key="HeaderTxt">
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="Foreground" Value="#34d399"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Margin" Value="4,8"/>
+                                </Style>
+                                <Style TargetType="TextBlock" x:Key="CellTxt">
+                                    <Setter Property="FontSize" Value="12"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="TextWrapping" Value="Wrap"/>
+                                    <Setter Property="Margin" Value="4,8"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                                <Style TargetType="TextBlock" x:Key="CellTxtAr" BasedOn="{StaticResource CellTxt}">
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="TextAlignment" Value="Right"/>
+                                    <Setter Property="Margin" Value="4,6"/>
+                                </Style>
+                            </Grid.Resources>
+
+                            <!-- Header Row -->
+                            <Border Grid.Row="0" Grid.ColumnSpan="3" BorderBrush="#30FFFFFF" BorderThickness="0,0,0,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource i18n_Adhan_Table_Call}" Style="{StaticResource HeaderTxt}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource i18n_Adhan_Table_Answer}" Style="{StaticResource HeaderTxt}"/>
+                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Table_Translit}" Style="{StaticResource HeaderTxt}"/>
+
+                            <!-- Row 1 -->
+                            <Border Grid.Row="1" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="1" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_AllahuAkbar}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row 2 -->
+                            <Border Grid.Row="2" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ اللَّهُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_AshHadu}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row 3 -->
+                            <Border Grid.Row="3" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="أَشْهَدُ أَنَّ مُحَمَّدًا رَسُولُ اللَّهِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="3" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_AshHaduMuhammad}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row 4 -->
+                            <Border Grid.Row="4" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="حَىَّ عَلَى الصَّلاَةِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="4" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_Hayya}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row 5 -->
+                            <Border Grid.Row="5" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="حَىَّ عَلَى الْفَلاَحِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="لاَ حَوْلَ وَلاَ قُوَّةَ إِلاَّ بِاللَّهِ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="5" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_Hayya}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row Fajr (Conditional) -->
+                            <Border x:Name="FajrRowBorder" Grid.Row="6" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1" Visibility="Collapsed"/>
+                            <TextBlock x:Name="FajrRowCol0" Grid.Row="6" Grid.Column="0" Text="الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ" Style="{StaticResource CellTxtAr}" Visibility="Collapsed" />
+                            <TextBlock x:Name="FajrRowCol1" Grid.Row="6" Grid.Column="1" Text="الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ" Style="{StaticResource CellTxtAr}" Visibility="Collapsed" />
+                            <TextBlock x:Name="FajrRowCol2" Grid.Row="6" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_SalatuKhayr}" Style="{StaticResource CellTxt}" Visibility="Collapsed" />
+
+                            <!-- Row 6 -->
+                            <Border Grid.Row="7" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="7" Grid.Column="0" Text="اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="7" Grid.Column="1" Text="اللَّهُ أَكْبَرُ اللَّهُ أَكْبَرُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="7" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_AllahuAkbar}" Style="{StaticResource CellTxt}" />
+
+                            <!-- Row 7 -->
+                            <Border Grid.Row="8" Grid.ColumnSpan="3" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1"/>
+                            <TextBlock Grid.Row="8" Grid.Column="0" Text="لاَ إِلَهَ إِلاَّ اللَّهُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="8" Grid.Column="1" Text="لاَ إِلَهَ إِلاَّ اللَّهُ" Style="{StaticResource CellTxtAr}" />
+                            <TextBlock Grid.Row="8" Grid.Column="2" Text="{DynamicResource i18n_Adhan_Translit_LaIlaha}" Style="{StaticResource CellTxt}" />
+
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Dua Section -->
+                <StackPanel x:Name="DuaContent" Visibility="Collapsed" VerticalAlignment="Center">
+                    <TextBlock Text="{DynamicResource i18n_Label_AdhanDua}" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="#9ca3af" Margin="0,0,0,10" TextDecorations="Underline"/>
+                    
+                    <TextBlock Text="{DynamicResource i18n_Adhan_DuaArabic}" 
+                               TextWrapping="Wrap" TextAlignment="Center" FontSize="20" Foreground="White" Margin="0,0,0,15" LineHeight="32"/>
+                    
+                    <TextBlock Text="{DynamicResource i18n_Adhan_DuaTransliteration}" 
+                               TextWrapping="Wrap" TextAlignment="Center" FontSize="14" Foreground="White" Opacity="0.8" FontStyle="Italic" Margin="0,0,0,10" LineHeight="20"/>
+
+                    <TextBlock Text="{DynamicResource i18n_Adhan_DuaTranslation}" 
+                               TextWrapping="Wrap" TextAlignment="Center" FontSize="13" Foreground="White" Opacity="0.6" Margin="0,0,0,5" LineHeight="18"/>
+                </StackPanel>
+            </Grid>
 
             <!-- Buttons -->
             <Grid>

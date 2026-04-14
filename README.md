@@ -34,7 +34,7 @@
 ## 📸 UI Preview
 
 <p align="center">
-  <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
+  <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/main/screenshots/preview.gif" alt="UI Preview" width="100%">
 </p>
 
 ## 🔥 What's New in v2.2.0 (Divine Tracker Expansion)

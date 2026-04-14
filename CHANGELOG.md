@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-//we added jamat time, loader screen, fixed prayer notifcation for tahajjurd ect. then continute
+## [2.3.0] - 2026-04-14
+
+### Added
+
+- **Interactive Adhan Reply Guide**: A new dual-stage popup during the Adhan. It first presents an exact transliterated and localized response guide—complete with Hadith references—instructing users on what to reply to each call of the Mu'adhdhin.
+- **Dynamic Fajr Context**: The reply guide intelligently displays the specific Fajr response ("الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ") only when the Fajr Adhan is playing.
+- **Automated Post-Adhan Dua**: When the Adhan completes, the popup waits 3 seconds before automatically shifting to display the Dua After Adhan, simultaneously playing the localized audio track (`dua_after_adhan.wav`).
+- **UI/UX Polish**: Updated the Adhan popup with modern, slim scrollbars and glassmorphic touches.
+
+### Fixed
+
+- **C# Build Health**: Resolved nullability warnings (`CS8622`) related to event handlers within WPF `AdhanNotificationWindow`.
 
 ## [2.2.1] - 2026-04-14
 
