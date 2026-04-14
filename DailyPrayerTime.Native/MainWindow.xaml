@@ -446,11 +446,18 @@
 
                 <Border x:Name="FajrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="FajrNameText" Text="{DynamicResource Prayer_Fajr}" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             <TextBlock x:Name="FajrRakatNote" Text="Total: 4 Rakats" FontSize="10" Foreground="#9ca3af" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="FajrTimeText" Text="--:-- AM - --:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="FajrTimeText" Text="--:-- AM - --:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="FajrJamatText" Text="Jamat: --:-- AM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
                 <Border x:Name="SunriseCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6" Visibility="Collapsed">
@@ -461,48 +468,83 @@
                 </Border>
                 <Border x:Name="DhuhrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="DhuhrNameText" Text="{DynamicResource Prayer_Dhuhr}" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             <TextBlock x:Name="DhuhrRakatNote" Text="Total: 12 Rakats" FontSize="10" Foreground="#9ca3af" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="DhuhrTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="DhuhrTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="DhuhrJamatText" Text="Jamat: --:-- PM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
                 <Border x:Name="JumuahCard" Background="#1d4ed8" CornerRadius="6" Padding="12" Margin="0,0,0,6" Visibility="Collapsed">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="JumuahNameText" Text="{DynamicResource Prayer_Jumuah}" FontSize="15" FontWeight="Bold" Foreground="White"/>
                             <TextBlock x:Name="JumuahRakatNote" Text="Total: 14 Rakats" FontSize="10" Foreground="#bfdbfe" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="JumuahTimeText" Text="--:-- PM" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="JumuahTimeText" Text="--:-- PM" FontSize="13" FontWeight="Bold" Foreground="White" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="JumuahJamatText" Text="Jamat: --:-- PM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
 
                 <Border x:Name="AsrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="AsrNameText" Text="{DynamicResource Prayer_Asr}" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             <TextBlock x:Name="AsrRakatNote" Text="Total: 8 Rakats" FontSize="10" Foreground="#9ca3af" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="AsrTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="AsrTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="AsrJamatText" Text="Jamat: --:-- PM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
                 <Border x:Name="MaghribCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="MaghribNameText" Text="{DynamicResource Prayer_Maghrib}" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             <TextBlock x:Name="MaghribRakatNote" Text="Total: 7 Rakats" FontSize="10" Foreground="#9ca3af" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="MaghribTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="MaghribTimeText" Text="--:-- PM - --:-- PM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="MaghribJamatText" Text="Jamat: --:-- PM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
                 <Border x:Name="IshaCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,10">
                     <Grid>
-                        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0">
                             <TextBlock x:Name="IshaNameText" Text="{DynamicResource Prayer_Isha}" FontSize="15" FontWeight="Medium" Foreground="White"/>
                             <TextBlock x:Name="IshaRakatNote" Text="Total: 17 Rakats" FontSize="10" Foreground="#9ca3af" Margin="0,6,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
-                        <TextBlock x:Name="IshaTimeText" Text="--:-- PM - --:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="IshaTimeText" Text="--:-- PM - --:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="IshaJamatText" Text="Jamat: --:-- PM" FontSize="11" FontWeight="SemiBold" Foreground="#fbbf24" HorizontalAlignment="Right" Margin="0,4,0,0"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
                 

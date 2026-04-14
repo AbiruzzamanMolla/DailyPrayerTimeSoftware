@@ -297,8 +297,15 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,0,0,10">
                             <TextBlock Text="Scheduled Time:" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
-                            <TextBox x:Name="DailySummaryPopupTimeInput" Width="60" Margin="10,0" Padding="2" Text="22:00"/>
-                            <TextBlock Text="(24h format, e.g. 22:00 for 10 PM)" VerticalAlignment="Center" FontSize="11" Foreground="#6f6885"/>
+                            <StackPanel Orientation="Horizontal" Margin="10,0">
+                                <ComboBox x:Name="DailySummaryHourInput" Width="50" Margin="0,2"/>
+                                <TextBlock Text=":" VerticalAlignment="Center" Margin="5,0"/>
+                                <ComboBox x:Name="DailySummaryMinuteInput" Width="50" Margin="0,2"/>
+                                <ComboBox x:Name="DailySummaryAmPmInput" Width="55" Margin="5,2,0,2" Visibility="Collapsed">
+                                    <ComboBoxItem Content="AM"/>
+                                    <ComboBoxItem Content="PM"/>
+                                </ComboBox>
+                            </StackPanel>
                         </StackPanel>
 
                         <CheckBox x:Name="AutoTrackRamadanInput" Content="{DynamicResource Tracker_AutoRamadan}" Margin="0,5"/>
@@ -312,6 +319,18 @@
                             <Button Content="{DynamicResource Btn_Backup}" Click="BackupTracker_Click" Margin="0,0,5,0" Padding="10" Background="#f0f0f0" BorderBrush="#ccc" BorderThickness="1"/>
                             <Button Content="{DynamicResource Btn_Restore}" Click="RestoreTracker_Click" Margin="5,0,0,0" Padding="10" Background="#f0f0f0" BorderBrush="#ccc" BorderThickness="1"/>
                         </UniformGrid>
+
+                        <TextBlock Text="Auto Backup Schedule" FontSize="11" Foreground="#6f6885" Margin="0,20,0,5"/>
+                        <StackPanel Orientation="Horizontal">
+                            <ComboBox x:Name="AutoBackupScheduleInput" Width="120" Margin="0,0,10,0">
+                                <ComboBoxItem Content="None" Tag="NONE"/>
+                                <ComboBoxItem Content="Daily" Tag="DAILY"/>
+                                <ComboBoxItem Content="Weekly" Tag="WEEKLY"/>
+                                <ComboBoxItem Content="Monthly" Tag="MONTHLY"/>
+                            </ComboBox>
+                            <Button Content="Choose Location" Click="ChooseAutoBackupLocation_Click" Padding="10,4" Background="#f0f0f0" BorderBrush="#ccc"/>
+                        </StackPanel>
+                        <TextBlock x:Name="AutoBackupLocationText" Text="Not set" FontSize="10" Foreground="#888" Margin="0,5,0,0" TextWrapping="Wrap"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>

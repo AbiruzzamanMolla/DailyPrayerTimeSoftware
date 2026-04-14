@@ -4,7 +4,7 @@ namespace DailyPrayerTime.Native
 {
     public partial class App : System.Windows.Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             SettingsManager.Load();
             LocalizationManager.Instance.SetLanguage(SettingsManager.Current.Language);
@@ -23,9 +23,7 @@ namespace DailyPrayerTime.Native
 
             base.OnStartup(e);
 
-            var mainWindow = new MainWindow();
             bool isSilent = false;
-            
             foreach (var arg in e.Args)
             {
                 if (arg.Equals("-silent", System.StringComparison.OrdinalIgnoreCase) || 
@@ -38,7 +36,20 @@ namespace DailyPrayerTime.Native
 
             if (!isSilent)
             {
+                var loader = new LoaderWindow();
+                loader.Show();
+
+                // Artificial delay to show branding and support links
+                await System.Threading.Tasks.Task.Delay(3000);
+
+                var mainWindow = new MainWindow();
                 mainWindow.Show();
+                loader.Close();
+            }
+            else
+            {
+                // Background start doesn't show loader
+                _ = new MainWindow();
             }
         }
     }

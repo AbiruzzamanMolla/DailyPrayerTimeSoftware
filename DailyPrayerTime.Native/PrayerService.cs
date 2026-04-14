@@ -43,9 +43,9 @@ namespace DailyPrayerTime.Native
             if (now >= Maghrib) return Prayer.MAGHRIB;
             if (now >= Asr) return Prayer.ASR;
             if (now >= Dhuhr) return Prayer.DHUHR;
-            if (now >= Sunrise) return Prayer.NONE; // After Sunrise, the current prayer is NONE (waiting for Dhuhr)
+            if (now >= Sunrise) return Prayer.SUNRISE; // After Sunrise, before Dhuhr
             if (now >= Fajr) return Prayer.FAJR;
-            return Prayer.NONE;
+            return Prayer.ISHA; // Post-midnight before Fajr is considered Isha relative to the previous day
         }
 
         public DateTime TimeForPrayer(Prayer p)

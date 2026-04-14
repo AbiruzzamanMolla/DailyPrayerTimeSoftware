@@ -102,6 +102,11 @@ namespace DailyPrayerTime.Native
         public bool DailySummaryPopupEnabled { get; set; } = true;
         public string DailySummaryPopupTime { get; set; } = "22:00"; // 10 PM
         public bool AutoTrackRamadan { get; set; } = true;
+
+        // Auto Backup Settings
+        public string AutoBackupSchedule { get; set; } = "NONE"; // "NONE", "DAILY", "WEEKLY", "MONTHLY"
+        public string AutoBackupLocation { get; set; } = "";
+        public string LastAutoBackupDate { get; set; } = "";
     }
 
     public static class SettingsManager

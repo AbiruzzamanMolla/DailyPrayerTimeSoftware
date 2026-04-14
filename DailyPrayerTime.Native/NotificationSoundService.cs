@@ -28,8 +28,7 @@ namespace DailyPrayerTime.Native
             if (!SettingsManager.Current.PrayerSoundEnabled) return;
 
             string prayerName = prayer.ToString().ToLower();
-            // Handle naming differences (Fajar vs Fajr)
-            if (prayerName == "fajr") prayerName = "fajr"; 
+            if (prayerName == "sunrise" || prayerName == "none") return;
             
             QueueSound(prayerName, type);
         }

@@ -37,11 +37,14 @@
   <img src="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/raw/native-rewrite/screenshots/preview.gif" alt="UI Preview" width="100%">
 </p>
 
-## 🔥 What's New in v2.1.0 (Multi-Language Audio)
+## 🔥 What's New in v2.2.0 (Divine Tracker Expansion)
 
-- **Native Arabic & Bangla Voice**: Added high-quality voice notifications for Arabic (العربية) and Bangla (বাংলা).
-- **Localized Audio Settings**: Selection menu now uses native language names for better clarity.
-- **Random Sound Audition**: Instant test button to hear random prayer sounds in your selected language.
+- **Divine Tracker Analytics**: New aggregate progress card in the Tracker tab showing Weekly, Monthly, and Yearly completion statistics.
+- **Automated Qadha Tracking**: Smart logic that calculates missed Fard prayers across all periods (Today, Week, Month, Year).
+- **Taskbar Jamat Times**: Prayer list now displays Jamat times alongside start times for better planning.
+- **Application Loader**: Enhanced startup experience with a sleek new loading screen.
+- **Automatic Data Backup**: Scheduled backups to your preferred directory to keep your progress safe.
+- **Fixed Night Logic & Notifications**: Perfected crossover handling for Tahajjud and Islamic Midnight during early morning hours, and resolved an issue with missed notification alerts.
 
 ## 🔥 What's New in v2.0.0 (Generation 2 Tracker)
 

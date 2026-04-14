@@ -69,16 +69,23 @@ namespace DailyPrayerTime.Native
                 ? Enumerable.Range(0, 24).Select(i => i.ToString("D2")).ToList()
                 : Enumerable.Range(1, 12).Select(i => i.ToString("D2")).ToList();
 
-            foreach (var combo in new[] { FajrHourInput, DhuhrHourInput, AsrHourInput, MaghribHourInput, IshaHourInput })
+            foreach (var combo in new[] { FajrHourInput, DhuhrHourInput, AsrHourInput, MaghribHourInput, IshaHourInput, DailySummaryHourInput })
             {
-                if (combo.ItemsSource == null) combo.ItemsSource = defaultHours;
+                if (combo != null && combo.ItemsSource == null) combo.ItemsSource = defaultHours;
             }
 
             var visibility = is24h ? Visibility.Collapsed : Visibility.Visible;
-            foreach (var combo in new[] { FajrAmPmInput, DhuhrAmPmInput, AsrAmPmInput, MaghribAmPmInput, IshaAmPmInput })
+            foreach (var combo in new[] { FajrAmPmInput, DhuhrAmPmInput, AsrAmPmInput, MaghribAmPmInput, IshaAmPmInput, DailySummaryAmPmInput })
             {
-                combo.Visibility = visibility;
-                if (combo.SelectedIndex == -1) combo.SelectedIndex = 0;
+                if (combo != null) {
+                    combo.Visibility = visibility;
+                    if (combo.SelectedIndex == -1) combo.SelectedIndex = 0;
+                }
+            }
+            if (DailySummaryMinuteInput != null && DailySummaryMinuteInput.ItemsSource == null)
+            {
+                DailySummaryMinuteInput.ItemsSource = Enumerable.Range(0, 60).Select(i => i.ToString("D2")).ToList();
+                if (DailySummaryMinuteInput.SelectedIndex == -1) DailySummaryMinuteInput.SelectedIndex = 0;
             }
 
             PopulateHints();
@@ -97,6 +104,7 @@ namespace DailyPrayerTime.Native
             var asr = GetTimeFromInputs(AsrHourInput, AsrMinuteInput, AsrAmPmInput, !to24h);
             var maghrib = GetTimeFromInputs(MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, !to24h);
             var isha = GetTimeFromInputs(IshaHourInput, IshaMinuteInput, IshaAmPmInput, !to24h);
+            var summary = GetTimeFromInputs(DailySummaryHourInput, DailySummaryMinuteInput, DailySummaryAmPmInput, !to24h);
 
             UpdateHourItems();
             PopulateHints();
@@ -107,6 +115,7 @@ namespace DailyPrayerTime.Native
             SetTimeToInputs(asr, AsrHourInput, AsrMinuteInput, AsrAmPmInput, to24h);
             SetTimeToInputs(maghrib, MaghribHourInput, MaghribMinuteInput, MaghribAmPmInput, to24h);
             SetTimeToInputs(isha, IshaHourInput, IshaMinuteInput, IshaAmPmInput, to24h);
+            SetTimeToInputs(summary, DailySummaryHourInput, DailySummaryMinuteInput, DailySummaryAmPmInput, to24h);
         }
 
         private static string GetTimeFromInputs(System.Windows.Controls.ComboBox h, System.Windows.Controls.ComboBox m, System.Windows.Controls.ComboBox ampm, bool was12h)
@@ -158,7 +167,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.1.0");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.2.0");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
@@ -252,8 +261,19 @@ namespace DailyPrayerTime.Native
             DeedPopupEnabledInput.IsChecked = s.DeedPopupEnabled;
             TrackerPopupOffsetInput.Text = s.DeedPopupOffsetMinutes.ToString();
             DailySummaryPopupEnabledInput.IsChecked = s.DailySummaryPopupEnabled;
-            DailySummaryPopupTimeInput.Text = s.DailySummaryPopupTime;
+            SetTimeToInputs(s.DailySummaryPopupTime ?? "22:00", DailySummaryHourInput, DailySummaryMinuteInput, DailySummaryAmPmInput, is24h);
             AutoTrackRamadanInput.IsChecked = s.AutoTrackRamadan;
+
+            // Load Auto Backup schedule & location
+            AutoBackupLocationText.Text = string.IsNullOrEmpty(s.AutoBackupLocation) ? "Not set" : s.AutoBackupLocation;
+            foreach (ComboBoxItem item in AutoBackupScheduleInput.Items)
+            {
+                if (item.Tag?.ToString() == s.AutoBackupSchedule)
+                {
+                    AutoBackupScheduleInput.SelectedItem = item;
+                    break;
+                }
+            }
 
             UpdateManualParamsVisibility();
             EstablishedFajrInput.IsChecked = s.EstablishedFajr;
@@ -482,7 +502,7 @@ namespace DailyPrayerTime.Native
             s.DeedPopupEnabled = DeedPopupEnabledInput.IsChecked ?? true;
             s.DeedPopupOffsetMinutes = int.TryParse(TrackerPopupOffsetInput.Text, out int tpo) ? tpo : 15;
             s.DailySummaryPopupEnabled = DailySummaryPopupEnabledInput.IsChecked ?? true;
-            s.DailySummaryPopupTime = DailySummaryPopupTimeInput.Text;
+            s.DailySummaryPopupTime = GetTimeFromInputs(DailySummaryHourInput, DailySummaryMinuteInput, DailySummaryAmPmInput, !is24h);
             s.AutoTrackRamadan = AutoTrackRamadanInput.IsChecked ?? true;
 
             // Save Granular Established
@@ -491,6 +511,19 @@ namespace DailyPrayerTime.Native
             s.EstablishedAsr = EstablishedAsrInput.IsChecked ?? true;
             s.EstablishedMaghrib = EstablishedMaghribInput.IsChecked ?? true;
             s.EstablishedIsha = EstablishedIshaInput.IsChecked ?? true;
+
+            // Save Auto Backup
+            if (AutoBackupScheduleInput.SelectedItem is ComboBoxItem backupItem && backupItem.Tag is string backupSchedule)
+            {
+                if (s.AutoBackupSchedule != backupSchedule)
+                {
+                    s.AutoBackupSchedule = backupSchedule;
+                }
+            }
+            if (AutoBackupLocationText.Text != "Not set" && !string.IsNullOrEmpty(AutoBackupLocationText.Text))
+            {
+                s.AutoBackupLocation = AutoBackupLocationText.Text;
+            }
 
             // Save Offsets
             if (int.TryParse(SuhurOffsetInput.Text, out int soff)) s.SuhurOffset = soff;
@@ -534,6 +567,18 @@ namespace DailyPrayerTime.Native
             if (result == true)
             {
                 AdhanSoundPathInput.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void ChooseAutoBackupLocation_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                dialog.Description = "Select a folder to save automatic backups";
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    AutoBackupLocationText.Text = dialog.SelectedPath;
+                }
             }
         }
         

@@ -108,6 +108,7 @@ namespace DailyPrayerTime.Native
                 _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
                 UpdateOverallProgress();
                 UpdateViewForTab();
+                UpdateQadhaSummary();
                 foreach (var item in PrayerItems) item.Refresh();
             }
         }
@@ -161,6 +162,10 @@ namespace DailyPrayerTime.Native
         {
             int total = 0;
             int checkedCount = 0;
+            int qadhaCount = 0;
+
+            DateTime targetDate;
+            if (!DateTime.TryParse(_currentDeeds.Date, out targetDate)) targetDate = DateTime.Today;
 
             foreach (var item in PrayerItems)
             {
@@ -172,12 +177,61 @@ namespace DailyPrayerTime.Native
                     total++;
                     if (d.IsChecked) checkedCount++;
                 }
+
+                // Qadha logic for current view (if it's a fard prayer)
+                if (item.PrayerName != "ADHKAR & DUAS")
+                {
+                    var fardDeed = item.Deeds.FirstOrDefault(d => d.Type == DeedType.Fard);
+                    if (fardDeed != null && fardDeed.IsEnabled && !fardDeed.IsChecked)
+                    {
+                        // For past dates, if it's enabled but not checked, it's Qadha
+                        if (targetDate.Date < DateTime.Today)
+                        {
+                            qadhaCount++;
+                        }
+                        else
+                        {
+                            // For today, it's Qadha only if the *next* prayer has started
+                            // item.IsEnabled being true only means it HAS started.
+                            // We need to know if it has ENDED.
+                            if (IsPrayerEnded(item.PrayerName))
+                            {
+                                qadhaCount++;
+                            }
+                        }
+                    }
+                }
             }
 
             if (total == 0) return;
             int percent = Math.Min(100, (checkedCount * 100) / total);
             OverallProgressPercent.Text = $"{percent}%";
             MainProgressBar.Value = percent;
+
+            StatsCompletedCount.Text = checkedCount.ToString();
+            StatsMissedCount.Text = qadhaCount.ToString();
+        }
+
+        private bool IsPrayerEnded(string prayerName)
+        {
+            if (System.Windows.Application.Current.MainWindow is MainWindow mw)
+            {
+                var times = mw.GetTodayPrayerTimes(); // Assume I'll add this or access field
+                if (times == null) return false;
+
+                var now = DateTime.Now;
+                return prayerName.ToUpper() switch
+                {
+                    "FAJR" => now > times.Sunrise,
+                    "DHUHR" => now > times.Asr,
+                    "JUMUAH" => now > times.Asr,
+                    "ASR" => now > times.Maghrib,
+                    "MAGHRIB" => now > times.Isha,
+                    "ISHA" => false, // Isha ends at next day's Fajr, making today a past date
+                    _ => false
+                };
+            }
+            return false;
         }
 
         private bool ConfirmPastEdit()
@@ -306,34 +360,141 @@ namespace DailyPrayerTime.Native
                 CalendarGrid.Visibility = Visibility.Collapsed;
                 TrackerBackButton.Visibility = Visibility.Collapsed;
 
+                UpdateQadhaSummary();
+
                 switch (tab)
                 {
                     case "Daily":
+                        OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_DailyCompletion");
                         if (_currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
                         {
-                            // We are viewing a past date, so show the History header with "PAST ACTIVITY" and display the Back button to let the user return
                             HistoryHeader.Visibility = Visibility.Visible;
                             TrackerBackButton.Visibility = Visibility.Visible;
                             HistorySectionTitle.Text = "PAST ACTIVITY";
                         }
+                        UpdateOverallProgress(); // This updates the card for Daily
                         break;
                     case "Weekly":
+                        OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_WeeklyCompletion");
                         HistorySectionTitle.Text = "THIS WEEK (SAT - FRI)";
                         HistoryList.Visibility = Visibility.Visible;
                         LoadWeeklyHistory();
+                        UpdateAggregateProgress(7);
                         break;
                     case "Monthly":
+                        OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_MonthlyCompletion");
                         HistorySectionTitle.Text = DateTime.Today.ToString("MMMM yyyy").ToUpper();
                         CalendarGrid.Visibility = Visibility.Visible;
                         LoadMonthlyCalendar(DateTime.Today.Year, DateTime.Today.Month);
+                        UpdateAggregateProgress(DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
                         break;
                     case "Yearly":
+                        OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_YearlyCompletion");
                         HistorySectionTitle.Text = DateTime.Today.Year + " SUMMARY";
                         HistoryList.Visibility = Visibility.Visible;
                         LoadYearlyHistory();
+                        UpdateAggregateProgress(365);
                         break;
                 }
             }
+        }
+
+        private void UpdateAggregateProgress(int days)
+        {
+            var today = DateTime.Today;
+            int totalCheckable = 0;
+            int checkedCount = 0;
+            int qadhaCount = 0;
+
+            for (int i = 0; i < days; i++)
+            {
+                var date = today.AddDays(-i);
+                // Limit monthly/weekly to their boundaries if needed, but simple days back is fine for "last X days" or "this period so far"
+                if (days == 7) { /* handle week logic if needed */ }
+                
+                var deeds = TrackerService.Instance.LoadDay(date);
+                var stats = GetStatsForDay(deeds);
+                totalCheckable += stats.total;
+                checkedCount += stats.completed;
+                qadhaCount += stats.qadha;
+            }
+
+            if (totalCheckable == 0) return;
+            int percent = (checkedCount * 100) / totalCheckable;
+            OverallProgressPercent.Text = $"{percent}%";
+            MainProgressBar.Value = percent;
+
+            StatsCompletedCount.Text = checkedCount.ToString();
+            StatsMissedCount.Text = qadhaCount.ToString();
+        }
+
+        private (int total, int completed, int qadha) GetStatsForDay(DailyDeeds deeds)
+        {
+            int total = 0;
+            int completed = 0;
+            int qadha = 0;
+
+            DateTime date;
+            if (!DateTime.TryParse(deeds.Date, out date)) date = DateTime.Today;
+
+            foreach (var p in deeds.Prayers)
+            {
+                // We only count Qadha for Fard prayers (Fajr, Dhuhr/Jumuah, Asr, Maghrib, Isha)
+                bool isFardPrayer = p.Key == "Fajr" || p.Key == "Dhuhr" || p.Key == "Asr" || 
+                                   p.Key == "Maghrib" || p.Key == "Isha" || p.Key == "Jumuah";
+
+                foreach (var d in p.Value)
+                {
+                    total++;
+                    if (d.IsChecked) completed++;
+                    else if (isFardPrayer && d.Type == DeedType.Fard)
+                    {
+                        if (date < DateTime.Today) qadha++;
+                        else if (IsPrayerEnded(p.Key)) qadha++;
+                    }
+                }
+            }
+            return (total, completed, qadha);
+        }
+
+        private void UpdateQadhaSummary()
+        {
+            var today = DateTime.Today;
+            
+            // Today
+            var todayStats = GetStatsForDay(TrackerService.Instance.LoadDay(today));
+            QadhaTodayCount.Text = todayStats.qadha.ToString();
+
+            // Week (Current localized week or last 7 days)
+            int weekQadha = 0;
+            // Get last 7 days including today
+            for(int i=0; i<7; i++)
+            {
+                var d = TrackerService.Instance.LoadDay(today.AddDays(-i));
+                weekQadha += GetStatsForDay(d).qadha;
+            }
+            QadhaWeekCount.Text = weekQadha.ToString();
+
+            // Month
+            int monthQadha = 0;
+            for(int i=0; i<today.Day; i++)
+            {
+                var d = TrackerService.Instance.LoadDay(today.AddDays(-i));
+                monthQadha += GetStatsForDay(d).qadha;
+            }
+            QadhaMonthCount.Text = monthQadha.ToString();
+
+            // Year
+            int yearQadha = 0;
+            int daysOfYear = today.DayOfYear;
+            // Note: Year-to-date calculation. If performance is an issue for users with 1 year data,
+            // we will need to implement a background worker or a database.
+            for(int i=0; i<daysOfYear; i++)
+            {
+                var d = TrackerService.Instance.LoadDay(today.AddDays(-i));
+                yearQadha += GetStatsForDay(d).qadha;
+            }
+            QadhaYearCount.Text = yearQadha.ToString();
         }
 
         private void LoadHistory(int days)

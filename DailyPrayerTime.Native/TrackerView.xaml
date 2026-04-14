@@ -163,13 +163,11 @@
                     <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold"/>
                 </StackPanel>
 
-                <!-- Daily View Content -->
-                <StackPanel x:Name="DailySection">
-                    <!-- Premium Horizontal Glass Progress Bar -->
-                    <Border Style="{StaticResource GlassCard}" Background="#1F2937" Padding="20">
+                <!-- COMMON COMPLETION CARD -->
+                <Border x:Name="OverallProgressCard" Style="{StaticResource GlassCard}" Background="#1F2937" Padding="20">
                     <StackPanel>
                         <Grid>
-                            <TextBlock Text="DAILY COMPLETION" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
+                            <TextBlock x:Name="OverallProgressTitle" Text="{DynamicResource Tracker_DailyCompletion}" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
                             <TextBlock x:Name="OverallProgressPercent" Text="0%" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid Margin="0,15,0,0">
@@ -195,7 +193,19 @@
                             </ProgressBar>
                         </Grid>
                         
-                        <Grid Margin="0,12,0,0">
+                        <!-- Stats Row -->
+                        <Grid Margin="0,15,0,0">
+                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Tracker_Completed}" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
+                                <TextBlock x:Name="StatsCompletedCount" Text="0" Foreground="#34D399" FontSize="10" FontWeight="Bold"/>
+                             </StackPanel>
+                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="{DynamicResource Tracker_Missed}" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
+                                <TextBlock x:Name="StatsMissedCount" Text="0" Foreground="#F87171" FontSize="10" FontWeight="Bold"/>
+                             </StackPanel>
+                        </Grid>
+                        
+                        <Grid x:Name="SawmGrid" Margin="0,12,0,0">
                             <StackPanel Orientation="Horizontal" x:Name="SawmIndicator">
                                 <Border Width="8" Height="8" CornerRadius="4" Background="#FBBF24" VerticalAlignment="Center" Margin="0,0,6,0"/>
                                 <TextBlock Text="FASTING ACTIVE" Foreground="#FBBF24" FontSize="10" FontWeight="Bold"/>
@@ -204,7 +214,10 @@
                         </Grid>
                     </StackPanel>
                 </Border>
-                <!-- Daily Prayers Grid -->
+
+                <!-- Daily View Content -->
+                <StackPanel x:Name="DailySection">
+                    <!-- Daily Prayers Grid -->
                 <TextBlock Text="MANDATORY PRAYERS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,8,0,12"/>
                 <ItemsControl x:Name="PrayerList">
                     <ItemsControl.ItemTemplate>
@@ -416,6 +429,33 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <!-- Qadha Summary Card -->
+            <Border x:Name="QadhaSummaryCard" Style="{StaticResource GlassCard}" Background="#2D1B36" Padding="20" Margin="0,10,0,20">
+                <StackPanel>
+                    <Grid>
+                        <TextBlock Text="{DynamicResource Tracker_QadhaSummary}" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
+                    </Grid>
+                    <StackPanel Margin="0,15,0,0">
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="{DynamicResource Tracker_Today}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="QadhaTodayCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="{DynamicResource Tracker_ThisWeek}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="QadhaWeekCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="{DynamicResource Tracker_ThisMonth}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="QadhaMonthCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid>
+                            <TextBlock Text="{DynamicResource Tracker_ThisYear}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="QadhaYearCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                        </Grid>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </StackPanel>
     </ScrollViewer>
 

@@ -8,10 +8,15 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False" SizeToContent="Height">
     <Window.Resources>
+        <LinearGradientBrush x:Key="MainGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#064E3B" Offset="0"/>
+            <GradientStop Color="#022C22" Offset="1"/>
+        </LinearGradientBrush>
         <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="#1AFFFFFF"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#2AFFFFFF"/>
             <Setter Property="Padding" Value="15,8"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontSize" Value="13"/>
@@ -19,16 +24,21 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="{TemplateBinding Padding}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="12" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2AFFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     
-    <Border Background="#1e1e1e" CornerRadius="20" BorderBrush="#333" BorderThickness="1" Margin="10">
+    <Border Background="{StaticResource MainGradient}" CornerRadius="15" BorderBrush="#20FFFFFF" BorderThickness="1" Margin="10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15" Color="Black" Opacity="0.5" ShadowDepth="2"/>
         </Border.Effect>
@@ -38,25 +48,25 @@
                        HorizontalAlignment="Center" FontSize="22" FontWeight="Bold" Foreground="White" Margin="0,0,0,5"/>
             
             <TextBlock x:Name="PrayerTimeRangeText" Text="05:30 AM - 06:45 AM" 
-                       HorizontalAlignment="Center" FontSize="14" Foreground="#999" Margin="0,0,0,2"/>
+                       HorizontalAlignment="Center" FontSize="14" Foreground="White" Opacity="0.7" Margin="0,0,0,2"/>
             
             <TextBlock x:Name="JamaatTimeText" Text="Jamaat: {0}" 
-                       HorizontalAlignment="Center" FontSize="15" FontWeight="SemiBold" Foreground="#10b981" Margin="0,0,0,20"/>
+                       HorizontalAlignment="Center" FontSize="15" FontWeight="SemiBold" Foreground="#34d399" Margin="0,0,0,20"/>
 
             <!-- Separator -->
-            <Border Height="1" Background="#333" Margin="0,0,0,20"/>
+            <Border Height="1" Background="#20FFFFFF" Margin="0,0,0,20"/>
 
             <!-- Dua Section -->
-            <TextBlock Text="{DynamicResource i18n_Label_AdhanDua}" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="#666" Margin="0,0,0,10" TextDecorations="Underline"/>
+            <TextBlock Text="{DynamicResource i18n_Label_AdhanDua}" HorizontalAlignment="Center" FontSize="12" FontWeight="SemiBold" Foreground="#9ca3af" Margin="0,0,0,10" TextDecorations="Underline"/>
             
             <TextBlock Text="{DynamicResource i18n_Adhan_DuaArabic}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="18" Foreground="#eee" Margin="0,0,0,15" LineHeight="28"/>
+                       TextWrapping="Wrap" TextAlignment="Center" FontSize="18" Foreground="White" Margin="0,0,0,15" LineHeight="28"/>
             
             <TextBlock Text="{DynamicResource i18n_Adhan_DuaTransliteration}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="13" Foreground="#888" FontStyle="Italic" Margin="0,0,0,10" LineHeight="20"/>
+                       TextWrapping="Wrap" TextAlignment="Center" FontSize="13" Foreground="White" Opacity="0.8" FontStyle="Italic" Margin="0,0,0,10" LineHeight="20"/>
 
             <TextBlock Text="{DynamicResource i18n_Adhan_DuaTranslation}" 
-                       TextWrapping="Wrap" TextAlignment="Center" FontSize="12" Foreground="#666" Margin="0,0,0,25" LineHeight="18"/>
+                       TextWrapping="Wrap" TextAlignment="Center" FontSize="12" Foreground="White" Opacity="0.6" Margin="0,0,0,25" LineHeight="18"/>
 
             <!-- Buttons -->
             <Grid>
@@ -65,8 +75,8 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Column="0" Content="{DynamicResource i18n_Btn_Close}" Style="{StaticResource ActionButton}" Background="#2a2a2a" Click="Close_Click" Margin="0,0,5,0"/>
-                <Button x:Name="MuteBtn" Grid.Column="1" Content="{DynamicResource i18n_Btn_Mute}" Style="{StaticResource ActionButton}" Foreground="#ef4444" Background="#2a2a2a" Click="Mute_Click" Margin="5,0,0,0"/>
+                <Button Grid.Column="0" Content="{DynamicResource i18n_Btn_Close}" Style="{StaticResource ActionButton}" Click="Close_Click" Margin="0,0,5,0"/>
+                <Button x:Name="MuteBtn" Grid.Column="1" Content="{DynamicResource i18n_Btn_Mute}" Style="{StaticResource ActionButton}" Foreground="#f87171" Click="Mute_Click" Margin="5,0,0,0"/>
             </Grid>
         </StackPanel>
     </Border>

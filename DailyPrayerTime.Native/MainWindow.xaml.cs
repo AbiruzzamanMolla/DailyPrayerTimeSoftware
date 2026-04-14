@@ -579,7 +579,15 @@ namespace DailyPrayerTime.Native
                 {
                     JumuahTimeText.Text = DhuhrTimeText.Text;
                     JumuahRakatNote.Text = LocalizationManager.Instance.GetString("Note_Jumuah");
+                    JumuahJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.DhuhrJamaatTime, timeFmt)}";
                 }
+
+                // Populate Jamat Times
+                FajrJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.FajrJamaatTime, timeFmt)}";
+                DhuhrJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.DhuhrJamaatTime, timeFmt)}";
+                AsrJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.AsrJamaatTime, timeFmt)}";
+                MaghribJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.MaghribJamaatTime, timeFmt)}";
+                IshaJamatText.Text = $"{LocalizationManager.Instance.GetString("Label_Jamaat")}: {FormatJamat(SettingsManager.Current.IshaJamaatTime, timeFmt)}";
                 
                 // Hero Section Sub-Card (Slot Swapping & Ranges)
                 DateTime now = DateTime.Now;
@@ -651,6 +659,60 @@ namespace DailyPrayerTime.Native
             });
         }
 
+        private string FormatJamat(string timeStr, string timeFmt)
+        {
+            if (string.IsNullOrEmpty(timeStr)) return "--:--";
+            try
+            {
+                var parts = timeStr.Split(':');
+                if (parts.Length < 2) return timeStr;
+                var dt = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, int.Parse(parts[0]), int.Parse(parts[1]), 0);
+                return dt.ToString(timeFmt);
+            }
+            catch { return timeStr; }
+        }
+
+        private (DateTime start, DateTime end) GetNightBoundaries(DateTime now)
+        {
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return (now, now);
+            DateTime todayPDate = _todayPrayerTimes.Fajr.Date;
+            DateTime maghrib, nextFajr;
+
+            if (todayPDate == now.Date)
+            {
+                if (now < _todayPrayerTimes.Fajr)
+                {
+                    maghrib = _todayPrayerTimes.Maghrib.AddDays(-1);
+                    nextFajr = _todayPrayerTimes.Fajr;
+                }
+                else
+                {
+                    maghrib = _todayPrayerTimes.Maghrib;
+                    nextFajr = _tomorrowPrayerTimes.Fajr;
+                }
+            }
+            else if (todayPDate == now.Date.AddDays(-1))
+            {
+                if (now < _tomorrowPrayerTimes.Fajr)
+                {
+                    maghrib = _todayPrayerTimes.Maghrib;
+                    nextFajr = _tomorrowPrayerTimes.Fajr;
+                }
+                else
+                {
+                    maghrib = _tomorrowPrayerTimes.Maghrib;
+                    nextFajr = _tomorrowPrayerTimes.Fajr.AddDays(1);
+                }
+            }
+            else
+            {
+                maghrib = _todayPrayerTimes.Maghrib;
+                nextFajr = _tomorrowPrayerTimes.Fajr;
+                if (now.Hour < 12) maghrib = maghrib.AddDays(-1);
+            }
+            return (maghrib, nextFajr);
+        }
+
         private void UpdateNafalTimes()
         {
             if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
@@ -671,9 +733,9 @@ namespace DailyPrayerTime.Native
 
             // 3. Tahajjud
             // After Isha until Fajr. Optimized after 1/2 or 1/3 of the night.
-            DateTime nightStart = _todayPrayerTimes.Isha;
-            DateTime nightEnd = _tomorrowPrayerTimes.Fajr;
-            TahajjudTimeText.Text = $"{nightStart.ToString(timeFmt)} - {nightEnd.ToString(timeFmt)}";
+            var (nightStart, nightEnd) = GetNightBoundaries(DateTime.Now);
+            DateTime ishaTime = nightStart.AddTicks((_todayPrayerTimes.Isha - _todayPrayerTimes.Maghrib).Ticks);
+            TahajjudTimeText.Text = $"{ishaTime.ToString(timeFmt)} - {nightEnd.ToString(timeFmt)}";
             TahajjudRakatNote.Text = LocalizationManager.Instance.GetString("Note_Tahajjud");
 
             // Last 1/3 calculation
@@ -684,6 +746,8 @@ namespace DailyPrayerTime.Native
             NightThirdNote.Text = LocalizationManager.Instance.GetString("Note_NightThird");
         }
 
+        private bool _isFirstBoot = true;
+
         private void Timer_Tick(object? sender, EventArgs e)
         {
             if (_todayPrayerTimes == null) return;
@@ -691,12 +755,60 @@ namespace DailyPrayerTime.Native
             DateTime now = DateTime.Now;
             var currentPrayer = _todayPrayerTimes.CurrentPrayer(now);
 
+            if (_isFirstBoot)
+            {
+                _lastStartNotificationPrayer = currentPrayer;
+                _lastEndSoundPrayer = currentPrayer;
+                _lastAdhanPrayer = currentPrayer;
+                _lastJamaatNotificationID = currentPrayer;
+                _lastEndNotificationID = currentPrayer;
+                _lastJamaatPopupPrayer = currentPrayer;
+                var nextResult = GetNextPrayerInfo(now);
+                _lastPreAdhanNotificationID = nextResult.nextPrayer;
+                _isFirstBoot = false;
+            }
+
             UpdateCountdown();
             CheckEnhancedNotifications(now, currentPrayer);
             CheckTahajjudStartSound(now);
             CheckProhibitedTimes();
             CheckAndShowJamaatAlarm();
             CheckAndPlayAdhanAlarm(currentPrayer);
+            CheckTahajjudAdhanAlarm(now);
+            CheckAutoBackup(now);
+        }
+
+        private void CheckAutoBackup(DateTime now)
+        {
+            var s = SettingsManager.Current;
+            if (s.AutoBackupSchedule == "NONE" || string.IsNullOrEmpty(s.AutoBackupLocation)) return;
+
+            bool due = false;
+            if (DateTime.TryParse(s.LastAutoBackupDate, out DateTime lastBackup))
+            {
+                if (s.AutoBackupSchedule == "DAILY" && (now - lastBackup).TotalDays >= 1) due = true;
+                else if (s.AutoBackupSchedule == "WEEKLY" && (now - lastBackup).TotalDays >= 7) due = true;
+                else if (s.AutoBackupSchedule == "MONTHLY" && now.Month != lastBackup.Month) due = true;
+            }
+            else
+            {
+                // Never backed up, do it now
+                due = true;
+            }
+
+            if (!due) return;
+
+            try
+            {
+                if (!Directory.Exists(s.AutoBackupLocation)) return;
+                string filename = $"DailyPrayerTracker_Backup_{now:yyyyMMdd_HHmm}.zip";
+                string dest = Path.Combine(s.AutoBackupLocation, filename);
+                TrackerService.Instance.BackupData(dest);
+
+                s.LastAutoBackupDate = now.ToString("o");
+                SettingsManager.Save();
+            }
+            catch { /* Skip and try again later */ }
         }
 
         private void CheckEnhancedNotifications(DateTime now, Prayer currentPrayer)
@@ -928,8 +1040,7 @@ namespace DailyPrayerTime.Native
             if (_lastTahajjudAdhanDate == today) return;
 
             // Best Time calculation (same as UpdateNafalTimes)
-            DateTime nightEnd = _tomorrowPrayerTimes.Fajr;
-            DateTime nightStart = _todayPrayerTimes.Isha;
+            var (nightStart, nightEnd) = GetNightBoundaries(now);
             TimeSpan nightDuration = nightEnd - nightStart;
             TimeSpan oneThird = new TimeSpan(nightDuration.Ticks / 3);
             DateTime lastThirdStart = nightEnd - oneThird;
@@ -976,13 +1087,7 @@ namespace DailyPrayerTime.Native
             if (_lastTahajjudSoundDate == today) return;
 
             // Islamic Midnight (Halfway between Maghrib/Sunset and Fajr)
-            DateTime nightStart = _todayPrayerTimes.Maghrib;
-            DateTime nightEnd = _tomorrowPrayerTimes.Fajr;
-            
-            // Cross-over handling
-            if (now.Hour < 12) nightStart = nightStart.AddDays(-1);
-            else nightEnd = nightEnd.AddDays(1);
-
+            var (nightStart, nightEnd) = GetNightBoundaries(now);
             TimeSpan nightDuration = nightEnd - nightStart;
             TimeSpan halfNight = new TimeSpan(nightDuration.Ticks / 2);
             DateTime islamicMidnight = nightStart + halfNight;
@@ -1409,10 +1514,7 @@ namespace DailyPrayerTime.Native
                 // Makruh or Tahajjud (During Isha)
                 if (curName.Equals("Isha", StringComparison.OrdinalIgnoreCase) || currentPrayer == Prayer.ISHA)
                 {
-                    // Correcting Night duration for crossover
-                    DateTime nightStart = now.Hour < 12 ? _todayPrayerTimes.Maghrib.AddDays(-1) : _todayPrayerTimes.Maghrib;
-                    DateTime nightEnd = now.Hour < 12 ? _todayPrayerTimes.Fajr : _tomorrowPrayerTimes.Fajr;
-                    
+                    var (nightStart, nightEnd) = GetNightBoundaries(now);
                     TimeSpan nightDuration = nightEnd - nightStart;
                     
                     // Islamic Midnight (Halfway)
@@ -1900,6 +2002,8 @@ namespace DailyPrayerTime.Native
                 var enabledPrayers = GetEnabledTrackerPrayers();
                 TrackerViewControl.LoadData(enabledPrayers);
         }
+
+        public CombinedPrayerTimes? GetTodayPrayerTimes() => _todayPrayerTimes;
 
         private void SyncToolbarIcons()
         {
