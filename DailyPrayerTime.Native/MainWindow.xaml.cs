@@ -474,9 +474,7 @@ namespace DailyPrayerTime.Native
                 HeroSubDay.Text = GetLocalizedDayName(DateTime.Now);
                 
                 // Force local Hijri calculation for non-English locales (API returns English month names)
-                HeroSubHijri.Text = (LocalizationManager.Instance.CurrentLanguage != "en" || SettingsManager.Current.HijriAdjustment != 0 || string.IsNullOrEmpty(_todayPrayerTimes.HijriDate)) 
-                    ? GetHijriDate() 
-                    : _todayPrayerTimes.HijriDate;
+                HeroSubHijri.Text = GetHijriDate(_todayPrayerTimes.HijriDay, _todayPrayerTimes.HijriMonth, _todayPrayerTimes.HijriYear);
                 RefreshUIDisplay();
                 
                 // Force an explicit update to the taskbar window now that data is loaded
@@ -522,14 +520,27 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private static string GetHijriDate()
+        private static string GetHijriDate(int d = 0, int m = 0, int y = 0)
         {
             try {
-                var now = DateTime.Now.AddDays(SettingsManager.Current.HijriAdjustment);
-                var hijri = new System.Globalization.UmAlQuraCalendar();
-                int year = hijri.GetYear(now);
-                int month = hijri.GetMonth(now);
-                int day = hijri.GetDayOfMonth(now);
+                int day, month, year;
+
+                if (d > 0 && m > 0 && y > 0)
+                {
+                    // Use API Provided Data
+                    day = d;
+                    month = m;
+                    year = y;
+                }
+                else
+                {
+                    // Local Fallback
+                    var now = DateTime.Now.AddDays(SettingsManager.Current.HijriAdjustment);
+                    var hijri = new System.Globalization.UmAlQuraCalendar();
+                    year = hijri.GetYear(now);
+                    month = hijri.GetMonth(now);
+                    day = hijri.GetDayOfMonth(now);
+                }
 
                 string[] months = {
                     LocalizationManager.Instance.GetString("Month_Hijri_1"),

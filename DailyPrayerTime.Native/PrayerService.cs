@@ -22,6 +22,7 @@ namespace DailyPrayerTime.Native
         public string HijriDate { get; set; } = "";
         public int HijriDay { get; set; } = 0;
         public int HijriMonth { get; set; } = 0;
+        public int HijriYear { get; set; } = 0;
 
         public CombinedPrayerTimes() { }
 
@@ -128,7 +129,8 @@ namespace DailyPrayerTime.Native
                             Iftar = ParseApiTime(timings.Maghrib.ToString()).AddMinutes(s.IftarOffset),
                             HijriDate = $"{hijri.day} {hijri.month.en} {hijri.year} AH",
                             HijriDay = int.TryParse(hijri.day.ToString(), out int d) ? d : 0,
-                            HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0
+                            HijriMonth = int.TryParse(hijri.month.number.ToString(), out int m) ? m : 0,
+                            HijriYear = int.TryParse(hijri.year.ToString(), out int y) ? y : 0
                         };
 
                         // Save to cache

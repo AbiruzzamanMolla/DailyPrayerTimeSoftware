@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 //we added jamat time, loader screen, fixed prayer notifcation for tahajjurd ect. then continute
 
+## [2.2.1] - 2026-04-14
+
+### Added
+
+- **Hybrid Hijri Calendar System**: Implemented a region-aware Hijri calendar that prioritizes accurate data from the AlAdhan API when online.
+- **Improved Hijri Accuracy**: Fixed discrepancies where the Hijri date was off by 1-2 days (e.g., in Bangladesh) by fetching real-time components (Day, Month, Year).
+- **Localized Hijri Months**: Appropriately translates Hijri month names into Bangla and Arabic based on the user's selected language.
+- **Smart Fallback**: Automatically reverts to the local UmAlQura calendar when offline or when API requests time out.
+
 ## [2.2.0] - 2026-04-14
 
 ### Added
