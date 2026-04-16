@@ -14,10 +14,10 @@ namespace DailyPrayerTime.Native
             this.DispatcherUnhandledException += (s, args) =>
             {
                 System.Windows.MessageBox.Show(
-                    string.Format(LocalizationManager.Instance.GetString("Msg_PlayFailed"), args.Exception.Message), 
+                    string.Format(LocalizationManager.Instance.GetString("Msg_AppErrorGeneral"), args.Exception.Message), 
                     LocalizationManager.Instance.GetString("Title_AppCrash"), 
-                    MessageBoxButton.OK, 
-                    MessageBoxImage.Error);
+                    System.Windows.MessageBoxButton.OK, 
+                    System.Windows.MessageBoxImage.Error);
                 args.Handled = true; // Prevents the app from crashing completely
             };
 

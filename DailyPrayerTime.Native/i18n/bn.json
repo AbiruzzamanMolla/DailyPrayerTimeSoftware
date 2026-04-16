@@ -376,6 +376,7 @@
   "Msg_AdhanFileNotFound": "Assets/Adhan ফোল্ডারে নির্বাচিত আজান ফাইলটি পাওয়া যায়নি।",
   "Msg_InvalidSoundFile": "প্রথমে একটি সঠিক সাউন্ড ফাইল নির্বাচন করুন।",
   "Msg_PlayFailed": "সাউন্ড বাজাতে ব্যর্থ হয়েছে: {0}",
+  "Msg_AppErrorGeneral": "অ্যাপ্লিকেশন ত্রুটি: {0}",
   "Msg_UpdateLinkFailed": "আপডেট লিঙ্ক খোলা সম্ভব হয়নি: {0}",
   "Btn_Checking": "চেক করা হচ্ছে...",
   "Msg_UpdateAvailable": "একটি নতুন সংস্করণ ({0}) উপলব্ধ!\n\nআপনি কি ডাউনলোড পেজ খুলতে চান?",

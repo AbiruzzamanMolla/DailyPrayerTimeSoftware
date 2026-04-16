@@ -653,7 +653,7 @@ namespace DailyPrayerTime.Native
         private void TestPopup_Click(object sender, RoutedEventArgs e)
         {
             var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
-            popup.Owner = this;
+            if (this.IsVisible) popup.Owner = this;
             popup.Show();
         }
 
@@ -751,7 +751,7 @@ namespace DailyPrayerTime.Native
         private void TestEstablished_Click(object sender, RoutedEventArgs e)
         {
             var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
-            popup.Owner = this;
+            if (this.IsVisible) popup.Owner = this;
             popup.Show();
         }
 
@@ -760,7 +760,7 @@ namespace DailyPrayerTime.Native
             var deeds = TrackerService.Instance.LoadDay(DateTime.Today);
             var entries = deeds.Prayers.ContainsKey("Asr") ? deeds.Prayers["Asr"] : new List<DeedEntry> { new DeedEntry { Label = "Test Prayer", IsChecked = false } };
             var popup = new DeedPopup("Asr", entries, deeds);
-            popup.Owner = this;
+            if (this.IsVisible) popup.Owner = this;
             popup.Show();
         }
 
@@ -768,7 +768,7 @@ namespace DailyPrayerTime.Native
         {
             var deeds = TrackerService.Instance.LoadDay(DateTime.Today);
             var popup = new DailySummaryPopup(deeds);
-            popup.Owner = this;
+            if (this.IsVisible) popup.Owner = this;
             popup.Show();
         }
 

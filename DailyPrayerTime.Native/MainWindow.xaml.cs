@@ -1184,7 +1184,7 @@ namespace DailyPrayerTime.Native
                     _lastDeedPopupDate = now.ToString("yyyy-MM-dd");
 
                     var popup = new DeedPopup(pKey, entries, _currentDeeds);
-                    popup.Owner = this;
+                    if (this.IsVisible) popup.Owner = this;
                     popup.Show();
                 }
             }
@@ -1201,7 +1201,7 @@ namespace DailyPrayerTime.Native
                 {
                     _lastSummaryPopupDate = now.ToString("yyyy-MM-dd");
                     var summary = new DailySummaryPopup(_currentDeeds);
-                    summary.Owner = this;
+                    if (this.IsVisible) summary.Owner = this;
                     summary.Show();
                 }
             }

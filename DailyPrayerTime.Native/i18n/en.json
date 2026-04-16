@@ -210,6 +210,7 @@
   "Msg_AdhanFileNotFound": "Selected built-in adhan file not found in Assets/Adhan folder.",
   "Msg_InvalidSoundFile": "Please select a valid sound file first.",
   "Msg_PlayFailed": "Failed to play sound: {0}",
+  "Msg_AppErrorGeneral": "Application Error: {0}",
   "Msg_UpdateLinkFailed": "Could not open the update link: {0}",
   "Btn_Checking": "Checking...",
   "Msg_UpdateAvailable": "A new version ({0}) is available!\n\nWould you like to open the download page?",
