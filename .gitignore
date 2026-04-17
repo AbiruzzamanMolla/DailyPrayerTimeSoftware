@@ -39,5 +39,6 @@ publish/
 
 # Release Output
 Output/
+Releases/
 .notes
 graphify-out

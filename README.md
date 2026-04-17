@@ -21,15 +21,17 @@
 
 ## 📥 Download & Install
 
-| Platform                       | Link                                                                                                                    |
+| Method                         | Link / Command                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.3.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.3.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
-1. Download the installer matching your system.
-2. Run the installer and follow the wizard to create Desktop and Start Menu shortcuts.
-3. Once installed, you can find **Daily Prayer Timer** on your Desktop or by searching in the Windows Start Menu.
+1. **WinGet**: Open any terminal (PowerShell, CMD, or Terminal) and run the command above.
+2. **Manual**: Download the installer matching your system.
+3. **Run**: Follow the installer wizard to create Desktop and Start Menu shortcuts.
+4. **Launch**: Once installed, find **Daily Prayer Timer** on your Desktop or via the Start Menu.
 
 ## 📸 UI Preview
 

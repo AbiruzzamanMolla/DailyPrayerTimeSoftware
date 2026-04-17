@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Interactive Adhan Reply Guide**: A new dual-stage popup during the Adhan. It first presents an exact transliterated and localized response guide—complete with Hadith references—instructing users on what to reply to each call of the Mu'adhdhin.
 - **Dynamic Fajr Context**: The reply guide intelligently displays the specific Fajr response ("الصَّلاَةُ خَيْرٌ مِنَ النَّوْمِ") only when the Fajr Adhan is playing.
 - **Automated Post-Adhan Dua**: When the Adhan completes, the popup waits 3 seconds before automatically shifting to display the Dua After Adhan, simultaneously playing the localized audio track (`dua_after_adhan.wav`).
+- **Official WinGet Support**: Daily Prayer Timer is now available on the official Microsoft WinGet repository. Users can now install and update the application via terminal using `winget install AbiruzzamanMolla.DailyPrayerTimer`.
 - **UI/UX Polish**: Updated the Adhan popup with modern, slim scrollbars and glassmorphic touches.
 
 ### Fixed
