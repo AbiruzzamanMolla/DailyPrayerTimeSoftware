@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abiruzzamanmolla.github.io/DailyPrayerTimeSoftware/sitemap.xml
