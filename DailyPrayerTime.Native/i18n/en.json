@@ -5,6 +5,7 @@
   "SupportMe": "Support Me",
   "Settings": "Settings",
   "DailyPrayer_Tab": "Daily Prayer",
+  "Tab_Salat": "Salat",
   "Notifications_Tab": "Notifications",
   "Layout_Tab": "Layout & Theme",
   "Support_Tab": "Support & Contact",
@@ -52,6 +53,7 @@
 
   "Section_Highlights": "Daily Highlights",
   "Section_TodaysPrayer": "Today's Prayer Times",
+  "Section_Fard": "Fard Prayers",
   "Section_Nafal": "Nafal Prayers",
   "Section_Prohibited": "Prohibited Times",
   

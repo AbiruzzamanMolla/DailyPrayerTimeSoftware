@@ -13,8 +13,9 @@ namespace DailyPrayerTime.Native
             
             this.DispatcherUnhandledException += (s, args) =>
             {
+                System.Console.WriteLine(args.Exception.ToString());
                 System.Windows.MessageBox.Show(
-                    string.Format(LocalizationManager.Instance.GetString("Msg_AppErrorGeneral"), args.Exception.Message), 
+                    string.Format(LocalizationManager.Instance.GetString("Msg_AppErrorGeneral"), args.Exception.ToString()), 
                     LocalizationManager.Instance.GetString("Title_AppCrash"), 
                     System.Windows.MessageBoxButton.OK, 
                     System.Windows.MessageBoxImage.Error);

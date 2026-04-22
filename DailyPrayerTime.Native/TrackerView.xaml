@@ -57,7 +57,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Hidden">
@@ -459,17 +458,5 @@
         </StackPanel>
     </ScrollViewer>
 
-        <!-- Docked Footer Navigation -->
-        <Border Grid.Row="1" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Padding="15,10">
-            <Button x:Name="CloseBtn" Cursor="Hand" Background="#34D399" Click="Close_Click" Margin="0,0,0,0">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="12" Padding="0,8">
-                            <TextBlock Text="EXIT TRACKER" Foreground="#064E3B" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="ExtraBold" FontSize="13"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-        </Border>
     </Grid>
 </UserControl>

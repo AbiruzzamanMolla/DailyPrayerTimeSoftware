@@ -5,6 +5,7 @@
   "SupportMe": "আমাকে সমর্থন করুন",
   "Settings": "সেটিংস",
   "DailyPrayer_Tab": "নামাজের সময়",
+  "Tab_Salat": "সালাত",
   "Notifications_Tab": "নোটিফিকেশন",
   "Layout_Tab": "লেআউট এবং থিম",
   "Support_Tab": "সহযোগিতা",
@@ -52,6 +53,7 @@
 
   "Section_Highlights": "আজকের হাইলাইটস",
   "Section_TodaysPrayer": "আজকের নামাজের সময়",
+  "Section_Fard": "ফরজ নামাজ",
   "Section_Nafal": "নফল নামাজ",
   "Section_Prohibited": "নিষিদ্ধ সময়",
 

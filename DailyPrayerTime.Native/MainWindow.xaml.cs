@@ -66,6 +66,12 @@ namespace DailyPrayerTime.Native
         {
             SettingsManager.Load();
             InitializeComponent();
+            
+            // Apply initial tab state
+            if (TabHome.IsChecked == true) TabHome_Checked(null, null);
+            else if (TabPrayers.IsChecked == true) TabPrayers_Checked(null, null);
+            else if (TabTracker.IsChecked == true) TabTracker_Checked(null, null);
+
             _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
             this.Height = SystemParameters.WorkArea.Height * 0.85;
             ApplySettingsTheme();
@@ -205,18 +211,16 @@ namespace DailyPrayerTime.Native
 
 
 
-        private void Support_Click(object sender, RoutedEventArgs e)
+        private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (this.WindowState == WindowState.Maximized)
             {
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = "https://www.supportkori.com/abiruzzaman",
-                    UseShellExecute = true
-                };
-                System.Diagnostics.Process.Start(psi);
+                this.WindowState = WindowState.Normal;
             }
-            catch { }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
@@ -302,15 +306,25 @@ namespace DailyPrayerTime.Native
             SyncToolbarIcons();
 
             // 1. Visibility Toggles
-            var visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
-            PrayerListScroll.Visibility = visibility;
-            StickyFooter.Visibility = visibility;
-            UpdateBanner.Visibility = Visibility.Collapsed; // Hide banner in zen regardless
+            // HeroBorder is now inside PrayerListScroll's MainContentStack
+            // Zen mode shows ONLY the HeroBorder in the center
+            var otherItemsVisibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
+            
+            HighlightsHeader.Visibility = otherItemsVisibility;
+            HighlightsGrid.Visibility = otherItemsVisibility;
+            ProhibitedHeader.Visibility = otherItemsVisibility;
+            ProhibitedGrid.Visibility = otherItemsVisibility;
+            FardHeader.Visibility = Visibility.Collapsed; // Always hidden in zen
+            FardCardsPanel.Visibility = Visibility.Collapsed;
+            NafalHeader.Visibility = Visibility.Collapsed;
+            NafalCardsPanel.Visibility = Visibility.Collapsed;
+            
+            UpdateBanner.Visibility = Visibility.Collapsed; 
 
             // 2. Layout Adjustments
-            HeroRow.Height = _isZenMode ? new GridLength(1, GridUnitType.Star) : GridLength.Auto;
-            ListRow.Height = _isZenMode ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
-            HeroBorder.VerticalAlignment = _isZenMode ? VerticalAlignment.Center : VerticalAlignment.Top;
+            MainContentStack.VerticalAlignment = _isZenMode ? VerticalAlignment.Center : VerticalAlignment.Top;
+            HeroBorder.Visibility = Visibility.Visible; // Always show hero in zen
+            PrayerListScroll.Visibility = Visibility.Visible; // Must be visible to see hero now
 
             // 3. Background Transition
             if (_isZenMode)
@@ -392,7 +406,6 @@ namespace DailyPrayerTime.Native
             
             // Hero section background
             HeroBorder.Background = primaryBrush;
-            StickyFooter.Background = primaryBrush;
 
             try 
             {
@@ -586,8 +599,21 @@ namespace DailyPrayerTime.Native
 
                 // Friday Jumu'ah Support
                 bool isFriday = DateTime.Now.DayOfWeek == DayOfWeek.Friday;
-                JumuahCard.Visibility = isFriday ? Visibility.Visible : Visibility.Collapsed;
+                bool showJumuah = false;
                 if (isFriday)
+                {
+                    DateTime? jamatTime = GetJamaatTime(Prayer.DHUHR, SettingsManager.Current, DateTime.Now);
+                    // If it's Friday and Jumu'ah (Dhuhr) jamaat hasn't passed yet, show Jumu'ah instead of Dhuhr
+                    if (jamatTime.HasValue && DateTime.Now < jamatTime.Value)
+                    {
+                        showJumuah = true;
+                    }
+                }
+
+                JumuahCard.Visibility = showJumuah ? Visibility.Visible : Visibility.Collapsed;
+                DhuhrCard.Visibility = showJumuah ? Visibility.Collapsed : Visibility.Visible;
+
+                if (showJumuah)
                 {
                     JumuahTimeText.Text = DhuhrTimeText.Text;
                     JumuahRakatNote.Text = LocalizationManager.Instance.GetString("Note_Jumuah");
@@ -615,7 +641,7 @@ namespace DailyPrayerTime.Native
                 }
                 else
                 {
-                    DhuhrLabel.Text = isFriday ? LocalizationManager.Instance.GetString("Prayer_Jumuah") : LocalizationManager.Instance.GetString("Prayer_Dhuhr");
+                    DhuhrLabel.Text = showJumuah ? LocalizationManager.Instance.GetString("Prayer_Jumuah") : LocalizationManager.Instance.GetString("Prayer_Dhuhr");
                     SubDhuhrTime.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
                     DhuhrLabel.Foreground = System.Windows.Media.Brushes.White;
                 }
@@ -655,11 +681,6 @@ namespace DailyPrayerTime.Native
                 // Hide cards if redundant in Ramadan mode
                 SuhurCard.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
                 IftarCard.Visibility = _isRamadanMode ? Visibility.Collapsed : Visibility.Visible;
-
-                // Sticky Footer: Prohibited Times
-                StickySunriseProhibited.Text = $"{_todayPrayerTimes.Sunrise.AddMinutes(-1).ToString(GetTimeFmt())} - {_todayPrayerTimes.Sunrise.AddMinutes(15).ToString(GetTimeFmt())}";
-                StickyZawalProhibited.Text = $"{_todayPrayerTimes.Dhuhr.AddMinutes(-10).ToString(GetTimeFmt())} - {_todayPrayerTimes.Dhuhr.ToString(GetTimeFmt())}";
-                StickySunsetProhibited.Text = $"{_todayPrayerTimes.Maghrib.AddMinutes(-5).ToString(GetTimeFmt())} - {_todayPrayerTimes.Maghrib.ToString(GetTimeFmt())}";
 
                 string todayDateShort = DateTime.Now.ToString("ddd, MMM d");
                 SuhurDateText.Text = todayDateShort;
@@ -1715,9 +1736,9 @@ namespace DailyPrayerTime.Native
             DateTime zawlStart = dhuhr.AddMinutes(-30), zawlEnd = dhuhr;
             DateTime sunsStart = maghrib.AddMinutes(-15), sunsEnd = maghrib;
 
-            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, StickySunriseStatus, now, sunrStart, sunrEnd);
-            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, StickyZawalStatus, now, zawlStart, zawlEnd);
-            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, StickySunsetStatus, now, sunsStart, sunsEnd);
+            UpdateProhibCard(SunriseProhibCard, SunriseProhibTimer, null, now, sunrStart, sunrEnd);
+            UpdateProhibCard(ZawalProhibCard, ZawalProhibTimer, null, now, zawlStart, zawlEnd);
+            UpdateProhibCard(SunsetProhibCard, SunsetProhibTimer, null, now, sunsStart, sunsEnd);
             
             // Populate Range Labels
             var timeFmt = GetTimeFmt();
@@ -1992,27 +2013,63 @@ namespace DailyPrayerTime.Native
             return LocalizationManager.Instance.GetString($"Day_{(int)dt.DayOfWeek}");
         }
 
-        // --- Tracker Event Handlers ---
+        // --- Tab Event Handlers ---
 
-        public void TrackerToggle_Click(object sender, RoutedEventArgs e)
+        private void TabHome_Checked(object sender, RoutedEventArgs e)
         {
-            _isTrackerMode = !_isTrackerMode;
-            SyncToolbarIcons();
+            if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
+            _isTrackerMode = false;
+            TrackerViewControl.Visibility = Visibility.Collapsed;
             
-            TrackerToggleIcon.Text = _isTrackerMode ? "✕" : "☷";
+            MainContentStack.VerticalAlignment = VerticalAlignment.Center;
+            HeroBorder.Visibility = Visibility.Visible;
+            PrayerListScroll.Visibility = Visibility.Visible;
+            
+            HighlightsHeader.Visibility = Visibility.Visible;
+            HighlightsGrid.Visibility = Visibility.Visible;
+            UpdateFastingHighlights(); 
+            ProhibitedHeader.Visibility = Visibility.Visible;
+            ProhibitedGrid.Visibility = Visibility.Visible;
 
-            TrackerViewControl.Visibility = _isTrackerMode ? Visibility.Visible : Visibility.Collapsed;
-            PrayerListScroll.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
+            FardHeader.Visibility = Visibility.Collapsed;
+            FardCardsPanel.Visibility = Visibility.Collapsed;
+            NafalHeader.Visibility = Visibility.Collapsed;
+            NafalCardsPanel.Visibility = Visibility.Collapsed;
+        }
 
-            // Hide/Show Hero Section
-            HeroBorder.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
-            HeroRow.Height = _isTrackerMode ? new GridLength(0) : GridLength.Auto;
+        private void TabPrayers_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
+            _isTrackerMode = false;
+            TrackerViewControl.Visibility = Visibility.Collapsed;
+            
+            MainContentStack.VerticalAlignment = VerticalAlignment.Top;
+            HeroBorder.Visibility = Visibility.Collapsed;
+            PrayerListScroll.Visibility = Visibility.Visible;
 
-            // Hide/Show Sticky Footer
-            StickyFooter.Visibility = _isTrackerMode ? Visibility.Collapsed : Visibility.Visible;
+            HighlightsHeader.Visibility = Visibility.Collapsed;
+            HighlightsGrid.Visibility = Visibility.Collapsed;
+            FastingNoteBorder.Visibility = Visibility.Collapsed;
+            ProhibitedHeader.Visibility = Visibility.Collapsed;
+            ProhibitedGrid.Visibility = Visibility.Collapsed;
 
-                var enabledPrayers = GetEnabledTrackerPrayers();
-                TrackerViewControl.LoadData(enabledPrayers);
+            FardHeader.Visibility = Visibility.Visible;
+            FardCardsPanel.Visibility = Visibility.Visible;
+            NafalHeader.Visibility = Visibility.Visible;
+            NafalCardsPanel.Visibility = Visibility.Visible;
+        }
+
+        private void TabTracker_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
+            _isTrackerMode = true;
+            TrackerViewControl.Visibility = Visibility.Visible;
+            HeroBorder.Visibility = Visibility.Collapsed;
+            PrayerListScroll.Visibility = Visibility.Collapsed;
+            UpdateBanner.Visibility = Visibility.Collapsed;
+
+            var enabledPrayers = GetEnabledTrackerPrayers();
+            TrackerViewControl.LoadData(enabledPrayers);
         }
 
         public CombinedPrayerTimes? GetTodayPrayerTimes() => _todayPrayerTimes;
@@ -2028,11 +2085,6 @@ namespace DailyPrayerTime.Native
             RamadanBtn.Background = _isRamadanMode ? activeBg : transBg;
             RamadanIcon.Foreground = _isRamadanMode ? darkFg : whiteFg;
             RamadanIcon.Opacity = 1.0;
-
-            // 2. Tracker Icon
-            HeaderTrackerToggleBtn.Background = _isTrackerMode ? activeBg : transBg;
-            TrackerToggleIcon.Foreground = _isTrackerMode ? darkFg : whiteFg;
-            TrackerToggleIcon.Opacity = 1.0;
 
             // 3. Zen Mode Icon
             ZenModeBtn.Background = _isZenMode ? activeBg : transBg;
@@ -2191,9 +2243,11 @@ namespace DailyPrayerTime.Native
                 HeroTrackerBox.Visibility = Visibility.Collapsed;
             }
 
-            // Auto-Sawm detect
+            // Fasting / Highlights Section Logic
             bool isSawmDay = TrackerService.Instance.IsSunnahSawmDay(DateTime.Today);
-            bool showHighlightsSawm = SettingsManager.Current.TrackerEnabled && (_isRamadanMode || isSawmDay);
+            // In normal mode, we always show the tracker if enabled. 
+            // In Ramadan mode, we always show the tracker if enabled.
+            bool showHighlightsSawm = SettingsManager.Current.TrackerEnabled;
             
             if (HighlightsSawmTrack != null)
             {
@@ -2205,10 +2259,17 @@ namespace DailyPrayerTime.Native
             {
                 if (_isRamadanMode) 
                 {
+                    // In Ramadan mode, Hero section already shows Suhur/Iftar
+                    // So we only show the Fasting Tracker card here
+                    if (SuhurCard != null) SuhurCard.Visibility = Visibility.Collapsed;
+                    if (IftarCard != null) IftarCard.Visibility = Visibility.Collapsed;
                     HighlightsGrid.Columns = 1;
                 }
                 else 
                 {
+                    // In Normal mode, show all 3 cards
+                    if (SuhurCard != null) SuhurCard.Visibility = Visibility.Visible;
+                    if (IftarCard != null) IftarCard.Visibility = Visibility.Visible;
                     HighlightsGrid.Columns = showHighlightsSawm ? 3 : 2;
                 }
             }

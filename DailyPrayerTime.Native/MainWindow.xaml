@@ -31,6 +31,14 @@
             <GradientStop Color="#064E3B" Offset="0"/>
             <GradientStop Color="#022C22" Offset="1"/>
         </LinearGradientBrush>
+        <Style x:Key="PremiumCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#2AFFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="15,12"/>
+        </Style>
         <Style x:Key="HeroDeedChipStyle" TargetType="CheckBox">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="10"/>
@@ -81,7 +89,30 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+        <Style x:Key="BottomTabStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="#9ca3af"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Foreground" Value="#34d399"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#10FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     
     <Border Background="#065F46" CornerRadius="15" BorderBrush="#20FFFFFF" BorderThickness="1">
@@ -89,71 +120,31 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/> <!-- Custom Title Bar -->
                 <RowDefinition Height="Auto"/> <!-- Update Banner -->
-                <RowDefinition x:Name="HeroRow" Height="Auto"/> <!-- Hero Section -->
-                <RowDefinition x:Name="ListRow" Height="*"/>    <!-- Prayer List -->
+                <RowDefinition x:Name="MainContentRow" Height="*"/> <!-- Main Content Area -->
                 <RowDefinition x:Name="FooterRow" Height="Auto"/> <!-- Footer -->
             </Grid.RowDefinitions>
 
             <!-- Custom Title Bar -->
             <Grid Grid.Row="0" Background="#111827">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/> <!-- Support -->
-                    <ColumnDefinition Width="*"/>    <!-- Name (Center) -->
-                    <ColumnDefinition Width="Auto"/> <!-- Controls -->
+                    <ColumnDefinition Width="*"/>   <!-- Left: Icon + App Name -->
+                    <ColumnDefinition Width="Auto"/> <!-- Right: Controls -->
                 </Grid.ColumnDefinitions>
 
-                <!-- Left: Support Us Button -->
-                <Button x:Name="SupportBtn" Click="Support_Click" Cursor="Hand" Margin="10,0,0,0" WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Background" Value="#20FFFFFF"/>
-                            <Setter Property="BorderBrush" Value="#30FFFFFF"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Height" Value="24"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                BorderThickness="{TemplateBinding BorderThickness}"
-                                                CornerRadius="12">
-                                            <StackPanel Orientation="Horizontal" Margin="10,0" VerticalAlignment="Center">
-                                                <TextBlock Text="❤" Foreground="#F43F5E" FontSize="10" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                                <TextBlock Text="{DynamicResource SupportUs}" Foreground="White" FontSize="10" FontWeight="Bold" VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#40FFFFFF"/>
-                                    <Setter Property="BorderBrush" Value="#60FFFFFF"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                <!-- Left: App Icon + Name -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0" IsHitTestVisible="False">
+                    <Image Source="pack://application:,,,/icon.ico" Width="16" Height="16" VerticalAlignment="Center" Margin="0,0,7,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    <TextBlock Text="{DynamicResource AppTitleUpper}"
+                               Foreground="White"
+                               FontSize="10"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Opacity="0.75"/>
+                </StackPanel>
 
-                <!-- Center: App Name Branding -->
-                <TextBlock Text="{DynamicResource AppTitleUpper}" 
-                           Grid.Column="1"
-                           Foreground="White" 
-                           FontSize="10" 
-                           FontWeight="Bold" 
-                           VerticalAlignment="Center" 
-                           HorizontalAlignment="Center" 
-                           Opacity="0.6"
-                           IsHitTestVisible="False"/>
-
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                     <Button x:Name="RamadanBtn" Click="RamadanMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_Ramadan}" Margin="0,0,5,0">
                         <TextBlock x:Name="RamadanIcon" Text="☾" FontSize="16" FontWeight="Bold" Foreground="White" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Button>
-
-                    <Button x:Name="HeaderTrackerToggleBtn" Click="TrackerToggle_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="Toggle Tracker" Margin="0,0,5,0">
-                        <TextBlock x:Name="TrackerToggleIcon" Text="☷" FontSize="16" FontWeight="Bold" Foreground="White" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
 
                     <Button x:Name="ZenModeBtn" Click="ZenMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_ZenMode}" Margin="0,0,5,0">
@@ -169,11 +160,15 @@
                     <Button Click="Minimize_Click" Style="{StaticResource ToolbarButtonStyle}">
                         <TextBlock Text="─" FontSize="12" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Button>
+                    <Button Click="Maximize_Click" Style="{StaticResource ToolbarButtonStyle}">
+                        <TextBlock Text="☐" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,2"/>
+                    </Button>
                     <Button Click="Close_Click" Style="{StaticResource ToolbarButtonStyle}" Foreground="#EF4444">
                         <TextBlock Text="✕" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Button>
                 </StackPanel>
             </Grid>
+
 
         <Border x:Name="UpdateBanner" Grid.Row="1" Margin="15,10,15,10" CornerRadius="8" Background="#fbbf24" Padding="12,8" Visibility="Collapsed" Cursor="Hand" MouseLeftButtonUp="UpdateBanner_Click">
             <Border.Effect>
@@ -194,7 +189,11 @@
             </Grid>
         </Border>
 
-        <Border x:Name="HeroBorder" Grid.Row="2" Margin="15,12,15,12" CornerRadius="16" Background="#170939" ClipToBounds="True" VerticalAlignment="Top">
+        <Grid Grid.Row="2">
+            <ScrollViewer x:Name="PrayerListScroll" VerticalScrollBarVisibility="Hidden">
+                <Grid x:Name="CenteringWrapper" MinHeight="{Binding ActualHeight, ElementName=PrayerListScroll}">
+                    <StackPanel x:Name="MainContentStack" VerticalAlignment="Center" Margin="15,10">
+                        <Border x:Name="HeroBorder" Margin="0,0,0,12" CornerRadius="16" Background="#170939" ClipToBounds="True">
             <Grid>
                 <Viewbox x:Name="HeroBackgroundViewbox" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-20,0" Width="140" Height="140" Stretch="Uniform" Opacity="0.05">
                     <Path x:Name="HeroBackgroundPath" Fill="White" Data="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1z" />
@@ -380,18 +379,17 @@
                         </StackPanel>
                     </Border>
 
-                    <Border x:Name="ProhibitedWarning" Background="#4dff0000" CornerRadius="6" Padding="8,4" Margin="0,10,0,0" Visibility="Collapsed">
-                        <TextBlock x:Name="ProhibitedText" Text="{DynamicResource Prohibited_Warning}" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-                    </Border>
-                </StackPanel>
-            </Grid>
-        </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
 
-        <ScrollViewer x:Name="PrayerListScroll" Grid.Row="3" VerticalScrollBarVisibility="Hidden" Margin="15,0,15,15">
-            <StackPanel>
-                <Grid Margin="0,6,0,6">
-                    <TextBlock Text="{DynamicResource Section_Highlights}" FontWeight="Bold" FontSize="13" Foreground="White" Opacity="0.8" VerticalAlignment="Center"/>
-                </Grid>
+            <Border x:Name="ProhibitedWarning" Background="#4dff0000" CornerRadius="6" Padding="8,4" Margin="0,10,0,0" Visibility="Collapsed">
+                <TextBlock x:Name="ProhibitedText" Text="{DynamicResource Prohibited_Warning}" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+            </Border>
+            
+            <Grid x:Name="HighlightsHeader" Margin="0,6,0,6">
+                <TextBlock Text="{DynamicResource Section_Highlights}" FontWeight="Bold" FontSize="13" Foreground="White" Opacity="0.8" VerticalAlignment="Center"/>
+            </Grid>
                 <UniformGrid x:Name="HighlightsGrid" Columns="3" Margin="0,0,0,6">
                     <Border x:Name="SuhurCard" Background="#1AFFFFFF" CornerRadius="6" Padding="8" Margin="0,0,5,0">
                         <StackPanel>
@@ -444,7 +442,9 @@
                     </Grid>
                 </Border>
 
-                <Border x:Name="FajrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                <TextBlock x:Name="FardHeader" Text="{DynamicResource Section_Fard}" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8" Visibility="Collapsed"/>
+                <StackPanel x:Name="FardCardsPanel" Visibility="Collapsed">
+                <Border x:Name="FajrCard" Style="{StaticResource PremiumCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -460,13 +460,13 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Border x:Name="SunriseCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6" Visibility="Collapsed">
+                <Border x:Name="SunriseCard" Style="{StaticResource PremiumCardStyle}" Visibility="Collapsed">
                     <Grid>
                         <TextBlock x:Name="SunriseNameText" Text="{DynamicResource Prayer_Sunrise}" FontSize="15" FontWeight="Medium" Foreground="White" HorizontalAlignment="Left"/>
                         <TextBlock x:Name="SunriseTimeText" Text="--:-- AM" FontSize="13" FontWeight="Bold" Foreground="#34d399" HorizontalAlignment="Right"/>
                     </Grid>
                 </Border>
-                <Border x:Name="DhuhrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                <Border x:Name="DhuhrCard" Style="{StaticResource PremiumCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -482,7 +482,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Border x:Name="JumuahCard" Background="#1d4ed8" CornerRadius="6" Padding="12" Margin="0,0,0,6" Visibility="Collapsed">
+                <Border x:Name="JumuahCard" Style="{StaticResource PremiumCardStyle}" Background="#1d4ed8" Visibility="Collapsed">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -499,7 +499,7 @@
                     </Grid>
                 </Border>
 
-                <Border x:Name="AsrCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                <Border x:Name="AsrCard" Style="{StaticResource PremiumCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -515,7 +515,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Border x:Name="MaghribCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                <Border x:Name="MaghribCard" Style="{StaticResource PremiumCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -531,7 +531,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-                <Border x:Name="IshaCard" Background="#1AFFFFFF" CornerRadius="6" Padding="12" Margin="0,0,0,10">
+                <Border x:Name="IshaCard" Style="{StaticResource PremiumCardStyle}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -547,10 +547,11 @@
                         </StackPanel>
                     </Grid>
                 </Border>
+                </StackPanel>
                 
-                <TextBlock Text="{DynamicResource Section_Nafal}" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8"/>
-                <StackPanel Margin="0,0,0,5">
-                    <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10" Margin="0,0,0,4">
+                <TextBlock x:Name="NafalHeader" Text="{DynamicResource Section_Nafal}" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8" Visibility="Collapsed"/>
+                <StackPanel x:Name="NafalCardsPanel" Margin="0,0,0,5" Visibility="Collapsed">
+                    <Border Style="{StaticResource PremiumCardStyle}">
                         <Grid>
                             <StackPanel HorizontalAlignment="Left">
                                 <TextBlock Text="{DynamicResource Prayer_Duha}" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
@@ -559,7 +560,7 @@
                             <TextBlock x:Name="DuhaTimeText" Text="--:-- AM - --:-- PM" FontSize="11" FontWeight="Bold" Foreground="#60a5fa" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
-                    <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10" Margin="0,0,0,4">
+                    <Border Style="{StaticResource PremiumCardStyle}">
                         <Grid>
                             <StackPanel HorizontalAlignment="Left">
                                 <TextBlock Text="{DynamicResource Prayer_Awwabin}" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
@@ -568,7 +569,7 @@
                             <TextBlock x:Name="AwwabinTimeText" Text="--:-- PM - --:-- PM" FontSize="11" FontWeight="Bold" Foreground="#60a5fa" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                         </Grid>
                     </Border>
-                    <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10" Margin="0,0,0,4">
+                    <Border Style="{StaticResource PremiumCardStyle}">
                         <Grid>
                             <StackPanel HorizontalAlignment="Left">
                                 <TextBlock Text="{DynamicResource Prayer_Tahajjud}" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
@@ -583,8 +584,8 @@
                     </Border>
                 </StackPanel>
 
-                <TextBlock Text="{DynamicResource Section_Prohibited}" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8"/>
-                <UniformGrid Columns="3" Margin="0,0,0,8">
+                <TextBlock x:Name="ProhibitedHeader" Text="{DynamicResource Section_Prohibited}" FontWeight="Bold" FontSize="13" Margin="0,10,0,4" Foreground="White" Opacity="0.8"/>
+                <UniformGrid x:Name="ProhibitedGrid" Columns="3" Margin="0,0,0,8">
                     <Border x:Name="SunriseProhibCard" Background="#4dff0000" CornerRadius="8" Padding="8" Margin="0,0,3,0">
                         <StackPanel>
                             <TextBlock Text="{DynamicResource Prayer_Sunrise}" FontSize="11" FontWeight="SemiBold" Foreground="White" HorizontalAlignment="Center"/>
@@ -610,40 +611,34 @@
                     </Border>
                 </UniformGrid>
             </StackPanel>
-        </ScrollViewer>
+        </Grid>
+    </ScrollViewer>
+    <local:TrackerView x:Name="TrackerViewControl" Visibility="Collapsed" Margin="15,0,15,15"/>
+</Grid>
 
-        <Border x:Name="StickyFooter" Grid.Row="4" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0" Padding="10,8">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                
-                <StackPanel Grid.Column="0" HorizontalAlignment="Center" ToolTip="Prohibited prayer time (Makruh)">
-                    <TextBlock Text="{DynamicResource Label_Tulu}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="StickySunriseProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                    <TextBlock x:Name="StickySunriseStatus" Text="{DynamicResource Label_Passed}" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
-                </StackPanel>
 
-                <!-- Noon (With Separators) -->
-                <Border Grid.Column="1" BorderBrush="#33FFFFFF" BorderThickness="1,0,1,0" ToolTip="Prohibited prayer time (Makruh)">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock Text="{DynamicResource Label_ZawalLong}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
-                        <TextBlock x:Name="StickyZawalProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                        <TextBlock x:Name="StickyZawalStatus" Text="{DynamicResource Label_Upcoming}" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
+        <Border Grid.Row="3" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
+            <UniformGrid Columns="3">
+                <RadioButton x:Name="TabHome" Style="{StaticResource BottomTabStyle}" IsChecked="True" Checked="TabHome_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                        <TextBlock Text="🏠" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <TextBlock Text="Home" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </Border>
-
-                <!-- Sunset -->
-                <StackPanel Grid.Column="2" HorizontalAlignment="Center" ToolTip="Prohibited prayer time (Makruh)">
-                    <TextBlock Text="{DynamicResource Label_Ghurub}" Foreground="White" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center"/>
-                    <TextBlock x:Name="StickySunsetProhibited" Text="--:-- - --:--" Foreground="White" FontSize="10" HorizontalAlignment="Center" Margin="0,1,0,0"/>
-                    <TextBlock x:Name="StickySunsetStatus" Text="{DynamicResource Label_Upcoming}" Foreground="White" Opacity="0.7" FontSize="8" FontWeight="Medium" HorizontalAlignment="Center"/>
-                </StackPanel>
-            </Grid>
+                </RadioButton>
+                <RadioButton x:Name="TabPrayers" Style="{StaticResource BottomTabStyle}" Checked="TabPrayers_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                        <TextBlock Text="🕒" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <TextBlock Text="{DynamicResource Tab_Salat}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton x:Name="TabTracker" Style="{StaticResource BottomTabStyle}" Checked="TabTracker_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
+                        <TextBlock Text="📊" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                        <TextBlock Text="Tracker" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </RadioButton>
+            </UniformGrid>
         </Border>
-        <local:TrackerView x:Name="TrackerViewControl" Grid.Row="3" Visibility="Collapsed" Margin="15,0,15,15"/>
     </Grid>
 </Border>
 </Window>

@@ -24,9 +24,9 @@
 | Method                         | Link / Command                                                                                                          |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.3.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.2_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.3.2_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.3.2_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 1. **WinGet**: Open any terminal (PowerShell, CMD, or Terminal) and run the command above.
 2. **Manual**: Download the installer matching your system.

@@ -59,9 +59,9 @@ namespace DailyPrayerTime.Native
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
+            // Only close the popup — do NOT stop audio.
+            // Audio continues playing; only Mute can stop it.
             _isClosed = true;
-            _player.Stop();
-            _player.Close();
             this.Close();
         }
 
@@ -105,8 +105,9 @@ namespace DailyPrayerTime.Native
         {
             _isClosed = true;
             _player.MediaEnded -= OnAdhanEnded;
-            _player.Stop();
-            _player.Close();
+            // Do NOT stop the player here — Close button should not affect audio.
+            // Only Mute_Click stops audio explicitly. OnClosed can be reached from
+            // either the Close button (audio should keep going) or system close (let it fade).
             base.OnClosed(e);
         }
     }

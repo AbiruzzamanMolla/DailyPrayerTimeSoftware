@@ -801,13 +801,6 @@ namespace DailyPrayerTime.Native
             return total == 0 ? 0 : (checkedCount * 100) / total;
         }
 
-        private void Close_Click(object sender, RoutedEventArgs e)
-        {
-            if (System.Windows.Application.Current.MainWindow is MainWindow mw)
-            {
-                mw.TrackerToggle_Click(this, new RoutedEventArgs());
-            }
-        }
     }
 
     public class HistoryItem

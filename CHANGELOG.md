@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.2] - 2026-04-22
+
+### Changed
+
+- **UI**: Removed the top-left "Support Us" button from the main window.
+- **Window Controls**: Added a Maximize button to the top-right window controls alongside Minimize and Close.
+- **Navigation Redesign**: Replaced the vertical scrolling layout with a modern, 3-tab bottom navigation system (Home, Salat, Tracker).
+- **Tab Rename**: Renamed the "Daily" tab to "Salat" and updated its icon to a clock (🕒) for better clarity.
+- **Tracker Integration**: Moved the Tracker feature from a top-bar toggle button to its own dedicated tab in the bottom navigation.
+- **Premium Cards**: Updated the prayer sections to use a unified, premium glassmorphic `PremiumCardStyle`.
+- **Fard Title**: Added a "Fard Prayers" localized title to match the "Nafal Prayers" layout in the Daily tab.
+- **Highlights Refactor**: Adjusted the Home tab "Daily Highlights" grid logic to consistently show 3 items (Suhur, Iftar, Fasting Tracker) in normal mode, and streamline to 1 item (Fasting Tracker) in Ramadan mode.
+- **Friday UI Logic**: Implemented dynamic visibility for Friday prayers. The Jumu'ah card now exclusively replaces the Dhuhr card on Fridays until the Jumu'ah Jamaat time passes, after which it automatically reverts to the standard Dhuhr card.
+- **Hero Context**: Updated the Hero section to intelligently display "Jumu'ah" instead of "Dhuhr" on Fridays during the appropriate time window.
+- **Centered Layout**: Refactored the Home tab to be vertically and horizontally centered on the screen. The Hero section and highlights now dynamically adjust their position for a more balanced "premium" look.
+
+### Fixed
+
+- **Adhan Popup – Close Button**: Fixed incorrect behavior where the Close button was stopping the Adhan audio. The Close button now only dismisses the popup window. The Adhan sound continues to play in the background. Only the **Mute** button stops the audio, as intended.
+
 ## [2.3.1] - 2026-04-16
 
 ### Fixed
