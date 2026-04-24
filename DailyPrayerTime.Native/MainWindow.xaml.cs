@@ -338,7 +338,23 @@ namespace DailyPrayerTime.Native
                 MainGrid.Background = (LinearGradientBrush)FindResource("MainGradient");
             }
         }
-        
+
+        /// <summary>Exits Zen Mode if currently active. Safe to call even when not in zen mode.</summary>
+        private void ExitZenMode()
+        {
+            if (!_isZenMode) return;
+            _isZenMode = false;
+            SyncToolbarIcons();
+
+            HighlightsHeader.Visibility = Visibility.Visible;
+            HighlightsGrid.Visibility = Visibility.Visible;
+            ProhibitedHeader.Visibility = Visibility.Visible;
+            ProhibitedGrid.Visibility = Visibility.Visible;
+
+            MainContentStack.VerticalAlignment = VerticalAlignment.Top;
+            MainGrid.Background = (LinearGradientBrush)FindResource("MainGradient");
+        }
+
         private void ManageOverlay()
         {
             bool shouldShowOverlay = SettingsManager.Current.ShowOverlay;
@@ -2035,6 +2051,10 @@ namespace DailyPrayerTime.Native
             FardCardsPanel.Visibility = Visibility.Collapsed;
             NafalHeader.Visibility = Visibility.Collapsed;
             NafalCardsPanel.Visibility = Visibility.Collapsed;
+
+            // Zen Mode is only available on the Home tab — re-enable the button
+            ZenModeBtn.IsEnabled = true;
+            ZenModeBtn.Opacity = 1.0;
         }
 
         private void TabPrayers_Checked(object sender, RoutedEventArgs e)
@@ -2042,6 +2062,11 @@ namespace DailyPrayerTime.Native
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = false;
             TrackerViewControl.Visibility = Visibility.Collapsed;
+
+            // Zen Mode is Home-tab only — exit it and disable the button
+            ExitZenMode();
+            ZenModeBtn.IsEnabled = false;
+            ZenModeBtn.Opacity = 0.35;
             
             MainContentStack.VerticalAlignment = VerticalAlignment.Top;
             HeroBorder.Visibility = Visibility.Collapsed;
@@ -2067,6 +2092,11 @@ namespace DailyPrayerTime.Native
             HeroBorder.Visibility = Visibility.Collapsed;
             PrayerListScroll.Visibility = Visibility.Collapsed;
             UpdateBanner.Visibility = Visibility.Collapsed;
+
+            // Zen Mode is Home-tab only — exit it and disable the button
+            ExitZenMode();
+            ZenModeBtn.IsEnabled = false;
+            ZenModeBtn.Opacity = 0.35;
 
             var enabledPrayers = GetEnabledTrackerPrayers();
             TrackerViewControl.LoadData(enabledPrayers);
@@ -2117,7 +2147,14 @@ namespace DailyPrayerTime.Native
                 enabled.Add("Duha");
             }
 
-            if (now >= _todayPrayerTimes.Dhuhr) enabled.Add("Dhuhr");
+            // On Fridays, enable "Jumuah" instead of "Dhuhr" — TrackerView shows the Jumuah section on Fridays
+            if (now >= _todayPrayerTimes.Dhuhr)
+            {
+                if (now.DayOfWeek == DayOfWeek.Friday)
+                    enabled.Add("Jumuah");
+                else
+                    enabled.Add("Dhuhr");
+            }
             
             // Asr & Evening Adhkar
             if (now >= _todayPrayerTimes.Asr) 
