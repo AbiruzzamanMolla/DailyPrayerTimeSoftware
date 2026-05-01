@@ -48,3 +48,4 @@ winget-pkgs/
 manifests/
 wingetcreate.exe
 *.nupkg
+scoop-bucket/
