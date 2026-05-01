@@ -42,3 +42,9 @@ Output/
 Releases/
 .notes
 graphify-out
+
+# Package Managers & Automation
+winget-pkgs/
+manifests/
+wingetcreate.exe
+*.nupkg

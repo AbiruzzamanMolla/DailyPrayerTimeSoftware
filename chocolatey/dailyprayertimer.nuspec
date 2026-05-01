@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>dailyprayertimer</id>
+    <version>2.3.3</version>
+    <title>Daily Prayer Timer</title>
+    <authors>Abiruzzaman Molla</authors>
+    <owners>Abiruzzaman Molla</owners>
+    <projectUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/main/DailyPrayerTime.Native/icon.ico</iconUrl>
+    <licenseUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware</projectSourceUrl>
+    <packageSourceUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/tree/main/chocolatey</packageSourceUrl>
+    <docsUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/blob/main/README.md</docsUrl>
+    <bugTrackerUrl>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/issues</bugTrackerUrl>
+    <tags>dailyprayertimer prayer timer islam adhan</tags>
+    <summary>A high-performance, native Windows application for accurate prayer times.</summary>
+    <description>
+A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI, deep taskbar integration, and full multi-language support. Keep track of your daily prayers and Sunnah fasts directly from your Windows desktop.
+    </description>
+    <releaseNotes>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
