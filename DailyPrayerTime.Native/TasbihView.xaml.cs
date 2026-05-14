@@ -54,6 +54,7 @@ namespace DailyPrayerTime.Native
         private PhraseItem CurrentPhrase => _phrases[_currentIndex];
         private int CurrentCount => _counts.GetValueOrDefault(CurrentPhrase.Key, 0);
         private ObservableCollection<DuaCardItem> _duaCards = new();
+        private bool _isEnglishLang = true;
 
         public TasbihView()
         {
@@ -159,7 +160,8 @@ namespace DailyPrayerTime.Native
             int target = _targets.GetValueOrDefault(key, 0);
 
             CountText.Text = count.ToString();
-            PhraseText.Text = phrase.Arabic;
+            bool isEn = SettingsManager.Current.Language == "en";
+            PhraseText.Text = isEn ? phrase.EnTranslit : phrase.BnTranslit;
             PhraseNameText.Text = GetPhraseDisplayName(key);
 
             TargetText.Text = target > 0 ? target.ToString() : "\U0001f3af";
@@ -307,9 +309,7 @@ namespace DailyPrayerTime.Native
         {
             if (_allDuas == null) return;
 
-            bool isEnglish = true;
-            if (DuaLangSelector.SelectedItem is System.Windows.Controls.ComboBoxItem item && item.Tag is string tag)
-                isEnglish = tag == "en";
+            bool isEnglish = _isEnglishLang;
 
             _duaCards.Clear();
             foreach (var r in _allDuas)
@@ -317,23 +317,38 @@ namespace DailyPrayerTime.Native
                 bool hasLang = isEnglish ? r.En != null : r.Bn != null;
                 if (!hasLang) continue;
 
+                var langData = isEnglish ? r.En : r.Bn;
                 _duaCards.Add(new DuaCardItem
                 {
                     Index = r.Index,
-                    Name = r.Name,
+                    Name = langData?.Name ?? r.Name,
                     Arabic = r.Arabic,
                     Reference = r.Reference,
-                    Transliteration = isEnglish ? (r.En?.Transliteration ?? "") : (r.Bn?.Transliteration ?? ""),
-                    Translation = isEnglish ? (r.En?.Translation ?? "") : (r.Bn?.Translation ?? ""),
+                    Transliteration = langData?.Transliteration ?? "",
+                    Translation = langData?.Translation ?? "",
                     IsExpanded = false
                 });
             }
         }
 
-        private void DuaLangSelector_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void SelectLang(bool isEnglish)
         {
+            _isEnglishLang = isEnglish;
+            if (isEnglish)
+            {
+                LangEnBtn.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 16, 185, 129));
+                LangBnBtn.Background = System.Windows.Media.Brushes.Transparent;
+            }
+            else
+            {
+                LangEnBtn.Background = System.Windows.Media.Brushes.Transparent;
+                LangBnBtn.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 16, 185, 129));
+            }
             ApplyLanguageFilter();
         }
+
+        private void LangEn_Click(object sender, System.Windows.Input.MouseButtonEventArgs e) => SelectLang(true);
+        private void LangBn_Click(object sender, System.Windows.Input.MouseButtonEventArgs e) => SelectLang(false);
 
         private void ToggleDuaCard(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -344,6 +359,7 @@ namespace DailyPrayerTime.Native
 
     public class DuaLangData
     {
+        public string Name { get; set; } = "";
         public string Transliteration { get; set; } = "";
         public string Translation { get; set; } = "";
     }

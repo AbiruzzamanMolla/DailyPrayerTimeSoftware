@@ -12,11 +12,11 @@ namespace DailyPrayerTime.Native.Services
 
         public static List<PhraseItem> DefaultPhrases => new()
         {
-            new("SubhanAllah", "سُبْحَانَ ٱللَّٰهِ"),
-            new("Alhamdulillah", "ٱلْحَمْدُ لِلَّٰهِ"),
-            new("AllahuAkbar", "ٱللَّٰهُ أَكْبَرُ"),
-            new("LaIlahaIllallah", "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ"),
-            new("Astaghfirullah", "أَسْتَغْفِرُ ٱللَّٰهَ"),
+            new("SubhanAllah", "سُبْحَانَ ٱللَّٰهِ", "Subhaanallaah", "সুবহানাল্লাহ"),
+            new("Alhamdulillah", "ٱلْحَمْدُ لِلَّٰهِ", "Alhamdulillaah", "আলহামদুলিল্লাহ"),
+            new("AllahuAkbar", "ٱللَّٰهُ أَكْبَرُ", "Allaahu 'Akbar", "আল্লাহু আকবার"),
+            new("LaIlahaIllallah", "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ", "Laa 'ilaaha 'illallaah", "লা ইলাহা ইল্লাল্লাহ"),
+            new("Astaghfirullah", "أَسْتَغْفِرُ ٱللَّٰهَ", "'Astaghfirullaah", "আসতাগফিরুল্লাহ"),
         };
 
         private string GetFilePath(DateTime date)
@@ -54,11 +54,15 @@ namespace DailyPrayerTime.Native.Services
     {
         public string Key { get; }
         public string Arabic { get; }
+        public string EnTranslit { get; }
+        public string BnTranslit { get; }
 
-        public PhraseItem(string key, string arabic)
+        public PhraseItem(string key, string arabic, string enTranslit, string bnTranslit)
         {
             Key = key;
             Arabic = arabic;
+            EnTranslit = enTranslit;
+            BnTranslit = bnTranslit;
         }
     }
 }

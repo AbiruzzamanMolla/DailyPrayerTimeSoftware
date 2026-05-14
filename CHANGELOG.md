@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Qibla Compass**: New dedicated tab (🧭) with a 240px compass rose, dynamic direction arrow, and bearing readout. Calculates precise Qibla direction from user's location to the Kaaba (21.4225°N, 39.8262°E) using spherical trigonometry. Shows direction name (N, NNE, NE, etc.) and numeric angle. Includes Recalculate button.
 - **Digital Tasbih (Dhikr Counter)**: New dedicated tab (📿) with 5 Arabic dhikr phrases (SubhanAllah, Alhamdulillah, Allahu Akbar, La ilaha illallah, Astaghfirullah). Tap or press Space/Enter to count. Includes decrement, reset, and target-snap buttons. Auto-saves daily totals to JSON. Scale animation on increment.
+- **Duas Section in Tasbih Tab**: Tab now has dual mode — Tasbih counter and Dua viewer. Includes 26 after-salaam duas and 1 Witr salaam dua, each with full Arabic text, transliteration, and translation in both English and Bangla. Language selector toggles between English/Bangla. Accordion-style cards with collapsible content. INotifyPropertyChanged for smooth expand/collapse.
 - **Ramadan Complete Module**: New dedicated tab (🌙) with six integrated sections:
   - **Status Banner**: Live countdown showing current Ramadan day (1-30) with progress bar, or days until next Ramadan.
   - **Daily Dua**: Curated set of 10 duas (Arabic + transliteration + translation), auto-rotated daily.
