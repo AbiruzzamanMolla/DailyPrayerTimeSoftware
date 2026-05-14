@@ -117,20 +117,12 @@
                                     </Grid>
                                     <Border Background="#0A111111" Padding="12,0,12,11" Margin="0" Visibility="{Binding ContentVisibility}">
                                         <StackPanel>
-                                            <ItemsControl ItemsSource="{Binding Segments}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Margin="0,0,0,10">
-                                                            <Border Background="#15111111" CornerRadius="8" Padding="12,10">
-                                                                <TextBlock Text="{Binding Arabic}" Foreground="White" FontSize="16" FontFamily="Traditional Arabic, Segoe UI" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" FlowDirection="RightToLeft"/>
-                                                            </Border>
-                                                            <TextBlock Text="{Binding Transliteration}" Foreground="White" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,6,0,3"/>
-                                                            <TextBlock Text="{Binding Translation}" Foreground="White" FontSize="11" Opacity="0.8" TextWrapping="Wrap"/>
-                                                            <TextBlock Text="{Binding Reference}" Foreground="#9ca3af" FontSize="9" Opacity="0.6" Margin="0,4,0,0" TextWrapping="Wrap"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
+                                            <Border Background="#15111111" CornerRadius="8" Padding="12,10">
+                                                <TextBlock Text="{Binding Arabic}" Foreground="White" FontSize="16" FontFamily="Traditional Arabic, Segoe UI" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" FlowDirection="RightToLeft"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Transliteration}" Foreground="White" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,8,0,4"/>
+                                            <TextBlock Text="{Binding Translation}" Foreground="White" FontSize="11" Opacity="0.85" TextWrapping="Wrap"/>
+                                            <TextBlock Text="{Binding Reference}" Foreground="#9ca3af" FontSize="9" Opacity="0.6" Margin="0,6,0,0" TextWrapping="Wrap"/>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>

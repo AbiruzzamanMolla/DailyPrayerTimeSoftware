@@ -16,9 +16,12 @@ namespace DailyPrayerTime.Native
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public int Id { get; set; }
+        public int Index { get; set; }
         public string Name { get; set; } = "";
-        public List<DuaSegment> Segments { get; set; } = new();
+        public string Arabic { get; set; } = "";
+        public string Reference { get; set; } = "";
+        public string Transliteration { get; set; } = "";
+        public string Translation { get; set; } = "";
 
         private bool _isExpanded;
         public bool IsExpanded
@@ -39,14 +42,6 @@ namespace DailyPrayerTime.Native
 
         private void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name ?? ""));
-    }
-
-    public class DuaSegment
-    {
-        public string Arabic { get; set; } = "";
-        public string Transliteration { get; set; } = "";
-        public string Translation { get; set; } = "";
-        public string Reference { get; set; } = "";
     }
 
     public partial class TasbihView : System.Windows.Controls.UserControl
@@ -290,19 +285,6 @@ namespace DailyPrayerTime.Native
             TabDuas.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(51, 16, 185, 129));
         }
 
-        private static readonly HashSet<int> _englishIds = new()
-        {
-            63, 64, 65, 68, 70, 100,
-            200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210
-        };
-
-        private static readonly HashSet<int> _bengaliIds = new()
-        {
-            360, 361, 362, 363, 364, 365, 366, 367, 368, 369,
-            370, 371, 372, 373, 374, 375, 376, 377, 378, 379,
-            380, 381, 382
-        };
-
         private List<DuaRawData>? _allDuas;
 
         private void LoadDuas()
@@ -329,17 +311,20 @@ namespace DailyPrayerTime.Native
             if (DuaLangSelector.SelectedItem is System.Windows.Controls.ComboBoxItem item && item.Tag is string tag)
                 isEnglish = tag == "en";
 
-            var allowed = isEnglish ? _englishIds : _bengaliIds;
-
             _duaCards.Clear();
             foreach (var r in _allDuas)
             {
-                if (!allowed.Contains(r.Id)) continue;
+                bool hasLang = isEnglish ? r.En != null : r.Bn != null;
+                if (!hasLang) continue;
+
                 _duaCards.Add(new DuaCardItem
                 {
-                    Id = r.Id,
+                    Index = r.Index,
                     Name = r.Name,
-                    Segments = r.Segments,
+                    Arabic = r.Arabic,
+                    Reference = r.Reference,
+                    Transliteration = isEnglish ? (r.En?.Transliteration ?? "") : (r.Bn?.Transliteration ?? ""),
+                    Translation = isEnglish ? (r.En?.Translation ?? "") : (r.Bn?.Translation ?? ""),
                     IsExpanded = false
                 });
             }
@@ -357,10 +342,19 @@ namespace DailyPrayerTime.Native
         }
     }
 
+    public class DuaLangData
+    {
+        public string Transliteration { get; set; } = "";
+        public string Translation { get; set; } = "";
+    }
+
     public class DuaRawData
     {
-        public int Id { get; set; }
+        public int Index { get; set; }
         public string Name { get; set; } = "";
-        public List<DuaSegment> Segments { get; set; } = new();
+        public string Arabic { get; set; } = "";
+        public string Reference { get; set; } = "";
+        public DuaLangData? En { get; set; }
+        public DuaLangData? Bn { get; set; }
     }
 }
