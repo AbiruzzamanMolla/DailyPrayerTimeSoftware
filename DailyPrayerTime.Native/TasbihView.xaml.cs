@@ -1,11 +1,54 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using DailyPrayerTime.Native.Services;
+using Newtonsoft.Json;
 
 namespace DailyPrayerTime.Native
 {
+    public class DuaCardItem : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public List<DuaSegment> Segments { get; set; } = new();
+
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded == value) return;
+                _isExpanded = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Arrow));
+                OnPropertyChanged(nameof(ContentVisibility));
+            }
+        }
+
+        public string Arrow => IsExpanded ? "\u25b2" : "\u25bc";
+        public Visibility ContentVisibility => IsExpanded ? Visibility.Visible : Visibility.Collapsed;
+
+        private void OnPropertyChanged([CallerMemberName] string? name = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name ?? ""));
+    }
+
+    public class DuaSegment
+    {
+        public string Arabic { get; set; } = "";
+        public string Transliteration { get; set; } = "";
+        public string Translation { get; set; } = "";
+        public string Reference { get; set; } = "";
+    }
+
     public partial class TasbihView : System.Windows.Controls.UserControl
     {
         private readonly List<PhraseItem> _phrases;
@@ -15,6 +58,7 @@ namespace DailyPrayerTime.Native
         private DateTime _currentDate;
         private PhraseItem CurrentPhrase => _phrases[_currentIndex];
         private int CurrentCount => _counts.GetValueOrDefault(CurrentPhrase.Key, 0);
+        private ObservableCollection<DuaCardItem> _duaCards = new();
 
         public TasbihView()
         {
@@ -29,6 +73,7 @@ namespace DailyPrayerTime.Native
             BuildPhraseChips();
             SelectPhrase(0);
             SetupKeyboard();
+            DuasList.ItemsSource = _duaCards;
         }
 
         public void LoadData()
@@ -39,6 +84,7 @@ namespace DailyPrayerTime.Native
             foreach (var phrase in _phrases)
                 _counts[phrase.Key] = saved.GetValueOrDefault(phrase.Key, 0);
             UpdateUI();
+            LoadDuas();
         }
 
         private void BuildPhraseChips()
@@ -215,7 +261,7 @@ namespace DailyPrayerTime.Native
         {
             if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.Enter)
             {
-                if (IsVisible)
+                if (IsVisible && TasbihPanel.Visibility == Visibility.Visible)
                 {
                     Increment();
                     e.Handled = true;
@@ -227,5 +273,94 @@ namespace DailyPrayerTime.Native
         {
             TasbihService.Instance.SaveDay(_currentDate, _counts);
         }
+
+        private void SwitchToTasbih(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            TasbihPanel.Visibility = Visibility.Visible;
+            DuasPanel.Visibility = Visibility.Collapsed;
+            TabTasbih.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(51, 16, 185, 129));
+            TabDuas.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(26, 255, 255, 255));
+        }
+
+        private void SwitchToDuas(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            TasbihPanel.Visibility = Visibility.Collapsed;
+            DuasPanel.Visibility = Visibility.Visible;
+            TabTasbih.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(26, 255, 255, 255));
+            TabDuas.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(51, 16, 185, 129));
+        }
+
+        private static readonly HashSet<int> _englishIds = new()
+        {
+            63, 64, 65, 68, 70, 100,
+            200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210
+        };
+
+        private static readonly HashSet<int> _bengaliIds = new()
+        {
+            360, 361, 362, 363, 364, 365, 366, 367, 368, 369,
+            370, 371, 372, 373, 374, 375, 376, 377, 378, 379,
+            380, 381, 382
+        };
+
+        private List<DuaRawData>? _allDuas;
+
+        private void LoadDuas()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "i18n", "duas.json");
+                if (!File.Exists(path)) return;
+
+                string json = File.ReadAllText(path);
+                _allDuas = JsonConvert.DeserializeObject<List<DuaRawData>>(json);
+                if (_allDuas == null) return;
+
+                ApplyLanguageFilter();
+            }
+            catch { }
+        }
+
+        private void ApplyLanguageFilter()
+        {
+            if (_allDuas == null) return;
+
+            bool isEnglish = true;
+            if (DuaLangSelector.SelectedItem is System.Windows.Controls.ComboBoxItem item && item.Tag is string tag)
+                isEnglish = tag == "en";
+
+            var allowed = isEnglish ? _englishIds : _bengaliIds;
+
+            _duaCards.Clear();
+            foreach (var r in _allDuas)
+            {
+                if (!allowed.Contains(r.Id)) continue;
+                _duaCards.Add(new DuaCardItem
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Segments = r.Segments,
+                    IsExpanded = false
+                });
+            }
+        }
+
+        private void DuaLangSelector_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            ApplyLanguageFilter();
+        }
+
+        private void ToggleDuaCard(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is System.Windows.FrameworkElement fe && fe.DataContext is DuaCardItem item)
+                item.IsExpanded = !item.IsExpanded;
+        }
+    }
+
+    public class DuaRawData
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public List<DuaSegment> Segments { get; set; } = new();
     }
 }

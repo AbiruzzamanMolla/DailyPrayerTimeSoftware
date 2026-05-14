@@ -1,0 +1,596 @@
+﻿[
+    {
+        "name":  "Dua after salaam #1",
+        "id":  63,
+        "segments":  [
+                         {
+                             "translation":  "I ask Allaah for forgiveness.",
+                             "arabic":  "أَسْتَغْفِرُ اللّٰهَ",
+                             "transliteration":  "\u0027Astaghfirullaaha",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "O Allah, You are Peace and from You comes peace. Blessed are You, O Owner of majesty and honor.",
+                             "arabic":  "اَللّٰهُمَّ أَنْتَ السَّلاَمُ، وَمِنْكَ السَّلاَمُ، تَبَارَكْتَ يَا ذَا الْجَلاَلِ وَالْإِكْرَامِ",
+                             "transliteration":  "Allaahumma \u0027Antas-Salaamu wa minkas-salaamu, tabaarakta yaa \u003cu\u003eTh\u003c/u\u003eal-Jalaali wal-\u0027Ikraam",
+                             "reference":  "Muslim 1/414."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua after salaam #2",
+        "id":  64,
+        "segments":  [
+                         {
+                             "translation":  "None has the right to be worshipped but Allah alone, He has no partner, His is the dominion and His is the praise, and He is Able to do all things.",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرٌ",
+                             "transliteration":  "Laa \u0027ilaaha \u0027illallaahu wahdahu laa shareeka lahu, lahul-mulku wa lahul-hamdu wa Huwa \u0027alaa kulli shay\u0027in Qadeer,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "O Allah, there is none who can withhold what You give, and none may give what You have withheld; and the might of the mighty person cannot benefit him against You.",
+                             "arabic":  "اَللّٰهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+                             "transliteration":  "Allaahumma laa maani\u0027a limaa \u0027a\u0027tayta, wa laa mu\u0027tiya limaa mana\u0027ta, wa laa yanfa\u0027u \u003cu\u003eth\u003c/u\u003eal-jaddi minkal-jadd.",
+                             "reference":  "Al-Bukhari 1/255, Muslim 1/414"
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua after salaam #3",
+        "id":  65,
+        "segments":  [
+                         {
+                             "translation":  "None has the right to be worshipped but Allah alone, He has no partner, His is the dominion and His is the praise and He is Able to do all things. There is no power and no might except by Allah. None has the right to be worshipped but Allah, and we do not worship any other besides Him. His is grace, and His is bounty and to Him belongs the most excellent praise. None has the right to be worshipped but Allah. (We are) sincere in making our religious devotion to Him, even though the disbelievers may dislike it.",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرٌ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ، لَا إِلٰهَ إِلَّا اللّٰهُ، وَلَا نَعْبُدُ إِلَّا إِيَّاهُ، لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلٰهَ إِلَّا اللّٰهُ مُخْلِصِيْنَ لَهُ الدِّيْنَ وَلَوْ كَرِهَ الْكَافِرُوْنَ",
+                             "transliteration":  "Laa \u0027ilaaha \u0027illallaahu wahdahu laa shareeka lahu, lahul-mulku, wa lahul-hamdu wa Huwa \u0027alaa kulli shay \u0027in Qadeer. Laa hawla wa laa quwwata \u0027illaa billaahi, laa \u0027ilaaha \u0027illallaahu, wa laa na\u0027budu \u0027illaa \u0027iyyaahu, lahun-ni\u0027matu wa lahul-fadhlu wa lahuth-thanaa\u0027ul-hasanu, laa \u0027ilaaha \u0027illallaahu mukhliseena lahud-deena wa law karihal-kaafiroon",
+                             "reference":  "Muslim 1/415."
+                         }
+                     ]
+    },
+    {
+        "name":  "Ayatul Kursi - Surah Al Baqarah 2:255",
+        "id":  68,
+        "segments":  [
+                         {
+                             "translation":  "Allah! There is none worthy of worship but He, the Ever Living, the One Who sustains and protects all that exists.",
+                             "arabic":  "اللّٰهُ لَاۤ اِلٰهَ اِلَّا هُوَ الۡحَـىُّ الۡقَيُّوۡمُ",
+                             "transliteration":  "Allaahu laa \u0027ilaaha \u0027illaa Huwal-Hayyul-Qayyoom,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "Neither slumber nor sleep overtakes Him.",
+                             "arabic":  "لَا تَاۡخُذُهٗ سِنَةٌ وَّلَا نَوۡمٌ‌ؕ",
+                             "transliteration":  "laa ta\u0027khu\u003cu\u003eth\u003c/u\u003euhu sinatun wa laa nawm,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "To Him belongs whatever is in the heavens and whatever is on the earth.",
+                             "arabic":  "لَهٗ مَا فِى السَّمٰوٰتِ وَمَا فِى الۡاَرۡضِ",
+                             "transliteration":  "lahu maa fis-samaawaati wa maafil-\u0027ardh,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "Who is he that can intercede with Him except with His Permission?",
+                             "arabic":  "مَنۡ ذَا الَّذِىۡ يَشۡفَعُ عِنۡدَهٗۤ اِلَّا بِاِذۡنِهٖ‌ؕ",
+                             "transliteration":  "man \u003cu\u003eth\u003c/u\u003eal-la\u003cu\u003eth\u003c/u\u003eee yashfa\u0027u \u0027indahu \u0027illaa bi\u0027\u003cu\u003eith\u003c/u\u003enih,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "He knows what happens to them in this world, and what will happen to them in the Hereafter.",
+                             "arabic":  "يَعۡلَمُ مَا بَيۡنَ اَيۡدِيۡهِمۡ وَمَا خَلۡفَهُمۡ‌ۚ",
+                             "transliteration":  "ya\u0027lamu maa bayna \u0027aydeehim wa maa khalfahum,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "And they will never compass anything of His Knowledge except that which He wills.",
+                             "arabic":  "وَلَا يُحِيۡطُوۡنَ بِشَىۡءٍ مِّنۡ عِلۡمِهٖۤ اِلَّا بِمَا شَآءَ ۚ",
+                             "transliteration":  "wa laa yuheetoona bishay\u0027im-min \u0027ilmihi \u0027illaa bimaa shaa\u0027a,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "His Throne extends over the heavens and the earth,",
+                             "arabic":  "وَسِعَ كُرۡسِيُّهُ السَّمٰوٰتِ وَالۡاَرۡضَ",
+                             "transliteration":  "wasi\u0027a kursiyyuhus-samaawaati wal\u0027ardh,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "and He feels no fatigue in guarding and preserving them.",
+                             "arabic":  "وَلَا يَـــُٔوۡدُهٗ حِفۡظُهُمَا",
+                             "transliteration":  "wa laa ya\u0027ooduhu hif\u003cu\u003edh\u003c/u\u003euhumaa,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "And He is the Most High, the Most Great.",
+                             "arabic":  "وَهُوَ الۡعَلِىُّ الۡعَظِيۡمُ‏",
+                             "transliteration":  "wa Huwal-\u0027Aliyyul- \u0027A\u003cu\u003edh\u003c/u\u003eeem.",
+                             "reference":  "An-Nasa\u0027i, \u0027Amalul-Yawm wal-Laylah (Hadith no. 100), also Ibn As-Sunni (no. 121). See also Al-Albani, Sahihul-Jami\u0027 As-Saghir 5/339 and Silsilatul-Ahadith As-Sahihah 2/697 (no. 972)."
+                         }
+                     ]
+    },
+    {
+        "name":  "Asking for Beneficial Knowledge, Pure Rizq \u0026 Accepted Deeds",
+        "id":  70,
+        "segments":  [
+                         {
+                             "translation":  "O Allah, I ask You for knowledge that is of benefit, a good provision, and deeds that will be accepted.",
+                             "arabic":  "اَللّٰهُمَّ إِنِّيْ أَسْأَلُكَ عِلْمًا نَافِعًا، وَرِزْقًا طَيِّبًا، وَعَمَلًا مُتَقَبَّلًا",
+                             "transliteration":  "Allaahumma \u0027innee \u0027as\u0027aluka \u0027ilman naafi\u0027an, wa rizqan tayyiban, wa \u0027amalan mutaqabbalan.",
+                             "reference":  "Ibn Majah and others. See Al-Albani, Sahih Ibn Majah 1/152 and Majma\u0027uz-Zawd\u0027id 10/111."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua before sleeping #5",
+        "id":  100,
+        "segments":  [
+                         {
+                             "translation":  "O Allaah, verily You have created my soul and You shall take it\u0027s life, to You belong it\u0027s life and death. If You should keep my soul alive then protect it, and if You should take it\u0027s life then forgive it. O Allaah, I ask You to grant me good health.",
+                             "arabic":  "اَللّٰهُمَّ إِنَّكَ خَلَقْتَ نَفْسِيْ وَأَنْتَ تَوَفَّاهَا، لَكَ مَمَاتُهَا وَمَحْيَاهَا، إِنْ أَحْيَيْتَهَا فَاحْفَظْهَا، وَإِنْ أَمَتَّهَا فَاغْفِرْ لَهَا، اَللّٰهُمَّ إِنِّيْ أَسْأَلُكَ الْعَافِيَةَ",
+                             "transliteration":  "Allaahwmma \u0027innaka khalaqta nafsee wa \u0027Anta tawaffaahaa, laka mamaatuhaa wa mahyaahaa, \u0027in \u0027ahyaytahaa fahfadhhaa, wa \u0027in \u0027amattahaa faghfir lahaa . Allaahumma \u0027innee \u0027as\u0027alukal-\u0027aafiyata.",
+                             "reference":  "Muslim 4/2083, Ahmad 2/79."
+                         }
+                     ]
+    },
+    {
+        "name":  "Forbiddance of ascribing things to omens",
+        "id":  200,
+        "segments":  [
+                         {
+                             "translation":  "O Allah there is no portent other than Your portent, no goodness other than Your goodness, and none worthy of worship other than You.",
+                             "arabic":  "اَللّٰهُمَّ لَا طَيْرَ إِلَّا طَيْرُكَ، وَلَا خَيْرَ إِلَّا خَيْرُكَ، وَلَا إِلٰهَ غَيْرُكَ",
+                             "transliteration":  "Allaahumma laa tayra \u0027illaa tayruka, wa laa khayra \u0027illaa khayruka, wa laa \u0027ilaaha ghayruka.",
+                             "reference":  "Ahmad 2/220, Ibn As-Sunni (no. 292). See also Al-Albani, Silsilatul-\u0027Ahadlth As-Sahihah 3/54, (no. 1065). As for bodings of good, these used to please the Prophet (SAW) and so when he heard good words from someone, he used to say: \u0027\u0027We have taken from you a good portent from your mouth,\u0027\u0027 Abu Dawud, Ahmad. See also Al-Albani, Silsilatul-\u0027Ahadith As-Sahihah 2/363, and it is with Abu Ash-Shaikh Al-Asfahani in \u0027Akhlaqun-Nabiyy, pg. 270."
+                         }
+                     ]
+    },
+    {
+        "name":  "When mounting an animal or any means of transport",
+        "id":  201,
+        "segments":  [
+                         {
+                             "translation":  "With the Name of Allah. Praise is to Allah. Glory is to Him Who has provided this for us though we could never have had it by our efforts. Surely, unto our Lord we are returning. Praise is to Allah. Praise is to Allah. Praise is to Allah. Allah is the Most Great. Allah is the Most Great. Allah is the Most Great. Glory is to You. O Allah, I have wronged my own soul. Forgive me, for surely none forgives sins but You.",
+                             "arabic":  "بِسْمِ اللّٰهِ، وَالْحَمْدُ لِلّٰهِ، سُبْحَانَ الَّذِيْ سَخَّرَ لَنَا هٰذَا وَمَا كُنَّا لَهُ مُقْرِنِيْنَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُوْنَ، اَلْحَمْدُ لِلّٰهِ، اَلْحَمْدُ لِلّٰهِ، اَلْحَمْدُ لِلّٰهِ، اَللّٰهُ أَكْبَرُ، اَللّٰهُ أَكْبَرُ، اَللّٰهُ أَكْبَرُ، سُبْحَانَكَ اللّٰهُمَّ إِنِّيْ ظَلَمْتُ نَفْسِيْ فَاغْفِرْ لِيْ، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوْبَ إِلَّا أَنْتَ",
+                             "transliteration":  "Bismillaah, Alhamdu lillaah. Subhaanal-la\u003cu\u003eth\u003c/u\u003eee sakhkhara lanaa haa\u003cu\u003eth\u003c/u\u003eaa wa maa kunnaa lahu muqrineen. Wa \u0027innaa \u0027ilaa Rabbinaa lamunqaliboon. Alhamdu lillaah, alhamdu lillaah, alhamdu lillaah, Allaahu \u0027Akbar, Allaahu \u0027Akbar, Allaahu \u0027Akbar, subhaanakal-laahumma \u0027innee dhalamtu nafsee faghfir lee, fa\u0027innahu laa yaghfiru\u003cu\u003eth\u003c/u\u003e-\u003cu\u003eth\u003c/u\u003eunooba \u0027illaa \u0027Anta.",
+                             "reference":  "Abu Dawud 3/34, At-Tirmithi 5/501. See also Al-Albani, Sahih At-Tirmithi 3/156."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua for travel",
+        "id":  202,
+        "segments":  [
+                         {
+                             "translation":  "Allah is the Most Great.",
+                             "arabic":  "اَللّٰهُ أَكْبَرُ",
+                             "transliteration":  "Allaahu \u0027Akbar",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "Glory is to Him Who has provided this for us though we could never have had it by our efforts. Surely, unto our Lord we are returning.",
+                             "arabic":  "سُبْحَانَ الَّذِيْ سَخَّرَ لَنَا هٰذَا وَمَا كُنَّا لَهُ مُقْرِنِيْنَ، وَإِنَّا إِلَى رَبِّنَا لَمُنْقَلِبُوْنَ",
+                             "transliteration":  "Subhaanal-la\u003cu\u003eth\u003c/u\u003eee sakhkhara lanaa haa\u003cu\u003eth\u003c/u\u003eaa wa maa kunnaa lahu muqrineen. Wa \u0027innaa \u0027ilaa Rabbinaa lamunqaliboon.",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "O Allah, we ask You on this our journey for goodness and piety, and for works that are pleasing to You. O Allah, lighten this journey for us and make its distance easy for us. O Allah, You are our Companion on the road and the One in Whose care we leave our family.",
+                             "arabic":  "اَللّٰهُمَّ إِنَّا نَسْأَلُكَ فِيْ سَفَرِنَا هٰذَا الْبِرَّ وَالتَّقْوَى، وَمِنَ الْعَمَلِ مَا تَرْضَى، اَللّٰهُمَّ هَوِّنْ عَلَيْنَا سَفَرَنَا هٰذَا وَاطْوِ عَنَّا بُعْدَهُ، اَللّٰهُمَّ أَنْتَ الصَّاحِبُ فِي السَّفَرِ، وَالْخَلِيْفَةُ فِي الْأَهْلِ",
+                             "transliteration":  "Allaahumma \u0027innaa nas\u0027aluka fee safarinaa haathal-birrawattaqwaa, waminal-\u0027amalimaa tardhaa, Allaahumma hawwin \u0027alaynaa safaranaa haa\u003cu\u003eth\u003c/u\u003eaa watwi \u0027annaa bu\u0027dahu, Allaahumma \u0027Antas-saahibu fis-safari, walkhaleefatu fil-\u0027ahli,",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "O Allah, I seek refuge in You from this journey\u0027s hardships, and from the wicked sights in store and from finding our family and property in misfortune upon returning.",
+                             "arabic":  "اَللّٰهُمَّ إِنِّيْ أَعُوْذُ بِكَ مِنْ وَعْثَاءِ السَّفَرِ، وَكَآبَةِ الْمَنْظَرِ، وَسُوْءِ الْمُنْقَلَبِ فِي الْمَالِ وَالْأَهْلِ",
+                             "transliteration":  "Allaahumma \u0027innee \u0027a\u0027oo\u003cu\u003eth\u003c/u\u003eu bika min wa\u0027thaa\u0027is-safari, wa ka\u0027aabanl-man\u003cu\u003edh\u003c/u\u003eari, wa soo\u0027il-munqalabi fil-maaliwal\u0027ahli.",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "We return repentant to our Lord, worshipping our Lord, and praising our Lord.",
+                             "arabic":  "آيِبُوْنَ، تَائِبُوْنَ، عَابِدُوْنَ، لِرَبِّنَا حَامِدُوْنَ",
+                             "transliteration":  "Aa\u0027iboona, taa\u0027iboona, \u0027aabidoona, Lirabbinaa haamidoon.",
+                             "reference":  "Muslim 2/978."
+                         }
+                     ]
+    },
+    {
+        "name":  "Upon entering a town or village",
+        "id":  203,
+        "segments":  [
+                         {
+                             "translation":  "O Allah, Lord of the seven heavens and all they overshadow, Lord of the seven worlds and all they uphold, Lord of the devils and all they lead astray, Lord of the winds and all they scatter. I ask You for the goodness of this town and for the goodness of its people, and for the goodness it contains. I seek refuge in You from its evil, from the evil of its people and from the evil it contains.",
+                             "arabic":  "اَللّٰهُمَّ رَبَّ السَّمَاوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ، وَرَبَّ الْأَرَضِيْنَ السَّبْعِ وَمَا أَقْلَلْنَ، وَرَبَّ الشَّيَاطِيْنِ وَمَا أَضْلَلْنَ، وَرَبَّ الرِّيَاحِ وَمَا ذَرَيْنَ، أَسْأَلُكَ خَيْرَ هٰذِهِ الْقَرْيَةِ، وَخَيْرَ أَهْلِهَا، وَخَيْرَ مَا فِيْهَا، وَأَعُوْذُ بِكَ مِنْ شَرِّهَا، وَشَرِّ أَهْلِهَا، وَشَرِّ مَا فِيْهَا",
+                             "transliteration":  "Allaahumma Rabbas-samaawaatis-sab\u0027i wa maa \u0027a\u003cu\u003edh\u003c/u\u003elalna, wa Rabbal-\u0027aradheenas-sab\u0027i wa maa \u0027aqlalna, wa Rabbash-shayaateeni wa maa \u0027adhlalna, wa Rabbar-riyaahi wa maa \u003cu\u003eth\u003c/u\u003earayna. \u0027As\u0027aluka khayra haathihil-qaryati wa khayra \u0027ahlihaa, wa khayra maafeehaa, wa \u0027a\u0027oo\u003cu\u003eth\u003c/u\u003eu bika min sharrihaa, wa sharri \u0027ahlihaa, wa shard maa feehaa.",
+                             "reference":  "Al-Hakim who graded it authentic and Ath-Tfaahabi agreed 2/100, and Ibn As-Sunni (no. 524). Al-Hafidh graded it good in his checking of Al-\u0027Athkdr 5/154. Ibn Baz said in Tuhfatul-\u0027Akhydr p. 37, that An-Nasa\u0027i recorded it with a good chain of narration."
+                         }
+                     ]
+    },
+    {
+        "name":  "When entering the market",
+        "id":  204,
+        "segments":  [
+                         {
+                             "translation":  "None has the right to be worshipped but Allah alone, Who has no partner. His is the dominion and His is the praise. He brings life and He causes death, and He is living and does not die. In His Hand is all good, and He is Able to do all things.",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ، وَلَهُ الْحَمْدُ، يُحْيِيْ وَيُمِيْتُ، وَهُوَ حَيٌّ لَا يَمُوْتُ، بِيَدِهِ الْخَيْرُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيْرٌ",
+                             "transliteration":  "Laa \u0027ilaaha \u0027illallaahu wahdahu laa shareeka lahu, lahul-mulku wa lahul-hamdu, yuhyee wa yumeetu, wa Huwa hayyun laa yamootu, biyadihil-khayru, wa Huwa \u0027alaa kulli shay\u0027in Qadeer.",
+                             "reference":  "At-Tirmithi 5/291, and Al-Hakim 1/538. Al-Albani graded it good in Sahih Ibn Majah 2/21 and Sahih At-Tirmithi 3/152.\u003c/p\u003e\u003c/div\u003e"
+                         }
+                     ]
+    },
+    {
+        "name":  "When the mounted animal (or mean of transport) stumbles",
+        "id":  205,
+        "segments":  [
+                         {
+                             "translation":  "With the Name of Allah.",
+                             "arabic":  "بِسْمِ اللّٰهِ",
+                             "transliteration":  "Bismillaahi.",
+                             "reference":  "Abu Dawud 4/296. Al-Albani graded it authentic in Sahih Abu Dawud 3/941."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua of the traveller for the resident",
+        "id":  206,
+        "segments":  [
+                         {
+                             "translation":  "I leave you in the care of Allah, as nothing is lost that is in His care.",
+                             "arabic":  "أَسْتَوْدِعُكُمُ اللّٰهَ الَّذِيْ لَا تَضِيْعُ وَدَائِعُهُ",
+                             "transliteration":  "\u0027Astawdi\u0027ukumul-laahal-la\u003cu\u003eth\u003c/u\u003eee laa tadhee\u0027u wadaa\u0027i\u0027uhu.",
+                             "reference":  "Ahmad 2/403, Ibn Majah 2/943. See also Al-Albani, Sahih Ibn Majah 2/133."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua of the resident for the traveller #1",
+        "id":  207,
+        "segments":  [
+                         {
+                             "translation":  "I leave your religion in the care of Allah, as well as your safety, and the last of your deeds.",
+                             "arabic":  "أَسْتَوْدِعُ اللّٰهَ دِيْنَكَ، وَأَمَانَتَكَ، وَخَوَاتِيْمَ عَمَلِكَ",
+                             "transliteration":  "\u0027Astawdi\u0027ullaaha deenaka, wa \u0027amaanataka, wa khawaateema \u0027amalika.",
+                             "reference":  "Ahmad 2/7, At-Tirmithi 5/499. See also Al-Albani, Sahih At-Tirmithi 2/155."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua of the resident for the traveller #2",
+        "id":  208,
+        "segments":  [
+                         {
+                             "translation":  "May Allah give you piety as your provision, forgive your sins, and make goodness easy for you wherever you are.",
+                             "arabic":  "زَوَّدَكَ اللّٰهُ التَّقْوَى، وَغَفَرَ ذَنْبَكَ، وَيَسَّرَ لَكَ الْخَيْرَ حَيْثُ مَا كُنْتَ",
+                             "transliteration":  "Zawwadakal-laahut-taqwaa, wa ghafara \u003cu\u003eth\u003c/u\u003eanbaka, wa yassara lakal-khayra haythu maa kunta.",
+                             "reference":  "At-Tirmithi. See Al-Albani, Sahih At-Tirmithi, 3/155."
+                         }
+                     ]
+    },
+    {
+        "name":  "Dua while ascending or descending",
+        "id":  209,
+        "segments":  [
+                         {
+                             "translation":  "Allah is the Most Great",
+                             "arabic":  "اَللّٰهُ أَكْبَرُ",
+                             "transliteration":  "Allaahu \u0027Akbar",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "Glory is to Allah.",
+                             "arabic":  "سُبْحَانَ اللّٰهِ",
+                             "transliteration":  "Subhaanallaah",
+                             "reference":  "Al-Bukhari, cf. Al-Asqalani, Fathul-Bari 6/135."
+                         }
+                     ]
+    },
+    {
+        "name":  "Prayer of the traveller as dawn approaches",
+        "id":  210,
+        "segments":  [
+                         {
+                             "translation":  "He Who listens has heard that we praise Allah for the good things He gives us. Our Lord, be with us and bestow Your favor upon us. I seek the protection of Allah from the Fire.",
+                             "arabic":  "سَمَّعَ سَامِعٌ بِحَمْدِ اللّٰهِ، وَحُسْنِ بَلَائِهِ عَلَيْنَا، رَبَّنَا صَاحِبْنَا، وَأَفْضِلْ عَلَيْنَا، عَائِذًا بِاللّٰهِ مِنَ النَّارِ",
+                             "transliteration":  "Sami\u0027a saami\u0027un bihamdillaahi wa husni balaa\u0027ihi \u0027alaynaa. Rabbanaa saahibnaa, wa \u0027afdhil \u0027alaynaa \u0027aa\u0027\u003cu\u003eith\u003c/u\u003ean billaahi minan-naar.",
+                             "reference":  "Muslim 4/2086, the meaning of sami\u0027a saami\u0027un (who listens has heard) is that \u0027a witness has witnessed our praise of Allah due to His blessings and favor upon us.\u0027 It could also be read samma\u0027a saami\u0027un, in which case it means \u0027one who has heard this statement of mine will convey it to another and he will say it as well.\u0027 This is due to the attention given to the Thikr (remembrance of Allah) and supplications made during the early morning hours. The meaning of his saying \u0027Our Lord, be with us and bestow Your favor upon us\u0027 is: \u0027Our Lord, protect us and guard us. Bless us with Your numerous bounties, and avert from us every evil.\u0027 See An-Nawawi, Sharh Sahih Muslim 17/39."
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #৯",
+        "id":  360,
+        "segments":  [
+                         {
+                             "translation":  "আল্লাহ ছাড়া কোনো মা’বুদ নেই, তিনি একক, তাঁর কোনো শরীক নেই। রাজত্ব তাঁরই এবং প্রশংসা তাঁরই। তিনি সবকিছুর উপর ক্ষমতাবান। হে আল্লাহ, আপনি যা দান করেন তা ঠেকানোর ক্ষমতা কারো নেই। আর আপনি যা না দেন তা দেওয়ার ক্ষমতাও কারো নেই। কোনো ভাগ্যবানের ভাগ্য বা পরিশ্রমীর পরিশ্রম আপনার ইচ্ছার বাইরে কোনো উপকারে লাগে না।",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمَلْكُ، وَلَهُ الْحَمْدُ، وَهْوَ عَلَی كُلِّ شَىْءٍ قَدِيْرٌ، اَللّٰهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِىَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+                             "transliteration":  "লা- ইলা-হা ইল্লল্লা-হু, ওয়া‘হদাহু লা- শারীকা লাহু, লাহুল মুলক, ওয়া লাহুল ‘হামদ, ওয়া হুআ ‘আলা- কুল্লি শাইয়িন কাদীর। আল্লা-হুম্মা, লা- মা-নি‘আ লিমা- আ‘অ্ত্বাইতা, ওয়ালা- মু‘অ্ত্বিয়া লিমা- মানা‘অ্তা, ওয়ালা- ইয়ান্ফা‘উ যাল জাদ্দি মিনকাল জাদ্দু।",
+                             "reference":  "বুখারী (১৬-কিতাব সিফাতিস সালাত, ৭১-বাবুয যিকরি বাদাস সালাত) ১/২৮৯ (ভারতীয় ১/২১৮); মুসলিম (৫-কিতাবুল মাসাজিদ, ২৬-বাব ইসতিহবাবিয যিকর) ১/৪১৪-৪১৫ (ভারতীয় ১/২১৮); রাহে বেলায়াত - যিকর নং  ৯৯"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১০",
+        "id":  361,
+        "segments":  [
+                         {
+                             "translation":  "আল্লাহ ছাড়া কোনো মা’বুদ নেই, তিনি একক, তাঁর কোনো শরীক নেই। রাজত্ব তাঁরই এবং প্রশংসা তাঁরই। তিনি সবকিছুর উপর ক্ষমতাবান। আল্লাহর দ্বারা ও আল্লাহর মাধ্যম ছাড়া কোনো অবলম্বন নেই এবং কোনো ক্ষমতা নেই। আমরা আল্লাহ ছাড়া কারো ইবাদত করি না। নিয়ামত তাঁরই, দয়া তাঁরই এবং উত্তম প্রশংসা তাঁরই। আল্লাহ ছাড়া কোনো মা’বুদ নেই। আমাদের দ্বীন বিশুদ্ধভাবে শুধুমাত্র তাঁরই জন্য, এতে যদিও কাফিরগণ অসন্তুষ্ট হয়।",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَی كُلِّ شَىْءٍ قَدِيْرٌ لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ لَا إِلٰهَ إِلَّا اللّٰهُ وَلاَ نَعْبُدُ إِلَّا إِيَّاهُ لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ وَلَهُ الثَّنَاءُ الْحَسَنُ لَا إِلٰهَ إِلَّا اللّٰهُ مُخْلِصِيْنَ لَهُ الدِّيْنَ وَلَوْ كَرِهَ الْكَافِرُوْنَ",
+                             "transliteration":  "লা- ইলা-হা ইল্লাল্লা-হু ওয়া‘হ্দাহু লা- শারীকা লাহু, লাহুল মুলকু ওয়া লাহুল ‘হামদু, ওয়া হুআ ‘আলা কুল্লি শাইইন ক্বাদীর। লা- ‘হাওলা ওয়ালা- ক্বুওয়াতা ইল্লা- বিল্লা-হ, লা- ইলা-হা ইল্লাল্লা-হু ওয়ালা- না‘্অ্বুদু ইল্লা- ইইয়া-হু। লাহুন নি‘অ্মাতু, ওয়া লাহুল ফাদ্ব্লু, ওয়ালাহুস সানা-উল ‘হাসান। লা- ইলা-হা ইল্লাল্লা-হু মুখলিসীনা লাহুদ্দীন, ওয়ালাও কারিহাল কা-ফিরূন।",
+                             "reference":  "মুসলিম (৫-কিতাবুল মাসাজিদ, ২৬-বাব ইসতিহবাবিয যিকর) ১/৪১৫-৪১৬ (ভারতীয় ১/১১৮); রাহে বেলায়াত - যিকর নং ১০০"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১১",
+        "id":  362,
+        "segments":  [
+                         {
+                             "translation":  "হে আমার প্রভু, আমাকে রক্ষা করুন আপনার শাস্তি থেকে যেদিন আপনি পুনরুত্থিত করবেন আপনার বান্দাগণকে।",
+                             "arabic":  "رَبِّ قِنِيْ عَذَابَكَ يَوْمَ تَبْعَثُ (تَجْمَعُ) عِبَادَكَ",
+                             "transliteration":  "রাব্বি ক্বিনী ‘আযা-বাকা ইয়াওমা তাব‘আসু ইবা-দাকা।",
+                             "reference":  "[১]মুসলিম(৬-কিতাব সালাতিল মুসাফিরীন,৮-বাব ইসতিহবাব ইয়ামিনীল) ১/৪৯২ নং ৭০৯ (ভা ১/২৪৭); সহীহ ইবনু খুযাইমা ৩/২৮,২৯,ইবনুল আসীর,জামিউল উসূল ৪/২২৮; রাহে বেলায়াত - যিকর নং ১০৪"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১২",
+        "id":  363,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমি আপনার আশ্রয় প্রর্থনা করছি কুফরি থেকে ও দারিদ্র্য থেকে এবং আপনার আশ্রয় প্রার্থনা করছি কবরের আযাব থেকে।",
+                             "arabic":  "اَللّٰهُمَّ إِنِّيْ أَعُوْذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ وَأَعُوْذُ بِكَ مِنْ عَذَابِ الْقَبْرِ",
+                             "transliteration":  "আল্লা-হুম্মা, ইন্নী আ‘ঊযু বিকা মিনাল কুফ্রি ওয়াল ফাকরি, ওয়া আ‘ঊযু বিকা মিন ‘আযা-বিল ক্বাব্রি।",
+                             "reference":  "[১]নাসাঈ(কিতাবুস সাহবি,বাবুত তাআওউয ফি দুরুরিস সালাত) ২/৮৩;মুসনাদ আহমাদ ৫/৪৪,ইবন খুযাইমা ১/৩৬৭;মুসতাদরাক হাকিম ১/৩৮৩,ইবনুল আসীর,জামিউল উসূল ৪/২২৯-২৩০; রাহে বেলায়াত - যিকর নং ১০৫"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৩",
+        "id":  364,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমাকে আপনার যিকর করতে, শুকর করতে এবং আপনার ইবাদত সুন্দরভাবে করতে তাওফীক ও ক্ষমতা প্রদান করুন।",
+                             "arabic":  "اَللّٰهُمَّ أَعِنِّيْ عَلَی ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ",
+                             "transliteration":  "আল্লা-হুম্মা, আ‘ইননী ‘আলা- যিক্রিকা ওয়া শুকরিকা ওয়া হুসনি ‘ইবা-দাতিকা।",
+                             "reference":  "[১]আবু দাঊদ(কিতাবুস সালাত,বাবুল ফিল ইস্তিগফার) ২/৮৭,নং ১৫২২ (ভা ১/২১৩);মুসতাদরাক হাকিম ১/৪০৭,৬৭৭;আলবানী,সহীহুত তারগীব ২/১১৯; রাহে বেলায়াত - যিকর নং ১০৬"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৪",
+        "id":  365,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমি আপনার আশ্রয় প্রার্থনা করছি কৃপণতা থেকে, আমি আপনার আশ্রয় প্রার্থনা করছি কাপুরুষতা থেকে, আমি আপনার আশ্রয় প্রার্থনা করছি অপমানকর অতি বৃদ্ধ বয়সে পৌঁছান  থেকে, (যে বয়সে মানুষ কাণ্ডজ্ঞান হারিয়ে ফেলে), আমি আপনার আশ্রয় প্রার্থনা করছি দুনিয়ার ফিতনা থেকে, আমি আপনার আশ্রয় প্রার্থনা করছি কবরের আযাব থেকে।",
+                             "arabic":  "اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنَ الْـبُخْلِ وَأَعُوْذُ بِكَ مِنْ اَلْجُبْنِ وَأَعُوْذُ بِكَ مِنْ أَنْ أُرَدَّ إِلَی أَرْذَلِ اَلْعُمُرِ وَأَعُوْذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا وَأَعُوْذُ بِكَ مِنْ عَذَابِ اَلْقَبْرِ",
+                             "transliteration":  "আল্ল-াহুম্মা, ইন্নী আ‘ঊযু বিকা মিনাল বুখ্লি ওয়া আ‘ঊযু বিকা মিনাল জুব্নি ওয়া আ‘ঊযু বিকা আন উরাদ্দা ইলা- আরযালিল উমুরি ওয়া আ‘ঊযু বিকা মিন ফিতনাতিদ দুনইয়া- ওয়া আ‘ঊযু বিকা মিন ‘আযা-বিল ক্বাব্রি।",
+                             "reference":  "[১]বুখারী(৬০-কিতাবুল জিহাদ,২৫-মা ইউতাআওআযু মিনাল জুবুন) ৩/১০৩৮,নং ২৬৬৭ (ভা ১/২৯৬),সহীহ ইবনু খুযাইমা ১/৩৬৭ নং ৭৪৬,সহীহ ইবনু হিব্বান ৫/৩৭১,নং ২০২৪; রাহে বেলায়াত - যিকর নং ১০৭"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৫",
+        "id":  366,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমার জন্য ক্ষমা করুন আমি আগে যা করেছি এবং পরে যা করেছি, গোপনে যা করেছি এবং প্রকাশ্যে যা করেছি এবং বাড়াবাড়ি করে যা করেছি এবং যা আপনি আমার চেয়েও বেশি জানেন। আপনিই অগ্রবর্তী করেন, আপনিই পিছিয়ে দেন। আপনি ছাড়া কোনো মা’বুদ নেই।",
+                             "arabic":  "اَللّٰهُمَّ اغْفِرْ لِىْ مَا قَدَّمْتُ وَمَا أَخَّرْتُ وَمَا أَسْرَرْتُ وَمَا أَعْلَنْتُ وَمَا أَسْرَفْتُ وَمَا أَنْتَ أَعْلَمُ بِهِ مِنِّىْ أَنْتَ الْمُقَدِّمُ وَأَنْتَ الْمُؤَخِّرُ لَا إِلٰهَ إِلَّا أَنْتَ",
+                             "transliteration":  "আল্লা-হুম্মাগফিরলী মা- ক্বাদ্দামতু, ওয়ামা- আখখারতু, ওয়ামা- আসরারতু, ওয়া মা- আ‘অ্লানতু, ওয়ামা- আস্রাফতু, ওয়ামা- আনতা আ‘অ্লামু বিহী মিন্নী। আনতাল মুক্বাদ্দিমু, ওয়া আনতাল মুআখ্খিরু, লা- ইলা-হা ইল্লা- আনতা।",
+                             "reference":  "[১]মুসলিম(৬-কিতাব সালাতিল মুসাফিরীন,২৬-বাবুদ্দুআ...) ১/৫৩৪-৫৩৫ (ভা ১/২৬৩);আবু দাঊদ(কিতাবুস সালাত,বাব মা ইউসতাফতাহু...) ১/১৯৯,নং ৭৬০ (ভা ১/১১১)সহীহ ইবনু খুযাইমা ১/৩৬৬,সহীহ ইবনু হিব্বান ৫/৩৭২,ইবনুল আসীর,জামিউল উসূল ৪/২২৪;বাইহাকী,আস-সুনানুল কুবরা ২/৩২,১৮৫।আল্লামা আহমদ শাকিরের আলোচনা দেখুন,মুসনাদে আহমাদ (শাকির সম্পাদিত) ২/১০০ও ১৩৪,যাকারিয়্যা,আল-ইখবার পৃ. ৬০; রাহে বেলায়াত - যিকর নং ১০৮"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৬",
+        "id":  367,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমার দ্বীনকে সংশোধিত-কল্যাণময় করুন, যাকে আপনি আমার রক্ষাকবজ বানিয়েছেন এবং আমার পার্থিব জীবনকে সংশোধিত করুন, যাতে আমার জীবন ও জীবিকা রেখেছেন। হে আল্লাহ, আমি আপনার অসন্তুষ্টি থেকে আপনার সন্তুষ্টির নিকট, আপনার শাস্তি থেকে আপনার ক্ষমার নিকট এবং আপনার থেকে আপনার নিকট আশ্্রয় প্রার্থনা করছি। হে আল্লাহ, আপনি যা প্রদান করেন তা ঠেকানোর কেউ নেই। এবং আপনি যা প্রদান না করেন তা প্রদান করার ক্ষমতাও কারো নেই। এবং কোনো পারিশ্রমকারীর পরিশ্রম আপনার ইচ্ছার বাইরে তার কোনো উপকারে লাগে না।",
+                             "arabic":  "اَللّٰهُمَّ أَصْلِحْ لِيْ دِيْنِيَ الَّذِيْ جَعَلْتَهُ عِصْمَةَ أَمْرِي، وَأَصْلِحْ لِيْ دُنْيَايَ الَّتِيْ جَعَلْتَ فِيْهَا مَعَاشِيْ، اَللّٰهُمَّ أَعُوْذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِعَفْوِكَ مِنْ نِقْمَتِكَ، وَأَعُوْذُ بِكَ مِنْكَ، اَللّٰهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ",
+                             "transliteration":  "আল্লা-হুম্মা, আস্বলি‘হ লী দীনিয়াল লাযী জা‘আল্তাহু ‘ইস্বমাতা আমরী। ওয়া আস্বলি‘হ লী দুন্ইয়া-ইয়াল্ লাতী জা‘আলতা ফীহা মা‘আ-শী। আল্লা-হুম্মা, ইন্নী আ‘ঊযু বি রিদা-কা মিন সাখাত্বিকা, ওয়াবি ‘আফ্বিকা মিন নাক্বামাতিকা, ওয়া আঊযু বিকা মিনকা। আল্লা-হুম্মা, লা- মা-নি‘আ লিমা- আ‘অ্ত্বাইতা, ওয়ালা- মু‘অ্ত্বিয়া লিমা মানা‘অ্তা, ওয়া লা- ইয়ানফা‘উ যাল জাদ্দি মিনকাল জাদ্দু।",
+                             "reference":  "[১]সহীহ ইবনু হিব্বান ৫/৩৭৩,নং ২০২৬, মাওয়ারিদুয যামআন ২/২৫৯-১৬১,সহীহ ইবনু খুযাইমা ১/৩৬৬-৩৬৭,নাসাঈ,আমালুল ইয়াওম,আস-সুনানুল কুবরা ৬/৪০,যাকারিয়্যা,আল-ইখবার,৫৬।  [২]তাবারানী,আল-মুজামুল আউসাত ৭/১৪২ নং ৭১০৬,হাইসামী,মাজমাউয যাওয়াইদ ১০/১১১; রাহে বেলায়াত - যিকর নং ১০৯"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৭",
+        "id":  368,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমি আপনার সাহায্যেই চেষ্টা করি, আপনার সাহায্যেই যুদ্ধ করি এবং আপনার সাহায্যে বীরত্ব প্রদর্শন করি ও বিজয়ী হই।",
+                             "arabic":  "اَللّٰهُمَّ بِكَ أُحَاوِلُ وَبِكَ أُقَاتِلُ وَبِكَ أُصَاوِلُ",
+                             "transliteration":  "আল্লা-হুম্মা বিকা উ‘হা-বিলু, ওয়াবিকা উক্বা-তিলু, ওয়াবিকা উসা-বিলু।",
+                             "reference":  "[১]সহীহ ইবনু হিব্বান ৫/৩৭৪,মুসনাদু আহমাদ ৪/৩৩২,৩৩৩,তাবারানী,কিতাবুদ দু\u0027আ,পৃ.২১১; রাহে বেলায়াত - যিকর নং ১১০"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৮",
+        "id":  369,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি ক্ষমা করুন আমাকে, তাওবা কবুল করুন আমার; নিশ্চয় আপনি তাওবা-কবুলকারী করুণাময় (অন্য বর্ণনায়: তাওবা কবুলকারী ক্ষমাশীল)।",
+                             "arabic":  "اَللّٰهُمَّ اغْفِرْ لِيْ وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيْم (اَلتَّوَّابُ الْغَفُوْرُ)",
+                             "transliteration":  "আল্লা-হুম্মাগ্ফির লী, ওয়াতুব্ ‘আলাইয়্যা, ইন্নাকা আন্তাত তাওয়া-বুর রাহীম (অন্য বর্ণনায়: [তাওয়াবুল গাফূর])",
+                             "reference":  "[১]বুখারী,আল-আদাবুল মুফরাদ ১/২১৭,আলবানী সহীহুল আদাবিল মুফরাদ পৃ.২৩০-২৩২;মুসনাদ আহমাদ ২/৮৪,মুসান্নাফ ইবন আবি শাইবা ৬/৩৪,নাসাঈ,আস-সুনানুল কুবরা ৬/৩১-৩২; রাহে বেলায়াত - যিকর নং ১১১"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #১৯",
+        "id":  370,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমার সকল ভুল ও গোনাহ ক্ষমা করে দিন। হে আল্লাহ, আপনি আমাকে উদ্বুদ্ধ ও অনুপ্রাণিত করুন, আমাকে পূর্ণ করুন এবং আমাকে উত্তম কর্ম ও আচরণের তাওফীক প্রদান করুন ; কারণ আপনি ছাড়া আর কেউ উত্তম কর্ম ও ব্যবহারের পথে নিতে পারে না বা খারাপ কর্ম ও আচরণ থেকে রক্ষা করতে পারে না।",
+                             "arabic":  "اَللّٰهُمَّ اغْفِرْ لِيْ ذُنُوْبِيْ وخَطَايَايَ كُلَّهَا اَللّٰهُمَّ أنْعِشْنِيْ واجْبُرْنِيْ واهْدِنِيْ لِصَالِحِ الأَعْمَالِ والْأَخْْلَاقِ فَإِنَّهُ لَا يَهْدِيْ لِصَالِحِهَا ولَا يَصْرِفُ سَيِّئَهَا إلَّا أَنْتَ",
+                             "transliteration":  "আল্লা-হুম্মার্গ্ফিলী যুনূবী ওয়া খাত্বা-ইয়া-ইয়া কুল্লাহা, আল্লা-হুম্মা, আন‘ইশ্নী, ওয়াজবুরনী, ওয়াহদিনী লিস্বা-লি\u0027হিল আ‘অ্মা-লি ওয়াল্ আখলা-ক, ইন্নাহু লা- ইয়াহদী লি স্বা-লি\u0027হিহা-, ওয়ালা- ইয়াস্রিফু সাইয়িয়াহা ইল্লা- আনতা।",
+                             "reference":  "[১]তাবারানী,আল-মু\u0027জামুল কাবীর,৮/২০০,২২৭;সাগীর ১/৩৬৫;নাবাবী,আল-আযকার,পৃ.১১৩;হাইসামী,মাজমাউয যাওয়াইদ ১০/১১১-১১২,১৭৩ হাইসামী হাদিসটিকে গ্রহণযোগ্য বলেছেন।\r\n[২] রাহে বেলায়াত - যিকর নং ১১২"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২০",
+        "id":  371,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমার ধর্মজীবনকে সর্বাঙ্গীন সুন্দর করে দিন, (আমার পাপ ক্ষমা করুন) আমার বাড়িকে প্রশস্ত করে দিন এবং আমার রিযিকে বরকত দান করুন।",
+                             "arabic":  "اَللّٰهُمَّ أَصْلِحْ لِيْ دِيْنِيْ (اِغْفِرْ لِيْ ذَنْبِيْ) وَوَسِّعْ لِيْ فِيْ دَارِيْ وَبَارِكْ لِيْ فِيْ رِزْقِيْ",
+                             "transliteration":  "আল্লা-হুম্মা, আস্ব্লি‘হ লী দ্বীনী, (ইগ্ফির লী যান্বী) ওয়া ওয়াস্সি‘য়্ লী ফী দা-রী ওয়া বা-রিক্ লী ফী রিযকী।",
+                             "reference":  "[১]মুসান্নাফ ইবনু আবি শাইবা ৬/৫০,মুসনাদু আবী ইয়ালা ১৩/২৫৭,নং ৭২৭৩,তাবারানী,আল-মুজামুস সাগীর ২/১৯৬।আল-মু\u0027জামুল আউসাত ৭/৭৩,হাইসামী,মাজমাউয যাওয়াইদ ১০/১০৯; রাহে বেলায়াত - যিকর নং ১১৩"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২১",
+        "id":  372,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, জিবরাঈল, মিকাঈল ও ইসরাফীলের প্রভু, আমাকে জাহান্নামের আগুনের উত্তাপ ও কবরের আযাব থেকে রক্ষা করুন।",
+                             "arabic":  "اَللّٰهُمَّ رَبَّ جِبْرِيْلَ وَمِيْكَائِيْلَ وَإِسْرَافِيْلَ، أَعِذْنِيْ مِنْ حَرِّ النَّارِ وَعَذَابِ الْقَبْرِ",
+                             "transliteration":  "আল্লা-হুম্মা, রাব্বা জিবরীলা ওয়া মীকাঈলা ওয়া ইসরা-ফীলা, আ‘ইয্নী মিন র্হারিন না-রি ওয়া ‘আযা-বিল ক্বাব্রি।",
+                             "reference":  "[১]মুসনাদ আহমাদ ৬/৬১,নাসাঈ,আস-সুনানুল কুবরা ৬/৪,তাবারানী,আল-মু\u0027জামুল আউসাত ৪/১৫৬,মাজমাউয যাওয়াইদ ১০/১১০,যাকারিয়্যা,আল-ইখবার ফীমা লা ইয়াসিহুহু পৃ.৪৯-৫০; রাহে বেলায়াত - যিকর নং ১১৪"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২২",
+        "id":  373,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমার জানা ও অজানা সকল প্রকার কল্যাণ আমি আপনার কাছে প্রার্থনা করছি। এবং আমার জানা ও অজানা সকল অকল্যাণ ও অমঙ্গল থেকে আপনার আশ্রয় প্রার্থনা করছি।",
+                             "arabic":  "اَللّٰهُمَّ إنِّيْ أَسْأَلُكَ مِنَ الْخَيْرِ كُلِّهِ مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ، وَأَعُوْذُ بِكَ مِنَ الشَّرِّ كُلِّهِ مَا عَلِمْتُ مِنْهُ وَمَا لَمْ أَعْلَمْ",
+                             "transliteration":  "আল্লা-হুম্মা, ইন্নী আস্আলুকা মিনাল খাইরি কুল্লিহী, মা- ‘আলিমতু মিনহু ওয়া মা- লা- আ‘অ্লাম। ওয়া আ‘ঊযু বিকা মিনাশ শাররি কুল্লিহী, মা- ‘আলিমতু মিনহু ওয়া মা- লা- আ‘অ্লাম।",
+                             "reference":  "[১]তাবারানী,কিতাবুদ দু\u0027আ পৃ.২০৮,আল-মুজামুল কাবীর ২/২৫২,সহীহুল জামিয়িস সাগীর ১/২৭৪,সিলসিলাতুল আহাদিসিস সহীহাহ ৪/৫৬-৫৭; রাহে বেলায়াত - যিকর নং ১১৫"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৩",
+        "id":  374,
+        "segments":  [
+                         {
+                             "translation":  "রহমান, রহীম আল্লাহর নামে। বলুন, তিনি আল্লাহ্, এক-অদ্বিতীয়। আল্লাহ্ হচ্ছেন ‘সামাদ’ (তিনি কারো মুখাপেক্ষী নন, সকলেই তাঁর মুখাপেক্ষী)। তিনি কাউকেও জন্ম দেন নি এবং তাঁকেও জন্ম দেয়া হয় নি। আর তাঁর সমতুল্য কেউই নেই।",
+                             "arabic":  "﷽ \r\nقُلۡ هُوَ اللّٰهُ اَحَدٌ‌ ۚ‏﴿١﴾ اَللّٰهُ الصَّمَدُ‌ ۚ‏﴿٢﴾ لَمۡ يَلِدۡ ۙوَلَمۡ يُوۡلَدۡ ۙ‏﴿٣﴾ وَلَمۡ يَكُنۡ لَّهٗ كُفُوًا اَحَدٌ ﴿٤﴾‏‏ ‏﻿",
+                             "transliteration":  "বিসমিল্লাহির রাহমানির রাহীম। ক্বুল হুওয়াল্লা-হু আহাদ। আল্লাহুস্ সামাদ। লাম ইয়ালিদ ওয়া লাম ইউলাদ। ওয়া লাম ইয়াকুল্লাহু কুফুওয়ান আহাদ",
+                             "reference":  "[১]মুসনাদু আবি ইয়ালা ৩/৩৩২,নং ১৭৯৪,তাবারানী,আল-মুজামুল আউসাত ৪/৪৫-৪৬,নং ৩৩৬১,আবু নুআইম,হিলইয়াতুল আউলিয়া ৬/২৪৩,তাফসীর ইবন কাসীর ৪/৫৭০,হাইসামী,মাজমাউয যাওয়াইদ ৬/৩০১,১০/১০[২]   [২]মুসনাদ আহমাদ ৩/৪৩৭; আলবানী,সহিহুল জামিয়িস সাগীর ২/১১০৪,নং ৬৪৭২; রাহে বেলায়াত - যিকর নং ১১৭"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৪",
+        "id":  375,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমাদের প্রভু ও সকল বস্তুর প্রভু, আমি সাক্ষ্য প্রদান করছি যে, আপনিই প্রভু। আপনি একক। আপনার কোনো শরীক নেই। হে আল্লাহ, আমাদের প্রভু ও সকল বস্তুর প্রভু, আমি সাক্ষ্য প্রদান করছি যে, মুহাম্মাদ আপনার বান্দা এবং রাসূল। হে আল্লাহ, আমাদের প্রভু ও সকল বস্তুর প্রভু, আমি সাক্ষ্য প্রদান করছি যে, সকল বান্দা পরস্পর ভাই ভাই। হে আল্লাহ, আমাদের প্রভু ও সকল বস্তুর প্রভু, আমাকে এবং আমার পরিবার পরিজনকে দুনিয়া ও আখেরাতের প্রতিক্ষণে ও সকল মুহূর্তে আপনার জন্য মুখলিস ও আন্তরিক বানিয়ে দিন। হে মহাপরাক্রম ও সম্মানের অধিকারী, আপনি শুনুন এবং কবুল করুন। আল্লাহ শ্রেষ্ঠ, সর্বশ্রেষ্ঠ। হে আল্লাহ, আসমান ও জমিনের আলো (অন্য বর্ণনায়: আসমান ও জমিনের প্রভু) আল্লাহ শ্রেষ্ঠ, সর্বশ্রেষ্ঠ। আল্লাহই আমার জন্য যথেষ্ট। আল্লাহ সর্বোত্তম উকিল। আল্লাহ শ্রেষ্ঠ, সর্বশ্রেষ্ঠ।",
+                             "arabic":  "اَللّٰهُمَّ رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ أَنَا شَهِيْدٌ أَنَّكَ أَنْتَ الرَّبُّ وَحْدَكَ لَا شَرِيْكَ لَكَ اَللّٰهُمَّ رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ أَنَا شَهِيْدٌ أَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُوْلُكَ اَللّٰهُمَّ رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ أَنَا شَهِيْدٌ أَنَّ الْعِبَادَ كُلَّهُمْ إِخْوَةٌ اللَّهُمَّ رَبَّنَا وَرَبَّ كُلِّ شَيْءٍ اِجْعَلْنِي مُخْلِصًا لَكَ وَأَهْلِيْ فِيْ كُلِّ سَاعَةٍ فِي الدُّنْيَا وَالآخِرَةِ يَا ذَا الْجَلَالِ وَالإِكْرَامِ، اِسْمَعْ وَاسْتَجِبْ اَللّٰهُ أَكْبَرُ الأَكْبَرُ اَللّٰهُمَّ نُوْرَ السَّمَاوَاتِ وَالأَرْضِ (رَبَّ السَّمَاوَاتِ وَالأَرْضِ) اَللّٰهُ أَكْبَرُ الأَكْبَرُ حَسْبِيَ اللّٰهُ وَنِعْمَ الْوَكِيْلُ اَللّٰهُ أَكْبَرُ الأَكْبَرُ",
+                             "transliteration":  "",
+                             "reference":  "[১]আবু দাঊদ (কিতাবুস সালাত,বাব মা ইয়াকুলু...) ২/৮৪ (ভা ১/২১১); মুসনাদ আহমাদ ৪/৩৬৯; রাহে বেলায়াত - যিকর নং ১১৯"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৫",
+        "id":  376,
+        "segments":  [
+                         {
+                             "translation":  "পবিত্রতা আপনার প্রভুর, প্ররাক্রমের প্রভুর, তারা যা বলে তা থেকে (তিনি পবিত্র) এবং সালাম (শান্তি) প্রেরিত পুরুষগণের (রাসূলগণের) উপর এবং প্রশংসা বিশ্বজগতের প্রভু আল্লাহর জন্য।",
+                             "arabic":  "سُبۡحٰنَ رَبِّكَ رَبِّ الۡعِزَّةِ عَمَّا يَصِفُوۡنَ‌ۚ‏  وَسَلٰمٌ عَلَى الۡمُرۡسَلِيۡنَ‌ۚ‏ وَالۡحَمۡدُ لِلّٰهِ رَبِّ الۡعٰلَمِيۡنَ‌‏",
+                             "transliteration":  "",
+                             "reference":  "[১]মুসনাদ আবী ইয়ালা ২/৩৬৩,নং ১১১৮,তাবারানী,আল-মুজামুল কাবীর ৫/২১১,১১/১১৫,মুসান্নাফ ইবনু আবী শাইবা ১/২৬৯-২৭০,হাইসামী,মাজমাউয যাওয়াইদ ২/১৪৭-১৪৮,১০১০৩; মুনযিরী,আত-তারগীব ২/৪৪৯,নাবাবী,আযকার পৃ.১১৩; রাহে বেলায়াত - যিকর নং ১২০"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৬",
+        "id":  377,
+        "segments":  [
+                         {
+                             "translation":  "আমি সাক্ষ্য প্রদান করছি, আল্লাহ ছাড়া কোনো মা’বুদ নেই, তিনি পরম দয়ালু ও করুণাময়। হে আল্লাহ, আপনি আমার দুশ্চিন্তা ও বেদনা দূর করে দিন।",
+                             "arabic":  "(أَشْهَدُ أَنْ  لَا إِلٰهَ إِلَّا اللّٰهُ) بِسْمِ اللّٰهِ الَّذِيْ لَا إِلٰهَ غَيْرُهُ الرَّحْمٰنِ الرَّحِيْمِ اَللّٰهُمَّ أَذْهِبْ عَنِّي الْهَمَّ وَالْحَزَنَ",
+                             "transliteration":  "",
+                             "reference":  "[১]তাবারানী,আল-মুজামুল আউসাত ৩/২৮৯,নং ৩১৭৮,মাজমাউয যাওয়াইদ ১০/১১০,নাবাবী,আল-আযকার,পৃ.১১৩; রাহে বেলায়াত - যিকর নং ১২২"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #৩১",
+        "id":  378,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আপনি আমার শেষ জীবনকে আমার জীবনের সর্বোত্তম অংশ, আমার শেষ কর্মগুলোকে জীবনের সর্বোত্তম কর্ম এবং যে দিন আমি আপনার সাক্ষাৎ করব সে দিনটিকে আমার জীবনের শ্রেষ্ঠ দিন করে দিন।",
+                             "arabic":  "اَللّٰهُمَّ اجْعَلْ خَيْرَ عُمْرِيْ آخِرَهُ وَخَيْرَ عَمَلِيْ خَوَاتِمَهُ، وخَيْرَ أَيَّامِيْ يَوْمَ أَلْقَاكَ",
+                             "transliteration":  "",
+                             "reference":  "[১]তাবারানী,আল-মু\u0027জামুল আউসাত ৯/১৫৭,১৭২,মাজমাউয যাওয়াইদ ১০/১১০,নাবাবী,আল-আযকার,পৃ.১১৩,যাকারিয়্যা,আল-ইখবার ফীমা লা ইয়াসিহুহু মিনাল আযকার,পৃ.৫৭।   [২]তাছাড়া একাধিক সনদে বর্ণিত হওয়ায় গ্রহণযোগ্যতা বৃ্দ্ধি পায়।হাইসামী,মাজমাউয যাওয়াইদ ১০/২৪২-২৪৩; রাহে বেলায়াত - যিকর নং ১২২"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৭",
+        "id":  379,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, নিশ্চয় আমি আপনার আশ্রয় প্রার্থনা করছি এমন কর্ম থেকে যা আমাকে অপমানিত করবে। হে আল্লাহ, আমি আপনার আশ্রয় প্রার্থনা করছি এরূপ ধনাঢ্যতা থেকে যা আমাকে অহংকারী করে তুলবে। হে আল্লাহ, আমি আপনার আশ্রয় প্রার্থনা করছি এরূপ বন্ধু বা সঙ্গী থেকে যে আমাকে ক্ষতিগ্রস্ত করবে। হে আল্লাহ আমি আপনার আশ্রয় চাচ্ছি এরূপ সকল বিষয় থেকে যা আমাকে অপ্রয়োজনে ব্যস্ত করে তুলবে। হে আল্লাহ, আমি আপনার আশ্রয় চাচ্ছি এরূপ দারিদ্র্য থেকে যা আমাকে (আপনার কথা) ভুলিয়ে দেবে।",
+                             "arabic":  "اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنْ عَمَلٍ يُخْزِيْنِيْ، اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنْ غِنًى يُطْغِيْنِيْ، اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنْ صَاحِبٍ يُرْدِيْنِيْ، اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنْ أَمَلٍ يُلْهِيْنِيْ، اَللّٰهُمَّ إنِّيْ أَعُوْذُ بِكَ مِنْ فَقْرٍ يُنْسِيْنِيْ.",
+                             "transliteration":  "",
+                             "reference":  "[১]মুসনাদু আবী ইয়ালা ৭/৩১৩,নং ৪৩৫২,তাবারানী,কিতাবুদ দু\u0027আ,পৃ. ২০৯,হাইসামী,মাজমাউয যাওয়াইদ ১০/১১০,যাকারিয়্যা,আল-ইখবার ফীমা লা ইয়াসিহুহু মিনাল আযকার পৃ.৬৪; রাহে বেলায়াত - যিকর নং ১২৩"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৮",
+        "id":  380,
+        "segments":  [
+                         {
+                             "translation":  "হে আল্লাহ, আমি আমার গোনাহের জন্য আপনার কাছে ক্ষমা (মাগফিরাত) প্রার্থনা করছি এবং আপনার কাছে হেদায়েত প্রার্থনা করছি, আমি যেন সকল কাজে সর্বোত্তম কর্মটি বেছে নিতে পারি। আমি আপনার কাছে তাওবা করছি, আপনি আমার তাওবা কবুল করুন। হে আল্লাহ, আপনি আমার প্রভু, আপনি আমার চাওয়া পাওয়াকে আপনার-মুখী বানিয়ে দিন এবং আমার বক্ষের মধ্যে আমার সচ্ছলতা (অমুখাপেক্ষিতা) প্রদান করুন (আমার অন্তরকে আপনি ছাড়া অন্য সবার থেকে অমুখাপেক্ষী বানিয়ে দিন), আপনি আমাকে যে রিযিক প্রদান করেছেন তাতে বরকত প্রদান করুন এবং আমার (কর্ম ও দু‘আ) কবুল করুন। নিশ্চয় আপনি আমার প্রভু।",
+                             "arabic":  "اَللّٰهُمَّ اسْتَغْفِرُكَ لِذَنْبِيْ وَأَسْتَهْدِيْكَ ِلأَرْشَدِ أَمْرِيْ وَأَتُوْبُ إِلَيْكَ فَتُبْ عَلَيَّ اَللّٰهُمَّ أَنْتَ رَبِّيْ فَاجْعَلْ رَغْبَتِيْ إِلَيْكَ وَاجْعَلْ غِنَائِيْ فِيْ صَدْرِيْ وَبَارِكْ لِيْ فِيْمَا رَزَقْتَنِيْ وَتَقَبَّلْ مِنِّيْ إِنَّكَ أَنْتَ رَبِّيْ",
+                             "transliteration":  "আল্লা-হুম্মা, আস্তাগ্ফিরুকা লিযামবি, ওয়া আসতাহ্দীকা লি আরশাদি আমরি, ওয়া আতূবু ইলাইকা, ফাতুব ‘আলাইয়্যা। আল্লা-হুম্মা আনতা রাব্বী, ফাজ্‘আল রাগ্বাতী ইলাইকা, ওয়াজ্‘আল গিনা-ঈ ফী স্বাদরী, ওয়া বা-রিক লী ফীমা- রাযাক্বতানী, ওয়া তাক্বাব্বাল মিন্নী। ইন্নাকা আনতা রাব্বী।",
+                             "reference":  "[১]মুসান্নাফ ইবনি আবী শাইবা ৬/৩৪; রাহে বেলায়াত - যিকর নং ১২৪"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #২৯",
+        "id":  381,
+        "segments":  [
+                         {
+                             "translation":  "আমার প্রভুর প্রশংসায় আমি সালাত শেষ করলাম। আমি আমার গোনাহসমূহের স্বীকারোক্তি করছি। আর আমি যে কর্ম করেছি তার অমঙ্গল ও অকল্যাণ থেকে আমি আমার প্রভুর আশ্রয় গ্রহণ করছি। হে মন পরিবর্তনকারী, আমার অন্তরকে পরিবর্তন করুন সে বিষয়ের জন্য যা আপনি ভালবাসেন এবং যাতে আপনি খুশি হন।",
+                             "arabic":  "بِحَمْدِ رَبِّيْ انْصَرَفْتُ وَبِذُنُوْبِيْ اعْتَرَفْتُ أَعُوْذُ بِرَبِّيْ مِنْ شَرِّ مَا اقْتَرَفْتُ يَا مُقَلِّبَ الْقُلُوْبِ قَلِّبْ قَلْبِيْ عَلَی مَا تُحِبُّ وَتَرْضَى",
+                             "transliteration":  "",
+                             "reference":  "[১]আব্দুর রাজ্জাক সান\u0027আনী,আল-মুসান্নাফ ২/২৩৭-২৩৮; রাহে বেলায়াত - যিকর নং ১২৫"
+                         }
+                     ]
+    },
+    {
+        "name":  "সালাম ফিরানোর পর যিকরসমূহ #৩০",
+        "id":  382,
+        "segments":  [
+                         {
+                             "translation":  "আল্লাহ অতি-পবিত্র",
+                             "arabic":  "سُبْحَانَ اللّٰهِ",
+                             "transliteration":  "সুবহা-নাল্লাহ",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "সকল প্রশংসা আল্লাহর জন্য",
+                             "arabic":  "اَلْحَمْدُ لِلّٰهِ",
+                             "transliteration":  "আলহামদুলিল্লা-হ",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "আল্লাহ অতি-মহান",
+                             "arabic":  "اَللّٰهُ أَكْبَرُ",
+                             "transliteration":  "আল্লা-হু আকবার",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "আল্লাহ ছাড়া কোনো মা’বুদ নেই, তিনি একক, তাঁর কোনো শরীক নেই। রাজত্ব তাঁরই এবং প্রশংসা তাঁরই। এবং তিনি সবকিছুর উপর ক্ষমতাবান।",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيْكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَی كُلِّ شَيْءٍ قَدِيْرٌ",
+                             "transliteration":  "লা- ইলা-হা ইল্লাল্লা-হু, ওয়া‘হদাহু লা- শারীকা লাহু, লাহুল মুলক, ওয়া লাহুল ‘হামদ, ওয়া হুআ ‘আলা- কুল্লি শাইয়িন কাদীর।",
+                             "reference":  ""
+                         },
+                         {
+                             "translation":  "আল্লাহ ছাড়া কোনো মা’বুদ নেই",
+                             "arabic":  "لَا إِلٰهَ إِلَّا اللّٰهُ",
+                             "transliteration":  "লা- ইলা-হা ইল্লাল্লা-হ",
+                             "reference":  "[১]তিরমিযী (৪৯-কিতাবুদ্দাওয়াত,৬২-বাব...)৫/৪৮০, নং ৩৪৭১ (ভা ২/১৮৫);নাসাঈ,আস-সুনানুল কুবরা ৬/২০৫,আলবানী,সহীহুত তারগীব ১/৩৪৩ (শামিলা ১/১৬০); রাহে বেলায়াত - যিকর নং ১২৬"
+                         }
+                     ]
+    }
+]
