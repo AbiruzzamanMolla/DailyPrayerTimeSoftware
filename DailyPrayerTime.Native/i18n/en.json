@@ -63,6 +63,7 @@
   "Tray_ShowOverlay": "Show Floating Overlay",
   "Tray_ShowDeskBand": "Show DeskBand (Legacy)",
   "Tray_ShowIntegratedTaskbar": "Show Integrated Taskbar Timer (Win 11 Source)",
+  "Tray_ShowEnhancedTaskbar": "Show Enhanced Taskbar Timer",
   "Tray_RunningInBackground": "App is running in the background.",
 
   "ToolTip_Ramadan": "Toggle Sawm Mode",

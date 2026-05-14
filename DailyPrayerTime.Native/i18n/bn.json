@@ -63,6 +63,7 @@
   "Tray_ShowOverlay": "ওভারলে দেখান",
   "Tray_ShowDeskBand": "ডেস্কব্যান্ড দেখান",
   "Tray_ShowIntegratedTaskbar": "ইন্টিগ্রেটেড টাস্কবার টাইমার দেখান",
+  "Tray_ShowEnhancedTaskbar": "এনহ্যান্সড টাস্কবার টাইমার দেখান",
   "Tray_RunningInBackground": "অ্যাপটি ব্যাকগ্রাউন্ডে চলছে।",
 
   "ToolTip_Ramadan": "সাওম মোড পরিবর্তন করুন",

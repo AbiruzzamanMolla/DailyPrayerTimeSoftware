@@ -28,6 +28,7 @@ namespace DailyPrayerTime.Native
         private CombinedPrayerTimes? _tomorrowPrayerTimes;
         private OverlayWindow? _overlay;
         private TaskbarWindow? _taskbarWindow;
+        private EnhancedTaskbarWindow? _enhancedTaskbarWindow;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
@@ -84,6 +85,7 @@ namespace DailyPrayerTime.Native
             _ = CheckForUpdates();
             ManageOverlay();
             ManageIntegratedTaskbar();
+            ManageEnhancedTaskbar();
 
             // Refresh AutoStart registry path in case the app was moved (Portable Mode support)
             if (SettingsManager.Current.AutoStart)
@@ -135,6 +137,7 @@ namespace DailyPrayerTime.Native
                     await CalculatePrayerTimes();
                     ManageOverlay();
                     ManageIntegratedTaskbar();
+                    ManageEnhancedTaskbar();
                 }
             });
 
@@ -170,6 +173,16 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(integratedItem);
 
+            var enhancedItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowEnhancedTaskbar"));
+            enhancedItem.CheckOnClick = true;
+            enhancedItem.Checked = SettingsManager.Current.UseEnhancedTaskbar;
+            enhancedItem.Click += (s, e) => {
+                SettingsManager.Current.UseEnhancedTaskbar = enhancedItem.Checked;
+                SettingsManager.Save();
+                ManageEnhancedTaskbar();
+            };
+            cms.Items.Add(enhancedItem);
+
             cms.Items.Add(new Forms.ToolStripSeparator());
             cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Exit"), null, (s, e) => System.Windows.Application.Current.Shutdown());
 
@@ -180,6 +193,7 @@ namespace DailyPrayerTime.Native
                 overlayItem.Checked = SettingsManager.Current.ShowOverlay;
                 deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
                 integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
+                enhancedItem.Checked = SettingsManager.Current.UseEnhancedTaskbar;
             };
 
             _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
@@ -411,6 +425,28 @@ namespace DailyPrayerTime.Native
                 _taskbarWindow.Close();
                 _taskbarWindow = null;
             }
+        }
+
+        public void ManageEnhancedTaskbar()
+        {
+            bool shouldShow = SettingsManager.Current.UseEnhancedTaskbar;
+
+            if (shouldShow && _enhancedTaskbarWindow == null)
+            {
+                _enhancedTaskbarWindow = new EnhancedTaskbarWindow();
+                _enhancedTaskbarWindow.Show();
+                UpdateCountdown();
+            }
+            else if (!shouldShow && _enhancedTaskbarWindow != null)
+            {
+                _enhancedTaskbarWindow.Close();
+                _enhancedTaskbarWindow = null;
+            }
+        }
+
+        public void OpenSettings()
+        {
+            Settings_Click(null, null);
         }
 
         private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -1701,7 +1737,26 @@ namespace DailyPrayerTime.Native
                 Debug.WriteLine("Integrated Taskbar update failed: " + ex.Message);
             }
 
-            // 3. Update Overlay Window (UI)
+            // 3. Update Enhanced Taskbar Window (TrafficMonitor-style)
+            try
+            {
+                if (_enhancedTaskbarWindow != null)
+                {
+                    string compact;
+                    if (currentPrayer != Prayer.NONE)
+                        compact = $"\u25cf {curName} {countStr}  \u25b8 {nextName} {nextTime.ToString(GetTimeFmt())}";
+                    else
+                        compact = $"\u25b8 {nextName} {nextTime.ToString(GetTimeFmt())}";
+                    string colorHex = GetStatusColorHex(currentPrayer, nextTime);
+                    _enhancedTaskbarWindow.UpdateData(compact, colorHex);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Enhanced Taskbar update failed: " + ex.Message);
+            }
+
+            // 4. Update Overlay Window (UI)
             if (_overlay == null) return;
 
             _overlay.OverlayNameText.Text = currentPrayer != Prayer.NONE 
@@ -1712,6 +1767,42 @@ namespace DailyPrayerTime.Native
             _overlay.ToolTipCurrentText.Text = string.Format(LocalizationManager.Instance.GetString("Label_CurrentWithRange"), curName, rangeStr);
             _overlay.ToolTipNextText.Text = string.Format(LocalizationManager.Instance.GetString("Label_NextStartsAt"), nextName, nextTime.ToString(GetTimeFmt()));
             _overlay.ForceTopmost();
+        }
+
+        private double CalcPrayerProgress(Prayer currentPrayer, DateTime nextTime, DateTime now)
+        {
+            if (_todayPrayerTimes == null) return 0;
+            Prayer prevP = GetPreviousPrayer(now);
+            DateTime prevT = _todayPrayerTimes.TimeForPrayer(prevP);
+            if (prevP == Prayer.ISHA && now < _todayPrayerTimes.Fajr)
+                prevT = _todayPrayerTimes.Isha.AddDays(-1);
+            TimeSpan total = nextTime - prevT;
+            TimeSpan elapsed = now - prevT;
+            if (total.TotalMilliseconds <= 0) return 0;
+            return Math.Max(0, Math.Min(1.0, elapsed.TotalMilliseconds / total.TotalMilliseconds));
+        }
+
+        private string GetStatusColorHex(Prayer currentPrayer, DateTime nextTime)
+        {
+            if (_todayPrayerTimes == null) return "#10b981";
+
+            DateTime now = DateTime.Now;
+            if (_sunriseProhibActive || _zawalProhibActive || _sunsetProhibActive)
+                return "#ef4444";
+
+            if (currentPrayer != Prayer.NONE)
+            {
+                var endTime = GetPrayerEndTime(currentPrayer);
+                if (endTime != DateTime.MaxValue)
+                {
+                    double minsLeft = (endTime - now).TotalMinutes;
+                    if (minsLeft < 10 && minsLeft > 0)
+                        return "#fbbf24";
+                }
+                return "#10b981";
+            }
+
+            return "#9ca3af";
         }
 
         private void UpdateProgressBar(Prayer currentPrayer, DateTime nextTime, DateTime now)
