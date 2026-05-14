@@ -12,6 +12,8 @@ namespace DailyPrayerTime.Native
     {
         private DispatcherTimer _posTimer;
         private IntPtr _myHwnd;
+        private int _lastX = -1, _lastY = -1, _lastW = -1, _lastH = -1;
+
         public EnhancedTaskbarWindow()
         {
             InitializeComponent();
@@ -67,9 +69,8 @@ namespace DailyPrayerTime.Native
                     sy = src.CompositionTarget.TransformToDevice.M22;
                 }
 
-                int scw = (int)(DisplayText.ActualWidth * sx) + (int)(16 * sx);
+                int scw = Math.Max((int)(DisplayText.ActualWidth * sx) + (int)(16 * sx), (int)(60 * sx));
                 int sch = (int)(ActualHeight * sy);
-                if (scw <= 0) scw = (int)(Width * sx);
                 if (sch <= 0) sch = (int)(Height * sy);
 
                 IntPtr notifyWnd = NativeMethods.FindWindowEx(trayHandle, IntPtr.Zero, "TrayNotifyWnd", null);
@@ -106,9 +107,17 @@ namespace DailyPrayerTime.Native
 
                 y = tr.Top + (tr.Height - sch) / 2;
 
+                if (x == _lastX && y == _lastY && scw == _lastW && sch == _lastH)
+                    return;
+
                 NativeMethods.SetWindowPos(_myHwnd, NativeMethods.HWND_TOPMOST,
                     x, y, scw, sch,
                     NativeMethods.SWP_NOACTIVATE);
+
+                _lastX = x;
+                _lastY = y;
+                _lastW = scw;
+                _lastH = sch;
             }
             catch (Exception ex)
             {
@@ -145,6 +154,7 @@ namespace DailyPrayerTime.Native
         {
             SettingsManager.Current.EnhancedTaskbarPosition = p;
             SettingsManager.Save();
+            _lastX = -1;
             Reposition();
         }
 

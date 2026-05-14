@@ -228,6 +228,7 @@
   "Check_Overlay": "ফ্লোটিং ওভারলে দেখান",
   "Check_DeskBand": "টাস্কবার টাইমার দেখান (Win 10)",
   "Check_IntegratedTaskbar": "ইন্টিগ্রেটেড টাস্কবার টাইমার দেখান (Win 11)",
+  "Check_EnhancedTaskbar": "এনহ্যান্সড টাস্কবার টাইমার দেখান",
   "Check_HeroGrid": "হিরো সেকশনে নামাজের সময়সূচি দেখান",
   "Check_Notifications": "নামাজের বিজ্ঞপ্তি চালু করুন",
   "Check_AutoStart": "উইন্ডোজ স্টার্টআপে চালু করুন",

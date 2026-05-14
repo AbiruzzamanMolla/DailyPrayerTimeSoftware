@@ -5,12 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.3.3] - 2026-04-24
+## [2.4.0] - 2026-05-14
+
+### Added
+
+- **Qibla Compass**: New dedicated tab (🧭) with a 240px compass rose, dynamic direction arrow, and bearing readout. Calculates precise Qibla direction from user's location to the Kaaba (21.4225°N, 39.8262°E) using spherical trigonometry. Shows direction name (N, NNE, NE, etc.) and numeric angle. Includes Recalculate button.
+- **Digital Tasbih (Dhikr Counter)**: New dedicated tab (📿) with 5 Arabic dhikr phrases (SubhanAllah, Alhamdulillah, Allahu Akbar, La ilaha illallah, Astaghfirullah). Tap or press Space/Enter to count. Includes decrement, reset, and target-snap buttons. Auto-saves daily totals to JSON. Scale animation on increment.
+- **Ramadan Complete Module**: New dedicated tab (🌙) with six integrated sections:
+  - **Status Banner**: Live countdown showing current Ramadan day (1-30) with progress bar, or days until next Ramadan.
+  - **Daily Dua**: Curated set of 10 duas (Arabic + transliteration + translation), auto-rotated daily.
+  - **Pre-Ramadan Preparation**: 7-item checklist visible before Ramadan, auto-saves each item.
+  - **Daily Spiritual Goal**: Text input to set today's goal, toggle to mark complete (strikethrough), shows last 7 days history.
+  - **Laylatul Qadr Tracker**: Appears during the last 10 nights (Ramadan 21-30). Click to mark/unmark each night. Shows corresponding Gregorian date.
+  - **Eid Takbeer Notification**: Toggle to enable a Windows toast notification on Eid day (Shawwal 1, calculated via UmAlQuraCalendar) with the full Takbeer text.
+- **Enhanced Taskbar Timer (TrafficMonitor-style)**: New taskbar integration that sits directly on the taskbar with no visible window border. Shows current prayer + countdown + next prayer in a single compact line. Color-coded dot (green=active, yellow=<10min, red=prohibited, gray=upcoming). Four user-selectable positions (Left of Tray, Right of Tray, Center, Left Near Start). Enable via tray menu checkbox or Settings > Layout & Themes. Right-click for position picker/settings/hide. Left-click does nothing (no accidental overlay toggle).
+- **Full-Screen Mode (F11)**: Now properly hides the Windows taskbar, custom title bar, and bottom tab bar. Uses primary screen dimensions with Topmost=true to cover the entire display. Restores original window bounds on exit.
+- **Tab Navigation**: Added 6-tab bottom navigation bar (Home, Salat, Tracker, Qibla, Tasbih, Ramadan) with emoji icons.
+
+### Changed
+
+- **Toggle Ramadan Mode → Toggle Sawm Mode**: Renamed the toolbar button tooltip and changed the icon from ☾ to 🕌 to better reflect the fasting focus.
+- **Full-Screen Exit**: Window now restores to its original position and size instead of fixed minimums.
 
 ### Fixed
 
-- **Jumu'ah Tracker**: Fixed a bug where the Jumu'ah section in the Divine Tracker remained permanently disabled (greyed-out) on Fridays even after Dhuhr time had passed. The `GetEnabledTrackerPrayers()` method now correctly adds `"Jumuah"` instead of `"Dhuhr"` on Fridays.
-- **Zen Mode Scope**: Zen Mode is now exclusively available on the **Home** tab. Switching to the Salat or Tracker tab automatically exits Zen Mode and visually disables the ✨ button. Returning to the Home tab re-enables it.
+- **Taskbar Timer Flickering**: Enhanced Taskbar Timer now caches its window position and dimensions (`_lastX/Y/W/H`). `SetWindowPos` is only called when values actually change, eliminating the single-frame flicker on taskbar refocus.
+- **Color.FromArgb Compilation**: Fixed byte-casting for all `Color.FromArgb()` calls across RamadanView and TasbihView to resolve ambiguous `byte`/`int` overload resolution under implicit usings.
+- **Namespace Ambiguity**: Resolved all `System.Drawing` vs `System.Windows.Media` type conflicts (Color, Brushes, Cursors, FontFamily, Point, KeyEventArgs, HorizontalAlignment, FrameworkElement, UserControl) by fully qualifying or aliasing types.
 
 ## [2.3.2] - 2026-04-22
 

@@ -291,6 +291,7 @@
   "Check_Overlay": "Show Floating Prayer Overlay",
   "Check_DeskBand": "Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)",
   "Check_IntegratedTaskbar": "Show Integrated Taskbar Timer (Win 11 Source)",
+  "Check_EnhancedTaskbar": "Show Enhanced Taskbar Timer",
   "Check_HeroGrid": "Show Prayer Times Grid in Hero Section",
   "Check_Notifications": "Enable Prayer Notifications",
   "Check_AutoStart": "Run on Windows Startup",

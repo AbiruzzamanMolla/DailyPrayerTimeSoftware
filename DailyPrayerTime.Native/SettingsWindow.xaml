@@ -498,6 +498,13 @@
                         <CheckBox x:Name="OverlayInput" Content="{DynamicResource i18n_Check_Overlay}" Margin="0,10,0,5" Foreground="#170939"/>
                         <CheckBox x:Name="UseDeskBandInput" Content="{DynamicResource i18n_Check_DeskBand}" Margin="0,0,0,5" Foreground="#170939"/>
                         <CheckBox x:Name="IntegratedTaskbarInput" Content="{DynamicResource i18n_Check_IntegratedTaskbar}" Margin="0,0,0,5" Foreground="#170939"/>
+                        <CheckBox x:Name="EnhancedTaskbarInput" Content="{DynamicResource i18n_Check_EnhancedTaskbar}" Margin="0,0,0,5" Foreground="#170939"/>
+                        <ComboBox x:Name="EnhancedTaskbarPositionInput" Margin="20,0,0,10" Padding="3" Width="150" HorizontalAlignment="Left">
+                            <ComboBoxItem Content="Left of Tray" Tag="LeftOfTray"/>
+                            <ComboBoxItem Content="Right of Tray" Tag="RightOfTray"/>
+                            <ComboBoxItem Content="Center" Tag="Center"/>
+                            <ComboBoxItem Content="Left (Near Start)" Tag="Left"/>
+                        </ComboBox>
                         <CheckBox x:Name="ShowHeroGridInput" Content="{DynamicResource i18n_Check_HeroGrid}" Margin="0,0,0,5" Foreground="#170939"/>
                         <Grid Margin="0,0,0,5">
                             <Grid.ColumnDefinitions>

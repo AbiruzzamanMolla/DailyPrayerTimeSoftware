@@ -183,6 +183,15 @@ namespace DailyPrayerTime.Native
             OverlayInput.IsChecked = s.ShowOverlay;
             UseDeskBandInput.IsChecked = s.UseDeskBand;
             IntegratedTaskbarInput.IsChecked = s.UseIntegratedTaskbar;
+            EnhancedTaskbarInput.IsChecked = s.UseEnhancedTaskbar;
+            foreach (System.Windows.Controls.ComboBoxItem item in EnhancedTaskbarPositionInput.Items)
+            {
+                if (item.Tag?.ToString() == s.EnhancedTaskbarPosition)
+                {
+                    EnhancedTaskbarPositionInput.SelectedItem = item;
+                    break;
+                }
+            }
             ShowHeroGridInput.IsChecked = s.ShowHeroPrayerGrid;
             NotificationsInput.IsChecked = s.NotificationsEnabled;
             
@@ -441,6 +450,9 @@ namespace DailyPrayerTime.Native
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
             s.UseDeskBand = UseDeskBandInput.IsChecked ?? false;
             s.UseIntegratedTaskbar = IntegratedTaskbarInput.IsChecked ?? false;
+            s.UseEnhancedTaskbar = EnhancedTaskbarInput.IsChecked ?? false;
+            if (EnhancedTaskbarPositionInput.SelectedItem is System.Windows.Controls.ComboBoxItem eposItem && eposItem.Tag is string epos)
+                s.EnhancedTaskbarPosition = epos;
             s.ShowHeroPrayerGrid = ShowHeroGridInput.IsChecked ?? true;
             s.NotificationsEnabled = NotificationsInput.IsChecked ?? true;
             
