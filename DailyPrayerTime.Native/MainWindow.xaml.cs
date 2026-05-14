@@ -52,9 +52,11 @@ namespace DailyPrayerTime.Native
         private Prayer _lastPreAdhanNotificationID = Prayer.NONE;
         private string _lastShuruqWarningDate = "";
         private string _lastSunriseNotificationDate = "";
+        private string _lastEidTakbeerDate = "";
         private UpdateInfo? _currentUpdate;
         private bool _isZenMode = false;
         private bool _isFullScreen = false;
+        private Rect? _savedWindowBounds;
         private bool _isRamadanMode = false;
         private bool _isFastingNoteExpanded = false;
         private bool _isTrackerMode = false;
@@ -257,23 +259,44 @@ namespace DailyPrayerTime.Native
             
             if (_isFullScreen)
             {
-                // To reliably hide taskbar with AllowsTransparency="True"
-                this.WindowState = WindowState.Normal;
+                _savedWindowBounds = new System.Windows.Rect(this.Left, this.Top, this.Width, this.Height);
+
                 this.WindowStyle = WindowStyle.None;
                 this.ResizeMode = ResizeMode.NoResize;
                 this.Topmost = true;
-                this.WindowState = WindowState.Maximized;
+                this.WindowState = WindowState.Normal;
+
+                this.Left = 0;
+                this.Top = 0;
+                this.Width = SystemParameters.PrimaryScreenWidth;
+                this.Height = SystemParameters.PrimaryScreenHeight;
+
+                MainGrid.RowDefinitions[0].Height = new System.Windows.GridLength(0);
+                FooterRow.Height = new System.Windows.GridLength(0);
             }
             else
             {
                 this.Topmost = false;
-                this.WindowState = WindowState.Normal;
-                this.WindowStyle = WindowStyle.None; // Maintain custom title bar style
+                this.WindowStyle = WindowStyle.None;
                 this.ResizeMode = ResizeMode.CanResize;
-                
-                // Ensure it's large enough when coming out of full screen if it was resized
-                if (this.Width < 460) this.Width = 460;
-                if (this.Height < 480) this.Height = 480;
+                this.WindowState = WindowState.Normal;
+
+                if (_savedWindowBounds.HasValue)
+                {
+                    var b = _savedWindowBounds.Value;
+                    this.Left = b.Left;
+                    this.Top = b.Top;
+                    this.Width = Math.Max(460, b.Width);
+                    this.Height = Math.Max(480, b.Height);
+                }
+                else
+                {
+                    this.Width = Math.Max(460, this.Width);
+                    this.Height = Math.Max(480, this.Height);
+                }
+
+                MainGrid.RowDefinitions[0].Height = new System.Windows.GridLength(40);
+                FooterRow.Height = System.Windows.GridLength.Auto;
             }
         }
 
@@ -825,6 +848,7 @@ namespace DailyPrayerTime.Native
             CheckAndPlayAdhanAlarm(currentPrayer);
             CheckTahajjudAdhanAlarm(now);
             CheckAutoBackup(now);
+            CheckEidTakbeer(now);
         }
 
         private void CheckAutoBackup(DateTime now)
@@ -858,6 +882,24 @@ namespace DailyPrayerTime.Native
                 SettingsManager.Save();
             }
             catch { /* Skip and try again later */ }
+        }
+
+        private void CheckEidTakbeer(DateTime now)
+        {
+            if (!SettingsManager.Current.EidTakbeerEnabled) return;
+            if (!DailyPrayerTime.Native.Services.RamadanData.IsEid(now.Date)) return;
+            string todayKey = now.ToString("yyyy-MM-dd");
+            if (_lastEidTakbeerDate == todayKey) return;
+            _lastEidTakbeerDate = todayKey;
+
+            try
+            {
+                ShowNotification(
+                    LocalizationManager.Instance.GetString("Ramadan_EidTakbeerTitle"),
+                    LocalizationManager.Instance.GetString("Ramadan_EidTakbeerMsg")
+                );
+            }
+            catch { /* Skip */ }
         }
 
         private void CheckEnhancedNotifications(DateTime now, Prayer currentPrayer)
@@ -2036,6 +2078,9 @@ namespace DailyPrayerTime.Native
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = false;
             TrackerViewControl.Visibility = Visibility.Collapsed;
+            QiblaViewControl.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Collapsed;
             
             MainContentStack.VerticalAlignment = VerticalAlignment.Center;
             HeroBorder.Visibility = Visibility.Visible;
@@ -2062,6 +2107,9 @@ namespace DailyPrayerTime.Native
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = false;
             TrackerViewControl.Visibility = Visibility.Collapsed;
+            QiblaViewControl.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Collapsed;
 
             // Zen Mode is Home-tab only — exit it and disable the button
             ExitZenMode();
@@ -2089,6 +2137,9 @@ namespace DailyPrayerTime.Native
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = true;
             TrackerViewControl.Visibility = Visibility.Visible;
+            QiblaViewControl.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Collapsed;
             HeroBorder.Visibility = Visibility.Collapsed;
             PrayerListScroll.Visibility = Visibility.Collapsed;
             UpdateBanner.Visibility = Visibility.Collapsed;
@@ -2100,6 +2151,51 @@ namespace DailyPrayerTime.Native
 
             var enabledPrayers = GetEnabledTrackerPrayers();
             TrackerViewControl.LoadData(enabledPrayers);
+        }
+
+        private void TabQibla_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized || QiblaViewControl == null) return;
+            _isTrackerMode = false;
+            TrackerViewControl.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Collapsed;
+            PrayerListScroll.Visibility = Visibility.Collapsed;
+            QiblaViewControl.Visibility = Visibility.Visible;
+            ExitZenMode();
+            ZenModeBtn.IsEnabled = false;
+            ZenModeBtn.Opacity = 0.35;
+            QiblaViewControl.UpdateDirection();
+        }
+
+        private void TabTasbih_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized || TasbihViewControl == null) return;
+            _isTrackerMode = false;
+            TrackerViewControl.Visibility = Visibility.Collapsed;
+            QiblaViewControl.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Collapsed;
+            PrayerListScroll.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Visible;
+            ExitZenMode();
+            ZenModeBtn.IsEnabled = false;
+            ZenModeBtn.Opacity = 0.35;
+            TasbihViewControl.LoadData();
+        }
+
+        private void TabRamadan_Checked(object sender, RoutedEventArgs e)
+        {
+            if (!IsInitialized || RamadanViewControl == null) return;
+            _isTrackerMode = false;
+            TrackerViewControl.Visibility = Visibility.Collapsed;
+            QiblaViewControl.Visibility = Visibility.Collapsed;
+            TasbihViewControl.Visibility = Visibility.Collapsed;
+            PrayerListScroll.Visibility = Visibility.Collapsed;
+            RamadanViewControl.Visibility = Visibility.Visible;
+            ExitZenMode();
+            ZenModeBtn.IsEnabled = false;
+            ZenModeBtn.Opacity = 0.35;
+            RamadanViewControl.LoadData();
         }
 
         public CombinedPrayerTimes? GetTodayPrayerTimes() => _todayPrayerTimes;

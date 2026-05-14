@@ -1,0 +1,112 @@
+<UserControl x:Class="DailyPrayerTime.Native.RamadanView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <StackPanel Margin="15,10">
+
+            <TextBlock Text="{DynamicResource Ramadan_Title}" FontSize="18" FontWeight="Bold" Foreground="White" Margin="0,5,0,15"/>
+
+            <Border x:Name="StatusCard" Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,15" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock x:Name="StatusTitleText" Text="" Foreground="White" FontSize="15" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatusSubText" Text="" Foreground="White" Opacity="0.7" FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    <Border Background="#1AFFFFFF" CornerRadius="8" Padding="10,8" Margin="0,10,0,0">
+                        <ProgressBar x:Name="RamadanProgressBar" Height="6" Value="0" Maximum="30" Background="#1AFFFFFF" Foreground="#34d399" BorderThickness="0"/>
+                    </Border>
+                    <TextBlock x:Name="ProgressLabel" Text="" Foreground="White" Opacity="0.5" FontSize="10" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="DuaCard" Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <Grid Margin="0,0,0,10">
+                        <TextBlock Text="{DynamicResource Ramadan_DuaTitle}" Foreground="#fcd34d" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="DuaDayLabel" Text="" Foreground="White" Opacity="0.6" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Border Background="#1A111111" CornerRadius="8" Padding="12,10" Margin="0,0,0,8">
+                        <TextBlock x:Name="DuaArabicText" Text="" Foreground="White" FontSize="17" FontFamily="Traditional Arabic, Segoe UI" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" FlowDirection="RightToLeft"/>
+                    </Border>
+                    <TextBlock x:Name="DuaTransliterationText" Text="" Foreground="White" Opacity="0.8" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,0,0,6"/>
+                    <TextBlock x:Name="DuaTranslationText" Text="" Foreground="White" Opacity="0.6" FontSize="11" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="PrepCard" Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,12" Margin="0,0,0,8" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Ramadan_PrepTitle}" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <ItemsControl x:Name="PrepChecklistControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,0,0,5">
+                                    <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Label}" Foreground="White" FontSize="12" Cursor="Hand" Checked="PrepChecklistItem_Changed" Unchecked="PrepChecklistItem_Changed"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="GoalCard" Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,12" Margin="0,0,0,8" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Ramadan_GoalTitle}" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <Border Background="#1AFFFFFF" CornerRadius="6" Padding="5" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="GoalInput" Background="Transparent" BorderThickness="0" Foreground="White" FontSize="13" Padding="8,6" TextWrapping="Wrap" AcceptsReturn="False"/>
+                            <Border Grid.Column="1" Background="#10B981" CornerRadius="6" Padding="12,6" Cursor="Hand" MouseLeftButtonUp="SaveGoal_Click">
+                                <TextBlock Text="{DynamicResource Ramadan_Save}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <Border x:Name="GoalTodayStatus" Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,0,0,8" Cursor="Hand" MouseLeftButtonUp="ToggleGoal_Click">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="GoalCheckBox" Width="18" Height="18" CornerRadius="3" BorderBrush="#AFFFFFFF" BorderThickness="1.5" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="GoalTodayText" Grid.Column="1" Text="" Foreground="White" FontSize="12" Opacity="0.7" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <StackPanel x:Name="GoalHistoryPanel" Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border x:Name="QadrCard" Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,12" Margin="0,0,0,8" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Ramadan_QadrTitle}" Foreground="#fcd34d" FontSize="13" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource Ramadan_QadrDesc}" Foreground="White" Opacity="0.6" FontSize="11" Margin="0,0,0,10"/>
+                    <ItemsControl x:Name="QadrNightsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,0,0,4" Cursor="Hand" MouseLeftButtonUp="ToggleQadrNight">
+                                    <TextBlock Text="{Binding Display}" Foreground="White" FontSize="12"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#15FFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="15,12" Margin="0,0,0,8">
+                <StackPanel>
+                    <TextBlock Text="{DynamicResource Ramadan_EidTitle}" Foreground="White" FontSize="13" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <TextBlock x:Name="EidDateText" Text="" Foreground="#fcd34d" Opacity="0.8" FontSize="11" Margin="0,0,0,8"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="EidToggleBtn" Width="44" Height="24" CornerRadius="12" Background="#2AFFFFFF" Cursor="Hand" MouseLeftButtonUp="ToggleEid_Click"/>
+                        <Ellipse x:Name="EidToggleKnob" Width="18" Height="18" Fill="#9ca3af" HorizontalAlignment="Left" Margin="3,0,0,0" Cursor="Hand" MouseLeftButtonUp="ToggleEid_Click"/>
+                        <TextBlock Grid.Column="1" x:Name="EidToggleLabel" Text="{DynamicResource Ramadan_EidEnable}" Foreground="White" FontSize="12" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

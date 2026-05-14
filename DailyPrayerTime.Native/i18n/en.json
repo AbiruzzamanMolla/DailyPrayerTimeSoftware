@@ -65,7 +65,7 @@
   "Tray_ShowIntegratedTaskbar": "Show Integrated Taskbar Timer (Win 11 Source)",
   "Tray_RunningInBackground": "App is running in the background.",
 
-  "ToolTip_Ramadan": "Toggle Ramadan View",
+  "ToolTip_Ramadan": "Toggle Sawm Mode",
   "ToolTip_FullScreen": "Toggle Full Screen Mode",
   "ToolTip_ZenMode": "Toggle Zen Mode",
 
@@ -424,5 +424,57 @@
   "Day_5": "Friday",
   "Day_6": "Saturday",
 
-  "Header_Basmala_Translation": "All praise is for Allah, and peace and blessings be upon the Messenger of Allah."
+  "Header_Basmala_Translation": "All praise is for Allah, and peace and blessings be upon the Messenger of Allah.",
+
+  "Tab_Ramadan": "Ramadan",
+
+  "Ramadan_Title": "Ramadan Module",
+  "Ramadan_DayStatus": "Ramadan Day {0}",
+  "Ramadan_DayActive": "Alhamdulillah, you are in Ramadan!",
+  "Ramadan_DaysUntil": "{0} days until Ramadan",
+  "Ramadan_NotRamadan": "Not in Ramadan",
+  "Ramadan_DuaTitle": "Dua of the Day",
+  "Ramadan_DuaGeneral": "A beautiful dua for reflection",
+  "Ramadan_DayLabel": "Day {0} Dua",
+  "Ramadan_PrepTitle": "Pre-Ramadan Preparation",
+  "Ramadan_Prep_Intention": "Make sincere intention for Ramadan",
+  "Ramadan_Prep_Quran": "Set a Qur'an completion goal",
+  "Ramadan_Prep_Schedule": "Adjust sleep & meal schedule",
+  "Ramadan_Prep_Charity": "Plan charity for the month",
+  "Ramadan_Prep_Duas": "Learn Ramadan-specific duas",
+  "Ramadan_Prep_Supplies": "Stock up on prayer & fasting supplies",
+  "Ramadan_Prep_Family": "Prepare family for Ramadan routine",
+  "Ramadan_GoalTitle": "Daily Spiritual Goal",
+  "Ramadan_GoalNone": "No goal set for today",
+  "Ramadan_Save": "Save",
+  "Ramadan_GoalHistory": "Previous Days",
+  "Ramadan_QadrTitle": "Laylatul Qadr Tracker",
+  "Ramadan_QadrDesc": "Mark the last 10 nights you observed for worship",
+  "Ramadan_QadrNight": "Night",
+  "Ramadan_EidTitle": "Eid al-Fitr",
+  "Ramadan_EidEnable": "Enable Eid Takbeer Reminder",
+  "Ramadan_EidToday": "Eid Mubarak! Today is Eid! 🎉",
+  "Ramadan_EidTomorrow": "Eid is tomorrow! Prepare the Takbeer!",
+  "Ramadan_EidCountdown": "{0} days until Eid",
+  "Ramadan_EidTakbeerTitle": "Eid Mubarak! 🎉",
+  "Ramadan_EidTakbeerMsg": "It's Eid today! Recite Takbeer: Allahu Akbar, Allahu Akbar, La ilaha illallahu, Wallahu Akbar, Allahu Akbar wa lillahil-hamd.",
+
+  "Tab_Qibla": "Qibla",
+  "Tab_Tasbih": "Tasbih",
+
+  "Qibla_Title": "Qibla Compass",
+  "Qibla_Bearing": "Direction: {0}",
+  "Qibla_FromLocation": "From {0}",
+  "Qibla_Note": "Align the green arrow with a physical compass to find the Qibla direction. The bearing is calculated from your location to the Kaaba in Makkah.",
+  "Qibla_Refresh": "Recalculate",
+  "Qibla_NoLocation": "Set your location in Settings",
+
+  "Tasbih_Title": "Digital Tasbih",
+  "Tasbih_TapHint": "Tap or press Space to count",
+  "Tasbih_TotalToday": "Total Today",
+  "Tasbih_SubhanAllah": "Glory be to Allah",
+  "Tasbih_Alhamdulillah": "Praise be to Allah",
+  "Tasbih_AllahuAkbar": "Allah is the Greatest",
+  "Tasbih_LaIlaha": "There is no god but Allah",
+  "Tasbih_Astaghfirullah": "I seek forgiveness from Allah"
 }

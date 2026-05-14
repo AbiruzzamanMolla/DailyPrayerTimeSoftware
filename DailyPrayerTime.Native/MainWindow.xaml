@@ -144,7 +144,7 @@
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
                     <Button x:Name="RamadanBtn" Click="RamadanMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_Ramadan}" Margin="0,0,5,0">
-                        <TextBlock x:Name="RamadanIcon" Text="☾" FontSize="16" FontWeight="Bold" Foreground="White" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="RamadanIcon" Text="🕌" FontSize="16" FontWeight="Bold" Foreground="White" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
 
                     <Button x:Name="ZenModeBtn" Click="ZenMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_ZenMode}" Margin="0,0,5,0">
@@ -614,27 +614,48 @@
         </Grid>
     </ScrollViewer>
     <local:TrackerView x:Name="TrackerViewControl" Visibility="Collapsed" Margin="15,0,15,15"/>
+    <local:QiblaView x:Name="QiblaViewControl" Visibility="Collapsed" Margin="15,0,15,15"/>
+    <local:TasbihView x:Name="TasbihViewControl" Visibility="Collapsed" Margin="15,0,15,15"/>
+    <local:RamadanView x:Name="RamadanViewControl" Visibility="Collapsed" Margin="15,0,15,15"/>
 </Grid>
 
 
         <Border Grid.Row="3" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
-            <UniformGrid Columns="3">
+            <UniformGrid Columns="6">
                 <RadioButton x:Name="TabHome" Style="{StaticResource BottomTabStyle}" IsChecked="True" Checked="TabHome_Checked" Cursor="Hand">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
-                        <TextBlock Text="🏠" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                        <TextBlock Text="Home" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="🏠" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="Home" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </RadioButton>
                 <RadioButton x:Name="TabPrayers" Style="{StaticResource BottomTabStyle}" Checked="TabPrayers_Checked" Cursor="Hand">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
-                        <TextBlock Text="🕒" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                        <TextBlock Text="{DynamicResource Tab_Salat}" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="🕒" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="{DynamicResource Tab_Salat}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </RadioButton>
                 <RadioButton x:Name="TabTracker" Style="{StaticResource BottomTabStyle}" Checked="TabTracker_Checked" Cursor="Hand">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,8">
-                        <TextBlock Text="📊" FontSize="16" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                        <TextBlock Text="Tracker" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="📊" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="Tracker" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton x:Name="TabQibla" Style="{StaticResource BottomTabStyle}" Checked="TabQibla_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="🧭" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="{DynamicResource Tab_Qibla}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton x:Name="TabTasbih" Style="{StaticResource BottomTabStyle}" Checked="TabTasbih_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="📿" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="{DynamicResource Tab_Tasbih}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </RadioButton>
+                <RadioButton x:Name="TabRamadan" Style="{StaticResource BottomTabStyle}" Checked="TabRamadan_Checked" Cursor="Hand">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
+                        <TextBlock Text="🌙" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
+                        <TextBlock Text="{DynamicResource Tab_Ramadan}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </RadioButton>
             </UniformGrid>

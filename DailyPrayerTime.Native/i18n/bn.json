@@ -65,7 +65,7 @@
   "Tray_ShowIntegratedTaskbar": "ইন্টিগ্রেটেড টাস্কবার টাইমার দেখান",
   "Tray_RunningInBackground": "অ্যাপটি ব্যাকগ্রাউন্ডে চলছে।",
 
-  "ToolTip_Ramadan": "রমজান ভিউ পরিবর্তন করুন",
+  "ToolTip_Ramadan": "সাওম মোড পরিবর্তন করুন",
   "ToolTip_FullScreen": "ফুল স্ক্রিন মোড",
   "ToolTip_ZenMode": "জেন মোড",
 
@@ -425,5 +425,57 @@
   "Day_5": "শুক্রবার",
   "Day_6": "শনিবার",
 
-  "Header_Basmala_Translation": "সমস্ত প্রশংসা আল্লাহর জন্য, এবং আল্লাহর রাসূলের ওপর শান্তি ও আশীর্বাদ বর্ষিত হোক।"
+  "Header_Basmala_Translation": "সমস্ত প্রশংসা আল্লাহর জন্য, এবং আল্লাহর রাসূলের ওপর শান্তি ও আশীর্বাদ বর্ষিত হোক।",
+
+  "Tab_Ramadan": "রমজান",
+
+  "Ramadan_Title": "রমজান মডিউল",
+  "Ramadan_DayStatus": "রমজানের {0}তম দিন",
+  "Ramadan_DayActive": "আলহামদুলিল্লাহ! আপনি রমজানে আছেন!",
+  "Ramadan_DaysUntil": "রমজান শুরু হতে {0} দিন বাকি",
+  "Ramadan_NotRamadan": "রমজান নয়",
+  "Ramadan_DuaTitle": "দিনের দোয়া",
+  "Ramadan_DuaGeneral": "চিন্তার জন্য একটি সুন্দর দোয়া",
+  "Ramadan_DayLabel": "{0}তম দিনের দোয়া",
+  "Ramadan_PrepTitle": "রমজানের প্রস্তুতি",
+  "Ramadan_Prep_Intention": "রমজানের জন্য আন্তরিক নিয়ত করুন",
+  "Ramadan_Prep_Quran": "কুরআন খতমের লক্ষ্য নির্ধারণ করুন",
+  "Ramadan_Prep_Schedule": "ঘুম ও খাবারের সময়সূচি ঠিক করুন",
+  "Ramadan_Prep_Charity": "মাসের জন্য দানের পরিকল্পনা করুন",
+  "Ramadan_Prep_Duas": "রমজানের দোয়া শিখুন",
+  "Ramadan_Prep_Supplies": "নামাজ ও রোজার প্রয়োজনীয় জিনিস সংগ্রহ করুন",
+  "Ramadan_Prep_Family": "রমজানের রুটিনের জন্য পরিবারকে প্রস্তুত করুন",
+  "Ramadan_GoalTitle": "দৈনিক আধ্যাত্মিক লক্ষ্য",
+  "Ramadan_GoalNone": "আজকের জন্য কোনো লক্ষ্য নির্ধারণ করা হয়নি",
+  "Ramadan_Save": "সংরক্ষণ করুন",
+  "Ramadan_GoalHistory": "আগের দিনসমূহ",
+  "Ramadan_QadrTitle": "লাইলাতুল কদর ট্র্যাকার",
+  "Ramadan_QadrDesc": "শেষ ১০ রাতের মধ্যে যেগুলোতে আপনি ইবাদত করেছেন চিহ্নিত করুন",
+  "Ramadan_QadrNight": "রাত",
+  "Ramadan_EidTitle": "ঈদুল ফিতর",
+  "Ramadan_EidEnable": "ঈদের তাকবিরের রিমাইন্ডার চালু করুন",
+  "Ramadan_EidToday": "ঈদ মোবারক! আজ ঈদ! 🎉",
+  "Ramadan_EidTomorrow": "আগামীকাল ঈদ! তাকবির পাঠের প্রস্তুতি নিন!",
+  "Ramadan_EidCountdown": "ঈদ হতে {0} দিন বাকি",
+  "Ramadan_EidTakbeerTitle": "ঈদ মোবারক! 🎉",
+  "Ramadan_EidTakbeerMsg": "আজ ঈদ! তাকবির পড়ুন: আল্লাহু আকবার, আল্লাহু আকবার, লা ইলাহা ইল্লাল্লাহু, ওয়াল্লাহু আকবার, আল্লাহু আকবার ওয়া লিল্লাহিল হামদ।",
+
+  "Tab_Qibla": "কিবলা",
+  "Tab_Tasbih": "তাসবিহ",
+
+  "Qibla_Title": "কিবলা কম্পাস",
+  "Qibla_Bearing": "দিক: {0}",
+  "Qibla_FromLocation": "{0} থেকে",
+  "Qibla_Note": "সবুজ তীরটি একটি ফিজিক্যাল কম্পাসের সাথে মিলিয়ে কিবলার দিক খুঁজুন। এই দিক আপনার অবস্থান থেকে মক্কার কাবা পর্যন্ত গণনা করা হয়েছে।",
+  "Qibla_Refresh": "পুনরায় গণনা করুন",
+  "Qibla_NoLocation": "সেটিংসে আপনার অবস্থান সেট করুন",
+
+  "Tasbih_Title": "ডিজিটাল তাসবিহ",
+  "Tasbih_TapHint": "গণনা করতে ট্যাপ বা স্পেস চাপুন",
+  "Tasbih_TotalToday": "আজকের মোট",
+  "Tasbih_SubhanAllah": "সুবহানাল্লাহ",
+  "Tasbih_Alhamdulillah": "আলহামদুলিল্লাহ",
+  "Tasbih_AllahuAkbar": "আল্লাহু আকবার",
+  "Tasbih_LaIlaha": "লা ইলাহা ইল্লাল্লাহ",
+  "Tasbih_Astaghfirullah": "আস্তাগফিরুল্লাহ"
 }
