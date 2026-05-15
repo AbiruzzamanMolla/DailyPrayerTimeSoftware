@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using DailyPrayerTime.Shared.Models;
 using DailyPrayerTime.Shared.Services;
 using Newtonsoft.Json;
 
@@ -27,15 +28,7 @@ public class DuaCardItem : INotifyPropertyChanged
     private void OnChanged([CallerMemberName] string? n = null) => PropertyChanged?.Invoke(this, new(n ?? ""));
 }
 
-public class DuaRaw
-{
-    public int Index { get; set; }
-    public string Name { get; set; } = "";
-    public string Arabic { get; set; } = "";
-    public string Reference { get; set; } = "";
-    public DuaLang? En { get; set; }
-    public DuaLang? Bn { get; set; }
-}
+public class DuaRaw { public int Index { get; set; } public string Name { get; set; } = ""; public string Arabic { get; set; } = ""; public string Reference { get; set; } = ""; public DuaLang? En { get; set; } public DuaLang? Bn { get; set; } }
 public class DuaLang { public string? Name { get; set; } public string? Transliteration { get; set; } public string? Translation { get; set; } }
 
 public partial class MainWindow : Window
@@ -51,6 +44,8 @@ public partial class MainWindow : Window
     private PhraseItem Current => _phrases[_currentIdx];
     private int CurrentCount => _counts.GetValueOrDefault(Current.Key, 0);
     private ObservableCollection<DuaCardItem> _duaCards = new();
+    private DailyDeeds _todayDeeds = new();
+    private bool _sawmTracked;
 
     public MainWindow()
     {
@@ -61,6 +56,7 @@ public partial class MainWindow : Window
         LoadCounts();
         DuasList.ItemsSource = _duaCards;
         LoadDuas();
+        LoadTracker();
     }
 
     private void BuildPhraseChips()
@@ -164,5 +160,82 @@ public partial class MainWindow : Window
     {
         if (sender is Avalonia.Controls.Control c && c.DataContext is DuaCardItem item)
             item.IsExpanded = !item.IsExpanded;
+    }
+
+    private void LoadTracker()
+    {
+        _todayDeeds = TrackerService.Instance.LoadDay(System.DateTime.Today);
+        _sawmTracked = _todayDeeds.Sawm;
+        RenderTrackerItems();
+        UpdateSawmUI();
+    }
+
+    private void RenderTrackerItems()
+    {
+        var items = new List<DeedEntry>();
+        string[] prayers = { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
+        foreach (var p in prayers)
+            if (_todayDeeds.Prayers.TryGetValue(p, out var entries))
+                items.AddRange(entries);
+        TrackPrayerList.ItemsSource = items;
+    }
+
+    private void ToggleTrackItem(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Avalonia.Controls.Control c && c.DataContext is DeedEntry entry)
+        {
+            entry.IsChecked = !entry.IsChecked;
+            TrackerService.Instance.SaveDay(_todayDeeds);
+            RenderTrackerItems();
+        }
+    }
+
+    private void ToggleSawm(object? sender, PointerPressedEventArgs e)
+    {
+        _sawmTracked = !_sawmTracked;
+        _todayDeeds.Sawm = _sawmTracked;
+        TrackerService.Instance.SaveDay(_todayDeeds);
+        UpdateSawmUI();
+    }
+
+    private void UpdateSawmUI()
+    {
+        if (_sawmTracked)
+        {
+            SawmCheck.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+            SawmCheck.BorderBrush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+            SawmLabel.Text = "Fasting today ✓";
+        }
+        else
+        {
+            SawmCheck.Background = Avalonia.Media.Brushes.Transparent;
+            SawmCheck.BorderBrush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(175, 255, 255, 255));
+            SawmLabel.Text = "Mark today as fasting";
+        }
+    }
+
+    private void TrackShowDay(object? sender, PointerPressedEventArgs e)
+    {
+        TrackDayPanel.IsVisible = true;
+        TrackWeekPanel.IsVisible = false;
+        TrackDayBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+        TrackWeekBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+    }
+
+    private void TrackShowWeek(object? sender, PointerPressedEventArgs e)
+    {
+        TrackDayPanel.IsVisible = false;
+        TrackWeekPanel.IsVisible = true;
+        TrackDayBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+        TrackWeekBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+
+        int total = 0, done = 0;
+        for (int i = 0; i < 7; i++)
+        {
+            var day = TrackerService.Instance.LoadDay(System.DateTime.Today.AddDays(-i));
+            foreach (var prayer in day.Prayers.Values)
+                foreach (var entry in prayer) { total++; if (entry.IsChecked) done++; }
+        }
+        WeekSummaryText.Text = total > 0 ? $"{done}/{total} deeds completed this week ({done * 100 / total}%)" : "No data this week";
     }
 }

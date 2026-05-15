@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DailyPrayerTime.Desktop.ViewModels"
         xmlns:local="using:DailyPrayerTime.Desktop.Views"
+        xmlns:models="using:DailyPrayerTime.Shared.Models"
         x:Class="DailyPrayerTime.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Daily Prayer Timer"
@@ -148,6 +149,63 @@
                 </ScrollViewer>
             </TabItem>
 
+            <!-- TRACKER -->
+            <TabItem Header="📊 Tracker">
+                <ScrollViewer>
+                    <StackPanel Margin="12">
+                        <TextBlock Text="📊 Daily Tracker" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                    <Border x:Name="TrackDayBtn" Background="#10B981" CornerRadius="6" Padding="12,5" Cursor="Hand" PointerPressed="TrackShowDay">
+                                        <TextBlock Text="Day" Foreground="White" FontSize="11" FontWeight="Bold"/>
+                                    </Border>
+                                    <Border x:Name="TrackWeekBtn" Background="#1AFFFFFF" CornerRadius="6" Padding="12,5" Cursor="Hand" PointerPressed="TrackShowWeek">
+                                        <TextBlock Text="Week" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel x:Name="TrackDayPanel">
+                                    <ItemsControl x:Name="TrackPrayerList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="models:DeedEntry">
+                                                <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,0,0,4">
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <TextBlock Text="{Binding Label}" Foreground="White" FontSize="12"/>
+                                                        <Border Grid.Column="1" Width="18" Height="18" CornerRadius="3" BorderBrush="#AFFFFFFF" BorderThickness="1.5" Cursor="Hand" PointerPressed="ToggleTrackItem">
+                                                            <Border.Styles>
+                                                                <Style Selector="Border.checked">
+                                                                    <Setter Property="Background" Value="#10B981"/>
+                                                                    <Setter Property="BorderBrush" Value="#10B981"/>
+                                                                </Style>
+                                                            </Border.Styles>
+                                                            <TextBlock Text="✓" Foreground="White" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsChecked}"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                                <StackPanel x:Name="TrackWeekPanel" IsVisible="False">
+                                    <TextBlock x:Name="WeekSummaryText" Text="Loading..." Foreground="White" FontSize="12" Opacity="0.7"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        <Border Classes="card" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Fasting (Sawm)" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                                <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,6,0,0" Cursor="Hand" PointerPressed="ToggleSawm">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Border x:Name="SawmCheck" Width="18" Height="18" CornerRadius="3" BorderBrush="#AFFFFFFF" BorderThickness="1.5"/>
+                                        <TextBlock x:Name="SawmLabel" Grid.Column="1" Text="Mark today as fasting" Foreground="White" FontSize="11" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
             <!-- DUAS -->
             <TabItem Header="📖 Duas">
                 <ScrollViewer>
@@ -183,6 +241,28 @@
                         </ItemsControl>
                     </StackPanel>
                 </ScrollViewer>
+            </TabItem>
+
+            <!-- ABOUT -->
+            <TabItem Header="ℹ About">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12" Spacing="8">
+                    <TextBlock Text="Daily Prayer Timer" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Cross-Platform Build" FontSize="12" Foreground="#10B981" HorizontalAlignment="Center"/>
+                    <Border Classes="card" Width="300">
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Avalonia UI + .NET 8" FontSize="13" FontWeight="SemiBold" Foreground="White"/>
+                            <TextBlock Text="• Prayer times with AlAdhan API" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Qibla direction finder" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Digital Tasbih counter" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• 27 after-salaam duas" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Ramadan tracker" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Daily deed tracking" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Linux notifications" FontSize="11" Foreground="#9CA3AF"/>
+                            <TextBlock Text="• Hijri calendar" FontSize="11" Foreground="#9CA3AF"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="github.com/AbiruzzamanMolla" FontSize="10" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
+                </StackPanel>
             </TabItem>
 
             <!-- SETTINGS -->
