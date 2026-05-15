@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using System.Collections.Generic;
 using System.Linq;
 using DailyPrayerTime.Shared.Services;
@@ -57,7 +56,7 @@ public partial class MainWindow : Window
             {
                 Text = _phrases[i].Arabic,
                 Foreground = Avalonia.Media.Brushes.White,
-                FontSize = 14.0,
+                FontSize = 14,
                 FontFamily = new Avalonia.Media.FontFamily("Traditional Arabic, Segoe UI"),
                 HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center
             };
@@ -135,23 +134,20 @@ public partial class MainWindow : Window
     private void TasbihDec(object? sender, PointerPressedEventArgs e)
     {
         if (CurrentCount > 0) _counts[Current.Key] = CurrentCount - 1;
-        Save();
-        UpdateTasbihUI();
+        Save(); UpdateTasbihUI();
     }
     private void TasbihReset(object? sender, PointerPressedEventArgs e)
     {
-        _counts[Current.Key] = 0;
-        Save();
-        UpdateTasbihUI();
+        _counts[Current.Key] = 0; Save(); UpdateTasbihUI();
     }
     private void TasbihTarget(object? sender, PointerPressedEventArgs e)
     {
         int target = _targets.GetValueOrDefault(Current.Key, 0);
-        if (target > 0)
-        {
-            _counts[Current.Key] = System.Math.Max(0, CurrentCount - target);
-            Save();
-            UpdateTasbihUI();
-        }
+        if (target > 0) { _counts[Current.Key] = System.Math.Max(0, CurrentCount - target); Save(); UpdateTasbihUI(); }
+    }
+    private void ApplySettings(object? sender, PointerPressedEventArgs e)
+    {
+        if (DataContext is ViewModels.MainWindowViewModel vm)
+            vm.ApplySettings();
     }
 }

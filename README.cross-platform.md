@@ -6,37 +6,53 @@ Branch: `linux-android-maui`
 
 ```
 DailyPrayerTime/
-├── DailyPrayerTime.Shared/     ← .NET Standard 2.0 shared logic
-│   └── Services/
-│       ├── QiblaCalculator.cs  ← pure math, works everywhere
-│       ├── IStorageService.cs  ← platform abstraction
-│       └── ...                 ← more to come
-├── DailyPrayerTime.Native/     ← Windows WPF (existing, unchanged)
-├── DailyPrayerTime.Desktop/    ← Avalonia UI (Linux/macOS/Windows)
-│   └── Views/                  ← Avalonia .axaml files
-│   └── Services/               ← platform-specific implementations
+├── DailyPrayerTime.Shared/         ← .NET 8 shared library (zero external deps)
+│   ├── Services/
+│   │   ├── QiblaCalculator.cs      ← pure math Qibla direction
+│   │   ├── PrayerCalculator.cs     ← pure C# prayer times (no library needed)
+│   │   ├── PrayerService.cs        ← AlAdhan API + local calc
+│   │   ├── TasbihService.cs        ← JSON dhikr counter
+│   │   ├── TrackerService.cs       ← daily deed tracker
+│   │   ├── RamadanService.cs       ← Ramadan state + duas
+│   │   ├── HijriDateHelper.cs      ← pure C# Hijri calendar (no UmAlQura)
+│   │   ├── RakatParser.cs          ← rakat string parser
+│   │   └── IStorageService.cs      ← platform abstraction
+│   └── Models/
+│       ├── TrackerModels.cs        ← DeedEntry, DailyDeeds
+│       └── AppSettings.cs          ← settings model
+├── DailyPrayerTime.Native/         ← Windows WPF (existing, v2.4.0)
+├── DailyPrayerTime.Desktop/        ← Avalonia UI (Linux/macOS/Windows)
+│   ├── Views/MainWindow.axaml      ← 5-tab layout
+│   ├── ViewModels/                 ← MVVM with live countdown
+│   ├── Styles/Theme.axaml          ← glassmorphism card styles
+│   ├── Services/                   ← LinuxStorageService, LinuxNotificationService
+│   ├── i18n/duas.json              ← 27 after-salaam duas
+│   └── DailyPrayerTime.Desktop.csproj
 └── DailyPrayerTime.CrossPlatform.slnx
 ```
 
-## Build status
+## Porting Status
 
-| Target | Status |
-|--------|--------|
-| Windows (WPF) | ✅ Working |
-| Linux (Avalonia) | 🚧 Scaffold only |
-| macOS (Avalonia) | 🚧 Scaffold only |
+| Feature | Shared | Avalonia UI |
+|---------|--------|-------------|
+| Qibla Compass | ✅ | ✅ Visual compass with arrow |
+| Digital Tasbih | ✅ | ✅ 5 phrases, count, save |
+| Prayer Times | ✅ | ✅ Live countdown |
+| Hijri Calendar | ✅ | ✅ Header display |
+| Ramadan Module | ✅ | ✅ Countdown, dua, Eid |
+| Deed Tracker | ✅ | ❌ Not yet |
+| Dua Library | ✅ (27 duas) | ❌ Not yet |
+| Settings | ❌ | ⚠️ Basic |
+| Notifications | ❌ | ⚠️ Service class only |
+| Adhan Audio | ❌ | ❌ |
 
-## Build for Linux
+## Build & Run
 
 ```bash
-# Prerequisites: .NET 8 SDK + Avalonia workload
+# Restore and build
 dotnet restore DailyPrayerTime.CrossPlatform.slnx
 dotnet build DailyPrayerTime.Desktop
+
+# Run on Linux/macOS
+dotnet run --project DailyPrayerTime.Desktop
 ```
-
-## Porting guide
-
-1. Move calculation services (no UI) into `DailyPrayerTime.Shared/Services/`
-2. Update namespace to `DailyPrayerTime.Shared.Services`
-3. Create platform implementations in each app project's `Services/` folder
-4. Rewrite UI layer (WPF ↔ Avalonia — similar XAML, different controls)

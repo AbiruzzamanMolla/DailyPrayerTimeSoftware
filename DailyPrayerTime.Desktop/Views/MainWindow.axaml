@@ -3,134 +3,179 @@
         xmlns:vm="using:DailyPrayerTime.Desktop.ViewModels"
         x:Class="DailyPrayerTime.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="Daily Prayer Timer (Cross-Platform)"
+        Title="Daily Prayer Timer"
         Width="450" Height="620"
         MinWidth="420" MinHeight="480"
         WindowStartupLocation="CenterScreen"
         Background="#022C22">
 
     <Grid RowDefinitions="Auto,*,Auto">
-        <!-- Header -->
-        <Border Grid.Row="0" Background="#065F46" Padding="15,8">
+        <Border Grid.Row="0" Background="#065F46" Padding="12,6">
             <Grid ColumnDefinitions="*,Auto">
                 <StackPanel>
-                    <TextBlock Text="Daily Prayer Timer" FontSize="14" FontWeight="Bold" Foreground="White" Opacity="0.8"/>
-                    <TextBlock Text="{Binding StatusText}" FontSize="10" Foreground="#A0D4B0"/>
+                    <TextBlock Text="Daily Prayer Timer" FontSize="13" FontWeight="Bold" Foreground="White" Opacity="0.85"/>
+                    <TextBlock x:Name="HijriText" FontSize="10" Foreground="#A0D4B0"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock x:Name="ClockText" FontSize="13" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
+                    <TextBlock x:Name="ClockText" FontSize="12" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Content -->
         <TabControl Grid.Row="1" Background="#022C22" BorderThickness="0">
-            <!-- Home Tab -->
-            <TabItem Header="🏠 Home" Background="Transparent">
+            <!-- HOME -->
+            <TabItem Header="🏠 Home">
                 <ScrollViewer>
-                    <StackPanel Margin="15">
+                    <StackPanel Margin="12">
                         <Border Classes="card">
                             <StackPanel>
                                 <TextBlock Text="{Binding CurrentPrayer}" FontSize="18" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding Countdown}" FontSize="40" FontWeight="Bold" Foreground="#10B981" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,8,0,0"/>
-                                <TextBlock Text="{Binding NextPrayer}" FontSize="13" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                                <TextBlock Text="{Binding Countdown}" FontSize="38" FontWeight="Bold" Foreground="#10B981" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                                <TextBlock Text="{Binding NextPrayer}" FontSize="12" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,8,0,0"/>
                             </StackPanel>
                         </Border>
 
-                        <Border Classes="card" Margin="0,10,0,0">
+                        <Border Classes="card" Margin="0,8,0,0">
+                            <Grid ColumnDefinitions="*,*">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding HijriDisplay}" FontSize="11" Foreground="#FBBF24" Opacity="0.9"/>
+                                    <TextBlock Text="{Binding GregorianDisplay}" FontSize="10" Foreground="#9CA3AF" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                                    <TextBlock Text="Qibla" FontSize="9" Foreground="#9CA3AF" Opacity="0.6"/>
+                                    <TextBlock Text="{Binding QiblaBearingText}" FontSize="14" FontWeight="Bold" Foreground="#10B981"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- QIBLA -->
+            <TabItem Header="🧭 Qibla">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="12">
+                    <Border Classes="card" Width="240" Height="240" Padding="0">
+                        <Grid>
+                            <Ellipse Width="200" Height="200" Stroke="#3AFFFFFF" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Ellipse Width="180" Height="180" Stroke="#1AFFFFFF" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="N" Foreground="#10B981" FontWeight="Bold" FontSize="13" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,14,0,0"/>
+                            <TextBlock Text="S" Foreground="#9CA3AF" FontSize="11" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,14"/>
+                            <TextBlock Text="E" Foreground="#9CA3AF" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0"/>
+                            <TextBlock Text="W" Foreground="#9CA3AF" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="14,0,0,0"/>
+                            <Polygon Points="120,20 112,65 128,65" Fill="#10B981" RenderTransformOrigin="50%,50%">
+                                <Polygon.RenderTransform>
+                                    <RotateTransform Angle="{Binding QiblaAngle}"/>
+                                </Polygon.RenderTransform>
+                            </Polygon>
+                            <Ellipse Width="8" Height="8" Fill="#10B981" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <TextBlock Text="{Binding QiblaBearingText}" FontSize="20" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,12,0,0"/>
+                    <TextBlock Text="{Binding QiblaDirection}" FontSize="12" Foreground="White" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                    <TextBlock Text="{Binding QiblaLocation}" FontSize="10" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </TabItem>
+
+            <!-- TASBIH -->
+            <TabItem Header="📿 Tasbih">
+                <StackPanel Margin="12">
+                    <TextBlock Text="📿 Digital Tasbih" Classes="section-title"/>
+                    <Border Classes="card" Padding="10,8">
+                        <WrapPanel x:Name="PhrasePanel" HorizontalAlignment="Center"/>
+                    </Border>
+                    <Border Classes="card" Margin="0,6,0,0" Cursor="Hand" PointerPressed="TasbihTap">
+                        <StackPanel HorizontalAlignment="Center" Margin="15">
+                            <TextBlock Text="📿" FontSize="28" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TbCount" Text="0" FontSize="52" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TbPhrase" Text="..." FontSize="16" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                            <TextBlock x:Name="TbTapHint" Text="Tap to count" FontSize="9" Foreground="#9CA3AF" Opacity="0.5" HorizontalAlignment="Center" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="card" Margin="0,6,0,0" Padding="10">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                            <Border Grid.Column="0" Width="38" Height="38" Background="#2AFFFFFF" CornerRadius="19" Cursor="Hand" PointerPressed="TasbihDec">
+                                <TextBlock Text="−" Foreground="White" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock Grid.Column="1" x:Name="TbLabel" FontSize="11" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border Grid.Column="2" Width="38" Height="38" Background="#2AFFFFFF" CornerRadius="19" Cursor="Hand" Margin="0,0,5,0" PointerPressed="TasbihReset">
+                                <TextBlock Text="↺" Foreground="White" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <Border Grid.Column="3" Width="38" Height="38" Background="#2AFFFFFF" CornerRadius="19" Cursor="Hand" PointerPressed="TasbihTarget">
+                                <TextBlock x:Name="TbTarget" Text="33" Foreground="#FBBF24" FontSize="13" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <Border Classes="card" Margin="0,6,0,0" Padding="10,8">
+                        <StackPanel>
+                            <TextBlock Text="Total Today" FontSize="9" Foreground="#9CA3AF" Opacity="0.6" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TbTotal" Text="0" FontSize="22" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </TabItem>
+
+            <!-- RAMADAN -->
+            <TabItem Header="🌙 Ramadan">
+                <ScrollViewer>
+                    <StackPanel Margin="12">
+                        <Border Classes="card">
                             <StackPanel>
-                                <TextBlock Text="Qibla Direction" FontSize="13" FontWeight="SemiBold" Foreground="White" Opacity="0.7"/>
-                                <TextBlock Text="{Binding QiblaBearingText}" FontSize="24" FontWeight="Bold" Foreground="#10B981" Margin="0,4,0,0"/>
-                                <TextBlock Text="{Binding QiblaDirection}" FontSize="12" Foreground="#9CA3AF"/>
+                                <TextBlock x:Name="RamadanStatus" Text="{Binding RamadanStatus}" FontSize="15" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                <Border Background="#1AFFFFFF" CornerRadius="6" Margin="0,8,0,0" Padding="0">
+                                    <ProgressBar x:Name="RamadanProgress" Value="{Binding RamadanDay}" Maximum="30" Height="6" Foreground="#10B981" Background="#1AFFFFFF"/>
+                                </Border>
+                                <TextBlock x:Name="RamadanProgressText" Text="{Binding RamadanDayDisplay}" FontSize="10" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                             </StackPanel>
                         </Border>
-
-                        <Border Classes="card" Margin="0,10,0,0">
+                        <Border Classes="card" Margin="0,6,0,0">
                             <StackPanel>
-                                <TextBlock Text="Tasbih Quick Count" FontSize="13" FontWeight="SemiBold" Foreground="White" Opacity="0.7"/>
-                                <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
-                                    <TextBlock Text="{Binding TasbihDisplay}" FontSize="20" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
-                                    <Border Grid.Column="1" Background="#10B981" CornerRadius="6" Padding="12,6" Cursor="Hand" PointerPressed="TasbihTap">
-                                        <TextBlock Text="+1" Foreground="White" FontSize="13" FontWeight="Bold"/>
-                                    </Border>
-                                </Grid>
+                                <TextBlock Text="Dua of the Day" FontSize="12" FontWeight="Bold" Foreground="#FBBF24" Margin="0,0,0,6"/>
+                                <Border Background="#15111111" CornerRadius="6" Padding="10,8">
+                                    <TextBlock x:Name="RamadanDuaArabic" FontSize="14" Foreground="White" FontFamily="Traditional Arabic, Segoe UI" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                </Border>
+                                <TextBlock x:Name="RamadanDuaTrans" FontSize="10" Foreground="White" Opacity="0.75" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                                <TextBlock x:Name="RamadanDuaTranslation" FontSize="10" Foreground="White" Opacity="0.55" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Classes="card" Margin="0,6,0,0">
+                            <StackPanel>
+                                <TextBlock Text="Eid al-Fitr" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock x:Name="EidCountdownText" Text="{Binding EidCountdown}" FontSize="11" Foreground="#9CA3AF" Margin="0,4,0,0"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
 
-            <!-- Qibla Tab -->
-            <TabItem Header="🧭 Qibla" Background="Transparent">
-                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="15">
-                    <Border Classes="card" Width="260" Height="260" Padding="0">
-                        <Grid>
-                            <Ellipse Width="220" Height="220" Stroke="#3AFFFFFF" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Ellipse Width="200" Height="200" Stroke="#1AFFFFFF" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Ellipse Width="180" Height="180" Stroke="#0FFFFFFF" StrokeThickness="1" StrokeDashArray="4,4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock Text="N" Foreground="#10B981" FontWeight="Bold" FontSize="14" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,14,0,0"/>
-                            <TextBlock Text="S" Foreground="#9CA3AF" FontSize="12" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,14"/>
-                            <TextBlock Text="E" Foreground="#9CA3AF" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0"/>
-                            <TextBlock Text="W" Foreground="#9CA3AF" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="14,0,0,0"/>
-                            <Polygon Points="130,25 120,70 140,70" Fill="#10B981" RenderTransformOrigin="50%,50%">
-                                <Polygon.RenderTransform>
-                                    <RotateTransform Angle="{Binding QiblaAngle}"/>
-                                </Polygon.RenderTransform>
-                            </Polygon>
-                            <Ellipse Width="10" Height="10" Fill="#10B981" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                    </Border>
-                    <TextBlock Text="{Binding QiblaBearingText}" FontSize="22" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,15,0,0"/>
-                    <TextBlock Text="{Binding QiblaDirection}" FontSize="13" Foreground="White" HorizontalAlignment="Center" Margin="0,4,0,0"/>
-                    <TextBlock Text="{Binding QiblaLocation}" FontSize="11" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                </StackPanel>
-            </TabItem>
-
-            <!-- Tasbih Tab -->
-            <TabItem Header="📿 Tasbih" Background="Transparent">
-                <StackPanel Margin="15">
-                    <TextBlock Text="📿 Digital Tasbih" Classes="section-title"/>
-                    <Border Classes="card" Padding="0">
-                        <StackPanel>
-                            <WrapPanel x:Name="PhrasePanel" HorizontalAlignment="Center" Margin="10,12,10,15"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Classes="card" Margin="0,8,0,0" Padding="0" Cursor="Hand" PointerPressed="TasbihTap">
-                        <StackPanel HorizontalAlignment="Center" Margin="20">
-                            <TextBlock Text="📿" FontSize="30" HorizontalAlignment="Center"/>
-                            <TextBlock x:Name="TbCount" Text="0" FontSize="60" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
-                            <TextBlock x:Name="TbPhrase" Text="Subhaanallaah" FontSize="18" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,8,0,0"/>
-                            <TextBlock Text="Tap or press Space to count" FontSize="10" Foreground="#9CA3AF" Opacity="0.5" HorizontalAlignment="Center" Margin="0,8,0,0"/>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Classes="card" Margin="0,8,0,0" Padding="10">
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
-                            <Border Grid.Column="0" Width="40" Height="40" Background="#2AFFFFFF" CornerRadius="20" Cursor="Hand" PointerPressed="TasbihDec">
-                                <TextBlock Text="−" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <TextBlock Grid.Column="1" x:Name="TbLabel" Text="Glory be to Allah" FontSize="12" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Border Grid.Column="2" Width="40" Height="40" Background="#2AFFFFFF" CornerRadius="20" Cursor="Hand" Margin="0,0,6,0" PointerPressed="TasbihReset">
-                                <TextBlock Text="↺" Foreground="White" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <Border Grid.Column="3" Width="40" Height="40" Background="#2AFFFFFF" CornerRadius="20" Cursor="Hand" PointerPressed="TasbihTarget">
-                                <TextBlock x:Name="TbTarget" Text="33" Foreground="#FBBF24" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </Grid>
-                    </Border>
-
-                    <Border Classes="card" Margin="0,8,0,0">
-                        <StackPanel>
-                            <TextBlock Text="Total Today" FontSize="10" Foreground="#9CA3AF" Opacity="0.6" HorizontalAlignment="Center"/>
-                            <TextBlock x:Name="TbTotal" Text="0" FontSize="24" FontWeight="Bold" Foreground="#10B981" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
+            <!-- SETTINGS -->
+            <TabItem Header="⚙ Settings">
+                <ScrollViewer>
+                    <StackPanel Margin="12" Spacing="8">
+                        <TextBlock Text="Location" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Latitude" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="LatInput" Text="{Binding Latitude}" Watermark="23.8103" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="Longitude" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="LonInput" Text="{Binding Longitude}" Watermark="90.4125" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="Calculation Method" FontSize="10" Foreground="#9CA3AF"/>
+                                <ComboBox x:Name="MethodInput" SelectedIndex="{Binding MethodIndex}" Foreground="White" Background="#1AFFFFFF">
+                                    <ComboBoxItem Content="Karachi" Tag="KARACHI"/>
+                                    <ComboBoxItem Content="MWL" Tag="MWL" IsSelected="True"/>
+                                    <ComboBoxItem Content="Makkah" Tag="MAKKAH"/>
+                                    <ComboBoxItem Content="ISNA" Tag="ISNA"/>
+                                    <ComboBoxItem Content="Egypt" Tag="EGYPT"/>
+                                </ComboBox>
+                                <Border Background="#10B981" CornerRadius="6" Padding="12,8" Cursor="Hand" PointerPressed="ApplySettings" HorizontalAlignment="Right">
+                                    <TextBlock Text="Apply" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
 
-        <!-- Footer -->
         <Border Grid.Row="2" Background="#00170939" Padding="0" Height="0"/>
     </Grid>
 </Window>
