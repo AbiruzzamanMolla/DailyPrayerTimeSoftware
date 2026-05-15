@@ -1,20 +1,57 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DailyPrayerTime.Desktop.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="DailyPrayerTime.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="DailyPrayerTime.Desktop">
+        Title="Daily Prayer Timer (Cross-Platform)"
+        Width="450" Height="620"
+        MinWidth="460" MinHeight="480"
+        WindowStartupLocation="CenterScreen">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <Grid RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" Background="#065F46">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="🕌 Daily Prayer Timer" FontSize="22" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="{Binding StatusText}" FontSize="13" Foreground="#A0D4B0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TabControl Grid.Row="1" Background="#022C22">
+            <TabItem Header="🏠 Home">
+                <StackPanel Margin="15">
+                    <Border Background="#15FFFFFF" CornerRadius="12" Padding="15" BorderBrush="#2AFFFFFF" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="{Binding CurrentPrayer}" FontSize="18" FontWeight="Bold" Foreground="White"/>
+                            <TextBlock Text="{Binding Countdown}" FontSize="32" FontWeight="Bold" Foreground="#34D399" FontFamily="Consolas"/>
+                            <TextBlock Text="{Binding NextPrayer}" FontSize="13" Foreground="#9CA3AF" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </TabItem>
 
+            <TabItem Header="🧭 Qibla">
+                <StackPanel Margin="15" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Border Background="#15FFFFFF" CornerRadius="12" Padding="20" BorderBrush="#2AFFFFFF" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="{Binding QiblaBearingText}" FontSize="36" FontWeight="Bold" Foreground="#34D399" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding QiblaDirection}" FontSize="15" Foreground="White" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding QiblaLocation}" FontSize="11" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </TabItem>
+
+            <TabItem Header="📿 Tasbih">
+                <StackPanel Margin="15">
+                    <TextBlock Text="📿 Digital Tasbih" FontSize="16" FontWeight="Bold" Foreground="White" Margin="0,0,0,10"/>
+                    <Border Background="#15FFFFFF" CornerRadius="12" Padding="15" BorderBrush="#2AFFFFFF" BorderThickness="1">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock x:Name="TasbihCount" Text="0" FontSize="48" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="TasbihPhrase" Text="Subhaanallaah" FontSize="18" Foreground="#34D399" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>
