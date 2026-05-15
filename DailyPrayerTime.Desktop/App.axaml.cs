@@ -18,14 +18,16 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         var storage = new LinuxStorageService();
-        TasbihService.Instance.BasePath = storage.GetAppDataPath();
+        string appData = storage.GetAppDataPath();
+
+        TasbihService.Instance.BasePath = appData;
+        PrayerService.CacheBasePath = appData;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
+            var vm = new MainWindowViewModel();
+            desktop.MainWindow = new MainWindow { DataContext = vm };
+            _ = vm.InitializeAsync();
         }
 
         base.OnFrameworkInitializationCompleted();
