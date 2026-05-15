@@ -332,9 +332,9 @@
                         <Border Classes="card">
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Latitude" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="LatInput" Text="{Binding Latitude}" Watermark="23.8103" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="LatInput" Text="{Binding Latitude}" PlaceholderText="23.8103" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="Longitude" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="LonInput" Text="{Binding Longitude}" Watermark="90.4125" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="LonInput" Text="{Binding Longitude}" PlaceholderText="90.4125" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="Calculation Method" FontSize="10" Foreground="#9CA3AF"/>
                                 <ComboBox x:Name="MethodInput" SelectedIndex="{Binding MethodIndex}" Foreground="White" Background="#1AFFFFFF">
                                     <ComboBoxItem Content="Karachi" Tag="KARACHI"/>
@@ -370,9 +370,9 @@
                         <Border Classes="card">
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Fajr Angle" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="FajrAngleInput" Text="{Binding FajrAngle}" Watermark="18.0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="FajrAngleInput" Text="{Binding FajrAngle}" PlaceholderText="18.0" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="Isha Angle" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="IshaAngleInput" Text="{Binding IshaAngle}" Watermark="17.5" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="IshaAngleInput" Text="{Binding IshaAngle}" PlaceholderText="17.5" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="High Latitude Rule" FontSize="10" Foreground="#9CA3AF"/>
                                 <ComboBox x:Name="HighLatInput" SelectedIndex="{Binding HighLatIndex}" Foreground="White" Background="#1AFFFFFF">
                                     <ComboBoxItem Content="None"/>
@@ -381,9 +381,9 @@
                                     <ComboBoxItem Content="Twilight Angle"/>
                                 </ComboBox>
                                 <TextBlock Text="Suhur Offset (min)" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="SuhurOffsetInput" Text="{Binding SuhurOffset}" Watermark="0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="SuhurOffsetInput" Text="{Binding SuhurOffset}" PlaceholderText="0" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="Iftar Offset (min)" FontSize="10" Foreground="#9CA3AF"/>
-                                <TextBox x:Name="IftarOffsetInput" Text="{Binding IftarOffset}" Watermark="0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBox x:Name="IftarOffsetInput" Text="{Binding IftarOffset}" PlaceholderText="0" Foreground="White" Background="#1AFFFFFF"/>
                                 <TextBlock Text="Time Format" FontSize="10" Foreground="#9CA3AF"/>
                                 <ComboBox x:Name="TimeFmtInput" SelectedIndex="{Binding TimeFmtIndex}" Foreground="White" Background="#1AFFFFFF">
                                     <ComboBoxItem Content="12h (AM/PM)"/>
