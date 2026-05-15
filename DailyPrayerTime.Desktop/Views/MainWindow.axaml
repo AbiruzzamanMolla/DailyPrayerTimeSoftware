@@ -202,6 +202,7 @@
                         <Border Classes="card" Margin="0,6,0,0">
                             <StackPanel>
                                 <TextBlock Text="Fasting (Sawm)" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                                <TextBlock x:Name="FastingHintText" Text="" FontSize="9" Foreground="#FBBF24" Opacity="0.8" Margin="0,2,0,0"/>
                                 <Border Background="#1AFFFFFF" CornerRadius="6" Padding="10,8" Margin="0,6,0,0" Cursor="Hand" PointerPressed="ToggleSawm">
                                     <Grid ColumnDefinitions="Auto,*">
                                         <Border x:Name="SawmCheck" Width="18" Height="18" CornerRadius="3" BorderBrush="#AFFFFFFF" BorderThickness="1.5"/>

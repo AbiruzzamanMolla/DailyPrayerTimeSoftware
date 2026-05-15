@@ -176,6 +176,16 @@ public partial class MainWindow : Window
         _sawmTracked = _todayDeeds.Sawm;
         RenderTrackerItems();
         UpdateSawmUI();
+
+        string[] fastingDays = { "Monday", "Thursday", "13th", "14th", "15th" };
+        var now = System.DateTime.Today;
+        var hin = "";
+        if (TrackerService.IsSunnahSawmDay(now))
+            hin = "🕌 Sunnah fast today";
+        var (hY, hM, hD) = HijriDateHelper.ToHijri(now);
+        if (hD >= 13 && hD <= 15)
+            hin = "🌙 Ayyam al-Bidh (White Days)";
+        FastingHintText.Text = hin;
     }
 
     private void RenderTrackerItems()
