@@ -419,6 +419,16 @@
                             </StackPanel>
                         </Border>
 
+                        <TextBlock Text="Updates" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock x:Name="UpdateStatusText" Text="Current version: 2.4.0. Click to check for updates." FontSize="10" Foreground="#9CA3AF"/>
+                                <Border Background="#10B981" CornerRadius="6" Padding="12,8" Cursor="Hand" PointerPressed="CheckForUpdates" HorizontalAlignment="Left">
+                                    <TextBlock Text="Check for Updates" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
                         <TextBlock Text="Theme" Classes="section-title"/>
                         <Border Classes="card">
                             <StackPanel Spacing="6">

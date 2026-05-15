@@ -339,6 +339,23 @@ public partial class MainWindow : Window
         LangBnBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
     }
 
+    private async void CheckForUpdates(object? sender, PointerPressedEventArgs e)
+    {
+        try
+        {
+            UpdateStatusText.Text = "Checking for updates...";
+            var info = await UpdateService.CheckForUpdateAsync();
+            if (info.IsUpdateAvailable)
+                UpdateStatusText.Text = $"Update v{info.LatestVersion} available! Visit GitHub to download.";
+            else
+                UpdateStatusText.Text = "You are on the latest version (2.4.0).";
+        }
+        catch
+        {
+            UpdateStatusText.Text = "Update check failed. Check your connection.";
+        }
+    }
+
     private void SetLangBn(object? sender, PointerPressedEventArgs e)
     {
         Localization.SetLanguage("bn");

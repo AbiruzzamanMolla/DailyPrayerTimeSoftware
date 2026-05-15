@@ -267,7 +267,9 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
         var (hYear, hMonth, hDay) = HijriDateHelper.ToHijri(now);
         string[] hMonths = { "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah" };
-        HijriDisplay = $"{hDay} {hMonths[hMonth - 1]} {hYear} AH";
+        string[] engDays = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+        int wd = (int)now.DayOfWeek;
+        HijriDisplay = $"{engDays[wd]}, {hDay} {hMonths[hMonth - 1]} {hYear} AH";
         GregorianDisplay = now.ToString("dddd, MMMM d, yyyy");
     }
 
