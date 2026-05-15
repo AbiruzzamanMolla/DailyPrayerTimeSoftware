@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Daily Prayer Timer
+Comment=Prayer times, Qibla, Tasbih, Duas, Ramadan tracker
+Exec=dailyprayertimer
+Icon=dailyprayertimer
+Terminal=false
+Type=Application
+Categories=Utility;X-Religion;

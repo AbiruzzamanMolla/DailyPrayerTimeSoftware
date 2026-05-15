@@ -52,3 +52,5 @@ scoop-bucket/
 # Linux build output
 linux-build/
 DailyPrayerTime.Desktop
+
+squashfs-root/
