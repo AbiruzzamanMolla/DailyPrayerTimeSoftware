@@ -1,0 +1,12 @@
+Package: dailyprayertimer
+Version: 2.4.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.31), libnotify-bin, libice6, libsm6, libx11-6, libxft2, libxext6, libssl3
+Maintainer: Abiruzzaman Molla <abiruzzaman@example.com>
+Description: Daily Prayer Timer - Cross-Platform
+ A high-performance desktop application for accurate prayer times,
+ Qibla direction, digital tasbih, dua library, Ramadan tracker,
+ and deed tracking. Built with Avalonia UI for Linux.
+Homepage: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware
