@@ -39,6 +39,12 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private string _latitude = "23.8103";
     private string _longitude = "90.4125";
     private int _methodIndex = 0;
+    private string _fajrAngle = "18.0";
+    private string _ishaAngle = "17.5";
+    private int _highLatIndex = 0;
+    private string _suhurOffset = "0";
+    private string _iftarOffset = "0";
+    private int _timeFmtIndex = 0;
     private string _ramadanDuaArabic = "";
     private string _ramadanDuaTrans = "";
     private string _ramadanDuaTranslation = "";
@@ -62,6 +68,12 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public string Latitude { get => _latitude; set => Set(ref _latitude, value); }
     public string Longitude { get => _longitude; set => Set(ref _longitude, value); }
     public int MethodIndex { get => _methodIndex; set => Set(ref _methodIndex, value); }
+    public string FajrAngle { get => _fajrAngle; set => Set(ref _fajrAngle, value); }
+    public string IshaAngle { get => _ishaAngle; set => Set(ref _ishaAngle, value); }
+    public int HighLatIndex { get => _highLatIndex; set => Set(ref _highLatIndex, value); }
+    public string SuhurOffset { get => _suhurOffset; set => Set(ref _suhurOffset, value); }
+    public string IftarOffset { get => _iftarOffset; set => Set(ref _iftarOffset, value); }
+    public int TimeFmtIndex { get => _timeFmtIndex; set => Set(ref _timeFmtIndex, value); }
     public string RamadanDuaArabic { get => _ramadanDuaArabic; set => Set(ref _ramadanDuaArabic, value); }
     public string RamadanDuaTrans { get => _ramadanDuaTrans; set => Set(ref _ramadanDuaTrans, value); }
     public string RamadanDuaTranslation { get => _ramadanDuaTranslation; set => Set(ref _ramadanDuaTranslation, value); }
@@ -168,7 +180,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
             ? $"{(int)diff.TotalHours:D2}:{diff.Minutes:D2}:{diff.Seconds:D2}"
             : "00:00:00";
 
-        string timeFmt = "hh:mm tt";
+        string timeFmt = TimeFmtIndex == 1 ? "HH:mm" : "hh:mm tt";
         string nextStr = $"\u25b8 {next} at {nextT.ToString(timeFmt)}";
 
         CurrentPrayer = cur;
@@ -230,7 +242,19 @@ public class MainWindowViewModel : INotifyPropertyChanged
             string[] methods = { "KARACHI", "MWL", "MAKKAH", "ISNA", "EGYPT", "SHIA", "TEHRAN", "GULF", "KUWAIT", "QATAR", "SINGAPORE", "FRANCE", "TURKEY", "RUSSIA", "MOONSIGHTING", "DUBAI", "JAKIM", "TUNISIA", "MOROCCO", "BRAZIL", "PORTUGAL", "JORDAN" };
             string method = methods.Length > MethodIndex ? methods[MethodIndex] : "MWL";
 
-            _prayerTimes = PrayerService.GetPrayerTimesAsync(lat, lon, method, 1, useApi: false).Result;
+            double.TryParse(FajrAngle, out double fa);
+            double.TryParse(IshaAngle, out double ia);
+            double.TryParse(SuhurOffset, out double soff);
+            double.TryParse(IftarOffset, out double ioff);
+
+            _prayerTimes = PrayerService.GetPrayerTimesAsync(
+                lat, lon, method, 1,
+                fajrAngle: fa > 0 ? fa : 18,
+                ishaAngle: ia > 0 ? ia : 17.5,
+                highLatRule: HighLatIndex,
+                suhurOffset: soff,
+                iftarOffset: ioff,
+                useApi: false).Result;
         }
     }
 

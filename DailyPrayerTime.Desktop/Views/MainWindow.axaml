@@ -324,6 +324,32 @@
                             </StackPanel>
                         </Border>
 
+                        <TextBlock Text="Advanced" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Fajr Angle" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="FajrAngleInput" Text="{Binding FajrAngle}" Watermark="18.0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="Isha Angle" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="IshaAngleInput" Text="{Binding IshaAngle}" Watermark="17.5" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="High Latitude Rule" FontSize="10" Foreground="#9CA3AF"/>
+                                <ComboBox x:Name="HighLatInput" SelectedIndex="{Binding HighLatIndex}" Foreground="White" Background="#1AFFFFFF">
+                                    <ComboBoxItem Content="None"/>
+                                    <ComboBoxItem Content="Middle of Night"/>
+                                    <ComboBoxItem Content="Seventh of Night"/>
+                                    <ComboBoxItem Content="Twilight Angle"/>
+                                </ComboBox>
+                                <TextBlock Text="Suhur Offset (min)" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="SuhurOffsetInput" Text="{Binding SuhurOffset}" Watermark="0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="Iftar Offset (min)" FontSize="10" Foreground="#9CA3AF"/>
+                                <TextBox x:Name="IftarOffsetInput" Text="{Binding IftarOffset}" Watermark="0" Foreground="White" Background="#1AFFFFFF"/>
+                                <TextBlock Text="Time Format" FontSize="10" Foreground="#9CA3AF"/>
+                                <ComboBox x:Name="TimeFmtInput" SelectedIndex="{Binding TimeFmtIndex}" Foreground="White" Background="#1AFFFFFF">
+                                    <ComboBoxItem Content="12h (AM/PM)"/>
+                                    <ComboBoxItem Content="24h"/>
+                                </ComboBox>
+                            </StackPanel>
+                        </Border>
+
                         <TextBlock Text="Language" Classes="section-title"/>
                         <Border Classes="card">
                             <StackPanel Spacing="6">
