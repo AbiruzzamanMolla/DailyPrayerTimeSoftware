@@ -24,6 +24,11 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private string _qiblaBearingText = "--°";
     private bool _tahajjudActive;
     private string _tahajjudRemaining = "";
+    private bool _showSuhurIftar;
+    private string _suhurTime = "";
+    private string _iftarTime = "";
+    private bool _nafalNoticeVisible;
+    private string _nafalNoticeText = "";
     private double _qiblaAngle;
     private string _qiblaDirection = "";
     private string _qiblaLocation = "";
@@ -54,6 +59,12 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public double QiblaAngle { get => _qiblaAngle; set => Set(ref _qiblaAngle, value); }
     public bool TahajjudActive { get => _tahajjudActive; set { Set(ref _tahajjudActive, value); } }
     public string TahajjudRemaining { get => _tahajjudRemaining; set => Set(ref _tahajjudRemaining, value); }
+    public bool ShowSuhurIftar { get => _showSuhurIftar; set { Set(ref _showSuhurIftar, value); } }
+    public string SuhurTime { get => _suhurTime; set => Set(ref _suhurTime, value); }
+    public string IftarTime { get => _iftarTime; set => Set(ref _iftarTime, value); }
+    public bool NafalNoticeVisible { get => _nafalNoticeVisible; set { Set(ref _nafalNoticeVisible, value); } }
+    public string NafalNoticeText { get => _nafalNoticeText; set => Set(ref _nafalNoticeText, value); }
+    public bool IsFriday => DateTime.Now.DayOfWeek == DayOfWeek.Friday;
     public string QiblaDirection { get => _qiblaDirection; set => Set(ref _qiblaDirection, value); }
     public string QiblaLocation { get => _qiblaLocation; set => Set(ref _qiblaLocation, value); }
     public string CurrentPrayer { get => _currentPrayer; set => Set(ref _currentPrayer, value); }
@@ -186,6 +197,36 @@ public class MainWindowViewModel : INotifyPropertyChanged
         CurrentPrayer = cur;
         Countdown = count;
         NextPrayer = nextStr;
+
+        // Suhur/Iftar display
+        if (_prayerTimes != null)
+        {
+            string fmt = TimeFmtIndex == 1 ? "HH:mm" : "hh:mm tt";
+            SuhurTime = _prayerTimes.Suhur.ToString(fmt);
+            IftarTime = _prayerTimes.Iftar.ToString(fmt);
+            ShowSuhurIftar = true;
+        }
+
+        // Nafal notices (Duha, Awwabin)
+        if (_prayerTimes != null)
+        {
+            var nafalNotice = "";
+            if (now > _prayerTimes.Sunrise.AddMinutes(15) && now < _prayerTimes.Dhuhr.AddMinutes(-5))
+                nafalNotice = "🌅 Salat al-Duha (Ishraq) is active";
+            else if (now > _prayerTimes.Maghrib.AddMinutes(15) && now < _prayerTimes.Isha.AddMinutes(-5))
+                nafalNotice = "🌆 Salat al-Awwabin is active";
+
+            if (!string.IsNullOrEmpty(nafalNotice))
+            {
+                NafalNoticeVisible = true;
+                NafalNoticeText = nafalNotice;
+            }
+            else
+            {
+                NafalNoticeVisible = false;
+                NafalNoticeText = "";
+            }
+        }
 
         // Tahajjud calculation (last third of night)
         if (_prayerTimes != null)
