@@ -22,6 +22,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private static bool _notificationsEnabled = true;
     public static bool NotificationsEnabled { get => _notificationsEnabled; set => _notificationsEnabled = value; }
     private string _qiblaBearingText = "--°";
+    private bool _tahajjudActive;
+    private string _tahajjudRemaining = "";
     private double _qiblaAngle;
     private string _qiblaDirection = "";
     private string _qiblaLocation = "";
@@ -44,6 +46,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public string StatusText { get => _statusText; set => Set(ref _statusText, value); }
     public string QiblaBearingText { get => _qiblaBearingText; set => Set(ref _qiblaBearingText, value); }
     public double QiblaAngle { get => _qiblaAngle; set => Set(ref _qiblaAngle, value); }
+    public bool TahajjudActive { get => _tahajjudActive; set { Set(ref _tahajjudActive, value); } }
+    public string TahajjudRemaining { get => _tahajjudRemaining; set => Set(ref _tahajjudRemaining, value); }
     public string QiblaDirection { get => _qiblaDirection; set => Set(ref _qiblaDirection, value); }
     public string QiblaLocation { get => _qiblaLocation; set => Set(ref _qiblaLocation, value); }
     public string CurrentPrayer { get => _currentPrayer; set => Set(ref _currentPrayer, value); }
@@ -171,6 +175,36 @@ public class MainWindowViewModel : INotifyPropertyChanged
         Countdown = count;
         NextPrayer = nextStr;
 
+        // Tahajjud calculation (last third of night)
+        if (_prayerTimes != null)
+        {
+            var ishaTime = _prayerTimes.Isha;
+            var fajrTime = _prayerTimes.Fajr;
+            if (now > ishaTime || now < fajrTime)
+            {
+                DateTime nightStart = now > ishaTime ? ishaTime : ishaTime.AddDays(-1);
+                DateTime nightEnd = now < fajrTime ? fajrTime : fajrTime.AddDays(1);
+                double nightDur = (nightEnd - nightStart).TotalHours;
+                DateTime lastThirdStart = nightEnd.AddHours(-nightDur / 3);
+                if (now >= lastThirdStart && now < nightEnd)
+                {
+                    TahajjudActive = true;
+                    TimeSpan taRem = nightEnd - now;
+                    TahajjudRemaining = $"Last third: ends in {(int)taRem.TotalHours:D2}:{taRem.Minutes:D2}:{taRem.Seconds:D2}";
+                }
+                else
+                {
+                    TahajjudActive = false;
+                    TahajjudRemaining = "";
+                }
+            }
+            else
+            {
+                TahajjudActive = false;
+                TahajjudRemaining = "";
+            }
+        }
+
         if (cur != _lastNotifiedPrayer && cur != "Sunrise" && cur != "--" && NotificationsEnabled)
         {
             _lastNotifiedPrayer = cur;
@@ -193,7 +227,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
             QiblaAngle = bearing;
             QiblaDirection = $"Direction: {GetCompassDirection(bearing)}";
 
-            string[] methods = { "KARACHI", "MWL", "MAKKAH", "ISNA", "EGYPT" };
+            string[] methods = { "KARACHI", "MWL", "MAKKAH", "ISNA", "EGYPT", "SHIA", "TEHRAN", "GULF", "KUWAIT", "QATAR", "SINGAPORE", "FRANCE", "TURKEY", "RUSSIA", "MOONSIGHTING", "DUBAI", "JAKIM", "TUNISIA", "MOROCCO", "BRAZIL", "PORTUGAL", "JORDAN" };
             string method = methods.Length > MethodIndex ? methods[MethodIndex] : "MWL";
 
             _prayerTimes = PrayerService.GetPrayerTimesAsync(lat, lon, method, 1, useApi: false).Result;

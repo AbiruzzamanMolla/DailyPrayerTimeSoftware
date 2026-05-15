@@ -50,6 +50,14 @@
                             </Grid>
                         </Border>
 
+                        <!-- Tahajjud -->
+                        <Border Classes="card" Margin="0,8,0,0" Padding="12,10" IsVisible="{Binding TahajjudActive}" Background="#1A111111">
+                            <StackPanel>
+                                <TextBlock Text="✨ Tahajjud time is active" FontSize="11" FontWeight="Bold" Foreground="#FBBF24" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                                <TextBlock Text="{Binding TahajjudRemaining}" FontSize="10" Foreground="White" Opacity="0.7" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
                         <!-- Prohibited Times -->
                         <Border Classes="card" Margin="0,8,0,0" Padding="12,10" IsVisible="False" x:Name="ProhibitedCard">
                             <StackPanel>
@@ -292,6 +300,23 @@
                                     <ComboBoxItem Content="Makkah" Tag="MAKKAH"/>
                                     <ComboBoxItem Content="ISNA" Tag="ISNA"/>
                                     <ComboBoxItem Content="Egypt" Tag="EGYPT"/>
+                                    <ComboBoxItem Content="Shia" Tag="SHIA"/>
+                                    <ComboBoxItem Content="Tehran" Tag="TEHRAN"/>
+                                    <ComboBoxItem Content="Gulf" Tag="GULF"/>
+                                    <ComboBoxItem Content="Kuwait" Tag="KUWAIT"/>
+                                    <ComboBoxItem Content="Qatar" Tag="QATAR"/>
+                                    <ComboBoxItem Content="Singapore" Tag="SINGAPORE"/>
+                                    <ComboBoxItem Content="France" Tag="FRANCE"/>
+                                    <ComboBoxItem Content="Turkey" Tag="TURKEY"/>
+                                    <ComboBoxItem Content="Russia" Tag="RUSSIA"/>
+                                    <ComboBoxItem Content="Moonsighting" Tag="MOONSIGHTING"/>
+                                    <ComboBoxItem Content="Dubai" Tag="DUBAI"/>
+                                    <ComboBoxItem Content="JAKIM" Tag="JAKIM"/>
+                                    <ComboBoxItem Content="Tunisia" Tag="TUNISIA"/>
+                                    <ComboBoxItem Content="Morocco" Tag="MOROCCO"/>
+                                    <ComboBoxItem Content="Brazil" Tag="BRAZIL"/>
+                                    <ComboBoxItem Content="Portugal" Tag="PORTUGAL"/>
+                                    <ComboBoxItem Content="Jordan" Tag="JORDAN"/>
                                 </ComboBox>
                                 <Border Background="#10B981" CornerRadius="6" Padding="12,8" Cursor="Hand" PointerPressed="ApplySettings" HorizontalAlignment="Right">
                                     <TextBlock Text="Apply" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
