@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DailyPrayerTime.Desktop/DailyPrayerTime.Desktop.csproj" />
+  <Project Path="DailyPrayerTime.Shared/DailyPrayerTime.Shared.csproj" />
+</Solution>
