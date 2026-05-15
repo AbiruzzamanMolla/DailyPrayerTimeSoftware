@@ -1,0 +1,27 @@
+<Styles xmlns="https://github.com/avaloniaui"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="#15FFFFFF" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="BorderBrush" Value="#2AFFFFFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <Style Selector="TextBlock.section-title">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Margin" Value="0,0,0,12" />
+    </Style>
+
+    <Style Selector="TabItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#9CA3AF" />
+    </Style>
+
+    <Style Selector="TabItem:selected">
+        <Setter Property="Foreground" Value="#10B981" />
+    </Style>
+</Styles>

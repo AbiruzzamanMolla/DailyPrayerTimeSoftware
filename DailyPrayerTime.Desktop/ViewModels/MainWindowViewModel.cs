@@ -13,50 +13,55 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
     private Timer? _timer;
     private CombinedPrayerTimes? _prayerTimes;
+    private int _tasbihCount;
 
     private string _statusText = "Initializing...";
     private string _qiblaBearingText = "--°";
+    private double _qiblaAngle;
     private string _qiblaDirection = "";
     private string _qiblaLocation = "";
     private string _currentPrayer = "--";
     private string _countdown = "--:--:--";
     private string _nextPrayer = "Loading...";
-    private string _tCount = "0";
-    private string _tPhrase = "Subhaanallaah";
+    private string _tasbihDisplay = "Subhaanallaah: 0";
 
     public string StatusText { get => _statusText; set => Set(ref _statusText, value); }
     public string QiblaBearingText { get => _qiblaBearingText; set => Set(ref _qiblaBearingText, value); }
+    public double QiblaAngle { get => _qiblaAngle; set => Set(ref _qiblaAngle, value); }
     public string QiblaDirection { get => _qiblaDirection; set => Set(ref _qiblaDirection, value); }
     public string QiblaLocation { get => _qiblaLocation; set => Set(ref _qiblaLocation, value); }
     public string CurrentPrayer { get => _currentPrayer; set => Set(ref _currentPrayer, value); }
     public string Countdown { get => _countdown; set => Set(ref _countdown, value); }
     public string NextPrayer { get => _nextPrayer; set => Set(ref _nextPrayer, value); }
-    public string TCount { get => _tCount; set => Set(ref _tCount, value); }
-    public string TPhrase { get => _tPhrase; set => Set(ref _tPhrase, value); }
+    public string TasbihDisplay { get => _tasbihDisplay; set => Set(ref _tasbihDisplay, value); }
+    public int TasbihCount { get => _tasbihCount; set { _tasbihCount = value; OnPropertyChanged(); UpdateTasbihDisplay(); } }
 
     public MainWindowViewModel()
     {
-        double bearing = QiblaCalculator.CalculateDirection(23.8103, 90.4125);
+        double lat = 23.8103, lon = 90.4125;
+        double bearing = QiblaCalculator.CalculateDirection(lat, lon);
         QiblaBearingText = $"{bearing:F1}°";
+        QiblaAngle = bearing;
         QiblaDirection = $"Direction: {GetCompassDirection(bearing)}";
         QiblaLocation = "From Dhaka, Bangladesh";
+        StatusText = "Avalonia Cross-Platform Build";
+
+        _ = InitPrayerTimes();
     }
 
-    public async Task InitializeAsync()
+    private async Task InitPrayerTimes()
     {
         try
         {
             _prayerTimes = await PrayerService.GetPrayerTimesAsync(
-                23.8103, 90.4125, "KARACHI", 1,
-                useApi: false);
+                23.8103, 90.4125, "KARACHI", 1, useApi: false);
 
             _timer = new Timer(1000);
-            _timer.Elapsed += (s, e) => UpdateTick();
+            _timer.Elapsed += (s, e) => Avalonia.Threading.Dispatcher.UIThread.Post(Tick);
             _timer.AutoReset = true;
             _timer.Start();
-
-            UpdateTick();
-            StatusText = "Running on Avalonia (Linux/macOS) ✓";
+            Tick();
+            StatusText = "Running on Avalonia ✓";
         }
         catch (Exception ex)
         {
@@ -64,7 +69,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         }
     }
 
-    private void UpdateTick()
+    private void Tick()
     {
         if (_prayerTimes == null) return;
 
@@ -79,11 +84,16 @@ public class MainWindowViewModel : INotifyPropertyChanged
             : "00:00:00";
 
         string timeFmt = "hh:mm tt";
-        string nextStr = $"{next} {nextT.ToString(timeFmt)}";
+        string nextStr = $"\u25b8 {next} at {nextT.ToString(timeFmt)}";
 
         CurrentPrayer = cur;
         Countdown = count;
         NextPrayer = nextStr;
+    }
+
+    private void UpdateTasbihDisplay()
+    {
+        TasbihDisplay = $"Subhaanallaah: {TasbihCount}";
     }
 
     private static string GetCompassDirection(double bearing)

@@ -22,12 +22,15 @@ public partial class App : Application
 
         TasbihService.Instance.BasePath = appData;
         PrayerService.CacheBasePath = appData;
+        TrackerService.Instance.BasePath = appData;
+        RamadanService.Instance.BasePath = appData;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var vm = new MainWindowViewModel();
-            desktop.MainWindow = new MainWindow { DataContext = vm };
-            _ = vm.InitializeAsync();
+            desktop.MainWindow = new MainWindow
+            {
+                DataContext = new MainWindowViewModel(),
+            };
         }
 
         base.OnFrameworkInitializationCompleted();
