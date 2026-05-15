@@ -257,6 +257,26 @@ public partial class MainWindow : Window
                 foreach (var entry in prayer) { total++; if (entry.IsChecked) done++; }
         }
         WeekSummaryText.Text = total > 0 ? $"{done}/{total} deeds completed this week ({done * 100 / total}%)" : "No data this week";
+        TrackMonthBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+    }
+
+    private void TrackShowMonth(object? sender, PointerPressedEventArgs e)
+    {
+        TrackDayPanel.IsVisible = false;
+        TrackWeekPanel.IsVisible = false;
+        TrackMonthPanel.IsVisible = true;
+        TrackDayBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+        TrackWeekBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+        TrackMonthBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+
+        int total = 0, done = 0;
+        for (int i = 0; i < 30; i++)
+        {
+            var day = TrackerService.Instance.LoadDay(System.DateTime.Today.AddDays(-i));
+            foreach (var prayer in day.Prayers.Values)
+                foreach (var entry in prayer) { total++; if (entry.IsChecked) done++; }
+        }
+        MonthSummaryText.Text = total > 0 ? $"{done}/{total} deeds in last 30 days ({done * 100 / total}%)" : "No data this month";
     }
 
     private void ToggleNotify(object? sender, PointerPressedEventArgs e)

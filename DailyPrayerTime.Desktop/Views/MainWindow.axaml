@@ -208,6 +208,9 @@
                                     <Border x:Name="TrackWeekBtn" Background="#1AFFFFFF" CornerRadius="6" Padding="12,5" Cursor="Hand" PointerPressed="TrackShowWeek">
                                         <TextBlock Text="Week" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
                                     </Border>
+                                    <Border x:Name="TrackMonthBtn" Background="#1AFFFFFF" CornerRadius="6" Padding="12,5" Cursor="Hand" PointerPressed="TrackShowMonth">
+                                        <TextBlock Text="Month" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
+                                    </Border>
                                 </StackPanel>
                                 <StackPanel x:Name="TrackDayPanel">
                                     <ItemsControl x:Name="TrackPrayerList">
@@ -233,6 +236,9 @@
                                 </StackPanel>
                                 <StackPanel x:Name="TrackWeekPanel" IsVisible="False">
                                     <TextBlock x:Name="WeekSummaryText" Text="Loading..." Foreground="White" FontSize="12" Opacity="0.7"/>
+                                </StackPanel>
+                                <StackPanel x:Name="TrackMonthPanel" IsVisible="False">
+                                    <TextBlock x:Name="MonthSummaryText" Text="Loading..." Foreground="White" FontSize="12" Opacity="0.7"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
