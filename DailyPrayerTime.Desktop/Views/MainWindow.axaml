@@ -49,6 +49,14 @@
                                 </StackPanel>
                             </Grid>
                         </Border>
+
+                        <!-- Prohibited Times -->
+                        <Border Classes="card" Margin="0,8,0,0" Padding="12,10" IsVisible="False" x:Name="ProhibitedCard">
+                            <StackPanel>
+                                <TextBlock Text="⚠ Prohibited Prayer Time" FontSize="11" FontWeight="Bold" Foreground="#EF4444" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                                <TextBlock x:Name="ProhibitedDescText" Text="" FontSize="10" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -287,6 +295,20 @@
                                 <Border Background="#10B981" CornerRadius="6" Padding="12,8" Cursor="Hand" PointerPressed="ApplySettings" HorizontalAlignment="Right">
                                     <TextBlock Text="Apply" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
                                 </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Language" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,*,*">
+                                    <Border x:Name="LangEnBtn" Background="#10B981" CornerRadius="6" Padding="8,5" Cursor="Hand" PointerPressed="SetLangEn" Margin="0,0,3,0">
+                                        <TextBlock Text="English" Foreground="White" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <Border Grid.Column="1" x:Name="LangBnBtn" Background="#1AFFFFFF" CornerRadius="6" Padding="8,5" Cursor="Hand" PointerPressed="SetLangBn" Margin="3,0,0,0">
+                                        <TextBlock Text="বাংলা" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </Grid>
                             </StackPanel>
                         </Border>
 

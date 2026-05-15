@@ -10,6 +10,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using DailyPrayerTime.Desktop.Services;
 using DailyPrayerTime.Shared.Models;
 using DailyPrayerTime.Shared.Services;
 using Newtonsoft.Json;
@@ -55,6 +56,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Localization.SetLanguage("en");
+        Localization.LanguageChanged += () => UpdateLangUI();
         BuildPhraseChips();
         SelectPhrase(0);
         UpdateTasbihUI();
@@ -62,6 +65,11 @@ public partial class MainWindow : Window
         DuasList.ItemsSource = _duaCards;
         LoadDuas();
         LoadTracker();
+    }
+
+    private void UpdateLangUI()
+    {
+        Title = Localization.Get("AppTitle");
     }
 
     private void BuildPhraseChips()
@@ -109,12 +117,7 @@ public partial class MainWindow : Window
         TbTotal.Text = _counts.Values.Sum().ToString();
     }
 
-    private string GetLabel(string key) => key switch
-    {
-        "SubhanAllah" => "Glory be to Allah", "Alhamdulillah" => "Praise be to Allah",
-        "AllahuAkbar" => "Allah is the Greatest", "LaIlahaIllallah" => "There is no god but Allah",
-        "Astaghfirullah" => "I seek forgiveness from Allah", _ => key
-    };
+    private string GetLabel(string key) => Localization.Get(key);
 
     private void LoadCounts()
     {
@@ -205,18 +208,20 @@ public partial class MainWindow : Window
 
     private void UpdateSawmUI()
     {
+        string text;
         if (_sawmTracked)
         {
             SawmCheck.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
             SawmCheck.BorderBrush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
-            SawmLabel.Text = "Fasting today ✓";
+            text = Localization.Get("FastingToday");
         }
         else
         {
             SawmCheck.Background = Avalonia.Media.Brushes.Transparent;
             SawmCheck.BorderBrush = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(175, 255, 255, 255));
-            SawmLabel.Text = "Mark today as fasting";
+            text = Localization.Get("MarkFasting");
         }
+        SawmLabel.Text = text;
     }
 
     private void TrackShowDay(object? sender, PointerPressedEventArgs e)
@@ -256,7 +261,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            NotifyToggle.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb((byte)42, (byte)255, (byte)255, (byte)255));
+            NotifyToggle.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(42, 255, 255, 255));
             NotifyKnob.Fill = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromRgb((byte)156, (byte)163, (byte)175));
             NotifyKnob.Margin = new Avalonia.Thickness(3, 0, 0, 0);
         }
@@ -279,14 +284,11 @@ public partial class MainWindow : Window
             var path = file.TryGetLocalPath();
             if (string.IsNullOrEmpty(path)) return;
 
-            var trackerDir = TrackerService.Instance.BasePath;
-            if (string.IsNullOrEmpty(trackerDir)) return;
-            trackerDir = System.IO.Path.Combine(trackerDir, "tracker");
+            var trackerDir = System.IO.Path.Combine(TrackerService.Instance.BasePath, "tracker");
             if (!System.IO.Directory.Exists(trackerDir)) return;
-
             System.IO.Compression.ZipFile.CreateFromDirectory(trackerDir, path);
         }
-        catch (Exception ex) { /* ignore */ }
+        catch { }
     }
 
     private async void RestoreData(object? sender, PointerPressedEventArgs e)
@@ -309,7 +311,7 @@ public partial class MainWindow : Window
                 System.IO.Directory.Delete(trackerDir, true);
             System.IO.Compression.ZipFile.ExtractToDirectory(path, System.IO.Path.GetDirectoryName(trackerDir) ?? ".");
         }
-        catch { /* ignore */ }
+        catch { }
     }
 
     public static string AccentColor { get; set; } = "#10B981";
@@ -320,4 +322,17 @@ public partial class MainWindow : Window
             AccentColor = colorHex;
     }
 
+    private void SetLangEn(object? sender, PointerPressedEventArgs e)
+    {
+        Localization.SetLanguage("en");
+        LangEnBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+        LangBnBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+    }
+
+    private void SetLangBn(object? sender, PointerPressedEventArgs e)
+    {
+        Localization.SetLanguage("bn");
+        LangEnBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(26, 255, 255, 255));
+        LangBnBtn.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+    }
 }
