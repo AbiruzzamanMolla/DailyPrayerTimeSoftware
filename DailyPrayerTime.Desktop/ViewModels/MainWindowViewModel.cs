@@ -19,6 +19,8 @@ public class MainWindowViewModel : INotifyPropertyChanged
 
     private string _lastNotifiedPrayer = "";
     private string _statusText = "Initializing...";
+    private static bool _notificationsEnabled = true;
+    public static bool NotificationsEnabled { get => _notificationsEnabled; set => _notificationsEnabled = value; }
     private string _qiblaBearingText = "--°";
     private double _qiblaAngle;
     private string _qiblaDirection = "";
@@ -169,7 +171,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
         Countdown = count;
         NextPrayer = nextStr;
 
-        if (cur != _lastNotifiedPrayer && cur != "Sunrise" && cur != "--")
+        if (cur != _lastNotifiedPrayer && cur != "Sunrise" && cur != "--" && NotificationsEnabled)
         {
             _lastNotifiedPrayer = cur;
             try { LinuxNotificationService.Show("Prayer Time", $"{cur} has begun."); }

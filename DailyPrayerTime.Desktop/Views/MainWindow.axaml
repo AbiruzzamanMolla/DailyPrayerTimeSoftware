@@ -269,7 +269,7 @@
             <TabItem Header="⚙ Settings">
                 <ScrollViewer>
                     <StackPanel Margin="12" Spacing="8">
-                        <TextBlock Text="Location" Classes="section-title"/>
+                        <TextBlock Text="Location &amp; Calculation" Classes="section-title"/>
                         <Border Classes="card">
                             <StackPanel Spacing="6">
                                 <TextBlock Text="Latitude" FontSize="10" Foreground="#9CA3AF"/>
@@ -287,6 +287,27 @@
                                 <Border Background="#10B981" CornerRadius="6" Padding="12,8" Cursor="Hand" PointerPressed="ApplySettings" HorizontalAlignment="Right">
                                     <TextBlock Text="Apply" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
                                 </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Notifications" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Text="Prayer notifications via system" FontSize="11" Foreground="White" VerticalAlignment="Center"/>
+                                    <Border x:Name="NotifyToggle" Width="40" Height="22" CornerRadius="11" Background="#2AFFFFFF" Cursor="Hand" PointerPressed="ToggleNotify">
+                                        <Ellipse x:Name="NotifyKnob" Width="16" Height="16" Fill="#9CA3AF" HorizontalAlignment="Left" Margin="3,0,0,0"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="About" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Daily Prayer Timer" FontSize="12" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text="Avalonia Cross-Platform Build" FontSize="10" Foreground="#10B981"/>
+                                <TextBlock Text=".NET 8 + Avalonia UI 12.0" FontSize="10" Foreground="#9CA3AF"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

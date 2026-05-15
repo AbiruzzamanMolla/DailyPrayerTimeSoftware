@@ -46,6 +46,7 @@ public partial class MainWindow : Window
     private ObservableCollection<DuaCardItem> _duaCards = new();
     private DailyDeeds _todayDeeds = new();
     private bool _sawmTracked;
+    private bool _notificationsEnabled = true;
 
     public MainWindow()
     {
@@ -238,4 +239,24 @@ public partial class MainWindow : Window
         }
         WeekSummaryText.Text = total > 0 ? $"{done}/{total} deeds completed this week ({done * 100 / total}%)" : "No data this week";
     }
+
+    private void ToggleNotify(object? sender, PointerPressedEventArgs e)
+    {
+        _notificationsEnabled = !_notificationsEnabled;
+        ViewModels.MainWindowViewModel.NotificationsEnabled = _notificationsEnabled;
+        if (_notificationsEnabled)
+        {
+            NotifyToggle.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb(255, 16, 185, 129));
+            NotifyKnob.Fill = Avalonia.Media.Brushes.White;
+            NotifyKnob.Margin = new Avalonia.Thickness(21, 0, 0, 0);
+        }
+        else
+        {
+            NotifyToggle.Background = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromArgb((byte)42, (byte)255, (byte)255, (byte)255));
+            NotifyKnob.Fill = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.FromRgb((byte)156, (byte)163, (byte)175));
+            NotifyKnob.Margin = new Avalonia.Thickness(3, 0, 0, 0);
+        }
+    }
+
+    public bool NotificationsEnabled => _notificationsEnabled;
 }
