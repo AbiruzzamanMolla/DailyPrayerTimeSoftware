@@ -1,12 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
+using DailyPrayerTime.Desktop.Services;
 using DailyPrayerTime.Shared.Services;
-using Newtonsoft.Json;
 
 namespace DailyPrayerTime.Desktop.ViewModels;
 
@@ -19,6 +17,7 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private RamadanState? _ramadanState;
     private int _ramadanDay = -1;
 
+    private string _lastNotifiedPrayer = "";
     private string _statusText = "Initializing...";
     private string _qiblaBearingText = "--°";
     private double _qiblaAngle;
@@ -169,6 +168,13 @@ public class MainWindowViewModel : INotifyPropertyChanged
         CurrentPrayer = cur;
         Countdown = count;
         NextPrayer = nextStr;
+
+        if (cur != _lastNotifiedPrayer && cur != "Sunrise" && cur != "--")
+        {
+            _lastNotifiedPrayer = cur;
+            try { LinuxNotificationService.Show("Prayer Time", $"{cur} has begun."); }
+            catch { }
+        }
 
         var (hYear, hMonth, hDay) = HijriDateHelper.ToHijri(now);
         string[] hMonths = { "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah" };

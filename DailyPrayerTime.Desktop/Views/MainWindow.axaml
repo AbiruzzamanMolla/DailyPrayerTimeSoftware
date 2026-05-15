@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:DailyPrayerTime.Desktop.ViewModels"
+        xmlns:local="using:DailyPrayerTime.Desktop.Views"
         x:Class="DailyPrayerTime.Desktop.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Daily Prayer Timer"
@@ -143,6 +144,43 @@
                                 <TextBlock x:Name="EidCountdownText" Text="{Binding EidCountdown}" FontSize="11" Foreground="#9CA3AF" Margin="0,4,0,0"/>
                             </StackPanel>
                         </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <!-- DUAS -->
+            <TabItem Header="📖 Duas">
+                <ScrollViewer>
+                    <StackPanel Margin="12">
+                        <TextBlock Text="📖 Duas &amp; Supplications" Classes="section-title"/>
+                        <ItemsControl x:Name="DuasList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="local:DuaCardItem">
+                                    <Border Classes="card" Margin="0,0,0,6" Padding="0" Cursor="Hand" PointerPressed="ToggleDuaCard">
+                                        <StackPanel>
+                                            <Grid Margin="12,10,12,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Name}" Foreground="#FBBF24" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Arrow}" Foreground="White" Opacity="0.5" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                            </Grid>
+                                            <Border Background="#0A111111" Margin="12,0,12,10" IsVisible="{Binding ContentVisible}">
+                                                <StackPanel>
+                                                    <Border Background="#15111111" CornerRadius="6" Padding="10,8">
+                                                        <TextBlock Text="{Binding Arabic}" Foreground="White" FontSize="14" FontFamily="Traditional Arabic, Segoe UI" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center"/>
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Transliteration}" Foreground="White" Opacity="0.7" FontSize="10" FontStyle="Italic" TextWrapping="Wrap" Margin="0,6,0,3"/>
+                                                    <TextBlock Text="{Binding Translation}" Foreground="White" Opacity="0.5" FontSize="10" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding Reference}" Foreground="#9CA3AF" Opacity="0.4" FontSize="8" Margin="0,2,0,0" TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
