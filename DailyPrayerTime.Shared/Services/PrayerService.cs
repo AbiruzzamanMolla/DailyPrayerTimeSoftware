@@ -65,6 +65,31 @@ namespace DailyPrayerTime.Shared.Services
             if (now < Isha) return Isha;
             return Fajr.AddDays(1);
         }
+
+        public DateTime GetPrayerByName(string name) => name switch
+        {
+            "Fajr" => Fajr, "Sunrise" => Sunrise, "Dhuhr" => Dhuhr,
+            "Asr" => Asr, "Maghrib" => Maghrib, "Isha" => Isha, _ => DateTime.MinValue
+        };
+
+        public DateTime GetPreviousPrayerTime(DateTime now)
+        {
+            if (now >= Isha) return Isha;
+            if (now >= Maghrib) return Maghrib;
+            if (now >= Asr) return Asr;
+            if (now >= Dhuhr) return Dhuhr;
+            if (now >= Sunrise) return Sunrise;
+            if (now >= Fajr) return Fajr;
+            return Isha.AddDays(-1);
+        }
+
+        public string GetPrayerNameAt(DateTime time)
+        {
+            if (time == Fajr) return "Fajr"; if (time == Sunrise) return "Sunrise";
+            if (time == Dhuhr) return "Dhuhr"; if (time == Asr) return "Asr";
+            if (time == Maghrib) return "Maghrib"; if (time == Isha) return "Isha";
+            return "";
+        }
     }
 
     public static class PrayerService

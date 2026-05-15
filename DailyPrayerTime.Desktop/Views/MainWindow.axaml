@@ -34,6 +34,12 @@
                                 <TextBlock Text="{Binding CurrentPrayer}" FontSize="18" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{Binding Countdown}" FontSize="38" FontWeight="Bold" Foreground="#10B981" FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,6,0,0"/>
                                 <TextBlock Text="{Binding NextPrayer}" FontSize="12" Foreground="#9CA3AF" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                                <ProgressBar Value="{Binding PrayerProgress}" Maximum="1" Height="4" Foreground="#10B981" Background="#1AFFFFFF" Margin="0,8,0,0"/>
+                                <Grid Margin="0,4,0,0">
+                                    <TextBlock Text="{Binding PrevPrayerName}" FontSize="9" Foreground="#9CA3AF" Opacity="0.6"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding PrayerProgressPercent}" FontSize="9" Foreground="#9CA3AF" Opacity="0.6" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding CurrentPrayer}" FontSize="9" Foreground="#9CA3AF" Opacity="0.6" HorizontalAlignment="Right"/>
+                                </Grid>
                             </StackPanel>
                         </Border>
 
@@ -55,11 +61,13 @@
                             <Grid ColumnDefinitions="*,*">
                                 <StackPanel HorizontalAlignment="Center">
                                     <TextBlock Text="Suhur (ends)" FontSize="9" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="SuhurTimeText" Text="{Binding SuhurTime}" FontSize="14" FontWeight="Bold" Foreground="#60A5FA" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SuhurTime}" FontSize="14" FontWeight="Bold" Foreground="#60A5FA" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SuhurStatus}" FontSize="9" Foreground="#60A5FA" Opacity="0.7" HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1" HorizontalAlignment="Center">
                                     <TextBlock Text="Iftar (begins)" FontSize="9" Foreground="#9CA3AF" HorizontalAlignment="Center"/>
-                                    <TextBlock x:Name="IftarTimeText" Text="{Binding IftarTime}" FontSize="14" FontWeight="Bold" Foreground="#F87171" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding IftarTime}" FontSize="14" FontWeight="Bold" Foreground="#F87171" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding IftarStatus}" FontSize="9" Foreground="#F87171" Opacity="0.7" HorizontalAlignment="Center"/>
                                 </StackPanel>
                             </Grid>
                         </Border>

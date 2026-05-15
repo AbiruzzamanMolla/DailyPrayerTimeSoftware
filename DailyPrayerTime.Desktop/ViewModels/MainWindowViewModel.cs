@@ -27,6 +27,11 @@ public class MainWindowViewModel : INotifyPropertyChanged
     private bool _showSuhurIftar;
     private string _suhurTime = "";
     private string _iftarTime = "";
+    private string _suhurStatus = "";
+    private string _iftarStatus = "";
+    private double _prayerProgress;
+    private string _prevPrayerName = "";
+    private string _prevPrayerTime = "";
     private bool _nafalNoticeVisible;
     private string _nafalNoticeText = "";
     private double _qiblaAngle;
@@ -62,6 +67,12 @@ public class MainWindowViewModel : INotifyPropertyChanged
     public bool ShowSuhurIftar { get => _showSuhurIftar; set { Set(ref _showSuhurIftar, value); } }
     public string SuhurTime { get => _suhurTime; set => Set(ref _suhurTime, value); }
     public string IftarTime { get => _iftarTime; set => Set(ref _iftarTime, value); }
+    public string SuhurStatus { get => _suhurStatus; set => Set(ref _suhurStatus, value); }
+    public string IftarStatus { get => _iftarStatus; set => Set(ref _iftarStatus, value); }
+    public double PrayerProgress { get => _prayerProgress; set { Set(ref _prayerProgress, value); OnPropertyChanged(nameof(PrayerProgressPercent)); } }
+    public string PrayerProgressPercent => $"{PrayerProgress * 100:F0}%";
+    public string PrevPrayerName { get => _prevPrayerName; set => Set(ref _prevPrayerName, value); }
+    public string PrevPrayerTime { get => _prevPrayerTime; set => Set(ref _prevPrayerTime, value); }
     public bool NafalNoticeVisible { get => _nafalNoticeVisible; set { Set(ref _nafalNoticeVisible, value); } }
     public string NafalNoticeText { get => _nafalNoticeText; set => Set(ref _nafalNoticeText, value); }
     public bool IsFriday => DateTime.Now.DayOfWeek == DayOfWeek.Friday;
@@ -198,13 +209,48 @@ public class MainWindowViewModel : INotifyPropertyChanged
         Countdown = count;
         NextPrayer = nextStr;
 
-        // Suhur/Iftar display
+        // Prayer progress bar
+        if (_prayerTimes != null && cur != "--" && cur != "Sunrise")
+        {
+            var curP = _prayerTimes.GetPrayerByName(cur);
+            var nextP = _prayerTimes.NextPrayerTime(now);
+            var prevP = _prayerTimes.GetPreviousPrayerTime(now);
+            if (curP != DateTime.MinValue && nextP != DateTime.MinValue && (nextP - curP).TotalSeconds > 0)
+            {
+                PrayerProgress = Math.Min(1, Math.Max(0, (now - curP).TotalSeconds / (nextP - curP).TotalSeconds));
+            }
+            if (prevP != DateTime.MinValue)
+            {
+                PrevPrayerName = _prayerTimes.GetPrayerNameAt(prevP);
+                PrevPrayerTime = prevP.ToString(timeFmt);
+            }
+        }
+
+        // Suhur/Iftar display with live countdown
         if (_prayerTimes != null)
         {
             string fmt = TimeFmtIndex == 1 ? "HH:mm" : "hh:mm tt";
             SuhurTime = _prayerTimes.Suhur.ToString(fmt);
             IftarTime = _prayerTimes.Iftar.ToString(fmt);
             ShowSuhurIftar = true;
+
+            if (now < _prayerTimes.Suhur)
+            {
+                var rem = _prayerTimes.Suhur - now;
+                SuhurStatus = $"{(int)rem.TotalHours:D2}:{rem.Minutes:D2}:{rem.Seconds:D2} left";
+                IftarStatus = _prayerTimes.Iftar.ToString(fmt);
+            }
+            else if (now >= _prayerTimes.Suhur && now < _prayerTimes.Iftar)
+            {
+                SuhurStatus = "\u2713 Passed";
+                var rem = _prayerTimes.Iftar - now;
+                IftarStatus = $"{(int)rem.TotalHours:D2}:{rem.Minutes:D2}:{rem.Seconds:D2} left";
+            }
+            else
+            {
+                SuhurStatus = "\u2713 Passed";
+                IftarStatus = "\u2713 Passed";
+            }
         }
 
         // Nafal notices (Duha, Awwabin)
