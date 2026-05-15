@@ -53,6 +53,9 @@ DailyPrayerTime/
 | Tahajjud Display | Last third of night window |
 | Prohibited Times | Sunrise/Zawal/Sunset alerts |
 | Smart Fasting | Monday/Thursday, Ayyam al-Bidh detection |
+| Advanced Settings | Fajr/Isha angles, high latitude rules, offsets |
+| Time Format | 12h or 24h display |
+| Calculation Methods | 22 methods including Shia, Turkey, Russia |
 
 ### Not Ported (Windows-specific or Future) ⏳
 
