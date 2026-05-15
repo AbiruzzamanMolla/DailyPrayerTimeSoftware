@@ -49,3 +49,6 @@ manifests/
 wingetcreate.exe
 *.nupkg
 scoop-bucket/
+# Linux build output
+linux-build/
+DailyPrayerTime.Desktop
