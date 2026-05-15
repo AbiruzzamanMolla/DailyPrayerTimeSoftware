@@ -302,6 +302,36 @@
                             </StackPanel>
                         </Border>
 
+                        <TextBlock Text="Data Backup" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Backup or restore your tracker data" FontSize="10" Foreground="#9CA3AF"/>
+                                <Grid ColumnDefinitions="*,*">
+                                    <Border Margin="0,0,4,0" Background="#10B981" CornerRadius="6" Padding="10,8" Cursor="Hand" PointerPressed="BackupData" HorizontalAlignment="Stretch">
+                                        <TextBlock Text="Backup" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <Border Grid.Column="1" Margin="4,0,0,0" Background="#2AFFFFFF" CornerRadius="6" Padding="10,8" Cursor="Hand" PointerPressed="RestoreData" HorizontalAlignment="Stretch">
+                                        <TextBlock Text="Restore" Foreground="White" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <TextBlock Text="Theme" Classes="section-title"/>
+                        <Border Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Accent Color" FontSize="10" Foreground="#9CA3AF"/>
+                                <WrapPanel>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#10B981" Cursor="Hand" PointerPressed="SetAccent" Tag="#10B981"/>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#3B82F6" Cursor="Hand" PointerPressed="SetAccent" Tag="#3B82F6"/>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#8B5CF6" Cursor="Hand" PointerPressed="SetAccent" Tag="#8B5CF6"/>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#F59E0B" Cursor="Hand" PointerPressed="SetAccent" Tag="#F59E0B"/>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#EF4444" Cursor="Hand" PointerPressed="SetAccent" Tag="#EF4444"/>
+                                    <Ellipse Margin="0,0,6,6" Width="28" Height="28" Fill="#EC4899" Cursor="Hand" PointerPressed="SetAccent" Tag="#EC4899"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
                         <TextBlock Text="About" Classes="section-title"/>
                         <Border Classes="card">
                             <StackPanel Spacing="4">

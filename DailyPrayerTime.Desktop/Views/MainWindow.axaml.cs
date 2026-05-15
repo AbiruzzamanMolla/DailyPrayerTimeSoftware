@@ -1,11 +1,15 @@
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Platform.Storage;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using DailyPrayerTime.Shared.Models;
 using DailyPrayerTime.Shared.Services;
 using Newtonsoft.Json;
@@ -259,4 +263,61 @@ public partial class MainWindow : Window
     }
 
     public bool NotificationsEnabled => _notificationsEnabled;
+
+    private async void BackupData(object? sender, PointerPressedEventArgs e)
+    {
+        try
+        {
+            var top = TopLevel.GetTopLevel(this);
+            if (top == null) return;
+            var file = await top.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+            {
+                DefaultExtension = "zip",
+                SuggestedFileName = "DailyPrayerTracker_Backup.zip"
+            });
+            if (file == null) return;
+            var path = file.TryGetLocalPath();
+            if (string.IsNullOrEmpty(path)) return;
+
+            var trackerDir = TrackerService.Instance.BasePath;
+            if (string.IsNullOrEmpty(trackerDir)) return;
+            trackerDir = System.IO.Path.Combine(trackerDir, "tracker");
+            if (!System.IO.Directory.Exists(trackerDir)) return;
+
+            System.IO.Compression.ZipFile.CreateFromDirectory(trackerDir, path);
+        }
+        catch (Exception ex) { /* ignore */ }
+    }
+
+    private async void RestoreData(object? sender, PointerPressedEventArgs e)
+    {
+        try
+        {
+            var top = TopLevel.GetTopLevel(this);
+            if (top == null) return;
+            var files = await top.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                AllowMultiple = false,
+                FileTypeFilter = new[] { new FilePickerFileType("ZIP Archive") { Patterns = new[] { "*.zip" } } }
+            });
+            if (files == null || files.Count == 0) return;
+            var path = files[0].TryGetLocalPath();
+            if (string.IsNullOrEmpty(path) || !System.IO.File.Exists(path)) return;
+
+            var trackerDir = System.IO.Path.Combine(TrackerService.Instance.BasePath, "tracker");
+            if (System.IO.Directory.Exists(trackerDir))
+                System.IO.Directory.Delete(trackerDir, true);
+            System.IO.Compression.ZipFile.ExtractToDirectory(path, System.IO.Path.GetDirectoryName(trackerDir) ?? ".");
+        }
+        catch { /* ignore */ }
+    }
+
+    public static string AccentColor { get; set; } = "#10B981";
+
+    private void SetAccent(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Avalonia.Controls.Control c && c.Tag is string colorHex)
+            AccentColor = colorHex;
+    }
+
 }
