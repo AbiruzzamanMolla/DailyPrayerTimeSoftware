@@ -168,7 +168,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.1");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.2");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
@@ -890,8 +890,8 @@ namespace DailyPrayerTime.Native
         {
             if (SettingsButtonsPanel == null) return;
             
-            // Index 4 is "Support & Contact"
-            if (SettingsTabControl.SelectedIndex == 4)
+            // Index 4 is "Support & Contact", index 5 is "Document"
+            if (SettingsTabControl.SelectedIndex == 4 || SettingsTabControl.SelectedIndex == 5)
             {
                 SettingsButtonsPanel.Visibility = Visibility.Collapsed;
             }
