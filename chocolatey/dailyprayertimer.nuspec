@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>dailyprayertimer</id>
-    <version>2.3.3</version>
+    <version>2.4.4</version>
     <title>Daily Prayer Timer</title>
     <authors>Abiruzzaman Molla</authors>
     <owners>Abiruzzaman Molla</owners>
@@ -19,7 +19,7 @@
     <description>
 A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI, deep taskbar integration, and full multi-language support. Keep track of your daily prayers and Sunnah fasts directly from your Windows desktop.
     </description>
-    <releaseNotes>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases</releaseNotes>
+    <releaseNotes>https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/tag/v2.4.4</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
