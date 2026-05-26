@@ -86,7 +86,7 @@ namespace DailyPrayerTime.Native
                 originalSize = _baseSizes[tb];
                 hasFontSize = true;
             }
-            else if (element is Control control)
+            else if (element is System.Windows.Controls.Control control)
             {
                 if (!_baseSizes.ContainsKey(control))
                 {
@@ -110,7 +110,7 @@ namespace DailyPrayerTime.Native
                 double scaled = Math.Round(originalSize * _currentScale, 1);
                 if (element is TextBlock t)
                     t.FontSize = scaled;
-                else if (element is Control c)
+                else if (element is System.Windows.Controls.Control c)
                     c.FontSize = scaled;
                 else if (element is TextElement e)
                     e.FontSize = scaled;
@@ -119,7 +119,7 @@ namespace DailyPrayerTime.Native
 
         private static void Reapply()
         {
-            foreach (var window in Application.Current.Windows)
+            foreach (var window in System.Windows.Application.Current.Windows)
             {
                 if (window is Window w)
                 {

@@ -14,7 +14,9 @@
     <img src="https://img.shields.io/github/v/release/AbiruzzamanMolla/DailyPrayerTimeSoftware" alt="Latest Release">
   </a>
   <img src="https://img.shields.io/github/downloads/AbiruzzamanMolla/DailyPrayerTimeSoftware/total?style=for-the-badge&color=brightgreen" alt="Total Downloads">
-
+  <a href="https://community.chocolatey.org/packages/dailyprayertimer">
+    <img src="https://img.shields.io/chocolatey/v/dailyprayertimer?label=chocolatey&color=blue" alt="Chocolatey Verified">
+  </a>
 </p>
 
 ---
@@ -25,11 +27,9 @@
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
 | **Scoop**                      | `scoop bucket add abiruzzaman https://github.com/AbiruzzamanMolla/scoop-bucket`<br>`scoop install dailyprayertimer`     |
-| **Chocolatey**                 | `choco install dailyprayertimer`                                                                                        |
+| **Chocolatey (Verified)**      | `choco install dailyprayertimer`                                                                                        |
 | **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-
 | **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-
 | **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.4.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
 > **Version 2.4.1** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
