@@ -28,11 +28,11 @@
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
 | **Scoop**                      | `scoop bucket add abiruzzaman https://github.com/AbiruzzamanMolla/scoop-bucket`<br>`scoop install dailyprayertimer`     |
 | **Chocolatey (Verified)**      | `choco install dailyprayertimer`                                                                                        |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.4.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.4_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.4_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.4.4_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
-> **Version 2.4.1** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
+> **Version 2.4.4** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
 
 1. **Package Managers**: Open any terminal (PowerShell, CMD, or Terminal) and run the respective command above.
 2. **Manual**: Download the installer matching your system.
@@ -84,13 +84,16 @@
 ### 💻 UI & Integration
 - **6-Tab Navigation**: Home, Salat, Tracker, Qibla, Tasbih, Ramadan — quick access to all features from the bottom bar.
 - **Premium Glassmorphism UI**: Modern design with semi-transparent backgrounds, vibrant Islamic Green gradients, and custom titlebar-less navigation.
+- **Embedded Settings Panel**: SPA-style settings integrated directly inside the main application window (no more separate modal windows) with dynamic bottom tab navigation auto-hiding.
+- **Built-in System Log Viewer**: Diagnostic card inside the settings help tab supporting interactive selections between application events (`app_log.txt`) and audio event logs (`audio_log.txt`), featuring dynamic clipboard copy state transitions.
+- **Ultra-Slim Fluent Scrollbars**: Customized scrollbar styling designed at an elegant **2px** width that responds beautifully to mouse hover and drag actions.
 - **Enhanced Startup Experience**: Sleek new application loader for a seamless transition from desktop to app.
 - **Enhanced Taskbar Timer (TrafficMonitor-style)**: New taskbar integration that embeds into the taskbar with no visible border. Shows current prayer + countdown + next prayer in a single compact line. Color-coded status dot. Four user-selectable positions (Left of Tray, Right of Tray, Center, Left Near Start). Enable from tray menu or Settings.
 - **Dual Legacy Taskbar Modes**:
   - **Integrated Taskbar Window**: Native taskbar timer for Windows 11.
   - **Legacy COM DeskBand**: Support for Windows 10 and ExplorerPatcher users.
 - **Floating Overlay**: A stylish fallback overlay to keep prayers in view while you work, featuring vertical "popup" expansion.
-- **Zen & Full Screen Modes**: Immersive focus modes. F11 full screen now properly hides the taskbar, title bar, and bottom navigation.
+- **Zen & Full Screen Modes**: Immersive focus modes. F11 full screen now properly hides the taskbar, title bar, and bottom navigation. Zen Mode now collapses bottom tabs, checklist tracker cards, and remote API notice banners while keeping the 5-prayer times grid visible.
 - **Theme Customization**: Full control over primary/secondary colors and background gradients.
 - **Smart Update System**: Automatic version checks on startup with manual "Check for Updates" options.
 - **Language Support**: English and Bangla (বাংলা) full UI localization, with framework for adding more languages.

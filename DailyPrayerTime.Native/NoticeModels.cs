@@ -9,38 +9,38 @@ namespace DailyPrayerTime.Native
         public bool Success { get; set; }
 
         [JsonPropertyName("language")]
-        public string Language { get; set; }
+        public string? Language { get; set; }
 
         [JsonPropertyName("notice")]
-        public NoticeData Notice { get; set; }
+        public NoticeData? Notice { get; set; }
 
         [JsonPropertyName("statistics")]
-        public NoticeStatistics Statistics { get; set; }
+        public NoticeStatistics? Statistics { get; set; }
     }
 
     public class NoticeData
     {
         [JsonPropertyName("title")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
 
         [JsonPropertyName("notification_message")]
-        public string NotificationMessage { get; set; }
+        public string? NotificationMessage { get; set; }
 
         [JsonPropertyName("message")]
-        public string Message { get; set; }
+        public string? Message { get; set; }
 
         [JsonPropertyName("start_date")]
-        public string StartDateString { get; set; }
+        public string? StartDateString { get; set; }
 
         [JsonPropertyName("expiry_date")]
-        public string ExpiryDateString { get; set; }
+        public string? ExpiryDateString { get; set; }
 
         [JsonIgnore]
         public DateTime? StartDate
         {
             get
             {
-                if (DateTime.TryParse(StartDateString, out var date))
+                if (StartDateString != null && DateTime.TryParse(StartDateString, out var date))
                     return date;
                 return null;
             }
@@ -51,7 +51,7 @@ namespace DailyPrayerTime.Native
         {
             get
             {
-                if (DateTime.TryParse(ExpiryDateString, out var date))
+                if (ExpiryDateString != null && DateTime.TryParse(ExpiryDateString, out var date))
                     return date;
                 return null;
             }

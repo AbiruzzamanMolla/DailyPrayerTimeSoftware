@@ -43,7 +43,10 @@ namespace DailyPrayerTime.Native
                 {
                     DisplayText.Text = compactLine;
                     if (!string.IsNullOrEmpty(statusColorHex))
-                        DisplayText.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom(statusColorHex);
+                    {
+                        if (new BrushConverter().ConvertFrom(statusColorHex) is SolidColorBrush brush)
+                            DisplayText.Foreground = brush;
+                    }
                 }
                 catch (Exception ex)
                 {

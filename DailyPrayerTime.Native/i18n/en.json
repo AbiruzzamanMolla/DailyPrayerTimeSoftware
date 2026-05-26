@@ -24,7 +24,6 @@
   "Btn_Restore": "Restore Data",
   "Btn_Tracker": "Tracker",
   "Btn_Dashboard": "Dashboard",
-  
   "Prayer_Fajr": "Fajr",
   "Prayer_Sunrise": "Sunrise",
   "Prayer_Dhuhr": "Dhuhr",
@@ -36,7 +35,6 @@
   "Prayer_Duha": "Salat al-Duha (Ishraq)",
   "Prayer_Awwabin": "Awwabin",
   "Prayer_Sunset": "Sunset",
-
   "Label_Calculating": "Calculating...",
   "Label_SuhurEnds": "Suhur Ends",
   "Label_IftarBegins": "Iftar Begins",
@@ -50,13 +48,11 @@
   "Label_AM": "AM",
   "Label_PM": "PM",
   "Label_Jamaat": "Jamaat",
-
   "Section_Highlights": "Daily Highlights",
   "Section_TodaysPrayer": "Today's Prayer Times",
   "Section_Fard": "Fard Prayers",
   "Section_Nafal": "Nafal Prayers",
   "Section_Prohibited": "Prohibited Times",
-  
   "Tray_Open": "Open",
   "Tray_Settings": "Settings",
   "Tray_Exit": "Exit",
@@ -65,19 +61,15 @@
   "Tray_ShowIntegratedTaskbar": "Show Integrated Taskbar Timer (Win 11 Source)",
   "Tray_ShowEnhancedTaskbar": "Show Enhanced Taskbar Timer",
   "Tray_RunningInBackground": "App is running in the background.",
-
   "ToolTip_Ramadan": "Toggle Sawm Mode",
   "ToolTip_FullScreen": "Toggle Full Screen Mode",
   "ToolTip_ZenMode": "Toggle Zen Mode",
-
   "Update_Available": "Update Available!",
   "Update_Ready": "New version is ready.",
   "Update_Download": "Download →",
   "Update_VersionAvailable": "Version v{0} is now available.",
-
   "Prohibited_Warning": "⚠️ Prohibited Prayer Time",
   "Tahajjud_EndsIn": "Tahajjud ends in: ",
-
   "Note_Fajr": "2 Sunnah (Mu'akkadah), 2 Fard (4 Total)",
   "Note_Dhuhr": "4 Sunnah, 4 Fard, 2 Sunnah, 2 Nafl (12 Total)",
   "Note_Asr": "4 Sunnah (Ghair Mu'akkadah), 4 Fard (8 Total)",
@@ -88,7 +80,6 @@
   "Note_Awwabin": "Min 2, typically 6 Rakats. After Maghrib Sunnah.",
   "Note_Tahajjud": "Min 2, typically 8 Rakats. Witr delay is Sunnah.",
   "Note_NightThird": "Highest reward time for Tahajjud",
-
   "Notify_PrayerStarted": "{0} time started",
   "Notify_PrayerStartedMsg": "The time for {0} has begun ({1}).",
   "Notify_StartingSoon": "{0} starting soon",
@@ -105,12 +96,10 @@
   "Notify_JamaatNowMsg": "Congregation for {0} is starting at {1}.",
   "Notify_EndingSoon": "{0} ending soon",
   "Notify_EndingSoonMsg": "{0} time will end in {1} minutes.",
-
   "Adhan_Title": "Time for {0}",
   "Title_AdhanNotification": "Adhan Notification",
   "Adhan_ItsTimeFor": "It's time for {0}",
   "Adhan_Jamaat": "Jamaat: {0}",
-
   "Tracker_Tab": "Tracker",
   "Tracker_DailyProgress": "Today's Progress",
   "Tracker_History": "Last 7 Days",
@@ -137,7 +126,6 @@
   "Tracker_ThisWeek": "This Week",
   "Tracker_ThisMonth": "This Month",
   "Tracker_ThisYear": "This Year",
-
   "Label_AdhanDua": "Adhan Dua",
   "Adhan_Reply_HadithRef": "Sahih Muslim 385 (The Book of Prayer, Chapter: Recommendation to repeat the words of the Mu'adhdhin).",
   "Adhan_Table_Call": "Mu'adhdhin (The Call)",
@@ -171,7 +159,6 @@
   "Loader_PleaseWait": "please wait",
   "Loader_JoinTelegram": "Follow updates on Telegram",
   "Loader_Title": "Loading Daily Prayer Timer",
-  
   "Method_Shia": "Shia",
   "Method_Karachi": "Karachi",
   "Method_ISNA": "ISNA",
@@ -234,7 +221,6 @@
   "Adhan_Qatami": "Nasser Alqatami",
   "Adhan_Menshawy": "Mohammad Almenshawy",
   "Adhan_Custom": "Custom (Select below)",
-
   "Section_Location": "Location & Calculation",
   "Label_LocationName": "Location Name:",
   "Label_Latitude": "Latitude:",
@@ -266,7 +252,6 @@
   "Label_MainText": "Main Text Color:",
   "Label_Subtext": "Subtext Color:",
   "Label_EstablishedShow": "Show",
-  
   "Section_Offsets": "Manual Offsets (Minutes)",
   "Section_Calculation": "Calculation",
   "Section_ManualParams": "Advanced Manual Parameters",
@@ -287,7 +272,6 @@
   "Label_Telegram": "Telegram",
   "Btn_OfficialSite": "Official Site",
   "Btn_JoinChannel": "Join Channel",
-  
   "Check_Overlay": "Show Floating Prayer Overlay",
   "Check_DeskBand": "Show Taskbar Prayer Timer (Supports Win 10 / ExplorerPatcher)",
   "Check_IntegratedTaskbar": "Show Integrated Taskbar Timer (Win 11 Source)",
@@ -299,7 +283,6 @@
   "Check_ExternalApi": "Use External API for accuracy (requires internet)",
   "Check_StartMinimized": "Start Minimized to Tray",
   "Check_MinimizeOnClose": "Minimize to Tray on Close",
-  
   "Adhan_Notifications": "Adhan Notifications",
   "Adhan_EnableSound": "Enable sound and visual popup for each prayer:",
   "Adhan_VisualPopup": "Visual Popup",
@@ -312,34 +295,26 @@
   "Test_Reminder": "Test Reminder",
   "Test_Established": "Test Popup",
   "Test_PrayerSound": "Test Sound",
-  
   "Reminders_Title": "Reminders & Windows Notifications",
   "Reminders_PreAdhan": "Notify before prayer start (10 mins default):",
   "Reminders_MinutesBefore": "minutes before start",
-  
   "Updates_Desc": "Check for application updates to get the latest features and bug fixes.",
   "SupportMe_Coffee": "Buy Me a Coffee ☕",
   "SupportMe_Desc": "If you find this application helpful, please consider supporting its development.",
-  
   "Established_Title": "Prayer Established Reminders (Popup)",
   "Established_Desc": "Show popup before congregation time at the Mosque:",
   "Established_Show": "Show",
   "Established_MinutesBefore": "minutes before Jamaat",
-  
   "Tahajjud_Title": "Tahajjud & Night Prayer",
   "Tahajjud_Enable": "Enable Alarm for Tahajjud (Last Third of Night)",
-  
   "i18n_PrayerSounds_Title": "Prayer Notification Sounds (Start/End)",
   "i18n_PrayerSounds_Desc": "Play voice/sound notifications when a prayer time starts or ends.",
   "i18n_PrayerSounds_Enable": "Enable Prayer Start & End Sounds",
   "i18n_PrayerSounds_Language": "Voice Language:",
-  
   "Update_CheckTitle": "Updates",
   "Update_Btn": "Check for Updates",
   "Update_VersionInfo": "Check for application updates to get the latest features and bug fixes.",
-  
   "Section_Developer": "Developer Profile",
-  
   "Fasting_Monday": "Monday Fast: The day the Prophet ﷺ was born and received revelation.",
   "Fasting_Thursday": "Thursday Fast: The day deeds are presented to Allah.",
   "Fasting_WhiteDays": "Ayyam al-Bidh: The monthly Sunnah 'White Days'.",
@@ -349,7 +324,6 @@
   "Fasting_EidFitr": "Prohibited: Eid-ul-Fitr - Forbidden to fast today.",
   "Fasting_EidAdha": "Prohibited: Eid-ul-Adha - Forbidden to fast today.",
   "Fasting_Tashreeq": "Prohibited: Days of Tashreeq - Forbidden to fast today.",
-  
   "Sunnah_Friday_Title": "Friday (Jumu'ah) Special Acts",
   "Sunnah_Friday_Header": "Friday (Jumu'ah) Sunnahs:",
   "Sunnah_Ghusl": "• Ghusl: Ritual bath to purify yourself.",
@@ -365,7 +339,6 @@
   "Sunnah_Dua_Header": "Special Dua Times:",
   "Sunnah_PreMaghrib": "• Pre-Maghrib: Last hour before sunset.",
   "Sunnah_DuringKhutbah": "• During Khutbah: Between the two sermons.",
-  
   "Label_MakruhStarts": "⚠️ Makruh begins at {0}",
   "Label_TahajjudActive": "✨ Tahajjud time is currently active",
   "Label_DuhaActive": "Salat al-Duha is active until {0}",
@@ -380,7 +353,6 @@
   "Label_NextStartsAt": "{0} starts at {1}",
   "Label_Qadha": "Qadha",
   "Label_Version": "Version",
-
   "Month_Hijri_1": "Muharram",
   "Month_Hijri_2": "Safar",
   "Month_Hijri_3": "Rabi' al-Awwal",
@@ -393,7 +365,6 @@
   "Month_Hijri_10": "Shawwal",
   "Month_Hijri_11": "Dhu al-Qi'dah",
   "Month_Hijri_12": "Dhu al-Hijjah",
-  
   "StartsInShort": "Starts in {0}h {1}m",
   "Hero_TimeLeft": "Time Left for {0}",
   "Hero_TimeUntil": "Time Until {0}",
@@ -402,9 +373,7 @@
   "Unit_Sec_Short": "s",
   "Status_Upcoming": "Upcoming",
   "Status_Completed": "Completed",
-
   "Label_HijriSuffix": "AH",
-
   "Month_Gregorian_1": "January",
   "Month_Gregorian_2": "February",
   "Month_Gregorian_3": "March",
@@ -417,7 +386,6 @@
   "Month_Gregorian_10": "October",
   "Month_Gregorian_11": "November",
   "Month_Gregorian_12": "December",
-
   "Day_0": "Sunday",
   "Day_1": "Monday",
   "Day_2": "Tuesday",
@@ -425,11 +393,8 @@
   "Day_4": "Thursday",
   "Day_5": "Friday",
   "Day_6": "Saturday",
-
   "Header_Basmala_Translation": "All praise is for Allah, and peace and blessings be upon the Messenger of Allah.",
-
   "Tab_Ramadan": "Ramadan",
-
   "Ramadan_Title": "Ramadan Module",
   "Ramadan_DayStatus": "Ramadan Day {0}",
   "Ramadan_DayActive": "Alhamdulillah, you are in Ramadan!",
@@ -460,17 +425,14 @@
   "Ramadan_EidCountdown": "{0} days until Eid",
   "Ramadan_EidTakbeerTitle": "Eid Mubarak! 🎉",
   "Ramadan_EidTakbeerMsg": "It's Eid today! Recite Takbeer: Allahu Akbar, Allahu Akbar, La ilaha illallahu, Wallahu Akbar, Allahu Akbar wa lillahil-hamd.",
-
   "Tab_Qibla": "Qibla",
   "Tab_Tasbih": "Tasbih",
-
   "Qibla_Title": "Qibla Compass",
   "Qibla_Bearing": "Direction: {0}",
   "Qibla_FromLocation": "From {0}",
   "Qibla_Note": "Align the green arrow with a physical compass to find the Qibla direction. The bearing is calculated from your location to the Kaaba in Makkah.",
   "Qibla_Refresh": "Recalculate",
   "Qibla_NoLocation": "Set your location in Settings",
-
   "Tasbih_Title": "Digital Tasbih",
   "Tasbih_TapHint": "Tap or press Space to count",
   "Tasbih_TotalToday": "Total Today",
@@ -478,5 +440,22 @@
   "Tasbih_Alhamdulillah": "Praise be to Allah",
   "Tasbih_AllahuAkbar": "Allah is the Greatest",
   "Tasbih_LaIlaha": "There is no god but Allah",
-  "Tasbih_Astaghfirullah": "I seek forgiveness from Allah"
+  "Tasbih_Astaghfirullah": "I seek forgiveness from Allah",
+  "Tab_Home": "Home",
+  "Tab_Help": "Help",
+  "Tracker_TabTitle": "Prayer & Sawm Tracker",
+  "Tracker_EnableDaily": "Enable Daily Tracker",
+  "Tracker_EnableDailyDesc": "Turn on/off the tracking system on the dashboard.",
+  "Tracker_ShowDeedPopup": "Show Deed Popups after Jamaat",
+  "Tracker_ShowAfter": "Show after",
+  "Tracker_MinutesOfJamaat": "minutes of Jamaat time.",
+  "Tracker_ShowDailySummary": "Show Daily Summary at Night",
+  "Tracker_ScheduledTime": "Scheduled Time:",
+  "Tracker_DataManagement": "Data Management",
+  "Tracker_AutoBackupSchedule": "Auto Backup Schedule",
+  "Tracker_ChooseLocation": "Choose Location",
+  "Backup_None": "None",
+  "Backup_Daily": "Daily",
+  "Backup_Weekly": "Weekly",
+  "Backup_Monthly": "Monthly"
 }

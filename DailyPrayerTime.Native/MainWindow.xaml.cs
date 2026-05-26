@@ -84,7 +84,6 @@ namespace DailyPrayerTime.Native
             this.Height = SystemParameters.WorkArea.Height * 0.85;
             ApplySettingsTheme();
             FontSizeHelper.InitializeFromSettings();
-            FontSizeHelper.ApplyScale(this);
             SetupTimer();
             SetupTrayIcon();
             _ = CalculatePrayerTimes();
@@ -201,8 +200,8 @@ namespace DailyPrayerTime.Native
                         {
                             ApiNoticeTitleText.Text = notice.Title;
                             ApiNoticeHeaderText.Text = notice.NotificationMessage;
-                            DailyPrayerTime.Native.Helpers.HtmlTextBlockHelper.ParseHtmlToTextBlock(ApiNoticeMessageText, notice.Message);
-                            ApiNoticeBanner.Visibility = Visibility.Visible;
+                            DailyPrayerTime.Native.Helpers.HtmlTextBlockHelper.ParseHtmlToTextBlock(ApiNoticeMessageText, notice.Message ?? "");
+                            ApiNoticeBanner.Visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
                         });
 
                         // Show Native Notification on 35s delay if not shown yet
@@ -217,7 +216,7 @@ namespace DailyPrayerTime.Native
                                 {
                                     if (_notifyIcon != null)
                                     {
-                                        _notifyIcon.ShowBalloonTip(5000, notice.NotificationMessage, notice.Message, Forms.ToolTipIcon.Info);
+                                        _notifyIcon.ShowBalloonTip(5000, notice.NotificationMessage ?? "", notice.Message ?? "", Forms.ToolTipIcon.Info);
                                     }
                                 });
                                 s.NoticeLastShownVersion = noticeId;
@@ -460,12 +459,12 @@ namespace DailyPrayerTime.Native
                     var b = _savedWindowBounds.Value;
                     this.Left = b.Left;
                     this.Top = b.Top;
-                    this.Width = Math.Max(460, b.Width);
+                    this.Width = Math.Max(570, b.Width);
                     this.Height = Math.Max(480, b.Height);
                 }
                 else
                 {
-                    this.Width = Math.Max(460, this.Width);
+                    this.Width = Math.Max(570, this.Width);
                     this.Height = Math.Max(480, this.Height);
                 }
 
@@ -507,7 +506,7 @@ namespace DailyPrayerTime.Native
             SettingsViewControl.Visibility = Visibility.Visible;
         }
 
-        private async void Settings_Click(object sender, RoutedEventArgs e)
+        private async void Settings_Click(object? sender, RoutedEventArgs? e)
         {
             SettingsIcon.Foreground = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
             await Task.Delay(50);
@@ -536,6 +535,11 @@ namespace DailyPrayerTime.Native
             
             UpdateBanner.Visibility = Visibility.Collapsed; 
             ApiNoticeBanner.Visibility = Visibility.Collapsed;
+
+            // Zen Mode specific: Hide Footer Tabs, Rakat Tracker Box & Fasting Note
+            if (FooterNavigationBar != null) FooterNavigationBar.Visibility = otherItemsVisibility;
+            if (HeroTrackerBox != null) HeroTrackerBox.Visibility = otherItemsVisibility;
+            if (FastingNoteBorder != null) FastingNoteBorder.Visibility = otherItemsVisibility;
 
             // 2. Layout Adjustments
             MainContentStack.VerticalAlignment = _isZenMode ? VerticalAlignment.Center : VerticalAlignment.Top;
@@ -567,8 +571,15 @@ namespace DailyPrayerTime.Native
             ProhibitedHeader.Visibility = Visibility.Visible;
             ProhibitedGrid.Visibility = Visibility.Visible;
 
+            if (FooterNavigationBar != null) FooterNavigationBar.Visibility = Visibility.Visible;
+            if (HeroTrackerBox != null) HeroTrackerBox.Visibility = Visibility.Visible;
+            UpdateFastingHighlights();
+
             MainContentStack.VerticalAlignment = VerticalAlignment.Top;
             MainGrid.Background = (LinearGradientBrush)FindResource("MainGradient");
+
+            // Restore remote API notice banners cleanly
+            _ = CheckApiNoticeAsync();
         }
 
         private void ManageOverlay()
@@ -2246,7 +2257,7 @@ namespace DailyPrayerTime.Native
                 
                 // Show toggle only if we have details
                 FastingNoteToggleBtn.Visibility = details.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
-                FastingNoteBorder.Visibility = Visibility.Visible;
+                FastingNoteBorder.Visibility = _isZenMode ? Visibility.Collapsed : Visibility.Visible;
             }
             else
             {
@@ -2405,7 +2416,7 @@ namespace DailyPrayerTime.Native
 
         // --- Tab Event Handlers ---
 
-        private void TabHome_Checked(object sender, RoutedEventArgs e)
+        private void TabHome_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = false;
@@ -2434,7 +2445,7 @@ namespace DailyPrayerTime.Native
             ZenModeBtn.Opacity = 1.0;
         }
 
-        private void TabPrayers_Checked(object sender, RoutedEventArgs e)
+        private void TabPrayers_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = false;
@@ -2464,7 +2475,7 @@ namespace DailyPrayerTime.Native
             NafalCardsPanel.Visibility = Visibility.Visible;
         }
 
-        private void TabTracker_Checked(object sender, RoutedEventArgs e)
+        private void TabTracker_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || HeroBorder == null || TrackerViewControl == null) return;
             _isTrackerMode = true;
@@ -2485,7 +2496,7 @@ namespace DailyPrayerTime.Native
             TrackerViewControl.LoadData(enabledPrayers);
         }
 
-        private void TabQibla_Checked(object sender, RoutedEventArgs e)
+        private void TabQibla_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || QiblaViewControl == null) return;
             _isTrackerMode = false;
@@ -2500,7 +2511,7 @@ namespace DailyPrayerTime.Native
             QiblaViewControl.UpdateDirection();
         }
 
-        private void TabTasbih_Checked(object sender, RoutedEventArgs e)
+        private void TabTasbih_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || TasbihViewControl == null) return;
             _isTrackerMode = false;
@@ -2515,7 +2526,7 @@ namespace DailyPrayerTime.Native
             TasbihViewControl.LoadData();
         }
 
-        private void TabRamadan_Checked(object sender, RoutedEventArgs e)
+        private void TabRamadan_Checked(object? sender, RoutedEventArgs? e)
         {
             if (!IsInitialized || RamadanViewControl == null) return;
             _isTrackerMode = false;
@@ -2696,7 +2707,11 @@ namespace DailyPrayerTime.Native
             string pKey = ToPrayerKey(currentPrayer == Prayer.NONE ? Prayer.FAJR : currentPrayer);
             if (currentPrayer == Prayer.DHUHR && DateTime.Now.DayOfWeek == DayOfWeek.Friday) pKey = "Jumuah";
 
-            if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds) && SettingsManager.Current.TrackerEnabled)
+            if (_isZenMode)
+            {
+                HeroTrackerBox.Visibility = Visibility.Collapsed;
+            }
+            else if (_currentDeeds.Prayers.TryGetValue(pKey, out var deeds) && SettingsManager.Current.TrackerEnabled)
             {
                 HeroTrackerBox.Visibility = Visibility.Visible;
                 HeroTrackerTitle.Text = $"{pKey.ToUpper()} TRACKER";

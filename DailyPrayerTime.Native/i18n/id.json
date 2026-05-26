@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "Segala puji bagi Allah",
   "Tasbih_AllahuAkbar": "Allah Maha Besar",
   "Tasbih_LaIlaha": "Tidak ada Tuhan selain Allah",
-  "Tasbih_Astaghfirullah": "Saya mohon ampun kepada Allah"
+  "Tasbih_Astaghfirullah": "Saya mohon ampun kepada Allah",
+  "Tab_Home": "Beranda",
+  "Tab_Help": "Bantuan",
+  "Tracker_TabTitle": "Pelacak Salat & Puasa",
+  "Tracker_EnableDaily": "Aktifkan Pelacak Harian",
+  "Tracker_EnableDailyDesc": "Aktifkan/nonaktifkan sistem pelacakan di dasbor.",
+  "Tracker_ShowDeedPopup": "Tampilkan Popup Amal setelah Jamaah",
+  "Tracker_ShowAfter": "Tampilkan setelah",
+  "Tracker_MinutesOfJamaat": "menit dari waktu Jamaah.",
+  "Tracker_ShowDailySummary": "Tampilkan Ringkasan Harian di Malam Hari",
+  "Tracker_ScheduledTime": "Waktu Terjadwal:",
+  "Tracker_DataManagement": "Manajemen Data",
+  "Tracker_AutoBackupSchedule": "Jadwal Pencadangan Otomatis",
+  "Tracker_ChooseLocation": "Pilih Lokasi",
+  "Backup_None": "Tidak ada",
+  "Backup_Daily": "Harian",
+  "Backup_Weekly": "Mingguan",
+  "Backup_Monthly": "Bulanan"
 }

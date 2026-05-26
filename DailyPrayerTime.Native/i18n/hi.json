@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "अल्लाह को प्रार्र्थना करें",
   "Tasbih_AllahuAkbar": "अल्लाह महानतम है",
   "Tasbih_LaIlaha": "कोई भगवान नहीं है सिर्फ अल्लाह",
-  "Tasbih_Astaghfirullah": "मैं अल्लाह से माफ़ी मांगता हूं"
+  "Tasbih_Astaghfirullah": "मैं अल्लाह से माफ़ी मांगता हूं",
+  "Tab_Home": "मुख्य पृष्ठ",
+  "Tab_Help": "सहायता",
+  "Tracker_TabTitle": "प्रार्थना और सॉम ट्रैकर",
+  "Tracker_EnableDaily": "दैनिक ट्रैकर सक्षम करें",
+  "Tracker_EnableDailyDesc": "डैशबोर्ड पर ट्रैकिंग सिस्टम को चालू/बंद करें।",
+  "Tracker_ShowDeedPopup": "जमात के बाद डीड पॉपअप दिखाएं",
+  "Tracker_ShowAfter": "इसके बाद दिखाएं",
+  "Tracker_MinutesOfJamaat": "जमात समय के मिनट।",
+  "Tracker_ShowDailySummary": "रात में दैनिक सारांश दिखाएं",
+  "Tracker_ScheduledTime": "निर्धारित समय:",
+  "Tracker_DataManagement": "डेटा प्रबंधन",
+  "Tracker_AutoBackupSchedule": "ऑटो बैकअप शेड्यूल",
+  "Tracker_ChooseLocation": "स्थान चुनें",
+  "Backup_None": "कोई नहीं",
+  "Backup_Daily": "दैनिक",
+  "Backup_Weekly": "साप्ताहिक",
+  "Backup_Monthly": "मासिक"
 }

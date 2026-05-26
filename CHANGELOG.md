@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.4] - 2026-05-26
+
+### Added
+
+- **Embedded Modern Settings Screen**: Completed the migration of the settings interface from a standalone popup window into a fully integrated, premium glassmorphic `UserControl` embedded directly inside the main application window.
+- **Single-Row Tabbed Settings Navigation**: Arranged all settings category tabs in a single row with modern custom icons (`🕋, 📊, 🔔, 🎨, ⚙️, 📄`) matching the main application navigation design.
+- **Dynamic Layout & Footer Management**: Configured settings to automatically hide the main bottom navigation bar (`FooterNavigationBar`) when opened to optimize space and prevent overlapping.
+- **Exhaustive Help & Settings Directory**: Expanded the help and documentation tab within settings with exhaustive, human-readable guidelines explaining every single settings parameter, calculation method, custom volume setting, and startup option.
+- **Built-in System Log Viewer**: Integrated an interactive diagnostic log viewer card in the Help tab supporting standard application events (`app_log.txt`) and audio event logs (`audio_log.txt`). Includes a dynamic "Refresh" control and a high-fidelity "Copy Logs" button that copies entries into the system clipboard with tactile button-state micro-animations.
+- **Ultra-Slim Fluent Scrollbars**: Overrode the native scrollbar style with an elegant, custom-themed Fluent track designed at an ultra-slim width of **2px** with responsive hover/drag translucent coloring to remain completely out of the way.
+
+### Changed
+
+- **Zen Mode Refinements**: Redesigned Zen Mode layout to completely collapse bottom tabs, checklist tracker cards, and remote API notice banners (like the Arafah recommendation bar) for an ultra-pure focus, while maintaining the essential 5-prayer timing grids inside the main card. Banners are cleanly re-evaluated and restored upon exiting Zen Mode.
+- **Global Font Scaling Optimization**: Revamped `FontSizeHelper` with a thread-safe, weak-referencing global listener (`ConditionalWeakTable`) that automatically scales newly loaded elements (like switched dynamic tab controls) without requiring visual tree traversals or leaking memory.
+
+### Fixed
+
+- **First-Click Blank Tab Bug**: Resolved an initialization order bug where the ComboBox and TabControl indices failed to sync on first-click by explicitly forcing selected index initialization in the Settings constructor and show actions.
+- **Combo Dropdown Text Invisibility**: Fixed ComboBox text coloring issues inside the Log Viewer by applying a high-contrast dark foreground style to match standard dropdown backgrounds.
+- **Compilation Warnings Cleaned**: Resolved all nullability and ambiguous type warnings (CS8618, CS8600, CS8604, CS8625) across `MainWindow.xaml.cs`, `EnhancedTaskbarWindow.xaml.cs`, and `NoticeModels.cs` for a completely warning-free compile under .NET 8.
+
 ## [2.4.3] - 2026-05-26
 
 ### Added

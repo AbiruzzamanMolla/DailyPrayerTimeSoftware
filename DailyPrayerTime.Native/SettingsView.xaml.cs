@@ -31,6 +31,10 @@ namespace DailyPrayerTime.Native
             // Wire up time format change event
             TimeFormatInput.SelectionChanged += TimeFormatInput_SelectionChanged;
             MethodInput.SelectionChanged += MethodInput_SelectionChanged;
+
+            // Select first tab initially
+            if (SettingsTabControl != null) SettingsTabControl.SelectedIndex = 0;
+            if (TabSettingsPrayer != null) TabSettingsPrayer.IsChecked = true;
         }
 
         public void Initialize(CombinedPrayerTimes? today, CombinedPrayerTimes? tomorrow)
@@ -38,6 +42,10 @@ namespace DailyPrayerTime.Native
             _today = today;
             _tomorrow = tomorrow;
             LoadForm();
+
+            // Select first tab on show
+            if (SettingsTabControl != null) SettingsTabControl.SelectedIndex = 0;
+            if (TabSettingsPrayer != null) TabSettingsPrayer.IsChecked = true;
         }
 
         private void MethodInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -319,6 +327,7 @@ namespace DailyPrayerTime.Native
             }
 
             PopulateHints();
+            LoadLogs();
         }
 
         private void PopulateHints()
@@ -897,6 +906,17 @@ namespace DailyPrayerTime.Native
             catch { /* Ignore */ }
         }
 
+        private void SettingsTab_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.RadioButton rb && int.TryParse(rb.Tag?.ToString(), out int idx))
+            {
+                if (SettingsTabControl != null)
+                {
+                    SettingsTabControl.SelectedIndex = idx;
+                }
+            }
+        }
+
         private void SettingsTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SettingsButtonsPanel == null) return;
@@ -973,6 +993,83 @@ namespace DailyPrayerTime.Native
                 }
             }
         }
+        private string GetSelectedLogPath()
+        {
+            string fileName = "app_log.txt";
+            if (LogTypeCombo?.SelectedItem is ComboBoxItem item && item.Tag is string tag)
+            {
+                fileName = tag;
+            }
+            return Path.Combine(StorageService.GetAppDataPath(), fileName);
+        }
+
+        private void LoadLogs()
+        {
+            if (LogViewerBox == null) return;
+            try
+            {
+                string path = GetSelectedLogPath();
+                if (File.Exists(path))
+                {
+                    var lines = File.ReadAllLines(path);
+                    var lastLines = lines.Length > 150 ? lines[^150..] : lines;
+                    LogViewerBox.Text = string.Join(Environment.NewLine, lastLines);
+                    LogViewerBox.ScrollToEnd();
+                }
+                else
+                {
+                    LogViewerBox.Text = $"Log file is empty or does not exist yet.{Environment.NewLine}Path: {path}";
+                }
+            }
+            catch (Exception ex)
+            {
+                LogViewerBox.Text = $"Error reading log file: {ex.Message}";
+            }
+        }
+
+        private void LogTypeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LoadLogs();
+        }
+
+        private void RefreshLogs_Click(object sender, RoutedEventArgs e)
+        {
+            LoadLogs();
+        }
+
+        private async void CopyLogs_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string path = GetSelectedLogPath();
+                if (File.Exists(path))
+                {
+                    string text = File.ReadAllText(path);
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        System.Windows.Clipboard.SetText(text);
+                        if (sender is System.Windows.Controls.Button btn)
+                        {
+                            string orig = btn.Content.ToString() ?? "📋 Copy Logs";
+                            btn.Content = "✓ Copied!";
+                            btn.IsEnabled = false;
+                            await Task.Delay(1500);
+                            btn.Content = orig;
+                            btn.IsEnabled = true;
+                        }
+                    }
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show("Log file is empty or does not exist yet.", "Empty Log", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to copy logs: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void UpdateManualParamsVisibility()
         {
             if (ManualParamsPanel != null && MethodInput != null)

@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "அல்லாஹ்வுக்கே புகழனைத்தும்",
   "Tasbih_AllahuAkbar": "அல்லாஹ் மிகப் பெரியவன்",
   "Tasbih_LaIlaha": "அல்லாஹ்வைத் தவிர வேறு கடவுள் இல்லை",
-  "Tasbih_Astaghfirullah": "நான் அல்லாஹ்விடம் பாவமன்னிப்பு தேடுகிறேன்"
+  "Tasbih_Astaghfirullah": "நான் அல்லாஹ்விடம் பாவமன்னிப்பு தேடுகிறேன்",
+  "Tab_Home": "முகப்பு",
+  "Tab_Help": "உदவி",
+  "Tracker_TabTitle": "தொழுகை மற்றும் நோன்பு டிராக்கர்",
+  "Tracker_EnableDaily": "தினசரி டிராக்கரை இயக்கு",
+  "Tracker_EnableDailyDesc": "டாஷ்போர்டில் கண்காணிப்பு அமைப்பை ஆன்/ஆஃப் செய்யவும்.",
+  "Tracker_ShowDeedPopup": "ஜமாஅத்திற்குப் பிறகு அமல் பாப்அப்களைக் காட்டு",
+  "Tracker_ShowAfter": "இதற்குப் பிறகு காட்டு",
+  "Tracker_MinutesOfJamaat": "ஜமாஅத் நேரத்தின் நிமிடங்கள்.",
+  "Tracker_ShowDailySummary": "இரவில் தினசரி சுருக்கத்தைக் காட்டு",
+  "Tracker_ScheduledTime": "திட்டமிடப்பட்ட நேரம்:",
+  "Tracker_DataManagement": "தரவு மேலாண்மை",
+  "Tracker_AutoBackupSchedule": "தானியங்கு காப்புப்பிரதி அட்டவணை",
+  "Tracker_ChooseLocation": "இருப்பிடத்தைத் தேர்வுசெய்",
+  "Backup_None": "ஏதுமில்லை",
+  "Backup_Daily": "தினசரி",
+  "Backup_Weekly": "வாராந்திர",
+  "Backup_Monthly": "மாதாந்திர"
 }

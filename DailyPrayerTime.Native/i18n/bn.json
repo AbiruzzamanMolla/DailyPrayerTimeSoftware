@@ -24,7 +24,6 @@
   "Btn_Restore": "রিস্টোর ডাটা",
   "Btn_Tracker": "ট্র্যাকার",
   "Btn_Dashboard": "ড্যাশবোর্ড",
-
   "Prayer_Fajr": "ফজর",
   "Prayer_Sunrise": "সূর্যোদয়",
   "Prayer_Dhuhr": "যোহর",
@@ -36,7 +35,6 @@
   "Prayer_Duha": "সালাত আদ-দোহা (ইশরাক)",
   "Prayer_Awwabin": "আউওয়াবীন",
   "Prayer_Sunset": "সূর্যাস্ত",
-
   "Label_Calculating": "গণনা করা হচ্ছে...",
   "Label_SuhurEnds": "সাহরির শেষ সময়",
   "Label_IftarBegins": "ইফতারের শুরু",
@@ -50,13 +48,11 @@
   "Label_AM": "AM",
   "Label_PM": "PM",
   "Label_Jamaat": "জামাত",
-
   "Section_Highlights": "আজকের হাইলাইটস",
   "Section_TodaysPrayer": "আজকের নামাজের সময়",
   "Section_Fard": "ফরজ নামাজ",
   "Section_Nafal": "নফল নামাজ",
   "Section_Prohibited": "নিষিদ্ধ সময়",
-
   "Tray_Open": "খুলুন",
   "Tray_Settings": "সেটিংস",
   "Tray_Exit": "বন্ধ করুন",
@@ -65,19 +61,15 @@
   "Tray_ShowIntegratedTaskbar": "ইন্টিগ্রেটেড টাস্কবার টাইমার দেখান",
   "Tray_ShowEnhancedTaskbar": "এনহ্যান্সড টাস্কবার টাইমার দেখান",
   "Tray_RunningInBackground": "অ্যাপটি ব্যাকগ্রাউন্ডে চলছে।",
-
   "ToolTip_Ramadan": "সাওম মোড পরিবর্তন করুন",
   "ToolTip_FullScreen": "ফুল স্ক্রিন মোড",
   "ToolTip_ZenMode": "জেন মোড",
-
   "Update_Available": "আপডেট পাওয়া গেছে!",
   "Update_Ready": "নতুন সংস্করণ প্রস্তুত।",
   "Update_Download": "ডাউনলোড →",
   "Update_VersionAvailable": "ভার্সন v{0} এখন পাওয়া যাচ্ছে।",
-
   "Prohibited_Warning": "⚠️ নামাজের নিষিদ্ধ সময়",
   "Tahajjud_EndsIn": "তাহাজ্জুদ শেষ হতে বাকি: ",
-
   "Note_Fajr": "২ রাকাত সুন্নাত, ২ রাকাত ফরজ (মোট ৪)",
   "Note_Dhuhr": "৪ রাকাত সুন্নাত, ৪ রাকাত ফরজ, ২ রাকাত সুন্নাত, ২ রাকাত নফল (মোট ১২)",
   "Note_Asr": "৪ রাকাত সুন্নাত, ৪ রাকাত ফরজ (মোট ৮)",
@@ -88,7 +80,6 @@
   "Note_Awwabin": "২ থেকে ৬ রাকাত। মাগরিবের সুন্নাতের পর।",
   "Note_Tahajjud": "কমপক্ষে ২ রাকাত, সাধারণত ৮ রাকাত। বিতর পরে পড়া সুন্নাত।",
   "Note_NightThird": "তাহাজ্জুদের শ্রেষ্ঠ সময়",
-
   "Notify_PrayerStarted": "{0} এর সময় শুরু",
   "Notify_PrayerStartedMsg": "{0} এর ওয়াক্ত শুরু হয়েছে ({1})।",
   "Notify_StartingSoon": "{0} শুরু হচ্ছে",
@@ -105,12 +96,10 @@
   "Notify_JamaatNowMsg": "{0} এর জামাত {1} মিনিটে শুরু হচ্ছে।",
   "Notify_EndingSoon": "{0} এর সময় শেষ হচ্ছে",
   "Notify_EndingSoonMsg": "{0} এর ওয়াক্ত শেষ হতে {1} মিনিট বাকি।",
-
   "Adhan_Title": "{0} এর সময় হয়েছে",
   "Title_AdhanNotification": "আজান বিজ্ঞপ্তি",
   "Adhan_ItsTimeFor": "{0} এর সময় হয়েছে",
   "Adhan_Jamaat": "জামাত: {0}",
-
   "Tracker_Tab": "ট্র্যাকার",
   "Tracker_DailyProgress": "আজকের অগ্রগতি",
   "Tracker_History": "গত ৭ দিন",
@@ -137,7 +126,6 @@
   "Tracker_ThisWeek": "এই সপ্তাহ",
   "Tracker_ThisMonth": "এই মাস",
   "Tracker_ThisYear": "এই বছর",
-
   "Label_AdhanDua": "আজানের দোয়া",
   "Adhan_Reply_HadithRef": "সহিহ মুসলিম ৩৮৫ (কিতাবুস সালাত, অধ্যায়: মুয়াজ্জিনের সাথে আজানের উত্তর দেওয়া মুস্তাহাব)।",
   "Adhan_Table_Call": "মুয়াজ্জিন (আহ্বান)",
@@ -171,7 +159,6 @@
   "Loader_PleaseWait": "অনুগ্রহ করে অপেক্ষা করুন",
   "Loader_JoinTelegram": "টেলিগ্রাম গ্রুপে যুক্ত হোন",
   "Loader_Title": "নামাজের সময়সূচি লোড হচ্ছে",
-
   "Section_Location": "অবস্থান এবং গণনা",
   "Label_LocationName": "অবস্থানের নাম:",
   "Label_Latitude": "অক্ষাংশ (Latitude):",
@@ -203,7 +190,6 @@
   "Label_MainText": "প্রধান টেক্সট রং:",
   "Label_Subtext": "সাব-টেক্সট রং:",
   "Label_EstablishedShow": "দেখুন",
-
   "Section_Offsets": "ম্যানুয়াল অফসেট (মিনিট)",
   "Section_Calculation": "গণনা (Calculation)",
   "Section_ManualParams": "উন্নত ম্যানুয়াল প্যারামিটার",
@@ -224,7 +210,6 @@
   "Label_Telegram": "টেলিগ্রাম",
   "Btn_OfficialSite": "অফিসিয়াল সাইট",
   "Btn_JoinChannel": "চ্যানেলে যুক্ত হোন",
-
   "Check_Overlay": "ফ্লোটিং ওভারলে দেখান",
   "Check_DeskBand": "টাস্কবার টাইমার দেখান (Win 10)",
   "Check_IntegratedTaskbar": "ইন্টিগ্রেটেড টাস্কবার টাইমার দেখান (Win 11)",
@@ -236,7 +221,6 @@
   "Check_ExternalApi": "নির্ভুলতার জন্য এক্সটার্নাল এপিআই ব্যবহার করুন",
   "Check_StartMinimized": "ট্রে-তে মিনিমাইজড অবস্থায় শুরু করুন",
   "Check_MinimizeOnClose": "বন্ধ করার সময় ট্রে-তে মিনিমাইজ করুন",
-
   "Adhan_Notifications": "আজান বিজ্ঞপ্তি",
   "Adhan_EnableSound": "প্রতি ওয়াক্তে আজান ও পপআপ চালু করুন:",
   "Adhan_VisualPopup": "ভিজুয়াল পপআপ",
@@ -249,34 +233,26 @@
   "Test_Reminder": "বিজ্ঞপ্তি পরীক্ষা",
   "Test_Established": "পপআপ পরীক্ষা",
   "Test_PrayerSound": "শব্দ পরীক্ষা",
-
   "Reminders_Title": "রিমাইন্ডার এবং উইন্ডোজ নোটিফিকেশন",
   "Reminders_PreAdhan": "নামাজ শুরুর আগে বিজ্ঞপ্তি দিন (ডিফল্ট ১০ মিনিট):",
   "Reminders_MinutesBefore": "মিনিট আগে",
-
   "Updates_Desc": "নতুন ফিচার এবং বাগ ফিক্স পেতে অ্যাপ আপডেট চেক করুন।",
   "SupportMe_Coffee": "আমাকে কফি খাওয়ান ☕",
   "SupportMe_Desc": "যদি এই অ্যাপটি আপনার উপকারে আসে, তবে প্রজেক্টটি চালিয়ে নিতে সমর্থন করতে পারেন।",
-
   "Established_Title": "মসজিদের জামাতের রিমাইন্ডার (পপআপ)",
   "Established_Desc": "মসজিদের জামাতের সময়ের আগে পপআপ দেখান:",
   "Established_Show": "দেখুন",
   "Established_MinutesBefore": "মিনিট আগে",
-
   "Tahajjud_Title": "তাহাজ্জুদ এবং রাতের নামাজ",
   "Tahajjud_Enable": "তাহাজ্জুদ অ্যালার্ম চালু করুন (রাতের শেষ এক তৃতীয়াংশ)",
-
   "i18n_PrayerSounds_Title": "নামাজের শব্দ বিজ্ঞপ্তি (শুরু/শেষ)",
   "i18n_PrayerSounds_Desc": "নামাজের ওয়াক্ত শুরু বা শেষ হলে ভয়েস/শব্দ বিজ্ঞপ্তি বাজান।",
   "i18n_PrayerSounds_Enable": "নামাজ শুরু এবং শেষের শব্দ চালু করুন",
   "i18n_PrayerSounds_Language": "ভয়েস ভাষা:",
-
   "Update_CheckTitle": "আপডেট",
   "Update_Btn": "আপডেট চেক করুন",
   "Update_VersionInfo": "নতুন ফিচার এবং বাগ ফিক্স পেতে অ্যাপ আপডেট চেক করুন।",
-
   "Section_Developer": "ডেভেলপার প্রোফাইল",
-
   "Fasting_Monday": "সোমবারের রোজা: এই দিনে আমাদের প্রিয় নবী ﷺ জন্মগ্রহণ করেছেন এবং ওহী পেয়েছেন।",
   "Fasting_Thursday": "বৃহস্পতিবারের রোজা: এই দিনে আল্লাহর কাছে আমলনামা পেশ করা হয়।",
   "Fasting_WhiteDays": "আইয়াম আল-বিদ: প্রতি মাসের ১৩, ১৪ এবং ১৫ তারিখের সুন্নাহ রোজা।",
@@ -286,7 +262,6 @@
   "Fasting_EidFitr": "নিষিদ্ধ: ঈদুল ফিতর - আজ রোজা রাখা নিষিদ্ধ।",
   "Fasting_EidAdha": "নিষিদ্ধ: ঈদুল আযহা - আজ রোজা রাখা নিষিদ্ধ।",
   "Fasting_Tashreeq": "নিষিদ্ধ: আইয়ামে তাশরিক - এই দিনগুলোতে রোজা রাখা নিষিদ্ধ।",
-
   "Sunnah_Friday_Title": "জুমার দিনের বিশেষ আমল",
   "Sunnah_Friday_Header": "জুমার দিনের সুন্নাহসমূহ:",
   "Sunnah_Ghusl": "• গোসল: জুমার নামাজের জন্য পবিত্র হওয়া।",
@@ -302,7 +277,6 @@
   "Sunnah_Dua_Header": "দোয়া কবুলের বিশেষ সময়:",
   "Sunnah_PreMaghrib": "• মাগরিবের আগে: সূর্যাস্তের আগের শেষ সময়।",
   "Sunnah_DuringKhutbah": "• খুতবার সময়: দুই খুতবার মাঝখানের সময়।",
-
   "Label_MakruhStarts": "⚠️ মাকরূহ সময় শুরু: {0}",
   "Label_TahajjudActive": "✨ এখন তাহাজ্জুদের সময়",
   "Label_DuhaActive": "সালাত আদ-দোহা বা ইশরাকের সময় {0} পর্যন্ত",
@@ -317,7 +291,6 @@
   "Label_NextStartsAt": "{0} শুরু হবে {1} টায়",
   "Label_Qadha": "ক্বাযা",
   "Label_Version": "ভার্সন",
-
   "Month_Hijri_1": "মহররম",
   "Month_Hijri_2": "সফর",
   "Month_Hijri_3": "রবিউল আউয়াল",
@@ -330,15 +303,12 @@
   "Month_Hijri_10": "শাওয়াল",
   "Month_Hijri_11": "যিলকদ",
   "Month_Hijri_12": "যিলহাজ্জ",
-
   "StartsInShort": "{0} ঘণ্টা {1} মিনিটে শুরু হচ্ছে",
   "Hero_TimeLeft": "{0} ওয়াক্ত শেষ হতে বাকি",
   "Hero_TimeUntil": "{0} শুরু হতে বাকি",
   "Unit_Hour_Short": "ঘন্টা",
   "Unit_Min_Short": "মিনিট",
   "Unit_Sec_Short": "সেকেন্ড",
-
-  "Adhan_Jamaat": "জামাত: {0}",
   "Method_Shia": "শিয়া",
   "Method_Karachi": "করাচি",
   "Method_ISNA": "ISNA",
@@ -403,9 +373,7 @@
   "Adhan_Custom": "কাস্টম (নিচে নির্বাচন করুন)",
   "Status_Upcoming": "আসন্ন",
   "Status_Completed": "সম্পন্ন",
-
   "Label_HijriSuffix": "হিজরি",
-
   "Month_Gregorian_1": "জানুয়ারি",
   "Month_Gregorian_2": "ফেব্রুয়ারি",
   "Month_Gregorian_3": "মার্চ",
@@ -418,7 +386,6 @@
   "Month_Gregorian_10": "অক্টোবর",
   "Month_Gregorian_11": "নভেম্বর",
   "Month_Gregorian_12": "ডিসেম্বর",
-
   "Day_0": "রবিবার",
   "Day_1": "সোমবার",
   "Day_2": "মঙ্গলবার",
@@ -426,11 +393,8 @@
   "Day_4": "বৃহস্পতিবার",
   "Day_5": "শুক্রবার",
   "Day_6": "শনিবার",
-
   "Header_Basmala_Translation": "সমস্ত প্রশংসা আল্লাহর জন্য, এবং আল্লাহর রাসূলের ওপর শান্তি ও আশীর্বাদ বর্ষিত হোক।",
-
   "Tab_Ramadan": "রমজান",
-
   "Ramadan_Title": "রমজান মডিউল",
   "Ramadan_DayStatus": "রমজানের {0}তম দিন",
   "Ramadan_DayActive": "আলহামদুলিল্লাহ! আপনি রমজানে আছেন!",
@@ -461,17 +425,14 @@
   "Ramadan_EidCountdown": "ঈদ হতে {0} দিন বাকি",
   "Ramadan_EidTakbeerTitle": "ঈদ মোবারক! 🎉",
   "Ramadan_EidTakbeerMsg": "আজ ঈদ! তাকবির পড়ুন: আল্লাহু আকবার, আল্লাহু আকবার, লা ইলাহা ইল্লাল্লাহু, ওয়াল্লাহু আকবার, আল্লাহু আকবার ওয়া লিল্লাহিল হামদ।",
-
   "Tab_Qibla": "কিবলা",
   "Tab_Tasbih": "তাসবিহ",
-
   "Qibla_Title": "কিবলা কম্পাস",
   "Qibla_Bearing": "দিক: {0}",
   "Qibla_FromLocation": "{0} থেকে",
   "Qibla_Note": "সবুজ তীরটি একটি ফিজিক্যাল কম্পাসের সাথে মিলিয়ে কিবলার দিক খুঁজুন। এই দিক আপনার অবস্থান থেকে মক্কার কাবা পর্যন্ত গণনা করা হয়েছে।",
   "Qibla_Refresh": "পুনরায় গণনা করুন",
   "Qibla_NoLocation": "সেটিংসে আপনার অবস্থান সেট করুন",
-
   "Tasbih_Title": "ডিজিটাল তাসবিহ",
   "Tasbih_TapHint": "গণনা করতে ট্যাপ বা স্পেস চাপুন",
   "Tasbih_TotalToday": "আজকের মোট",
@@ -479,5 +440,22 @@
   "Tasbih_Alhamdulillah": "আলহামদুলিল্লাহ",
   "Tasbih_AllahuAkbar": "আল্লাহু আকবার",
   "Tasbih_LaIlaha": "লা ইলাহা ইল্লাল্লাহ",
-  "Tasbih_Astaghfirullah": "আস্তাগফিরুল্লাহ"
+  "Tasbih_Astaghfirullah": "আস্তাগফিরুল্লাহ",
+  "Tab_Home": "হোম",
+  "Tab_Help": "সাহায্য",
+  "Tracker_TabTitle": "নামাজ ও রোজা ট্র্যাকার",
+  "Tracker_EnableDaily": "দৈনিক ট্র্যাকার চালু করুন",
+  "Tracker_EnableDailyDesc": "ড্যাশবোর্ডে ট্র্যাকিং সিস্টেম চালু বা বন্ধ করুন।",
+  "Tracker_ShowDeedPopup": "জামায়াতের পর আমল পপআপ দেখান",
+  "Tracker_ShowAfter": "পপআপের সময়",
+  "Tracker_MinutesOfJamaat": "মিনিট পর (জামায়াতের সময় থেকে)।",
+  "Tracker_ShowDailySummary": "রাতে দৈনিক সারসংক্ষেপ দেখান",
+  "Tracker_ScheduledTime": "নির্ধারিত সময়:",
+  "Tracker_DataManagement": "তথ্য ব্যবস্থাপনা",
+  "Tracker_AutoBackupSchedule": "স্বয়ংক্রিয় ব্যাকআপ শিডিউল",
+  "Tracker_ChooseLocation": "স্থান নির্ধারণ করুন",
+  "Backup_None": "কোনোটিই নয়",
+  "Backup_Daily": "দৈনিক",
+  "Backup_Weekly": "সাপ্তাহিক",
+  "Backup_Monthly": "মাসিক"
 }

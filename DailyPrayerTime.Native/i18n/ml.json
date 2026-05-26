@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "അല്ലാഹുവിന് സ്തുതി",
   "Tasbih_AllahuAkbar": "അല്ലാഹുവാണ് ഏറ്റവും വലിയവൻ",
   "Tasbih_LaIlaha": "അല്ലാഹുവല്ലാതെ ഒരു ദൈവവുമില്ല",
-  "Tasbih_Astaghfirullah": "ഞാൻ അല്ലാഹുവിനോട് പാപമോചനം തേടുന്നു"
+  "Tasbih_Astaghfirullah": "ഞാൻ അല്ലാഹുവിനോട് പാപമോചനം തേടുന്നു",
+  "Tab_Home": "ഹോം",
+  "Tab_Help": "സഹായം",
+  "Tracker_TabTitle": "പ്രാർത്ഥന & നോമ്പ് ട്രാക്കർ",
+  "Tracker_EnableDaily": "ദൈനംദിന ട്രാക്കർ പ്രവർത്തനക്ഷമമാക്കുക",
+  "Tracker_EnableDailyDesc": "ഡാഷ്‌ബോർഡിലെ ട്രാക്കിംഗ് സിസ്റ്റം ഓൺ/ഓഫ് ചെയ്യുക.",
+  "Tracker_ShowDeedPopup": "ജമാഅത്തിന് ശേഷം അമൽ പോപ്പ്അപ്പുകൾ കാണിക്കുക",
+  "Tracker_ShowAfter": "ഇത്രയും മിനിറ്റിന് ശേഷം കാണിക്കുക",
+  "Tracker_MinutesOfJamaat": "മിനിറ്റുകൾക്ക് ശേഷം ജമാഅത്ത് സമയം.",
+  "Tracker_ShowDailySummary": "രാത്രിയിൽ ദൈനംദിന സംഗ്രഹം കാണിക്കുക",
+  "Tracker_ScheduledTime": "ഷെഡ്യൂൾ ചെയ്ത സമയം:",
+  "Tracker_DataManagement": "ഡാറ്റ മാനേജ്‌മെന്റ്",
+  "Tracker_AutoBackupSchedule": "ഓട്ടो ബാക്കപ്പ് ഷെഡ്യൂൾ",
+  "Tracker_ChooseLocation": "ലൊക്കേഷൻ തിരഞ്ഞെടുക്കുക",
+  "Backup_None": "ഒന്നുമില്ല",
+  "Backup_Daily": "ദിവസേന",
+  "Backup_Weekly": "ആഴ്ചതോറും",
+  "Backup_Monthly": "മാസംതോറും"
 }

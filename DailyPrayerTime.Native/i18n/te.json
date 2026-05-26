@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "అల్లాహ్ కు స్తోత్రములు",
   "Tasbih_AllahuAkbar": "అల్లాహ్ గొప్పవాడు",
   "Tasbih_LaIlaha": "అల్లా తప్ప మరే దేవుడు లేడు",
-  "Tasbih_Astaghfirullah": "నేను అల్లాహ్ నుండి క్షమాపణ కోరుతున్నాను"
+  "Tasbih_Astaghfirullah": "నేను అల్లాహ్ నుండి క్షమాపణ కోరుతున్నాను",
+  "Tab_Home": "హోమ్",
+  "Tab_Help": "సహాయం",
+  "Tracker_TabTitle": "ప్రార్థన & ఉపవాసం ట్రాకర్",
+  "Tracker_EnableDaily": "రోజువారీ ట్రాకర్ ప్రారంభించు",
+  "Tracker_EnableDailyDesc": "డాష్‌బోర్డ్‌లో ట్రాకింగ్ సిസ്റ്റమ్‌ను ఆన్/ఆఫ్ చేయండి.",
+  "Tracker_ShowDeedPopup": "జమాత్ తర్వాత డీడ్ పాపప్‌లను చూపించు",
+  "Tracker_ShowAfter": "తర్వాత చూపించు",
+  "Tracker_MinutesOfJamaat": "జమాత్ సమయం నిమిషాలు.",
+  "Tracker_ShowDailySummary": "రాత్రిపూట రోజువారీ సారాంశాన్ని చూపించు",
+  "Tracker_ScheduledTime": "షెడ్యూల్ చేసిన సమయం:",
+  "Tracker_DataManagement": "డేటా నిర్వహణ",
+  "Tracker_AutoBackupSchedule": "ఆటో బ్యాకప్ షెడ్యూల్",
+  "Tracker_ChooseLocation": "స్థానాన్ని ఎంచుకోండి",
+  "Backup_None": "ఏదీ లేదు",
+  "Backup_Daily": "రోజువారీ",
+  "Backup_Weekly": "వారానికోసారి",
+  "Backup_Monthly": "నెలవారీ"
 }

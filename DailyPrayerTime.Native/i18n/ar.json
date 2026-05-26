@@ -440,5 +440,22 @@
   "Tasbih_Alhamdulillah": "الحمد لله",
   "Tasbih_AllahuAkbar": "الله أكبر",
   "Tasbih_LaIlaha": "لا إله إلا الله",
-  "Tasbih_Astaghfirullah": "أستغفر الله"
+  "Tasbih_Astaghfirullah": "أستغفر الله",
+  "Tab_Home": "الرئيسية",
+  "Tab_Help": "مساعدة",
+  "Tracker_TabTitle": "مقتفي الصلاة والصيام",
+  "Tracker_EnableDaily": "تمكين المقتفي اليومي",
+  "Tracker_EnableDailyDesc": "تشغيل/إيقاف تشغيل نظام التتبع على لوحة القيادة.",
+  "Tracker_ShowDeedPopup": "إظهار نوافذ الأعمال المنبثقة بعد الجماعة",
+  "Tracker_ShowAfter": "إظهار بعد",
+  "Tracker_MinutesOfJamaat": "دقائق من وقت الجماعة.",
+  "Tracker_ShowDailySummary": "إظهار الملخص اليومي ليلاً",
+  "Tracker_ScheduledTime": "الوقت المجدول:",
+  "Tracker_DataManagement": "إدارة البيانات",
+  "Tracker_AutoBackupSchedule": "جدول النسخ الاحتياطي التلقائي",
+  "Tracker_ChooseLocation": "اختر الموقع",
+  "Backup_None": "بلا",
+  "Backup_Daily": "يومياً",
+  "Backup_Weekly": "أسبوعياً",
+  "Backup_Monthly": "شهرياً"
 }

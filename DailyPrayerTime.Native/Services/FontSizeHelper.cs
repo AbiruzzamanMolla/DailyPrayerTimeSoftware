@@ -1,21 +1,47 @@
 using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace DailyPrayerTime.Native
 {
     public static class FontSizeHelper
     {
-        private static readonly Dictionary<DependencyObject, double> _baseSizes = new Dictionary<DependencyObject, double>();
+        private class BoxedDouble
+        {
+            public double Value { get; set; }
+        }
+
+        private static readonly ConditionalWeakTable<DependencyObject, BoxedDouble> _baseSizes = new ConditionalWeakTable<DependencyObject, BoxedDouble>();
         private static double _currentScale = 1.0;
 
         public static double CurrentScale => _currentScale;
 
         public static event Action? ScaleChanged;
+
+        static FontSizeHelper()
+        {
+            // Register a global class handler for the Loaded event of FrameworkElements and TextElements
+            EventManager.RegisterClassHandler(typeof(FrameworkElement), FrameworkElement.LoadedEvent, new RoutedEventHandler(OnElementLoaded));
+            EventManager.RegisterClassHandler(typeof(TextElement), TextElement.LoadedEvent, new RoutedEventHandler(OnTextElementLoaded));
+        }
+
+        private static void OnElementLoaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is DependencyObject depObj)
+            {
+                ApplyScaleToElement(depObj);
+            }
+        }
+
+        private static void OnTextElementLoaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is DependencyObject depObj)
+            {
+                ApplyScaleToElement(depObj);
+            }
+        }
 
         public static void Increase()
         {
@@ -46,7 +72,7 @@ namespace DailyPrayerTime.Native
         public static void Reset()
         {
             _currentScale = 1.0;
-            _baseSizes.Clear();
+            Reapply();
             SettingsManager.Current.FontScale = _currentScale;
             SettingsManager.Save();
             ScaleChanged?.Invoke();
@@ -55,19 +81,23 @@ namespace DailyPrayerTime.Native
         public static void InitializeFromSettings()
         {
             _currentScale = Math.Clamp(SettingsManager.Current.FontScale, 0.6, 2.0);
-            _baseSizes.Clear();
         }
 
         public static void ApplyScale(DependencyObject root)
         {
             if (root == null) return;
 
+            if (root is FrameworkElement fe && !fe.IsLoaded)
+            {
+                return;
+            }
+
             ApplyScaleToElement(root);
 
-            int childCount = VisualTreeHelper.GetChildrenCount(root);
+            int childCount = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
             for (int i = 0; i < childCount; i++)
             {
-                var child = VisualTreeHelper.GetChild(root, i);
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
                 ApplyScale(child);
             }
         }
@@ -79,29 +109,20 @@ namespace DailyPrayerTime.Native
 
             if (element is TextBlock tb)
             {
-                if (!_baseSizes.ContainsKey(tb))
-                {
-                    _baseSizes[tb] = tb.FontSize;
-                }
-                originalSize = _baseSizes[tb];
+                var boxed = _baseSizes.GetValue(tb, key => new BoxedDouble { Value = ((TextBlock)key).FontSize });
+                originalSize = boxed.Value;
                 hasFontSize = true;
             }
             else if (element is System.Windows.Controls.Control control)
             {
-                if (!_baseSizes.ContainsKey(control))
-                {
-                    _baseSizes[control] = control.FontSize;
-                }
-                originalSize = _baseSizes[control];
+                var boxed = _baseSizes.GetValue(control, key => new BoxedDouble { Value = ((System.Windows.Controls.Control)key).FontSize });
+                originalSize = boxed.Value;
                 hasFontSize = true;
             }
             else if (element is TextElement te)
             {
-                if (!_baseSizes.ContainsKey(te))
-                {
-                    _baseSizes[te] = te.FontSize;
-                }
-                originalSize = _baseSizes[te];
+                var boxed = _baseSizes.GetValue(te, key => new BoxedDouble { Value = ((TextElement)key).FontSize });
+                originalSize = boxed.Value;
                 hasFontSize = true;
             }
 
