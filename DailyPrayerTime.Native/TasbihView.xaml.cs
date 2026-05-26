@@ -54,7 +54,6 @@ namespace DailyPrayerTime.Native
         private PhraseItem CurrentPhrase => _phrases[_currentIndex];
         private int CurrentCount => _counts.GetValueOrDefault(CurrentPhrase.Key, 0);
         private ObservableCollection<DuaCardItem> _duaCards = new();
-        private bool _isEnglishLang = true;
 
         public TasbihView()
         {
@@ -305,50 +304,58 @@ namespace DailyPrayerTime.Native
             catch { }
         }
 
+        private string _selectedLang = "en";
+
         private void ApplyLanguageFilter()
         {
             if (_allDuas == null) return;
 
-            bool isEnglish = _isEnglishLang;
-
             _duaCards.Clear();
             foreach (var r in _allDuas)
             {
-                bool hasLang = isEnglish ? r.En != null : r.Bn != null;
-                if (!hasLang) continue;
+                DuaLangData? langData = null;
+                switch (_selectedLang)
+                {
+                    case "en": langData = r.En; break;
+                    case "bn": langData = r.Bn; break;
+                    case "hi": langData = r.Hi; break;
+                    case "ta": langData = r.Ta; break;
+                    case "te": langData = r.Te; break;
+                    case "ml": langData = r.Ml; break;
+                    case "id": langData = r.Id; break;
+                    case "ar": langData = r.Ar; break;
+                }
 
-                var langData = isEnglish ? r.En : r.Bn;
+                bool hasLang = langData != null;
+                if (!hasLang && _selectedLang != "en") 
+                {
+                    // If translation doesn't exist, fallback to English or original name
+                }
+
                 _duaCards.Add(new DuaCardItem
                 {
                     Index = r.Index,
-                    Name = langData?.Name ?? r.Name,
+                    Name = langData?.Name ?? r.En?.Name ?? r.Name,
                     Arabic = r.Arabic,
                     Reference = r.Reference,
-                    Transliteration = langData?.Transliteration ?? "",
-                    Translation = langData?.Translation ?? "",
+                    Transliteration = langData?.Transliteration ?? r.En?.Transliteration ?? "",
+                    Translation = langData?.Translation ?? r.En?.Translation ?? "",
                     IsExpanded = false
                 });
             }
         }
 
-        private void SelectLang(bool isEnglish)
+        private void DuaLangCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            _isEnglishLang = isEnglish;
-            if (isEnglish)
+            if (sender is System.Windows.Controls.ComboBox combo && combo.SelectedItem is System.Windows.Controls.ComboBoxItem item)
             {
-                LangEnBtn.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 16, 185, 129));
-                LangBnBtn.Background = System.Windows.Media.Brushes.Transparent;
+                if (item.Tag is string lang)
+                {
+                    _selectedLang = lang;
+                    ApplyLanguageFilter();
+                }
             }
-            else
-            {
-                LangEnBtn.Background = System.Windows.Media.Brushes.Transparent;
-                LangBnBtn.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(255, 16, 185, 129));
-            }
-            ApplyLanguageFilter();
         }
-
-        private void LangEn_Click(object sender, System.Windows.Input.MouseButtonEventArgs e) => SelectLang(true);
-        private void LangBn_Click(object sender, System.Windows.Input.MouseButtonEventArgs e) => SelectLang(false);
 
         private void ToggleDuaCard(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -372,5 +379,11 @@ namespace DailyPrayerTime.Native
         public string Reference { get; set; } = "";
         public DuaLangData? En { get; set; }
         public DuaLangData? Bn { get; set; }
+        public DuaLangData? Hi { get; set; }
+        public DuaLangData? Ta { get; set; }
+        public DuaLangData? Te { get; set; }
+        public DuaLangData? Ml { get; set; }
+        public DuaLangData? Id { get; set; }
+        public DuaLangData? Ar { get; set; }
     }
 }

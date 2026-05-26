@@ -74,19 +74,17 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="📖  Duas &amp; Supplications" FontSize="14" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
-                    <Border Grid.Column="1" Background="#170939" CornerRadius="6" Padding="2">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Border x:Name="LangEnBtn" Grid.Column="0" Background="#10B981" CornerRadius="4" Padding="10,4" Cursor="Hand" MouseLeftButtonUp="LangEn_Click">
-                                <TextBlock Text="English" Foreground="White" FontSize="11" FontWeight="Bold"/>
-                            </Border>
-                            <Border x:Name="LangBnBtn" Grid.Column="1" Background="Transparent" CornerRadius="4" Padding="10,4" Cursor="Hand" MouseLeftButtonUp="LangBn_Click">
-                                <TextBlock Text="বাংলা" Foreground="White" FontSize="11" FontWeight="SemiBold"/>
-                            </Border>
-                        </Grid>
+                    <Border Grid.Column="1" Background="#1AFFFFFF" CornerRadius="4" Padding="2">
+                        <ComboBox x:Name="DuaLangCombo" SelectionChanged="DuaLangCombo_SelectionChanged" Background="Transparent" Foreground="Black" BorderThickness="0" FontSize="11" FontWeight="Bold" Width="100">
+                            <ComboBoxItem Content="English" Tag="en" IsSelected="True"/>
+                            <ComboBoxItem Content="বাংলা" Tag="bn"/>
+                            <ComboBoxItem Content="हिंदी" Tag="hi"/>
+                            <ComboBoxItem Content="தமிழ்" Tag="ta"/>
+                            <ComboBoxItem Content="తెలుగు" Tag="te"/>
+                            <ComboBoxItem Content="മലയാളം" Tag="ml"/>
+                            <ComboBoxItem Content="Bahasa Indonesia" Tag="id"/>
+                            <ComboBoxItem Content="عربي" Tag="ar"/>
+                        </ComboBox>
                     </Border>
                 </Grid>
                 <ItemsControl x:Name="DuasList">

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **UI Streamlining**: Moved the app's global font scaling controls (A−, A○, A+) from the main window's top menu bar directly into the Settings (Appearance section) for a cleaner UI layout. The keyboard shortcuts (Ctrl+Plus, Ctrl+Minus, Ctrl+0) remain fully functional.
+- **Duas & Supplications Multi-Language Support**: Replaced the English/Bangla toggle buttons in the Tasbih section with a full language dropdown supporting all 8 available languages (English, Bengali, Hindi, Tamil, Telugu, Malayalam, Indonesian, Arabic). Translations fall back to English when not available for a selected language.
 
 ### Fixed
 
