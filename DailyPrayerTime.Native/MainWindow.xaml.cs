@@ -251,15 +251,15 @@ namespace DailyPrayerTime.Native
             cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Open"), null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
             cms.Items.Add(new Forms.ToolStripSeparator());
 
-            _trayCurrentPrayerItem = new Forms.ToolStripMenuItem("Current Prayer: --");
+            _trayCurrentPrayerItem = new Forms.ToolStripMenuItem(string.Format(LocalizationManager.Instance.GetString("Tray_CurrentPrayer"), "--"));
             _trayCurrentPrayerItem.Enabled = false;
             cms.Items.Add(_trayCurrentPrayerItem);
 
-            _trayStartTimeItem = new Forms.ToolStripMenuItem("Start Time: --");
+            _trayStartTimeItem = new Forms.ToolStripMenuItem(string.Format(LocalizationManager.Instance.GetString("Tray_StartTime"), "--"));
             _trayStartTimeItem.Enabled = false;
             cms.Items.Add(_trayStartTimeItem);
 
-            _trayEndTimeItem = new Forms.ToolStripMenuItem("End Time: --");
+            _trayEndTimeItem = new Forms.ToolStripMenuItem(string.Format(LocalizationManager.Instance.GetString("Tray_EndTime"), "--"));
             _trayEndTimeItem.Enabled = false;
             cms.Items.Add(_trayEndTimeItem);
 
@@ -275,7 +275,7 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
-            var taskbarTimerItem = new Forms.ToolStripMenuItem("Show Taskbar Timer");
+            var taskbarTimerItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowTaskbarTimer"));
             taskbarTimerItem.CheckOnClick = true;
             taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
             taskbarTimerItem.Click += (s, e) => {
@@ -1672,20 +1672,20 @@ namespace DailyPrayerTime.Native
                 heroPrayer = Prayer.NONE;
             }
 
-            if (_trayCurrentPrayerItem != null) _trayCurrentPrayerItem.Text = $"Current Prayer: {curName}";
+            if (_trayCurrentPrayerItem != null) _trayCurrentPrayerItem.Text = string.Format(LocalizationManager.Instance.GetString("Tray_CurrentPrayer"), curName);
             
             try
             {
                 DateTime startTime = _todayPrayerTimes.TimeForPrayer(curPrayer);
                 if (curPrayer == Prayer.ISHA && now < _todayPrayerTimes.Fajr && _tomorrowPrayerTimes != null)
                 {
-                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = $"Start Time: {startTime.ToString(GetTimeFmt())}";
-                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = $"End Time: {_todayPrayerTimes.Fajr.ToString(GetTimeFmt())}";
+                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = string.Format(LocalizationManager.Instance.GetString("Tray_StartTime"), startTime.ToString(GetTimeFmt()));
+                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = string.Format(LocalizationManager.Instance.GetString("Tray_EndTime"), _todayPrayerTimes.Fajr.ToString(GetTimeFmt()));
                 }
                 else
                 {
-                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = $"Start Time: {startTime.ToString(GetTimeFmt())}";
-                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = $"End Time: {nextTime.ToString(GetTimeFmt())}";
+                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = string.Format(LocalizationManager.Instance.GetString("Tray_StartTime"), startTime.ToString(GetTimeFmt()));
+                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = string.Format(LocalizationManager.Instance.GetString("Tray_EndTime"), nextTime.ToString(GetTimeFmt()));
                 }
             } 
             catch { }

@@ -632,20 +632,20 @@
                             <StackPanel>
                                 <TextBlock Text="{DynamicResource i18n_Section_WindowsIntegration}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
                                 <CheckBox x:Name="OverlayInput" Content="{DynamicResource i18n_Check_Overlay}" Margin="0,6,0,4" Foreground="White"/>
-                                <CheckBox x:Name="ShowTaskbarTimerInput" Content="Show Taskbar Timer" Margin="0,0,0,4" Foreground="White"/>
+                                <CheckBox x:Name="ShowTaskbarTimerInput" Content="{DynamicResource Check_ShowTaskbarTimer}" Margin="0,0,0,4" Foreground="White"/>
                                 <StackPanel Margin="20,0,0,6" Orientation="Horizontal">
-                                    <TextBlock Text="Timer Style:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" Opacity="0.7" FontSize="11"/>
+                                    <TextBlock Text="{DynamicResource Label_TimerStyle}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" Opacity="0.7" FontSize="11"/>
                                     <ComboBox x:Name="TaskbarTimerTypeInput" Padding="3" Width="200" Foreground="Black">
-                                        <ComboBoxItem Content="Enhanced Taskbar Timer" Tag="Enhanced" Foreground="Black"/>
-                                        <ComboBoxItem Content="Integrated Taskbar (Win 11)" Tag="Integrated" Foreground="Black"/>
-                                        <ComboBoxItem Content="DeskBand (Legacy/ExplorerPatcher)" Tag="DeskBand" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource Timer_Enhanced}" Tag="Enhanced" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource Timer_Integrated}" Tag="Integrated" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource Timer_DeskBand}" Tag="DeskBand" Foreground="Black"/>
                                     </ComboBox>
                                 </StackPanel>
                                 <ComboBox x:Name="EnhancedTaskbarPositionInput" Margin="20,0,0,8" Padding="3" Width="150" HorizontalAlignment="Left" Foreground="Black">
-                                    <ComboBoxItem Content="Left of Tray" Tag="LeftOfTray" Foreground="Black"/>
-                                    <ComboBoxItem Content="Right of Tray" Tag="RightOfTray" Foreground="Black"/>
-                                    <ComboBoxItem Content="Center" Tag="Center" Foreground="Black"/>
-                                    <ComboBoxItem Content="Left (Near Start)" Tag="Left" Foreground="Black"/>
+                                    <ComboBoxItem Content="{DynamicResource Timer_LeftOfTray}" Tag="LeftOfTray" Foreground="Black"/>
+                                    <ComboBoxItem Content="{DynamicResource Timer_RightOfTray}" Tag="RightOfTray" Foreground="Black"/>
+                                    <ComboBoxItem Content="{DynamicResource Timer_Center}" Tag="Center" Foreground="Black"/>
+                                    <ComboBoxItem Content="{DynamicResource Timer_LeftNearStart}" Tag="Left" Foreground="Black"/>
                                 </ComboBox>
                                 <CheckBox x:Name="ShowHeroGridInput" Content="{DynamicResource i18n_Check_HeroGrid}" Margin="0,0,0,4" Foreground="White"/>
                                 <Grid Margin="0,0,0,4">
@@ -686,10 +686,10 @@
                                 <TextBlock Text="{DynamicResource i18n_Section_Appearance}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
                                 
                                 <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
-                                    <TextBlock Text="App Font Size:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" Opacity="0.7" FontSize="11"/>
-                                    <Button Content="A−" Width="30" Height="26" Margin="0,0,5,0" Click="FontDecrease_Click" ToolTip="Decrease font size" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
-                                    <Button Content="A○" Width="30" Height="26" Margin="0,0,5,0" Click="FontReset_Click" ToolTip="Reset font size" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
-                                    <Button Content="A+" Width="30" Height="26" Margin="0,0,0,0" Click="FontIncrease_Click" ToolTip="Increase font size" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                    <TextBlock Text="{DynamicResource Label_AppFontSize}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" Opacity="0.7" FontSize="11"/>
+                                    <Button Content="A−" Width="30" Height="26" Margin="0,0,5,0" Click="FontDecrease_Click" ToolTip="{DynamicResource Tooltip_FontDecrease}" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                    <Button Content="A○" Width="30" Height="26" Margin="0,0,5,0" Click="FontReset_Click" ToolTip="{DynamicResource Tooltip_FontReset}" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                    <Button Content="A+" Width="30" Height="26" Margin="0,0,0,0" Click="FontIncrease_Click" ToolTip="{DynamicResource Tooltip_FontIncrease}" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
                                 </StackPanel>
                                 
                                 <Grid Margin="0,5,0,0">
@@ -750,7 +750,7 @@
                                         </Grid>
                                     </StackPanel>
                                 </Grid>
-                                <Button Content="Reset to Default Colors" Click="ResetColors_Click" Margin="0,8,0,0" Padding="8,4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Cursor="Hand" HorizontalAlignment="Right"/>
+                                <Button Content="{DynamicResource Btn_ResetColors}" Click="ResetColors_Click" Margin="0,8,0,0" Padding="8,4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Cursor="Hand" HorizontalAlignment="Right"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -772,7 +772,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{DynamicResource i18n_Updates_Desc}" TextWrapping="Wrap" Foreground="White" Opacity="0.7" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.4.3" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.4.4" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="12,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
                                         <Button.Resources>

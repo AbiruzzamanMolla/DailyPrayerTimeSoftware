@@ -457,5 +457,22 @@
   "Backup_None": "Tidak ada",
   "Backup_Daily": "Harian",
   "Backup_Weekly": "Mingguan",
-  "Backup_Monthly": "Bulanan"
+  "Backup_Monthly": "Bulanan",
+  "Check_ShowTaskbarTimer": "Tampilkan Timer Taskbar",
+  "Label_TimerStyle": "Gaya Timer:",
+  "Timer_Enhanced": "Timer Taskbar yang Ditingkatkan",
+  "Timer_Integrated": "Taskbar Terintegrasi (Win 11)",
+  "Timer_DeskBand": "DeskBand (Warisan/ExplorerPatcher)",
+  "Timer_LeftOfTray": "Kiri Tray",
+  "Timer_RightOfTray": "Kanan Tray",
+  "Timer_Center": "Tengah",
+  "Timer_LeftNearStart": "Kiri (Dekat Start)",
+  "Label_AppFontSize": "Ukuran Font App:",
+  "Tooltip_FontDecrease": "Kecilkan ukuran font",
+  "Tooltip_FontReset": "Reset ukuran font",
+  "Tooltip_FontIncrease": "Perbesar ukuran font",
+  "Tray_CurrentPrayer": "Sholat Saat Ini: {0}",
+  "Tray_StartTime": "Waktu Mulai: {0}",
+  "Tray_EndTime": "Waktu Berakhir: {0}",
+  "Tray_ShowTaskbarTimer": "Tampilkan Timer Taskbar"
 }

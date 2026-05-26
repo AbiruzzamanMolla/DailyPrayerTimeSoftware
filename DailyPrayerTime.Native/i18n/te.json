@@ -457,5 +457,22 @@
   "Backup_None": "ఏదీ లేదు",
   "Backup_Daily": "రోజువారీ",
   "Backup_Weekly": "వారానికోసారి",
-  "Backup_Monthly": "నెలవారీ"
+  "Backup_Monthly": "నెలవారీ",
+  "Check_ShowTaskbarTimer": "టాస్క్‌బార్ టైమర్ చూపించు",
+  "Label_TimerStyle": "టైమర్ స్టైల్:",
+  "Timer_Enhanced": "మెరుగైన టాస్క్‌బార్ టైమర్",
+  "Timer_Integrated": "ఇంటిగ్రేటెడ్ టాస్క్‌బార్ (Win 11)",
+  "Timer_DeskBand": "డెస్క్‌బ్యాండ్ (Legacy/ExplorerPatcher)",
+  "Timer_LeftOfTray": "ట్రేకి ఎడమ",
+  "Timer_RightOfTray": "ట్రేకి కుడి",
+  "Timer_Center": "మధ్యం",
+  "Timer_LeftNearStart": "ఎడమ (స్టార్ట్ దగ్గర)",
+  "Label_AppFontSize": "యాప్ ఫాంట్ సైజు:",
+  "Tooltip_FontDecrease": "ఫాంట్ సైజు తగ్గించు",
+  "Tooltip_FontReset": "ఫాంట్ సైజు రీసెట్ చేయి",
+  "Tooltip_FontIncrease": "ఫాంట్ సైజు పెంచు",
+  "Tray_CurrentPrayer": "ప్రస్తుత నమాజ్: {0}",
+  "Tray_StartTime": "ప్రారంభ సమయం: {0}",
+  "Tray_EndTime": "ముగింపు సమయం: {0}",
+  "Tray_ShowTaskbarTimer": "టాస్క్‌బార్ టైమర్ చూపించు"
 }

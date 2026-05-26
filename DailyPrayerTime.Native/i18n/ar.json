@@ -457,5 +457,22 @@
   "Backup_None": "بلا",
   "Backup_Daily": "يومياً",
   "Backup_Weekly": "أسبوعياً",
-  "Backup_Monthly": "شهرياً"
+  "Backup_Monthly": "شهرياً",
+  "Check_ShowTaskbarTimer": "إظهار مؤقت شريط المهام",
+  "Label_TimerStyle": "نمط المؤقت:",
+  "Timer_Enhanced": "مؤقت شريط المهام المحسّن",
+  "Timer_Integrated": "شريط المهام المدمج (Win 11)",
+  "Timer_DeskBand": "DeskBand (قديم/ExplorerPatcher)",
+  "Timer_LeftOfTray": "يسار منطقة الإعلام",
+  "Timer_RightOfTray": "يمين منطقة الإعلام",
+  "Timer_Center": "مركز",
+  "Timer_LeftNearStart": "يسار (بالقرب من البداية)",
+  "Label_AppFontSize": "حجم خط التطبيق:",
+  "Tooltip_FontDecrease": "تقليل حجم الخط",
+  "Tooltip_FontReset": "إعادة تعيين حجم الخط",
+  "Tooltip_FontIncrease": "زيادة حجم الخط",
+  "Tray_CurrentPrayer": "الصلاة الحالية: {0}",
+  "Tray_StartTime": "وقت البدء: {0}",
+  "Tray_EndTime": "وقت الانتهاء: {0}",
+  "Tray_ShowTaskbarTimer": "إظهار مؤقت شريط المهام"
 }

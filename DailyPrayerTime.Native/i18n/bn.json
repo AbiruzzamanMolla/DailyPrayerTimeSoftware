@@ -457,5 +457,22 @@
   "Backup_None": "কোনোটিই নয়",
   "Backup_Daily": "দৈনিক",
   "Backup_Weekly": "সাপ্তাহিক",
-  "Backup_Monthly": "মাসিক"
+  "Backup_Monthly": "মাসিক",
+  "Check_ShowTaskbarTimer": "টাস্কবার টাইমার দেখান",
+  "Label_TimerStyle": "টাইমার স্টাইল:",
+  "Timer_Enhanced": "উন্নত টাস্কবার টাইমার",
+  "Timer_Integrated": "ইন্টিগ্রেটেড টাস্কবার (উইন ১১)",
+  "Timer_DeskBand": "ডেস্কব্যান্ড (লেগেসি/এক্সপ্লোরার প্যাচার)",
+  "Timer_LeftOfTray": "ট্রের বাম দিকে",
+  "Timer_RightOfTray": "ট্রের ডান দিকে",
+  "Timer_Center": "মাঝখানে",
+  "Timer_LeftNearStart": "বাম (স্টার্ট বাটনের কাছে)",
+  "Label_AppFontSize": "অ্যাপ ফন্ট সাইজ:",
+  "Tooltip_FontDecrease": "ফন্ট সাইজ কমান",
+  "Tooltip_FontReset": "ফন্ট সাইজ রিসেট করুন",
+  "Tooltip_FontIncrease": "ফন্ট সাইজ বাড়ান",
+  "Tray_CurrentPrayer": "বর্তমান নামাজ: {0}",
+  "Tray_StartTime": "শুরুর সময়: {0}",
+  "Tray_EndTime": "শেষের সময়: {0}",
+  "Tray_ShowTaskbarTimer": "টাস্কবার টাইমার দেখান"
 }

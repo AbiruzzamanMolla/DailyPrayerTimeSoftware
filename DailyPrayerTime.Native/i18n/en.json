@@ -457,5 +457,22 @@
   "Backup_None": "None",
   "Backup_Daily": "Daily",
   "Backup_Weekly": "Weekly",
-  "Backup_Monthly": "Monthly"
+  "Backup_Monthly": "Monthly",
+  "Check_ShowTaskbarTimer": "Show Taskbar Timer",
+  "Label_TimerStyle": "Timer Style:",
+  "Timer_Enhanced": "Enhanced Taskbar Timer",
+  "Timer_Integrated": "Integrated Taskbar (Win 11)",
+  "Timer_DeskBand": "DeskBand (Legacy/ExplorerPatcher)",
+  "Timer_LeftOfTray": "Left of Tray",
+  "Timer_RightOfTray": "Right of Tray",
+  "Timer_Center": "Center",
+  "Timer_LeftNearStart": "Left (Near Start)",
+  "Label_AppFontSize": "App Font Size:",
+  "Tooltip_FontDecrease": "Decrease font size",
+  "Tooltip_FontReset": "Reset font size",
+  "Tooltip_FontIncrease": "Increase font size",
+  "Tray_CurrentPrayer": "Current Prayer: {0}",
+  "Tray_StartTime": "Start Time: {0}",
+  "Tray_EndTime": "End Time: {0}",
+  "Tray_ShowTaskbarTimer": "Show Taskbar Timer"
 }

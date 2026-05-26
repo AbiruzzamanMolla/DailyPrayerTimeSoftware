@@ -457,5 +457,22 @@
   "Backup_None": "कोई नहीं",
   "Backup_Daily": "दैनिक",
   "Backup_Weekly": "साप्ताहिक",
-  "Backup_Monthly": "मासिक"
+  "Backup_Monthly": "मासिक",
+  "Check_ShowTaskbarTimer": "टास्कबार टाइमर दिखाएं",
+  "Label_TimerStyle": "टाइमर शैली:",
+  "Timer_Enhanced": "उन्नत टास्कबार टाइमर",
+  "Timer_Integrated": "एकीकृत टास्कबार (विन 11)",
+  "Timer_DeskBand": "डेस्कबैंड (लेगेसी/एक्सप्लोरर पैचर)",
+  "Timer_LeftOfTray": "ट्रे के बाईं ओर",
+  "Timer_RightOfTray": "ट्रे के दाईं ओर",
+  "Timer_Center": "केंद्र",
+  "Timer_LeftNearStart": "बाईं ओर (स्टार्ट के पास)",
+  "Label_AppFontSize": "ऐप फ़ॉन्ट आकार:",
+  "Tooltip_FontDecrease": "फ़ॉन्ट आकार घटाएं",
+  "Tooltip_FontReset": "फ़ॉन्ट आकार रीसेट करें",
+  "Tooltip_FontIncrease": "फ़ॉन्ट आकार बढ़ाएं",
+  "Tray_CurrentPrayer": "वर्तमान नमाज़: {0}",
+  "Tray_StartTime": "शुरुआत समय: {0}",
+  "Tray_EndTime": "समाप्त समय: {0}",
+  "Tray_ShowTaskbarTimer": "टास्कबार टाइमर दिखाएं"
 }

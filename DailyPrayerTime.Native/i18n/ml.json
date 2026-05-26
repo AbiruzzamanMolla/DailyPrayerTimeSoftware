@@ -457,5 +457,22 @@
   "Backup_None": "ഒന്നുമില്ല",
   "Backup_Daily": "ദിവസേന",
   "Backup_Weekly": "ആഴ്ചതോറും",
-  "Backup_Monthly": "മാസംതോറും"
+  "Backup_Monthly": "മാസംതോറും",
+  "Check_ShowTaskbarTimer": "ടാസ്‌ക്ബാർ ടൈമർ കാണിക്കുക",
+  "Label_TimerStyle": "ടൈമർ ശൈലി:",
+  "Timer_Enhanced": "മെച്ചപ്പെടുത്തിയ ടാസ്‌ക്ബാർ ടൈമർ",
+  "Timer_Integrated": "ഇന്റഗ്രേറ്റഡ് ടാസ്‌ക്ബാർ (Win 11)",
+  "Timer_DeskBand": "ഡെസ്‌ക്ബാൻഡ് (Legacy/ExplorerPatcher)",
+  "Timer_LeftOfTray": "ട്രേയുടെ ഇടതുവശം",
+  "Timer_RightOfTray": "ട്രേയുടെ വലതുവശം",
+  "Timer_Center": "മധ്യഭാഗം",
+  "Timer_LeftNearStart": "ഇടത് (ആരംഭ ബട്ടണിനടുത്ത്)",
+  "Label_AppFontSize": "ആപ്പ് ഫോണ്ട് വലുപ്പം:",
+  "Tooltip_FontDecrease": "ഫോണ്ട് വലുപ്പം കുറയ്ക്കുക",
+  "Tooltip_FontReset": "ഫോണ്ട് വലുപ്പം പുനഃസജ്ജമാക്കുക",
+  "Tooltip_FontIncrease": "ഫോണ്ട് വലുപ്പം വർദ്ധിപ്പിക്കുക",
+  "Tray_CurrentPrayer": "ഇപ്പോഴത്തെ നമസ്കാരം: {0}",
+  "Tray_StartTime": "ആരംഭ സമയം: {0}",
+  "Tray_EndTime": "അവസാന സമയം: {0}",
+  "Tray_ShowTaskbarTimer": "ടാസ്‌ക്ബാർ ടൈമർ കാണിക്കുക"
 }

@@ -457,5 +457,22 @@
   "Backup_None": "ஏதுமில்லை",
   "Backup_Daily": "தினசரி",
   "Backup_Weekly": "வாராந்திர",
-  "Backup_Monthly": "மாதாந்திர"
+  "Backup_Monthly": "மாதாந்திர",
+  "Check_ShowTaskbarTimer": "டாஸ்க்பார் டைமரைக் காட்டு",
+  "Label_TimerStyle": "டைமர் பாணி:",
+  "Timer_Enhanced": "மேம்படுத்தப்பட்ட டாஸ்க்பார் டைமர்",
+  "Timer_Integrated": "ஒருங்கிணைந்த டாஸ்க்பார் (Win 11)",
+  "Timer_DeskBand": "DeskBand (Legacy/ExplorerPatcher)",
+  "Timer_LeftOfTray": "ட்ரேயின் இடதுபுறம்",
+  "Timer_RightOfTray": "ட்ரேயின் வலதுபுறம்",
+  "Timer_Center": "மையம்",
+  "Timer_LeftNearStart": "இடது (தொடக்கத்திற்கு அருகில்)",
+  "Label_AppFontSize": "ஆப் எழுத்துரு அளவு:",
+  "Tooltip_FontDecrease": "எழுத்துரு அளவை குறைக்கவும்",
+  "Tooltip_FontReset": "எழுத்துரு அளவை மீட்டமைக்கவும்",
+  "Tooltip_FontIncrease": "எழுத்துரு அளவை அதிகரிக்கவும்",
+  "Tray_CurrentPrayer": "தற்போதைய தொழுகை: {0}",
+  "Tray_StartTime": "தொடக்க நேரம்: {0}",
+  "Tray_EndTime": "முடிவு நேரம்: {0}",
+  "Tray_ShowTaskbarTimer": "டாஸ்க்பார் டைமரைக் காட்டு"
 }
