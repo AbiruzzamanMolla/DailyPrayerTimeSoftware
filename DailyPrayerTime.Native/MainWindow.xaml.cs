@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Text.Json;
 
 namespace DailyPrayerTime.Native
 {
@@ -37,6 +38,10 @@ namespace DailyPrayerTime.Native
         private bool _zawalProhibActive = false;
         private bool _sunsetProhibActive = false;
         private string _prohibNotifyDate = "";
+        
+        private Forms.ToolStripMenuItem? _trayCurrentPrayerItem;
+        private Forms.ToolStripMenuItem? _trayStartTimeItem;
+        private Forms.ToolStripMenuItem? _trayEndTimeItem;
 
         private static string GetTimeFmt() => SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
         private MediaPlayer _adhanPlayer = new MediaPlayer();
@@ -85,6 +90,7 @@ namespace DailyPrayerTime.Native
             _ = CalculatePrayerTimes();
             Task.Run(async () => await DownloadDefaultAdhan());
             _ = CheckForUpdates();
+            _ = CheckApiNoticeAsync();
             ManageOverlay();
             ManageIntegratedTaskbar();
             ManageEnhancedTaskbar();
@@ -119,6 +125,95 @@ namespace DailyPrayerTime.Native
             }
         }
 
+        private async Task CheckApiNoticeAsync()
+        {
+            try
+            {
+                var s = SettingsManager.Current;
+                string lang = LocalizationManager.Instance.CurrentLanguage;
+                if (lang != "bn" && lang != "en") lang = "en";
+
+                bool shouldFetch = true;
+                if (!string.IsNullOrEmpty(s.LastNoticeFetchTime) && DateTime.TryParse(s.LastNoticeFetchTime, out DateTime lastFetch))
+                {
+                    if ((DateTime.Now - lastFetch).TotalHours < 6)
+                    {
+                        shouldFetch = false;
+                    }
+                }
+
+                NoticeApiResponse? apiResponse = null;
+
+                if (shouldFetch)
+                {
+                    using var client = new HttpClient();
+                    string url = $"https://audiobookbangla.com/api/dpt-notice?lang={lang}";
+                    var response = await client.GetAsync(url);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string json = await response.Content.ReadAsStringAsync();
+                        apiResponse = JsonSerializer.Deserialize<NoticeApiResponse>(json);
+                        
+                        s.CachedNoticeResponseJson = json;
+                        s.LastNoticeFetchTime = DateTime.Now.ToString("o");
+                        SettingsManager.Save();
+                    }
+                }
+                else if (!string.IsNullOrEmpty(s.CachedNoticeResponseJson))
+                {
+                    apiResponse = JsonSerializer.Deserialize<NoticeApiResponse>(s.CachedNoticeResponseJson);
+                }
+
+                if (apiResponse != null && apiResponse.Success && apiResponse.Notice != null)
+                {
+                    var notice = apiResponse.Notice;
+                    DateTime now = DateTime.Now;
+
+                    if (notice.StartDate.HasValue && notice.ExpiryDate.HasValue &&
+                        now >= notice.StartDate.Value && now <= notice.ExpiryDate.Value)
+                    {
+                        // Show Banner
+                        Dispatcher.Invoke(() =>
+                        {
+                            ApiNoticeTitleText.Text = notice.Title;
+                            ApiNoticeHeaderText.Text = notice.NotificationMessage;
+                            DailyPrayerTime.Native.Helpers.HtmlTextBlockHelper.ParseHtmlToTextBlock(ApiNoticeMessageText, notice.Message);
+                            ApiNoticeBanner.Visibility = Visibility.Visible;
+                        });
+
+                        // Show Native Notification on 35s delay if not shown yet
+                        string noticeId = $"{notice.Title}_{notice.StartDateString}";
+                        if (s.NoticeLastShownVersion != noticeId)
+                        {
+                            // Start delay task
+                            _ = Task.Run(async () =>
+                            {
+                                await Task.Delay(TimeSpan.FromSeconds(35));
+                                Dispatcher.Invoke(() =>
+                                {
+                                    if (_notifyIcon != null)
+                                    {
+                                        _notifyIcon.ShowBalloonTip(5000, notice.NotificationMessage, notice.Message, Forms.ToolTipIcon.Info);
+                                    }
+                                });
+                                s.NoticeLastShownVersion = noticeId;
+                                SettingsManager.Save();
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Log($"CheckApiNoticeAsync error: {ex.Message}");
+            }
+        }
+
+        private void ApiNoticeDismiss_Click(object sender, RoutedEventArgs e)
+        {
+            ApiNoticeBanner.Visibility = Visibility.Collapsed;
+        }
+
         private void SetupTrayIcon()
         {
             _notifyIcon = new Forms.NotifyIcon();
@@ -131,17 +226,19 @@ namespace DailyPrayerTime.Native
             var cms = new Forms.ContextMenuStrip();
             
             cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Open"), null, (s, e) => { Show(); WindowState = WindowState.Normal; Activate(); });
-            
-            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Settings"), null, async (s, e) => { 
-                var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
-                if (sw.ShowDialog() == true) {
-                    ApplySettingsTheme();
-                    await CalculatePrayerTimes();
-                    ManageOverlay();
-                    ManageIntegratedTaskbar();
-                    ManageEnhancedTaskbar();
-                }
-            });
+            cms.Items.Add(new Forms.ToolStripSeparator());
+
+            _trayCurrentPrayerItem = new Forms.ToolStripMenuItem("Current Prayer: --");
+            _trayCurrentPrayerItem.Enabled = false;
+            cms.Items.Add(_trayCurrentPrayerItem);
+
+            _trayStartTimeItem = new Forms.ToolStripMenuItem("Start Time: --");
+            _trayStartTimeItem.Enabled = false;
+            cms.Items.Add(_trayStartTimeItem);
+
+            _trayEndTimeItem = new Forms.ToolStripMenuItem("End Time: --");
+            _trayEndTimeItem.Enabled = false;
+            cms.Items.Add(_trayEndTimeItem);
 
             cms.Items.Add(new Forms.ToolStripSeparator());
 
@@ -155,47 +252,44 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
-            var deskbandItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowDeskBand"));
-            deskbandItem.CheckOnClick = true;
-            deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
-            deskbandItem.Click += (s, e) => {
-                SettingsManager.Current.UseDeskBand = deskbandItem.Checked;
+            var taskbarTimerItem = new Forms.ToolStripMenuItem("Show Taskbar Timer");
+            taskbarTimerItem.CheckOnClick = true;
+            taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
+            taskbarTimerItem.Click += (s, e) => {
+                SettingsManager.Current.ShowTaskbarTimer = taskbarTimerItem.Checked;
                 SettingsManager.Save();
-                // DeskBand is handled by Explorer, we just update data
+                if (!taskbarTimerItem.Checked) {
+                    // Temporarily hide them
+                    ManageIntegratedTaskbar(forceHide: true);
+                    ManageEnhancedTaskbar(forceHide: true);
+                } else {
+                    ManageIntegratedTaskbar();
+                    ManageEnhancedTaskbar();
+                }
             };
-            cms.Items.Add(deskbandItem);
+            cms.Items.Add(taskbarTimerItem);
 
-            var integratedItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowIntegratedTaskbar"));
-            integratedItem.CheckOnClick = true;
-            integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
-            integratedItem.Click += (s, e) => {
-                SettingsManager.Current.UseIntegratedTaskbar = integratedItem.Checked;
-                SettingsManager.Save();
-                ManageIntegratedTaskbar();
-            };
-            cms.Items.Add(integratedItem);
-
-            var enhancedItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowEnhancedTaskbar"));
-            enhancedItem.CheckOnClick = true;
-            enhancedItem.Checked = SettingsManager.Current.UseEnhancedTaskbar;
-            enhancedItem.Click += (s, e) => {
-                SettingsManager.Current.UseEnhancedTaskbar = enhancedItem.Checked;
-                SettingsManager.Save();
-                ManageEnhancedTaskbar();
-            };
-            cms.Items.Add(enhancedItem);
+            cms.Items.Add(new Forms.ToolStripSeparator());
+            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Settings"), null, async (s, e) => { 
+                var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
+                if (sw.ShowDialog() == true) {
+                    ApplySettingsTheme();
+                    await CalculatePrayerTimes();
+                    ManageOverlay();
+                    ManageIntegratedTaskbar();
+                    ManageEnhancedTaskbar();
+                }
+            });
 
             cms.Items.Add(new Forms.ToolStripSeparator());
             cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Exit"), null, (s, e) => System.Windows.Application.Current.Shutdown());
 
             _notifyIcon.ContextMenuStrip = cms;
 
-            // Ensure checkmarks stay in sync when menu opens
+            // Ensure checkmarks and labels stay in sync when menu opens
             cms.Opening += (s, e) => {
                 overlayItem.Checked = SettingsManager.Current.ShowOverlay;
-                deskbandItem.Checked = SettingsManager.Current.UseDeskBand;
-                integratedItem.Checked = SettingsManager.Current.UseIntegratedTaskbar;
-                enhancedItem.Checked = SettingsManager.Current.UseEnhancedTaskbar;
+                taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
             };
 
             _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
@@ -401,6 +495,7 @@ namespace DailyPrayerTime.Native
             NafalCardsPanel.Visibility = Visibility.Collapsed;
             
             UpdateBanner.Visibility = Visibility.Collapsed; 
+            ApiNoticeBanner.Visibility = Visibility.Collapsed;
 
             // 2. Layout Adjustments
             MainContentStack.VerticalAlignment = _isZenMode ? VerticalAlignment.Center : VerticalAlignment.Top;
@@ -452,9 +547,9 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private void ManageIntegratedTaskbar()
+        private void ManageIntegratedTaskbar(bool forceHide = false)
         {
-            bool shouldShow = SettingsManager.Current.UseIntegratedTaskbar;
+            bool shouldShow = SettingsManager.Current.UseIntegratedTaskbar && SettingsManager.Current.ShowTaskbarTimer && !forceHide;
 
             if (shouldShow && _taskbarWindow == null)
             {
@@ -471,9 +566,9 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        public void ManageEnhancedTaskbar()
+        public void ManageEnhancedTaskbar(bool forceHide = false)
         {
-            bool shouldShow = SettingsManager.Current.UseEnhancedTaskbar;
+            bool shouldShow = SettingsManager.Current.UseEnhancedTaskbar && SettingsManager.Current.ShowTaskbarTimer && !forceHide;
 
             if (shouldShow && _enhancedTaskbarWindow == null)
             {
@@ -1525,6 +1620,24 @@ namespace DailyPrayerTime.Native
                 heroCountStr = "-" + countStr;
                 heroPrayer = Prayer.NONE;
             }
+
+            if (_trayCurrentPrayerItem != null) _trayCurrentPrayerItem.Text = $"Current Prayer: {curName}";
+            
+            try
+            {
+                DateTime startTime = _todayPrayerTimes.TimeForPrayer(curPrayer);
+                if (curPrayer == Prayer.ISHA && now < _todayPrayerTimes.Fajr && _tomorrowPrayerTimes != null)
+                {
+                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = $"Start Time: {startTime.ToString(GetTimeFmt())}";
+                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = $"End Time: {_todayPrayerTimes.Fajr.ToString(GetTimeFmt())}";
+                }
+                else
+                {
+                    if (_trayStartTimeItem != null) _trayStartTimeItem.Text = $"Start Time: {startTime.ToString(GetTimeFmt())}";
+                    if (_trayEndTimeItem != null) _trayEndTimeItem.Text = $"End Time: {nextTime.ToString(GetTimeFmt())}";
+                }
+            } 
+            catch { }
 
             UpdateHeroSection(heroPrayer, curName, nextName, heroCountStr, nextTime);
             UpdateOverlay(heroPrayer, curName, nextName, heroCountStr, nextTime);

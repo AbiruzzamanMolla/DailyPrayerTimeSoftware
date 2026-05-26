@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.3] - 2026-05-26
+
+### Added
+
+- **API-Driven Notification System**: Integrated a dynamic, remote notification banner that fetches updates from `audiobookbangla.com`. The banner supports custom titles, HTML-rendered messages, and dismissible functionality with local caching to reduce server load.
+- **Global Localization Expansion**: Added complete interface translations for 6 new languages: Hindi, Tamil, Telugu, Malayalam, Indonesian, and Arabic. Users can switch to these languages seamlessly from the Settings menu.
+- **Unified Taskbar Settings**: Reorganized the taskbar integration settings by introducing a unified "Show Taskbar Timer" toggle along with a dropdown to select the preferred timer style (Enhanced, Integrated, or DeskBand).
+- **Advanced System Tray Menu**: Redesigned the right-click tray menu to show real-time prayer information including the current prayer name, start time, and end time. The menu layout is now reorganized for better accessibility and includes a unified toggle to quickly show or hide the taskbar timer.
+
+### Changed
+
+- **UI Streamlining**: Moved the app's global font scaling controls (A−, A○, A+) from the main window's top menu bar directly into the Settings (Appearance section) for a cleaner UI layout. The keyboard shortcuts (Ctrl+Plus, Ctrl+Minus, Ctrl+0) remain fully functional.
+
+### Fixed
+
+- **Zen Mode Layout Consistency**: Fixed a visual bug where the top and bottom margins were misaligned when entering Zen Mode due to improper handling of the new notification banner visibility.
+
 ## [2.4.2] - 2026-05-26
 
 ### Added

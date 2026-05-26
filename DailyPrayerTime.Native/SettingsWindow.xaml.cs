@@ -168,7 +168,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.2");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.3");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
@@ -182,9 +182,17 @@ namespace DailyPrayerTime.Native
             MadhabInput.SelectedIndex = s.School == 1 ? 1 : 0;
             
             OverlayInput.IsChecked = s.ShowOverlay;
-            UseDeskBandInput.IsChecked = s.UseDeskBand;
-            IntegratedTaskbarInput.IsChecked = s.UseIntegratedTaskbar;
-            EnhancedTaskbarInput.IsChecked = s.UseEnhancedTaskbar;
+            ShowTaskbarTimerInput.IsChecked = s.ShowTaskbarTimer;
+            
+            foreach (System.Windows.Controls.ComboBoxItem item in TaskbarTimerTypeInput.Items)
+            {
+                if (item.Tag?.ToString() == s.TaskbarTimerType)
+                {
+                    TaskbarTimerTypeInput.SelectedItem = item;
+                    break;
+                }
+            }
+            if (TaskbarTimerTypeInput.SelectedIndex == -1) TaskbarTimerTypeInput.SelectedIndex = 0;
             foreach (System.Windows.Controls.ComboBoxItem item in EnhancedTaskbarPositionInput.Items)
             {
                 if (item.Tag?.ToString() == s.EnhancedTaskbarPosition)
@@ -449,9 +457,17 @@ namespace DailyPrayerTime.Native
             s.School = MadhabInput.SelectedIndex; // 0=Shafi, 1=Hanafi
             
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
-            s.UseDeskBand = UseDeskBandInput.IsChecked ?? false;
-            s.UseIntegratedTaskbar = IntegratedTaskbarInput.IsChecked ?? false;
-            s.UseEnhancedTaskbar = EnhancedTaskbarInput.IsChecked ?? false;
+            s.ShowTaskbarTimer = ShowTaskbarTimerInput.IsChecked ?? false;
+            
+            if (TaskbarTimerTypeInput.SelectedItem is System.Windows.Controls.ComboBoxItem typeItem && typeItem.Tag is string tType)
+            {
+                s.TaskbarTimerType = tType;
+                
+                // Map to legacy booleans for background service compat
+                s.UseEnhancedTaskbar = (tType == "Enhanced");
+                s.UseIntegratedTaskbar = (tType == "Integrated");
+                s.UseDeskBand = (tType == "DeskBand");
+            }
             if (EnhancedTaskbarPositionInput.SelectedItem is System.Windows.Controls.ComboBoxItem eposItem && eposItem.Tag is string epos)
                 s.EnhancedTaskbarPosition = epos;
             s.ShowHeroPrayerGrid = ShowHeroGridInput.IsChecked ?? true;
@@ -614,6 +630,21 @@ namespace DailyPrayerTime.Native
                 }
             }
             catch { /* handle permission error */ }
+        }
+
+        private void FontIncrease_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Increase();
+        }
+
+        private void FontDecrease_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Decrease();
+        }
+
+        private void FontReset_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Reset();
         }
 
         private async void SearchLocation_Click(object sender, RoutedEventArgs e)

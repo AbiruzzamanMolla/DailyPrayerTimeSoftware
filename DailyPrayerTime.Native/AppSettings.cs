@@ -23,9 +23,14 @@ namespace DailyPrayerTime.Native
         public bool RamadanMode { get; set; } = false;
         
         public bool ShowOverlay { get; set; } = true;
-        public bool UseDeskBand { get; set; } = false;
-        public bool UseIntegratedTaskbar { get; set; } = false;
-        public bool UseEnhancedTaskbar { get; set; } = false;
+        
+        public bool ShowTaskbarTimer { get; set; } = false;
+        public string TaskbarTimerType { get; set; } = "Enhanced"; // Enhanced, Integrated, DeskBand
+        
+        public bool UseDeskBand { get; set; } = false; // Legacy
+        public bool UseIntegratedTaskbar { get; set; } = false; // Legacy
+        public bool UseEnhancedTaskbar { get; set; } = false; // Legacy
+        
         public string EnhancedTaskbarPosition { get; set; } = "LeftOfTray";
         public bool ShowHeroPrayerGrid { get; set; } = false;
         public bool AutoStart { get; set; } = false;
@@ -105,6 +110,11 @@ namespace DailyPrayerTime.Native
         public string DailySummaryPopupTime { get; set; } = "22:00"; // 10 PM
         public bool AutoTrackRamadan { get; set; } = true;
         public bool EidTakbeerEnabled { get; set; } = false;
+
+        // Notice API Caching
+        public string LastNoticeFetchTime { get; set; } = "";
+        public string CachedNoticeResponseJson { get; set; } = "";
+        public string NoticeLastShownVersion { get; set; } = "";
 
         // Font Scale (0.75 = smaller, 1.0 = default, 1.5 = larger)
         public double FontScale { get; set; } = 1.0;
