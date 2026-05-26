@@ -78,6 +78,8 @@ namespace DailyPrayerTime.Native
             _currentDeeds = TrackerService.Instance.LoadDay(DateTime.Today);
             this.Height = SystemParameters.WorkArea.Height * 0.85;
             ApplySettingsTheme();
+            FontSizeHelper.InitializeFromSettings();
+            FontSizeHelper.ApplyScale(this);
             SetupTimer();
             SetupTrayIcon();
             _ = CalculatePrayerTimes();
@@ -265,6 +267,48 @@ namespace DailyPrayerTime.Native
                 FullScreen_Click(this, new RoutedEventArgs());
                 e.Handled = true;
             }
+
+            if (e.Key == Key.OemPlus || e.Key == Key.Add)
+            {
+                if (System.Windows.Input.Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    FontIncrease_Click(sender, e);
+                    e.Handled = true;
+                }
+            }
+
+            if (e.Key == Key.OemMinus || e.Key == Key.Subtract)
+            {
+                if (System.Windows.Input.Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    FontDecrease_Click(sender, e);
+                    e.Handled = true;
+                }
+            }
+
+            if (e.Key == Key.D0 || e.Key == Key.NumPad0)
+            {
+                if (System.Windows.Input.Keyboard.Modifiers == ModifierKeys.Control)
+                {
+                    FontReset_Click(sender, e);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void FontIncrease_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Increase();
+        }
+
+        private void FontDecrease_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Decrease();
+        }
+
+        private void FontReset_Click(object sender, RoutedEventArgs e)
+        {
+            FontSizeHelper.Reset();
         }
 
         private void FullScreen_Click(object sender, RoutedEventArgs e)
@@ -1080,15 +1124,27 @@ namespace DailyPrayerTime.Native
         private void CheckAndPlayAdhanAlarm(Prayer currentPrayer)
         {
             var s = SettingsManager.Current;
-            if (string.IsNullOrEmpty(s.AdhanSoundPath)) return;
-            if (!IsAdhanEnabled(currentPrayer, s)) return;
+            if (string.IsNullOrEmpty(s.AdhanSoundPath))
+            {
+                AudioLogger.Log("CheckAndPlayAdhanAlarm skipped: no adhan sound path configured");
+                return;
+            }
+            if (!IsAdhanEnabled(currentPrayer, s))
+            {
+                AudioLogger.Log($"CheckAndPlayAdhanAlarm skipped: adhan disabled for {currentPrayer}");
+                return;
+            }
 
             // Only trigger if we haven't played it for this prayer today
             string today = DateTime.Now.ToShortDateString();
             if (_lastAdhanPrayer == currentPrayer && _lastAdhanDate == today) return;
 
             DateTime? jamaatTime = GetJamaatTime(currentPrayer != Prayer.NONE ? currentPrayer : Prayer.FAJR, s, DateTime.Now);
-            if (!jamaatTime.HasValue) return;
+            if (!jamaatTime.HasValue)
+            {
+                AudioLogger.Log($"CheckAndPlayAdhanAlarm skipped: no jamaat time for {currentPrayer}");
+                return;
+            }
 
             DateTime adhanTriggerTime = jamaatTime.Value.AddMinutes(-s.AdhanAlarmOffset);
             DateTime now = DateTime.Now;
@@ -1100,7 +1156,11 @@ namespace DailyPrayerTime.Native
                 soundPath = s.FajrAdhanSoundPath;
             }
 
-            if (string.IsNullOrEmpty(soundPath)) return;
+            if (string.IsNullOrEmpty(soundPath))
+            {
+                AudioLogger.Log("CheckAndPlayAdhanAlarm skipped: sound path empty after resolution");
+                return;
+            }
 
             // Trigger if within a 30-second window of the offset
             if (now >= adhanTriggerTime && now < adhanTriggerTime.AddSeconds(30))
@@ -1120,6 +1180,7 @@ namespace DailyPrayerTime.Native
                     });
                     _lastAdhanPrayer = currentPrayer;
                     _lastAdhanDate = today;
+                    AudioLogger.Log($"CheckAndPlayAdhanAlarm popup shown: prayer={prayerName}, path={soundPath}");
                 }
                 else
                 {
@@ -1132,10 +1193,16 @@ namespace DailyPrayerTime.Native
                             _adhanPlayer.Play();
                             _lastAdhanPrayer = currentPrayer;
                             _lastAdhanDate = today;
+                            AudioLogger.Log($"CheckAndPlayAdhanAlarm direct play: prayer={prayerName}, path={soundPath}");
+                        }
+                        else
+                        {
+                            AudioLogger.Log($"CheckAndPlayAdhanAlarm sound file missing: {soundPath}");
                         }
                     }
                     catch (Exception ex)
                     {
+                        AudioLogger.Log($"CheckAndPlayAdhanAlarm play error: {soundPath} - {ex.Message}");
                         Debug.WriteLine("Adhan play failed: " + ex.Message);
                     }
                 }
@@ -1160,7 +1227,16 @@ namespace DailyPrayerTime.Native
         private void CheckTahajjudAdhanAlarm(DateTime now)
         {
             var s = SettingsManager.Current;
-            if (!s.TahajjudAdhanEnabled || _todayPrayerTimes == null || _tomorrowPrayerTimes == null) return;
+            if (!s.TahajjudAdhanEnabled)
+            {
+                AudioLogger.Log("CheckTahajjudAdhanAlarm skipped: Tahajjud adhan disabled");
+                return;
+            }
+            if (_todayPrayerTimes == null || _tomorrowPrayerTimes == null)
+            {
+                AudioLogger.Log("CheckTahajjudAdhanAlarm skipped: prayer times not available");
+                return;
+            }
 
             // Only trigger if we haven't played it tonight
             string today = now.ToShortDateString();
@@ -1176,7 +1252,16 @@ namespace DailyPrayerTime.Native
             if (now >= lastThirdStart && now < lastThirdStart.AddSeconds(30))
             {
                 string soundPath = !string.IsNullOrEmpty(s.TahajjudAdhanSoundPath) ? s.TahajjudAdhanSoundPath : s.AdhanSoundPath;
-                if (string.IsNullOrEmpty(soundPath) || !System.IO.File.Exists(soundPath)) return;
+                if (string.IsNullOrEmpty(soundPath))
+                {
+                    AudioLogger.Log("CheckTahajjudAdhanAlarm skipped: sound path empty");
+                    return;
+                }
+                if (!System.IO.File.Exists(soundPath))
+                {
+                    AudioLogger.Log($"CheckTahajjudAdhanAlarm skipped: file not found: {soundPath}");
+                    return;
+                }
 
                 if (s.AdhanPopupEnabled)
                 {
@@ -1188,6 +1273,7 @@ namespace DailyPrayerTime.Native
                         popup.Show();
                     });
                     _lastTahajjudAdhanDate = today;
+                    AudioLogger.Log($"CheckTahajjudAdhanAlarm popup shown: path={soundPath}");
                 }
                 else
                 {
@@ -1196,9 +1282,11 @@ namespace DailyPrayerTime.Native
                         _adhanPlayer.Open(new Uri(soundPath));
                         _adhanPlayer.Play();
                         _lastTahajjudAdhanDate = today;
+                        AudioLogger.Log($"CheckTahajjudAdhanAlarm direct play: path={soundPath}");
                     }
                     catch (Exception ex)
                     {
+                        AudioLogger.Log($"CheckTahajjudAdhanAlarm play error: {soundPath} - {ex.Message}");
                         Debug.WriteLine("Tahajjud Adhan play failed: " + ex.Message);
                     }
                 }

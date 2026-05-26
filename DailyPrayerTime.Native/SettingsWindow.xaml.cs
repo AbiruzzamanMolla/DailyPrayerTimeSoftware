@@ -24,6 +24,7 @@ namespace DailyPrayerTime.Native
             _today = today;
             _tomorrow = tomorrow;
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             InitializeTimeInputs();
             PopulateSoundLanguages();
             LoadForm();
@@ -167,7 +168,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.0");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.1");
 
             // Setup method dropdown
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
@@ -799,6 +800,7 @@ namespace DailyPrayerTime.Native
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
+                AudioLogger.Log($"PlayTestSound invalid file: {path}");
                 System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_InvalidSoundFile"), LocalizationManager.Instance.GetString("Title_TestSound"), MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -808,6 +810,7 @@ namespace DailyPrayerTime.Native
                 var popup = new AdhanNotificationWindow(prayerName, range, jamaat, path);
                 popup.Volume = AdhanVolumeInput.Value / 100.0;
                 popup.Show();
+                AudioLogger.Log($"PlayTestSound popup: {path}");
             }
             else
             {
@@ -816,9 +819,11 @@ namespace DailyPrayerTime.Native
                     _testPlayer.Open(new Uri(path));
                     _testPlayer.Volume = AdhanVolumeInput.Value / 100.0;
                     _testPlayer.Play();
+                    AudioLogger.Log($"PlayTestSound direct: {path}");
                 }
                 catch (Exception ex)
                 {
+                    AudioLogger.Log($"PlayTestSound error: {path} - {ex.Message}");
                     System.Windows.MessageBox.Show(string.Format(LocalizationManager.Instance.GetString("Msg_PlayFailed"), ex.Message));
                 }
             }

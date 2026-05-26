@@ -106,6 +106,9 @@ namespace DailyPrayerTime.Native
         public bool AutoTrackRamadan { get; set; } = true;
         public bool EidTakbeerEnabled { get; set; } = false;
 
+        // Font Scale (0.75 = smaller, 1.0 = default, 1.5 = larger)
+        public double FontScale { get; set; } = 1.0;
+
         // Auto Backup Settings
         public string AutoBackupSchedule { get; set; } = "NONE"; // "NONE", "DAILY", "WEEKLY", "MONTHLY"
         public string AutoBackupLocation { get; set; } = "";

@@ -21,6 +21,7 @@ namespace DailyPrayerTime.Native
         public AdhanNotificationWindow(string prayerName, string timeRange, string jamaatTime, string soundPath)
         {
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             
             PrayerTitleText.Text = string.Format(LocalizationManager.Instance.GetString("Adhan_Title"), prayerName);
             PrayerTimeRangeText.Text = timeRange;
@@ -49,11 +50,17 @@ namespace DailyPrayerTime.Native
                     _player.MediaEnded += OnAdhanEnded;
                     _player.Open(new Uri(soundPath));
                     _player.Play();
+                    AudioLogger.Log($"AdhanNotificationWindow playing: {soundPath}");
                 }
                 catch (Exception ex)
                 {
+                    AudioLogger.Log($"AdhanNotificationWindow play error: {soundPath} - {ex.Message}");
                     System.Diagnostics.Debug.WriteLine($"Popup Adhan play failed: {ex.Message}");
                 }
+            }
+            else
+            {
+                AudioLogger.Log($"AdhanNotificationWindow sound file missing or empty: path='{soundPath}', exists={File.Exists(soundPath)}");
             }
         }
 
@@ -67,6 +74,7 @@ namespace DailyPrayerTime.Native
 
         private void Mute_Click(object sender, RoutedEventArgs e)
         {
+            AudioLogger.Log("AdhanNotificationWindow muted by user");
             _player.Stop();
             MuteBtn.IsEnabled = false;
             MuteBtn.Opacity = 0.5;
@@ -93,11 +101,17 @@ namespace DailyPrayerTime.Native
                 {
                     _player.Open(new Uri(duaPath));
                     _player.Play();
+                    AudioLogger.Log($"Dua playing: {duaPath}");
                 }
                 catch (Exception ex)
                 {
+                    AudioLogger.Log($"Dua play error: {duaPath} - {ex.Message}");
                     System.Diagnostics.Debug.WriteLine($"Dua play failed: {ex.Message}");
                 }
+            }
+            else
+            {
+                AudioLogger.Log($"Dua file not found: {duaPath}");
             }
         }
 

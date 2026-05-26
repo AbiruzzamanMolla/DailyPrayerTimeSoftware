@@ -13,6 +13,7 @@ namespace DailyPrayerTime.Native
         public CongregationTimerPopup(string prayerName, DateTime targetTime)
         {
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             _targetTime = targetTime;
             PrayerNameText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_Label"), prayerName);
             

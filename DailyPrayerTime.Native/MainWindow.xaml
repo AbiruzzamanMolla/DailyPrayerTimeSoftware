@@ -151,6 +151,16 @@
                         <TextBlock x:Name="ZenModeIcon" Text="✦" FontSize="16" FontWeight="Bold" Foreground="White" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
 
+                    <Button x:Name="FontDecreaseBtn" Click="FontDecrease_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="Decrease font size (Ctrl+−)">
+                        <TextBlock Text="A−" FontSize="11" FontWeight="Bold" Foreground="White" Opacity="0.9" />
+                    </Button>
+                    <Button x:Name="FontResetBtn" Click="FontReset_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="Reset font size (Ctrl+0)">
+                        <TextBlock Text="A○" FontSize="11" FontWeight="Bold" Foreground="White" Opacity="0.9" />
+                    </Button>
+                    <Button x:Name="FontIncreaseBtn" Click="FontIncrease_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="Increase font size (Ctrl++)">
+                        <TextBlock Text="A+" FontSize="11" FontWeight="Bold" Foreground="White" Opacity="0.9" />
+                    </Button>
+
                     <Button x:Name="SettingsBtn" Click="Settings_Click" Style="{StaticResource ToolbarButtonStyle}" Margin="0,0,10,0">
                         <TextBlock x:Name="SettingsIcon" Text="⚙" FontSize="16" Foreground="White" Opacity="1.0" />
                     </Button>

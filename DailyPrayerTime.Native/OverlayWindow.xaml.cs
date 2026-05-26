@@ -27,6 +27,7 @@ namespace DailyPrayerTime.Native
         public OverlayWindow()
         {
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             this.Loaded += (s, e) => LoadPosition();
             // Watch for taskbar changes to ensure it's still visible
             SystemParameters.StaticPropertyChanged += (s, e) => { if (e.PropertyName == "WorkArea") EnsureVisible(); };

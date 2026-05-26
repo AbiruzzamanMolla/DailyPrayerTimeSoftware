@@ -11,6 +11,7 @@ namespace DailyPrayerTime.Native
         public DailySummaryPopup(DailyDeeds deeds)
         {
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             var summary = deeds.Prayers.Select(p => new SummaryItem 
             { 
                 Label = p.Key.ToUpper(), 

@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.1] - 2026-05-26
+
+### Added
+
+- **Audio Event Logging**: Added file-based logging of all audio/sound events (adhan, notification sounds, dua, test sounds) to `audio_log.txt` in the app data directory to help debug audio issues.
+- **Global Font Scaling**: Added font increase/decrease/reset buttons (A− A○ A+) in the title bar with `Ctrl+Plus` / `Ctrl+Minus` / `Ctrl+0` keyboard shortcuts. Font scale persists across sessions and applies to all windows.
+
+### Fixed
+
+- **Missing Sound File Handling**: Added detailed logging when sound files are not found, helping identify missing notification assets.
+
 ## [2.4.0] - 2026-05-14
 
 ### Added

@@ -14,6 +14,7 @@ namespace DailyPrayerTime.Native
         public DeedPopup(string prayerName, List<DeedEntry> entries, DailyDeeds deeds)
         {
             InitializeComponent();
+            FontSizeHelper.AutoScaleOnLoaded(this);
             _prayerName = prayerName;
             _deeds = deeds;
             TitleText.Text = $"DID YOU PRAY {prayerName.ToUpper()}?";

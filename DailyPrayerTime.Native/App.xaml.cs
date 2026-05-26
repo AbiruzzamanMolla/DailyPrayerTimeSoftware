@@ -8,11 +8,13 @@ namespace DailyPrayerTime.Native
         {
             SettingsManager.Load();
             LocalizationManager.Instance.SetLanguage(SettingsManager.Current.Language);
+            AudioLogger.Log("Application started");
             
             this.ShutdownMode = ShutdownMode.OnExplicitShutdown;
             
             this.DispatcherUnhandledException += (s, args) =>
             {
+                AudioLogger.Log($"UNHANDLED EXCEPTION: {args.Exception}");
                 System.Console.WriteLine(args.Exception.ToString());
                 System.Windows.MessageBox.Show(
                     string.Format(LocalizationManager.Instance.GetString("Msg_AppErrorGeneral"), args.Exception.ToString()), 
