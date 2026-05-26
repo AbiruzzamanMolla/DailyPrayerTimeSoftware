@@ -648,7 +648,7 @@
 </Grid>
 
 
-        <Border Grid.Row="3" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
+        <Border x:Name="FooterNavigationBar" Grid.Row="3" Background="#170939" BorderBrush="#1AFFFFFF" BorderThickness="0,1,0,0">
             <UniformGrid Columns="6">
                 <RadioButton x:Name="TabHome" Style="{StaticResource BottomTabStyle}" IsChecked="True" Checked="TabHome_Checked" Cursor="Hand">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
@@ -688,6 +688,7 @@
                 </RadioButton>
             </UniformGrid>
         </Border>
+        <local:SettingsView x:Name="SettingsViewControl" Visibility="Collapsed" Grid.Row="2" Grid.RowSpan="2"/>
     </Grid>
 </Border>
 </Window>

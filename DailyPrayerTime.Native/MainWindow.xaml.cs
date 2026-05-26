@@ -98,11 +98,35 @@ namespace DailyPrayerTime.Native
             // Refresh AutoStart registry path in case the app was moved (Portable Mode support)
             if (SettingsManager.Current.AutoStart)
             {
-                SettingsWindow.SetAutoStart(true, SettingsManager.Current.SilentStart);
+                SettingsView.SetAutoStart(true, SettingsManager.Current.SilentStart);
             }
 
             InitBasmalaHeader();
             SyncToolbarIcons();
+
+            SettingsViewControl.OnCloseRequested += async (isSaved) =>
+            {
+                SettingsViewControl.Visibility = Visibility.Collapsed;
+                FooterNavigationBar.Visibility = Visibility.Visible;
+                
+                if (isSaved)
+                {
+                    ApplySettingsTheme();
+                    await CalculatePrayerTimes();
+                    ManageOverlay();
+                    ManageIntegratedTaskbar();
+                    ManageEnhancedTaskbar();
+                }
+                
+                if (TabHome.IsChecked == true) TabHome_Checked(null, null);
+                else if (TabPrayers.IsChecked == true) TabPrayers_Checked(null, null);
+                else if (TabTracker.IsChecked == true) TabTracker_Checked(null, null);
+                else if (TabQibla.IsChecked == true) TabQibla_Checked(null, null);
+                else if (TabTasbih.IsChecked == true) TabTasbih_Checked(null, null);
+                else if (TabRamadan.IsChecked == true) TabRamadan_Checked(null, null);
+                
+                SyncToolbarIcons();
+            };
         }
 
         private async Task CheckForUpdates()
@@ -270,15 +294,13 @@ namespace DailyPrayerTime.Native
             cms.Items.Add(taskbarTimerItem);
 
             cms.Items.Add(new Forms.ToolStripSeparator());
-            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Settings"), null, async (s, e) => { 
-                var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
-                if (sw.ShowDialog() == true) {
-                    ApplySettingsTheme();
-                    await CalculatePrayerTimes();
-                    ManageOverlay();
-                    ManageIntegratedTaskbar();
-                    ManageEnhancedTaskbar();
-                }
+            cms.Items.Add(LocalizationManager.Instance.GetString("Tray_Settings"), null, (s, e) => { 
+                this.Dispatcher.Invoke(() => {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                    this.Activate();
+                    ShowSettingsView();
+                });
             });
 
             cms.Items.Add(new Forms.ToolStripSeparator());
@@ -459,19 +481,37 @@ namespace DailyPrayerTime.Native
             FastingNoteExtraContent.Visibility = _isFastingNoteExpanded ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        private void ShowSettingsView()
+        {
+            // Hide all tab views
+            if (HeroBorder != null) HeroBorder.Visibility = Visibility.Collapsed;
+            if (PrayerListScroll != null) PrayerListScroll.Visibility = Visibility.Collapsed;
+            if (HighlightsHeader != null) HighlightsHeader.Visibility = Visibility.Collapsed;
+            if (HighlightsGrid != null) HighlightsGrid.Visibility = Visibility.Collapsed;
+            if (FastingNoteBorder != null) FastingNoteBorder.Visibility = Visibility.Collapsed;
+            if (ProhibitedHeader != null) ProhibitedHeader.Visibility = Visibility.Collapsed;
+            if (ProhibitedGrid != null) ProhibitedGrid.Visibility = Visibility.Collapsed;
+            if (FardHeader != null) FardHeader.Visibility = Visibility.Collapsed;
+            if (FardCardsPanel != null) FardCardsPanel.Visibility = Visibility.Collapsed;
+            if (NafalHeader != null) NafalHeader.Visibility = Visibility.Collapsed;
+            if (NafalCardsPanel != null) NafalCardsPanel.Visibility = Visibility.Collapsed;
+
+            if (TrackerViewControl != null) TrackerViewControl.Visibility = Visibility.Collapsed;
+            if (QiblaViewControl != null) QiblaViewControl.Visibility = Visibility.Collapsed;
+            if (TasbihViewControl != null) TasbihViewControl.Visibility = Visibility.Collapsed;
+            if (RamadanViewControl != null) RamadanViewControl.Visibility = Visibility.Collapsed;
+
+            // Hide Footer and Show SettingsView
+            FooterNavigationBar.Visibility = Visibility.Collapsed;
+            SettingsViewControl.Initialize(_todayPrayerTimes, _tomorrowPrayerTimes);
+            SettingsViewControl.Visibility = Visibility.Visible;
+        }
+
         private async void Settings_Click(object sender, RoutedEventArgs e)
         {
             SettingsIcon.Foreground = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
-            await Task.Delay(50); // Yield cleanly to UI thread to render green color before blocking modal opens
-            
-            var sw = new SettingsWindow(_todayPrayerTimes, _tomorrowPrayerTimes);
-            if (sw.ShowDialog() == true)
-            {
-                ApplySettingsTheme();
-                _ = CalculatePrayerTimes();
-                ManageOverlay();
-                ManageIntegratedTaskbar();
-            }
+            await Task.Delay(50);
+            ShowSettingsView();
             SyncToolbarIcons();
         }
 
