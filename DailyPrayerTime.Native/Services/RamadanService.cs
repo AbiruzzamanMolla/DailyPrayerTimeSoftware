@@ -143,6 +143,8 @@ namespace DailyPrayerTime.Native.Services
                 Directory.CreateDirectory(dir);
             state.Year = DateTime.Today.Year;
             File.WriteAllText(path, JsonConvert.SerializeObject(state, Formatting.Indented));
+            // Push to cloud
+            _ = CloudSyncService.Instance.PushRamadanAsync(state);
         }
     }
 }

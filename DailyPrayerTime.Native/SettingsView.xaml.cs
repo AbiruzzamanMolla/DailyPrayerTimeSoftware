@@ -326,6 +326,25 @@ namespace DailyPrayerTime.Native
                 PrayerSoundLanguageInput.SelectedItem = selected;
             }
 
+            // Leaderboard settings
+            LeaderboardAnonymousInput.IsChecked = s.LeaderboardAnonymous;
+
+            // Cycle settings
+            CycleEnabledInput.IsChecked = s.CycleEnabled;
+            foreach (ComboBoxItem item in CycleMadhabInput.Items)
+            {
+                if (item.Tag?.ToString() == s.SelectedCycleMadhab)
+                {
+                    CycleMadhabInput.SelectedItem = item;
+                    break;
+                }
+            }
+            if (CycleMadhabInput.SelectedIndex == -1) CycleMadhabInput.SelectedIndex = 0;
+
+            // Cloud sync settings
+            CloudSyncEnabledInput.IsChecked = s.CloudSyncEnabled;
+            UpdateCloudSyncUI();
+
             PopulateHints();
             LoadLogs();
         }
@@ -527,6 +546,19 @@ namespace DailyPrayerTime.Native
             s.DailySummaryPopupEnabled = DailySummaryPopupEnabledInput.IsChecked ?? true;
             s.DailySummaryPopupTime = GetTimeFromInputs(DailySummaryHourInput, DailySummaryMinuteInput, DailySummaryAmPmInput, !is24h);
             s.AutoTrackRamadan = AutoTrackRamadanInput.IsChecked ?? true;
+
+            // Leaderboard settings
+            s.LeaderboardAnonymous = LeaderboardAnonymousInput.IsChecked ?? false;
+
+            // Cycle settings
+            s.CycleEnabled = CycleEnabledInput.IsChecked ?? false;
+            if (CycleMadhabInput.SelectedItem is ComboBoxItem madhabItem && madhabItem.Tag is string madhab)
+            {
+                s.SelectedCycleMadhab = madhab;
+            }
+
+            // Cloud sync settings
+            s.CloudSyncEnabled = CloudSyncEnabledInput.IsChecked ?? false;
 
             s.EstablishedFajr = EstablishedFajrInput.IsChecked ?? true;
             s.EstablishedDhuhr = EstablishedDhuhrInput.IsChecked ?? true;
@@ -1077,6 +1109,47 @@ namespace DailyPrayerTime.Native
                 ManualParamsPanel.Visibility = (MethodInput.SelectedItem is ComboBoxItem item && item.Tag?.ToString() == "MANUAL") 
                     ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+
+        private void LeaderboardAnonymous_Changed(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoaded) return;
+            bool isAnonymous = LeaderboardAnonymousInput.IsChecked ?? false;
+            _ = LeaderboardService.Instance.ToggleAnonymousAsync(isAnonymous);
+        }
+
+        private async void CloudSyncSignIn_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new Views.AuthPromptWindow();
+            window.Owner = Window.GetWindow(this);
+            var result = window.ShowDialog();
+            if (result == true)
+            {
+                UpdateCloudSyncUI();
+                System.Windows.MessageBox.Show("Signed in successfully! Your data will now sync to the cloud.",
+                    "Cloud Sync", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void CloudSyncSignOut_Click(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to sign out? Cloud sync will be disabled.",
+                "Sign Out", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                AuthService.Instance.SignOut();
+                UpdateCloudSyncUI();
+            }
+        }
+
+        private void UpdateCloudSyncUI()
+        {
+            bool isSignedIn = AuthService.Instance.IsSignedIn;
+            CloudSyncStatusText.Text = isSignedIn
+                ? $"Signed in as {AuthService.Instance.Email}"
+                : "Not signed in";
+            CloudSyncSignInBtn.Visibility = isSignedIn ? Visibility.Collapsed : Visibility.Visible;
+            CloudSyncSignOutBtn.Visibility = isSignedIn ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

@@ -81,6 +81,8 @@ namespace DailyPrayerTime.Native.Services
             {
                 string json = JsonConvert.SerializeObject(deeds, Formatting.Indented);
                 File.WriteAllText(path, json);
+                // Push to cloud in background
+                _ = CloudSyncService.Instance.PushTrackerAsync(deeds);
             }
             catch (Exception ex)
             {

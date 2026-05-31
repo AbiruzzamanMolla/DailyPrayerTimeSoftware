@@ -123,6 +123,20 @@ namespace DailyPrayerTime.Native
         public string AutoBackupSchedule { get; set; } = "NONE"; // "NONE", "DAILY", "WEEKLY", "MONTHLY"
         public string AutoBackupLocation { get; set; } = "";
         public string LastAutoBackupDate { get; set; } = "";
+
+        // Cloud Sync
+        public bool CloudSyncEnabled { get; set; } = false;
+        public string? FirebaseUid { get; set; }
+        public string? FirebaseEmail { get; set; }
+        public string? FirebaseDisplayName { get; set; }
+        public string LastSyncAt { get; set; } = "";
+
+        // Cycle Tracker
+        public bool CycleEnabled { get; set; } = false;
+        public string SelectedCycleMadhab { get; set; } = "Sistani";
+
+        // Leaderboard
+        public bool LeaderboardAnonymous { get; set; } = false;
     }
 
     public static class SettingsManager

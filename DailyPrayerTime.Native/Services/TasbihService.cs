@@ -47,6 +47,8 @@ namespace DailyPrayerTime.Native.Services
             if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             File.WriteAllText(path, JsonConvert.SerializeObject(counts, Formatting.Indented));
+            // Debounced cloud push
+            CloudSyncService.Instance.PushTasbihDebounced(date, counts);
         }
     }
 
