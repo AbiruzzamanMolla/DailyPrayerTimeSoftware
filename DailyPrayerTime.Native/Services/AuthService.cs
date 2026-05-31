@@ -27,8 +27,8 @@ namespace DailyPrayerTime.Native.Services
         {
             _client = new FirebaseAuthClient(new FirebaseConfig
             {
-                ApiKey = FirebaseConfig.ApiKey,
-                AuthDomain = FirebaseConfig.AuthDomain,
+                ApiKey = Helpers.FirebaseConfig.ApiKey,
+                AuthDomain = Helpers.FirebaseConfig.AuthDomain,
                 Providers = new[]
                 {
                     new GoogleProvider().AddScopes("email", "profile"),

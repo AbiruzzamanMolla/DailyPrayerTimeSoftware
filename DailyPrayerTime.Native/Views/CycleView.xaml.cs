@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DailyPrayerTime.Native.Helpers;
 using DailyPrayerTime.Native.Models;
 using DailyPrayerTime.Native.Services;
 
