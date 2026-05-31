@@ -68,6 +68,16 @@ namespace DailyPrayerTime.Native.Services
                     new DeedEntry { Label = "Evening Adhkar", Type = DeedType.Nafl }
                 };
             }
+
+            // Sync tasbih counts from TasbihService
+            if (deeds.TasbihCounts == null || deeds.TasbihCounts.Count == 0)
+            {
+                var tasbihCounts = TasbihService.Instance.LoadDay(date);
+                if (tasbihCounts.Count > 0)
+                {
+                    deeds.TasbihCounts = tasbihCounts;
+                }
+            }
             
             return deeds;
         }

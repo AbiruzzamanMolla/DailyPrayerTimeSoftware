@@ -15,10 +15,10 @@ namespace DailyPrayerTime.Native.Helpers
         private const string DownloadUrl = "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest";
         private const string AppName = "Daily Prayer Timer";
 
-        public static string GenerateMonthlyCard(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth)
+        public static string GenerateMonthlyCard(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth, int totalAdhkarCompleted, int totalNafalCompleted, int totalTasbihCount)
         {
             // Create a WPF visual for the card
-            var card = CreateCardVisual(deeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth);
+            var card = CreateCardVisual(deeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth, totalAdhkarCompleted, totalNafalCompleted, totalTasbihCount);
 
             // Render to bitmap
             var bitmap = RenderVisualToBitmap(card, 1080, 1920); // Instagram story size
@@ -38,7 +38,7 @@ namespace DailyPrayerTime.Native.Helpers
             return filePath;
         }
 
-        private static Border CreateCardVisual(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth)
+        private static Border CreateCardVisual(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth, int totalAdhkarCompleted, int totalNafalCompleted, int totalTasbihCount)
         {
             string monthName = DateTime.ParseExact(deeds.Date.Substring(0, 7) + "-01", "yyyy-MM-dd", null).ToString("MMMM yyyy");
 
@@ -207,6 +207,21 @@ namespace DailyPrayerTime.Native.Helpers
             statsGrid.Children.Add(CreateStatCard("📊", daysInMonth.ToString(), "Days in Month", 2));
 
             statsStack.Children.Add(statsGrid);
+
+            // Second stats row - Adhkar, Nafal, Tasbih
+            var statsGrid2 = new Grid
+            {
+                Margin = new Thickness(0, 0, 0, 30)
+            };
+            statsGrid2.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statsGrid2.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            statsGrid2.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            statsGrid2.Children.Add(CreateStatCard("📖", totalAdhkarCompleted.ToString(), "Adhkar", 0));
+            statsGrid2.Children.Add(CreateStatCard("🌙", totalNafalCompleted.ToString(), "Nafal", 1));
+            statsGrid2.Children.Add(CreateStatCard("🕌", totalTasbihCount.ToString(), "Tasbih", 2));
+
+            statsStack.Children.Add(statsGrid2);
 
             // Prayer breakdown
             statsStack.Children.Add(new TextBlock

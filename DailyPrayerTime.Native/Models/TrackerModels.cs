@@ -31,6 +31,18 @@ namespace DailyPrayerTime.Native.Models
         public Dictionary<string, List<DeedEntry>> Prayers { get; set; } = new Dictionary<string, List<DeedEntry>>();
         public bool Sawm { get; set; }
         public List<string> ExtraAmols { get; set; } = new List<string>();
+        public Dictionary<string, int> TasbihCounts { get; set; } = new Dictionary<string, int>();
+
+        public int TotalTasbihCount
+        {
+            get
+            {
+                int total = 0;
+                foreach (var count in TasbihCounts.Values)
+                    total += count;
+                return total;
+            }
+        }
 
         public void EnsurePrayer(string prayerName)
         {

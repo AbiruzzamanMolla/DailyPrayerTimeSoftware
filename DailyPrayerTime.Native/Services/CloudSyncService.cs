@@ -340,6 +340,9 @@ namespace DailyPrayerTime.Native.Services
                     TotalPrayersCompleted = r.Data.TryGetValue("totalPrayersCompleted", out var tp) ? Convert.ToInt32(tp) : 0,
                     TotalDaysTracked = r.Data.TryGetValue("totalDaysTracked", out var td) ? Convert.ToInt32(td) : 0,
                     CompletionRate = r.Data.TryGetValue("completionRate", out var cr) ? Convert.ToDouble(cr) : 0,
+                    TotalTasbihCount = r.Data.TryGetValue("totalTasbihCount", out var tc) ? Convert.ToInt32(tc) : 0,
+                    TotalAdhkarCompleted = r.Data.TryGetValue("totalAdhkarCompleted", out var ac) ? Convert.ToInt32(ac) : 0,
+                    TotalNafalCompleted = r.Data.TryGetValue("totalNafalCompleted", out var nc) ? Convert.ToInt32(nc) : 0,
                     Month = r.Data.TryGetValue("month", out var m2) ? m2.ToString() ?? "" : "",
                     LastUpdated = r.Data.TryGetValue("lastUpdated", out var lu) ? lu.ToString() ?? "" : ""
                 }).OrderByDescending(e => e.CompletionRate).ToList();

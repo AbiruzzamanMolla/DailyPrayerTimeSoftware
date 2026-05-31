@@ -16,6 +16,9 @@ namespace DailyPrayerTime.Native.Services
         public int TotalPrayersCompleted { get; set; }
         public int TotalDaysTracked { get; set; }
         public double CompletionRate { get; set; }
+        public int TotalTasbihCount { get; set; }
+        public int TotalAdhkarCompleted { get; set; }
+        public int TotalNafalCompleted { get; set; }
         public string Month { get; set; } = "";
         public string LastUpdated { get; set; } = "";
         public int Rank { get; set; }
@@ -92,6 +95,9 @@ namespace DailyPrayerTime.Native.Services
                         TotalPrayersCompleted = data.TryGetValue("totalPrayersCompleted", out var tp) ? Convert.ToInt32(tp) : 0,
                         TotalDaysTracked = data.TryGetValue("totalDaysTracked", out var td) ? Convert.ToInt32(td) : 0,
                         CompletionRate = data.TryGetValue("completionRate", out var cr) ? Convert.ToDouble(cr) : 0,
+                        TotalTasbihCount = data.TryGetValue("totalTasbihCount", out var tc) ? Convert.ToInt32(tc) : 0,
+                        TotalAdhkarCompleted = data.TryGetValue("totalAdhkarCompleted", out var ac) ? Convert.ToInt32(ac) : 0,
+                        TotalNafalCompleted = data.TryGetValue("totalNafalCompleted", out var nc) ? Convert.ToInt32(nc) : 0,
                         LastUpdated = data.TryGetValue("lastUpdated", out var lu) ? lu.ToString() ?? "" : ""
                     };
                     entries.Add(entry);
@@ -132,32 +138,55 @@ namespace DailyPrayerTime.Native.Services
                 int totalPrayersCompleted = 0;
                 int totalDaysTracked = 0;
                 int totalPrayerOpportunities = 0;
+                int totalTasbihCount = 0;
+                int totalAdhkarCompleted = 0;
+                int totalNafalCompleted = 0;
 
                 DateTime now = DateTime.Today;
                 DateTime monthStart = new DateTime(now.Year, now.Month, 1);
                 DateTime monthEnd = now; // Up to today
 
                 for (DateTime date = monthStart; date <= monthEnd; date = date.AddDays(1))
+                {
                     var deeds = TrackerService.Instance.LoadDay(date);
 
-                    bool hasData = deeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked));
+                    bool hasData = deeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked)) || deeds.TotalTasbihCount > 0;
                     if (hasData) totalDaysTracked++;
 
                     foreach (var prayer in deeds.Prayers)
                     {
-                        // Skip nafal/adhkar from leaderboard calculation
-                        if (prayer.Key == "Tahajjud" || prayer.Key == "Duha" ||
-                            prayer.Key == "Awwabin" || prayer.Key == "Adhkar")
-                            continue;
-
                         foreach (var deed in prayer.Value)
                         {
-                            if (deed.Type == DeedType.Fard)
+                            if (deed.IsChecked)
+                            {
+                                if (prayer.Key == "Adhkar")
+                                {
+                                    totalAdhkarCompleted++;
+                                }
+                                else if (prayer.Key == "Tahajjud" || prayer.Key == "Duha" || prayer.Key == "Awwabin")
+                                {
+                                    totalNafalCompleted++;
+                                }
+                                else
+                                {
+                                    // Fard/Sunnah prayers
+                                    totalPrayerOpportunities++;
+                                    totalPrayersCompleted++;
+                                }
+                            }
+                            else if (prayer.Key != "Adhkar" && prayer.Key != "Tahajjud" && 
+                                     prayer.Key != "Duha" && prayer.Key != "Awwabin")
                             {
                                 totalPrayerOpportunities++;
-                                if (deed.IsChecked) totalPrayersCompleted++;
                             }
                         }
+                    }
+
+                    // Count tasbih from tracker (synced from TasbihService)
+                    if (deeds.TasbihCounts != null)
+                    {
+                        foreach (var count in deeds.TasbihCounts.Values)
+                            totalTasbihCount += count;
                     }
                 }
 
@@ -176,6 +205,9 @@ namespace DailyPrayerTime.Native.Services
                     ["totalPrayersCompleted"] = totalPrayersCompleted,
                     ["totalDaysTracked"] = totalDaysTracked,
                     ["completionRate"] = completionRate,
+                    ["totalTasbihCount"] = totalTasbihCount,
+                    ["totalAdhkarCompleted"] = totalAdhkarCompleted,
+                    ["totalNafalCompleted"] = totalNafalCompleted,
                     ["month"] = now.ToString("yyyy-MM"),
                     ["lastUpdated"] = DateTime.UtcNow.ToString("o")
                 };

@@ -862,24 +862,43 @@ namespace DailyPrayerTime.Native
 
                 int totalPrayersCompleted = 0;
                 int totalDaysTracked = 0;
+                int totalAdhkarCompleted = 0;
+                int totalNafalCompleted = 0;
+                int totalTasbihCount = 0;
 
                 for (DateTime date = monthStart; date <= monthEnd; date = date.AddDays(1))
                 {
                     var dayDeeds = Services.TrackerService.Instance.LoadDay(date);
-                    bool hasData = dayDeeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked));
+                    bool hasData = dayDeeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked)) || dayDeeds.TotalTasbihCount > 0;
                     if (hasData) totalDaysTracked++;
 
                     foreach (var prayer in dayDeeds.Prayers)
                     {
-                        if (prayer.Key == "Tahajjud" || prayer.Key == "Duha" ||
-                            prayer.Key == "Awwabin" || prayer.Key == "Adhkar")
-                            continue;
-
                         foreach (var deed in prayer.Value)
                         {
-                            if (deed.Type == DeedType.Fard && deed.IsChecked)
-                                totalPrayersCompleted++;
+                            if (deed.IsChecked)
+                            {
+                                if (prayer.Key == "Adhkar")
+                                {
+                                    totalAdhkarCompleted++;
+                                }
+                                else if (prayer.Key == "Tahajjud" || prayer.Key == "Duha" || prayer.Key == "Awwabin")
+                                {
+                                    totalNafalCompleted++;
+                                }
+                                else if (deed.Type == DeedType.Fard)
+                                {
+                                    totalPrayersCompleted++;
+                                }
+                            }
                         }
+                    }
+
+                    // Count tasbih
+                    if (dayDeeds.TasbihCounts != null)
+                    {
+                        foreach (var count in dayDeeds.TasbihCounts.Values)
+                            totalTasbihCount += count;
                     }
                 }
 
@@ -889,7 +908,8 @@ namespace DailyPrayerTime.Native
 
                 // Use today's deeds for the card (for prayer breakdown)
                 string filePath = Helpers.CardGenerator.GenerateMonthlyCard(
-                    _currentDeeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth);
+                    _currentDeeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth,
+                    totalAdhkarCompleted, totalNafalCompleted, totalTasbihCount);
 
                 var result = MessageBox.Show(
                     $"Card saved to:\n{filePath}\n\nOpen folder to view?",
