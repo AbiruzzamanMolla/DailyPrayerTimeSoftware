@@ -844,6 +844,70 @@ namespace DailyPrayerTime.Native
             return total == 0 ? 0 : (checkedCount * 100) / total;
         }
 
+        private void ShareCard_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentDeeds == null)
+            {
+                MessageBox.Show("No data to generate card.", "", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                // Calculate monthly stats
+                DateTime now = DateTime.Today;
+                DateTime monthStart = new DateTime(now.Year, now.Month, 1);
+                DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+                int daysInMonth = monthEnd.Day;
+
+                int totalPrayersCompleted = 0;
+                int totalDaysTracked = 0;
+
+                for (DateTime date = monthStart; date <= monthEnd; date = date.AddDays(1))
+                {
+                    var dayDeeds = Services.TrackerService.Instance.LoadDay(date);
+                    bool hasData = dayDeeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked));
+                    if (hasData) totalDaysTracked++;
+
+                    foreach (var prayer in dayDeeds.Prayers)
+                    {
+                        if (prayer.Key == "Tahajjud" || prayer.Key == "Duha" ||
+                            prayer.Key == "Awwabin" || prayer.Key == "Adhkar")
+                            continue;
+
+                        foreach (var deed in prayer.Value)
+                        {
+                            if (deed.Type == DeedType.Fard && deed.IsChecked)
+                                totalPrayersCompleted++;
+                        }
+                    }
+                }
+
+                double completionRate = (5 * daysInMonth) > 0
+                    ? Math.Round((double)totalPrayersCompleted / (5 * daysInMonth) * 100, 1)
+                    : 0;
+
+                // Use today's deeds for the card (for prayer breakdown)
+                string filePath = Helpers.CardGenerator.GenerateMonthlyCard(
+                    _currentDeeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth);
+
+                var result = MessageBox.Show(
+                    $"Card saved to:\n{filePath}\n\nOpen folder to view?",
+                    "Card Generated!",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{filePath}\"");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to generate card: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 
     public class HistoryItem
