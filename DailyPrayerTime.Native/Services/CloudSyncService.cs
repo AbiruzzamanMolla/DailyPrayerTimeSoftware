@@ -348,23 +348,54 @@ namespace DailyPrayerTime.Native.Services
             }
         }
 
-        // ─── Full Sync ───────────────────────────────────────────
+        // ─── Full Sync (Current Month Only) ──────────────────────
         public async Task SyncAllAsync()
         {
             if (!IsCloudEnabled) return;
             try
             {
                 _isSyncing = true;
-                // Sync today and past 7 days
-                for (int i = 0; i < 7; i++)
+
+                // Sync only current month (1st to last day)
+                DateTime now = DateTime.Today;
+                DateTime monthStart = new DateTime(now.Year, now.Month, 1);
+                DateTime monthEnd = monthStart.AddMonths(1).AddDays(-1);
+
+                for (DateTime date = monthStart; date <= monthEnd; date = date.AddDays(1))
                 {
-                    await SyncAndMergeTrackerAsync(DateTime.Today.AddDays(-i));
+                    await SyncAndMergeTrackerAsync(date);
                 }
+
+                // Also push leaderboard stats
+                await LeaderboardService.Instance.PushMyStatsAsync();
+
+                SettingsManager.Current.LastSyncAt = DateTime.UtcNow.ToString("o");
+                SettingsManager.Save();
+
                 SyncCompleted?.Invoke();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Full sync failed: {ex.Message}");
+            }
+            finally
+            {
+                _isSyncing = false;
+            }
+        }
+
+        public async Task SyncSingleDayAsync(DateTime date)
+        {
+            if (!IsCloudEnabled) return;
+            try
+            {
+                _isSyncing = true;
+                await SyncAndMergeTrackerAsync(date);
+                SyncCompleted?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Day sync failed: {ex.Message}");
             }
             finally
             {

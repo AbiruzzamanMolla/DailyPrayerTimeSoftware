@@ -82,11 +82,19 @@
                         <TextBlock Text="Divine Tracker" Foreground="White" FontSize="24" FontWeight="Bold"/>
                         <TextBlock Text="Visualize your spiritual journey" Foreground="#D1D5DB" FontSize="12" Opacity="0.8" Margin="2,2,0,0"/>
                     </StackPanel>
-                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center">
-                        <Border Background="#10B981" CornerRadius="8" Padding="8,4" Margin="0,0,0,4">
-                            <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
-                        </Border>
-                        <TextBlock x:Name="HijriDateLabel" Text="24 RAMADAN 1445 AH" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                    <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                        <Button x:Name="CloudSyncBtn" Click="CloudSync_Click" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="8" Padding="10,6" Cursor="Hand" Margin="0,0,10,0" ToolTip="Sync to cloud">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="☁" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Text="Sync" FontSize="10" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <StackPanel>
+                            <Border Background="#10B981" CornerRadius="8" Padding="8,4" Margin="0,0,0,4">
+                                <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Border>
+                            <TextBlock x:Name="HijriDateLabel" Text="24 RAMADAN 1445 AH" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
 

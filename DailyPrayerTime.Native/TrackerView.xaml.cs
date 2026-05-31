@@ -777,6 +777,49 @@ namespace DailyPrayerTime.Native
             }
         }
 
+        private async void CloudSync_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Services.AuthService.Instance.IsSignedIn)
+            {
+                var prompt = new Views.AuthPromptWindow();
+                prompt.Owner = System.Windows.Window.GetWindow(this);
+                var result = prompt.ShowDialog();
+                if (result != true) return;
+            }
+
+            CloudSyncBtn.IsEnabled = false;
+            var originalContent = ((StackPanel)((Button)sender).Content);
+            var textBlock = (TextBlock)originalContent.Children[1];
+            string originalText = textBlock.Text;
+            textBlock.Text = "Syncing...";
+
+            try
+            {
+                await Services.CloudSyncService.Instance.SyncAllAsync();
+                textBlock.Text = "Done!";
+                System.Windows.MessageBox.Show(
+                    "Current month data synced to cloud successfully!",
+                    "Cloud Sync",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                textBlock.Text = "Failed";
+                System.Windows.MessageBox.Show(
+                    $"Sync failed: {ex.Message}",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                await System.Threading.Tasks.Task.Delay(1500);
+                textBlock.Text = originalText;
+                CloudSyncBtn.IsEnabled = true;
+            }
+        }
+
         private int CalculateProgress(DailyDeeds deeds)
         {
             int total = 0;
