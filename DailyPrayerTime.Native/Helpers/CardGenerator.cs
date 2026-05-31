@@ -73,8 +73,30 @@ namespace DailyPrayerTime.Native.Helpers
             var headerStack = new StackPanel
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
-                Margin = new Thickness(0, 80, 0, 0)
+                Margin = new Thickness(0, 50, 0, 0)
             };
+
+            // Bismillah at top
+            headerStack.Children.Add(new TextBlock
+            {
+                Text = "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
+                FontSize = 28,
+                FontFamily = new FontFamily("Traditional Arabic, Segoe UI"),
+                Foreground = new SolidColorBrush(Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FlowDirection = FlowDirection.RightToLeft,
+                Margin = new Thickness(0, 0, 0, 20)
+            });
+
+            // Decorative divider
+            headerStack.Children.Add(new Border
+            {
+                Width = 500,
+                Height = 2,
+                Background = new SolidColorBrush(Color.FromArgb(0x44, 0x10, 0xB9, 0x81)),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Margin = new Thickness(0, 0, 0, 25)
+            });
 
             // App icon circle
             var iconBorder = new Border
@@ -282,14 +304,24 @@ namespace DailyPrayerTime.Native.Helpers
                 Margin = new Thickness(0, 0, 0, 15)
             });
 
+            // MashaAllah, BarakAllah at bottom
             footerStack.Children.Add(new TextBlock
             {
-                Text = "بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ",
-                FontSize = 24,
+                Text = "مَا شَاءَ ٱللَّٰهُ  •  بَارَكَ ٱللَّٰهُ",
+                FontSize = 26,
                 FontFamily = new FontFamily("Traditional Arabic, Segoe UI"),
-                Foreground = new SolidColorBrush(Color.FromArgb(0x66, 0xFF, 0xFF, 0xFF)),
+                Foreground = new SolidColorBrush(Color.FromRgb(0xFB, 0xBF, 0x24)),
                 HorizontalAlignment = HorizontalAlignment.Center,
-                FlowDirection = FlowDirection.RightToLeft
+                FlowDirection = FlowDirection.RightToLeft,
+                Margin = new Thickness(0, 0, 0, 5)
+            });
+
+            footerStack.Children.Add(new TextBlock
+            {
+                Text = "MashaAllah • BarakAllah",
+                FontSize = 14,
+                Foreground = new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0xFF, 0xFF)),
+                HorizontalAlignment = HorizontalAlignment.Center
             });
 
             Grid.SetRow(footerStack, 2);
