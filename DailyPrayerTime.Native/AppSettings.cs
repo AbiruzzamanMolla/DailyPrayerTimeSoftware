@@ -137,6 +137,7 @@ namespace DailyPrayerTime.Native
 
         // Leaderboard
         public bool LeaderboardAnonymous { get; set; } = false;
+        public string LastHallOfFameMonth { get; set; } = "";
     }
 
     public static class SettingsManager

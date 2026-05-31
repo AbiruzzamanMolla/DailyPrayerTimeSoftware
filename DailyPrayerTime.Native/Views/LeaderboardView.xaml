@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
-             d:DesignHeight="400" d:DesignWidth="350"
+             d:DesignHeight="500" d:DesignWidth="350"
              Background="Transparent">
 
     <Grid Margin="15,0,15,10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -26,8 +27,22 @@
             <Button Grid.Column="2" Content="{DynamicResource Leaderboard_Refresh}" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" Foreground="White" Padding="10,4" CornerRadius="6" Cursor="Hand" Click="Refresh_Click" FontSize="10"/>
         </Grid>
 
+        <!-- Tab Navigation -->
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="TabMonthly" Grid.Column="0" Content="📅 Monthly" Click="TabMonthly_Click"
+                    Background="#10B981" Foreground="White" FontSize="11" FontWeight="SemiBold"
+                    Padding="10,6" CornerRadius="8,0,0,8" Cursor="Hand" BorderThickness="0"/>
+            <Button x:Name="TabHallOfFame" Grid.Column="1" Content="🏆 Hall of Fame" Click="TabHallOfFame_Click"
+                    Background="#1AFFFFFF" Foreground="White" FontSize="11" FontWeight="SemiBold"
+                    Padding="10,6" CornerRadius="0,8,8,0" Cursor="Hand" BorderThickness="1" BorderBrush="#33FFFFFF"/>
+        </Grid>
+
         <!-- My Ranking Card -->
-        <Border Grid.Row="1" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,0,0,10" x:Name="MyRankCard" Visibility="Collapsed">
+        <Border Grid.Row="2" Background="#1AFFFFFF" BorderBrush="#2AFFFFFF" BorderThickness="1" CornerRadius="10" Padding="12,10" Margin="0,0,0,10" x:Name="MyRankCard" Visibility="Collapsed">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -43,9 +58,9 @@
             </Grid>
         </Border>
 
-        <!-- Leaderboard List -->
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <StackPanel x:Name="LeaderboardList">
+        <!-- Content Area -->
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="ContentPanel">
                 <TextBlock x:Name="LoadingText" Text="{DynamicResource Leaderboard_Loading}" Foreground="White" Opacity="0.5" FontSize="12" HorizontalAlignment="Center" Margin="0,20,0,0"/>
             </StackPanel>
         </ScrollViewer>

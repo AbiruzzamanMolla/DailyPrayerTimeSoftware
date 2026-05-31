@@ -377,6 +377,9 @@ namespace DailyPrayerTime.Native.Services
                 // Also push leaderboard stats
                 await LeaderboardService.Instance.PushMyStatsAsync();
 
+                // Check if we need to save previous month's top 3
+                await LeaderboardService.Instance.CheckAndSavePreviousMonthAsync();
+
                 SettingsManager.Current.LastSyncAt = DateTime.UtcNow.ToString("o");
                 SettingsManager.Save();
 
