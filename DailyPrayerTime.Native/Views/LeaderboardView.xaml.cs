@@ -24,6 +24,9 @@ namespace DailyPrayerTime.Native.Views
                 return;
             }
 
+            // Show current month
+            MonthLabel.Text = DateTime.Today.ToString("MMMM yyyy");
+
             LoadingText.Visibility = Visibility.Visible;
             LoadingText.Text = LocalizationManager.Instance.GetString("Leaderboard_Loading") ?? "Loading...";
 

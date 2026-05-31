@@ -22,6 +22,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="{DynamicResource Leaderboard_Title}" FontWeight="Bold" FontSize="13" Foreground="White" Opacity="0.8" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" x:Name="MonthLabel" Text="" FontSize="10" Foreground="White" Opacity="0.5" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Button Grid.Column="2" Content="{DynamicResource Leaderboard_Refresh}" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" Foreground="White" Padding="10,4" CornerRadius="6" Cursor="Hand" Click="Refresh_Click" FontSize="10"/>
         </Grid>
 

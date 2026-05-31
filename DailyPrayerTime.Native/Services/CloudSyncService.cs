@@ -325,7 +325,14 @@ namespace DailyPrayerTime.Native.Services
             try
             {
                 var rawEntries = await FirestoreRestHelper.GetCollectionAsync("leaderboard");
-                var entries = rawEntries.Select(r => new LeaderboardEntry
+                string currentMonth = DateTime.Today.ToString("yyyy-MM");
+
+                var entries = rawEntries
+                    .Where(r => {
+                        string entryMonth = r.Data.TryGetValue("month", out var m) ? m.ToString() ?? "" : "";
+                        return string.IsNullOrEmpty(entryMonth) || entryMonth == currentMonth;
+                    })
+                    .Select(r => new LeaderboardEntry
                 {
                     UserId = r.Id,
                     DisplayName = r.Data.TryGetValue("displayName", out var dn) ? dn.ToString() ?? "" : "",
@@ -333,6 +340,7 @@ namespace DailyPrayerTime.Native.Services
                     TotalPrayersCompleted = r.Data.TryGetValue("totalPrayersCompleted", out var tp) ? Convert.ToInt32(tp) : 0,
                     TotalDaysTracked = r.Data.TryGetValue("totalDaysTracked", out var td) ? Convert.ToInt32(td) : 0,
                     CompletionRate = r.Data.TryGetValue("completionRate", out var cr) ? Convert.ToDouble(cr) : 0,
+                    Month = r.Data.TryGetValue("month", out var m2) ? m2.ToString() ?? "" : "",
                     LastUpdated = r.Data.TryGetValue("lastUpdated", out var lu) ? lu.ToString() ?? "" : ""
                 }).OrderByDescending(e => e.CompletionRate).ToList();
 

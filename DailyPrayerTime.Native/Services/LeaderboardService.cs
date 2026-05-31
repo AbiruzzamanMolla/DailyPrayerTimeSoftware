@@ -16,6 +16,7 @@ namespace DailyPrayerTime.Native.Services
         public int TotalPrayersCompleted { get; set; }
         public int TotalDaysTracked { get; set; }
         public double CompletionRate { get; set; }
+        public string Month { get; set; } = "";
         public string LastUpdated { get; set; } = "";
         public int Rank { get; set; }
     }
@@ -56,9 +57,15 @@ namespace DailyPrayerTime.Native.Services
 
                 // Fetch all leaderboard entries
                 var rawEntries = await FirestoreRestHelper.GetCollectionAsync("leaderboard");
+                string currentMonth = DateTime.Today.ToString("yyyy-MM");
 
                 foreach (var (id, data) in rawEntries)
                 {
+                    // Only show entries from current month
+                    string entryMonth = data.TryGetValue("month", out var m) ? m.ToString() ?? "" : "";
+                    if (!string.IsNullOrEmpty(entryMonth) && entryMonth != currentMonth)
+                        continue;
+
                     var entry = new LeaderboardEntry
                     {
                         UserId = id,
@@ -103,14 +110,16 @@ namespace DailyPrayerTime.Native.Services
                 string uid = AuthService.Instance.Uid!;
                 bool isAnonymous = SettingsManager.Current.LeaderboardAnonymous;
 
-                // Calculate stats from local tracker data
+                // Calculate stats from current month only
                 int totalPrayersCompleted = 0;
                 int totalDaysTracked = 0;
                 int totalPrayerOpportunities = 0;
 
-                for (int i = 0; i < 30; i++)
-                {
-                    DateTime date = DateTime.Today.AddDays(-i);
+                DateTime now = DateTime.Today;
+                DateTime monthStart = new DateTime(now.Year, now.Month, 1);
+                DateTime monthEnd = now; // Up to today
+
+                for (DateTime date = monthStart; date <= monthEnd; date = date.AddDays(1))
                     var deeds = TrackerService.Instance.LoadDay(date);
 
                     bool hasData = deeds.Prayers.Values.Any(p => p.Any(d => d.IsChecked));
@@ -149,6 +158,7 @@ namespace DailyPrayerTime.Native.Services
                     ["totalPrayersCompleted"] = totalPrayersCompleted,
                     ["totalDaysTracked"] = totalDaysTracked,
                     ["completionRate"] = completionRate,
+                    ["month"] = now.ToString("yyyy-MM"),
                     ["lastUpdated"] = DateTime.UtcNow.ToString("o")
                 };
 
