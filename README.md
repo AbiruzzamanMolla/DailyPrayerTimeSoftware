@@ -28,11 +28,11 @@
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
 | **Scoop**                      | `scoop bucket add abiruzzaman https://github.com/AbiruzzamanMolla/scoop-bucket`<br>`scoop install dailyprayertimer`     |
 | **Chocolatey (Verified)**      | `choco install dailyprayertimer`                                                                                        |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.5.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.5.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
-> **Version 2.5.0** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
+> **Version 2.5.1** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
 
 1. **Package Managers**: Open any terminal (PowerShell, CMD, or Terminal) and run the respective command above.
 2. **Manual**: Download the installer matching your system.

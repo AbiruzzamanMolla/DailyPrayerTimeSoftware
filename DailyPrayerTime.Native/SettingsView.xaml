@@ -823,7 +823,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{DynamicResource i18n_Updates_Desc}" TextWrapping="Wrap" Foreground="White" Opacity="0.7" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.5.0" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.5.1" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="12,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
                                         <Button.Resources>
@@ -833,6 +833,66 @@
                                         </Button.Resources>
                                     </Button>
                                 </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Contact Us Form (Authorized Users) -->
+                        <Border x:Name="ContactUsCard" Style="{StaticResource PremiumCardStyle}" Visibility="Collapsed">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,6"/>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Desc}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                                
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{DynamicResource i18n_ContactUs_Name}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="ContactNameInput" Padding="5" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Margin="0,0,0,8"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="{DynamicResource i18n_ContactUs_Email}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
+                                        <TextBox x:Name="ContactEmailInput" Padding="5" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Margin="0,0,0,8"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Subject}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
+                                <TextBox x:Name="ContactSubjectInput" Padding="5" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Margin="0,0,0,8"/>
+
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Message}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
+                                <TextBox x:Name="ContactMessageInput" Padding="5" Height="80" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Margin="0,0,0,8"/>
+
+                                <Grid Margin="0,4,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="ContactStatusText" Grid.Column="0" Text="" FontSize="11" VerticalAlignment="Center" TextWrapping="Wrap" Margin="0,0,10,0"/>
+                                    <Button x:Name="ContactSendBtn" Grid.Column="1" Content="{DynamicResource i18n_ContactUs_Send}" Click="SendContact_Click" Padding="15,6" Background="#34d399" Foreground="Black" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                                        <Button.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="6"/>
+                                            </Style>
+                                        </Button.Resources>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Contact Us Authentication Promo -->
+                        <Border x:Name="ContactUsAuthPromptCard" Style="{StaticResource PremiumCardStyle}" Visibility="Visible">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,6"/>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_SignInPrompt}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                                <Button Content="🔑 Sign in with Google" Click="CloudSyncSignIn_Click" HorizontalAlignment="Left" Padding="15,6" Background="#4285F4" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </StackPanel>
                         </Border>
 
@@ -1146,7 +1206,11 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.5.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.5.1" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>In-App Support Contact Form:</Bold> Send suggestions or bug reports to the developer directly from the Settings Support tab (requires cloud sign-in for secure messaging).</TextBlock>
+                                </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Global Leaderboard &amp; Hall of Fame:</Bold> All signed-in users now compete on a shared Monthly Leaderboard inside the Tracker tab, sorted by completion rate. Medal icons crown the top three. A permanent Hall of Fame preserves each month's champions forever.</TextBlock>

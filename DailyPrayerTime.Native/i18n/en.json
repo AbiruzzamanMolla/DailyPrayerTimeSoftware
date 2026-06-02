@@ -512,5 +512,18 @@
   "Tracker_TabWeekly": "Weekly",
   "Tracker_TabMonthly": "Monthly",
   "Tracker_TabYearly": "Yearly",
-  "Tracker_TabLeaderboard": "Leaderboard"
+  "Tracker_TabLeaderboard": "Leaderboard",
+  "ContactUs_Title": "Contact Us",
+  "ContactUs_Desc": "Have a suggestion, bug report, or need help? Send us a message directly!",
+  "ContactUs_Name": "Your Name:",
+  "ContactUs_Email": "Your Email:",
+  "ContactUs_Subject": "Subject:",
+  "ContactUs_Message": "Message:",
+  "ContactUs_Send": "Send Message",
+  "ContactUs_Sending": "Sending...",
+  "ContactUs_Success": "Message sent successfully!",
+  "ContactUs_Error": "Failed to send message: {0}",
+  "ContactUs_Required": "Please fill in all required fields (Subject and Message).",
+  "ContactUs_InvalidEmail": "Please enter a valid email address.",
+  "ContactUs_SignInPrompt": "Please sign in with your Google account to unlock direct developer support. Tying messages to a verified account ensures we can safely reply to your query."
 }

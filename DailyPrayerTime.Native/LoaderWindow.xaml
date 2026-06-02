@@ -84,7 +84,7 @@
                     
                     <!-- Version Badge -->
                     <Border Background="#ecfdf5" CornerRadius="15" Padding="12,4" HorizontalAlignment="Center" Margin="0,15,0,0">
-                        <TextBlock x:Name="VersionText" Text="v2.5.0" FontSize="11" Foreground="#059669" FontWeight="Bold"/>
+                        <TextBlock x:Name="VersionText" Text="v2.5.1" FontSize="11" Foreground="#059669" FontWeight="Bold"/>
                     </Border>
                 </StackPanel>
 

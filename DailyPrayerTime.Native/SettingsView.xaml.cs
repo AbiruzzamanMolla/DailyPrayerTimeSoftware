@@ -10,6 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DailyPrayerTime.Native.Services;
 using DailyPrayerTime.Native.Models;
+using DailyPrayerTime.Native.Helpers;
 using System.Collections.Generic;
 
 namespace DailyPrayerTime.Native
@@ -177,7 +178,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.5.0");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.5.1");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {
@@ -1150,6 +1151,123 @@ namespace DailyPrayerTime.Native
                 : "Not signed in";
             CloudSyncSignInBtn.Visibility = isSignedIn ? Visibility.Collapsed : Visibility.Visible;
             CloudSyncSignOutBtn.Visibility = isSignedIn ? Visibility.Visible : Visibility.Collapsed;
+
+            // Update Contact Us UI
+            if (ContactUsCard != null && ContactUsAuthPromptCard != null)
+            {
+                ContactUsCard.Visibility = isSignedIn ? Visibility.Visible : Visibility.Collapsed;
+                ContactUsAuthPromptCard.Visibility = isSignedIn ? Visibility.Collapsed : Visibility.Visible;
+
+                if (isSignedIn)
+                {
+                    if (string.IsNullOrEmpty(ContactNameInput.Text))
+                        ContactNameInput.Text = AuthService.Instance.DisplayName ?? "";
+                    if (string.IsNullOrEmpty(ContactEmailInput.Text))
+                        ContactEmailInput.Text = AuthService.Instance.Email ?? "";
+                }
+            }
+        }
+
+        private async void SendContact_Click(object sender, RoutedEventArgs e)
+        {
+            string name = ContactNameInput.Text.Trim();
+            string email = ContactEmailInput.Text.Trim();
+            string subject = ContactSubjectInput.Text.Trim();
+            string message = ContactMessageInput.Text.Trim();
+
+            // Clear previous status
+            ContactStatusText.Text = "";
+            ContactStatusText.Foreground = System.Windows.Media.Brushes.White;
+
+            if (string.IsNullOrEmpty(subject) || string.IsNullOrEmpty(message))
+            {
+                ContactStatusText.Text = LocalizationManager.Instance.GetString("ContactUs_Required");
+                ContactStatusText.Foreground = System.Windows.Media.Brushes.Red;
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(email) && !email.Contains("@"))
+            {
+                ContactStatusText.Text = LocalizationManager.Instance.GetString("ContactUs_InvalidEmail");
+                ContactStatusText.Foreground = System.Windows.Media.Brushes.Red;
+                return;
+            }
+
+            // Set loading state
+            ContactSendBtn.IsEnabled = false;
+            ContactSendBtn.Content = LocalizationManager.Instance.GetString("ContactUs_Sending");
+            ContactStatusText.Text = LocalizationManager.Instance.GetString("ContactUs_Sending");
+            ContactStatusText.Foreground = System.Windows.Media.Brushes.Yellow;
+
+            try
+            {
+                string messageId = Guid.NewGuid().ToString();
+                var timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                string appVersion = "2.5.1";
+                string uid = AuthService.Instance.Uid ?? "";
+
+                // 1. Save message to 'contact_messages'
+                var messageData = new Dictionary<string, object>
+                {
+                    { "name", name },
+                    { "email", email },
+                    { "subject", subject },
+                    { "message", message },
+                    { "timestamp", timestamp },
+                    { "uid", uid },
+                    { "app_version", appVersion }
+                };
+
+                bool savedMsg = await FirestoreRestHelper.SetDocumentAsync("contact_messages", messageId, messageData);
+
+                // 2. Save trigger document to 'mail' (for Trigger Email Firebase Extension)
+                string safeMessage = message.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\n", "<br/>");
+                var mailData = new Dictionary<string, object>
+                {
+                    { "to", "abiruzzaman.molla@gmail.com" }, // Developer's email
+                    { "message", new Dictionary<string, object>
+                        {
+                            { "subject", $"[Daily Prayer Timer Support] {subject}" },
+                            { "text", $"Name: {name}\nEmail: {email}\nUID: {uid}\nVersion: {appVersion}\n\nMessage:\n{message}" },
+                            { "html", $"<h3>Daily Prayer Timer Support Query</h3>" +
+                                      $"<p><b>Name:</b> {name}</p>" +
+                                      $"<p><b>Email:</b> {email}</p>" +
+                                      $"<p><b>UID:</b> {uid}</p>" +
+                                      $"<p><b>Version:</b> {appVersion}</p>" +
+                                      $"<p><b>Message:</b></p>" +
+                                      $"<p style='white-space: pre-wrap; background: #f3f4f6; padding: 10px; border-radius: 5px;'>{safeMessage}</p>" }
+                        }
+                    }
+                };
+
+                bool savedMail = await FirestoreRestHelper.SetDocumentAsync("mail", messageId, mailData);
+
+                if (savedMsg)
+                {
+                    ContactStatusText.Text = LocalizationManager.Instance.GetString("ContactUs_Success");
+                    ContactStatusText.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#34d399"));
+                    
+                    // Clear inputs
+                    ContactSubjectInput.Text = "";
+                    ContactMessageInput.Text = "";
+                }
+                else
+                {
+                    ContactStatusText.Text = string.Format(LocalizationManager.Instance.GetString("ContactUs_Error"), "Firestore write failed.");
+                    ContactStatusText.Foreground = System.Windows.Media.Brushes.Red;
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Log($"Contact us form error: {ex.Message}");
+                ContactStatusText.Text = string.Format(LocalizationManager.Instance.GetString("ContactUs_Error"), ex.Message);
+                ContactStatusText.Foreground = System.Windows.Media.Brushes.Red;
+            }
+            finally
+            {
+                ContactSendBtn.IsEnabled = true;
+                ContactSendBtn.Content = LocalizationManager.Instance.GetString("ContactUs_Send");
+            }
         }
     }
 }

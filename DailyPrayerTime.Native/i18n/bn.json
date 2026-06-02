@@ -512,5 +512,18 @@
   "Tracker_TabWeekly": "সাপ্তাহিক",
   "Tracker_TabMonthly": "মাসিক",
   "Tracker_TabYearly": "বাৎসরিক",
-  "Tracker_TabLeaderboard": "লিডারবোর্ড"
+  "Tracker_TabLeaderboard": "লিডারবোর্ড",
+  "ContactUs_Title": "যোগাযোগ করুন",
+  "ContactUs_Desc": "কোনো পরামর্শ, বাগ রিপোর্ট, বা সাহায্যের প্রয়োজন? সরাসরি আমাদের বার্তা পাঠান!",
+  "ContactUs_Name": "আপনার নাম:",
+  "ContactUs_Email": "আপনার ইমেইল:",
+  "ContactUs_Subject": "বিষয়:",
+  "ContactUs_Message": "বার্তা:",
+  "ContactUs_Send": "বার্তা পাঠান",
+  "ContactUs_Sending": "পাঠানো হচ্ছে...",
+  "ContactUs_Success": "বার্তা সফলভাবে পাঠানো হয়েছে!",
+  "ContactUs_Error": "বার্তা পাঠাতে ব্যর্থ হয়েছে: {0}",
+  "ContactUs_Required": "দয়া করে সমস্ত প্রয়োজনীয় ক্ষেত্রগুলি পূরণ করুন (বিষয় এবং বার্তা)।",
+  "ContactUs_InvalidEmail": "দয়া করে একটি সঠিক ইমেল ঠিকানা লিখুন।",
+  "ContactUs_SignInPrompt": "সরাসরি ডেভেলপার সহায়তার সুবিধা পেতে দয়া করে আপনার গুগল অ্যাকাউন্ট দিয়ে সাইন ইন করুন। একটি যাচাইকৃত অ্যাকাউন্টের সাথে বার্তা যুক্ত থাকলে আমরা আপনার প্রশ্নের নিরাপদ উত্তর দিতে পারি।"
 }

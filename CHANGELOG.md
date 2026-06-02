@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.1] - 2026-06-02
+
+### Added
+
+- **In-App Support Contact Form**: Added a premium, glassmorphic Contact Us card inside the Settings > Support tab. Users signed in to Cloud Sync can now send bug reports, suggestions, or help requests directly to the developer from within the app.
+- **Root-level Firestore Integrations**: Configured globally-scoped REST collections for `contact_messages` and `mail` in `FirestoreRestHelper.cs` to store submissions cleanly in database root paths.
+- **Trigger Email Integration**: Submissions write to the global `mail` collection, which is watched by the standard Firebase Trigger Email extension to automatically forward queries to the developer's email address (`abiruzzaman.molla@gmail.com`).
+- **Complete Localization**: Full localization suite added for contact form fields and statuses across English, Bengali, Hindi, Arabic, Malayalam, Tamil, Telugu, and Indonesian language packs.
+
+### Changed
+
+- **Settings Support Card Ordering**: Rearranged cards inside the Settings Support tab so that the Contact Us card is positioned directly underneath the Updates card at the very top of the scroll view.
+
 ## [2.5.0] - 2026-06-02
 
 ### Added

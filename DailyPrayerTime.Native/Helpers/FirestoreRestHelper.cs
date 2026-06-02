@@ -24,7 +24,7 @@ namespace DailyPrayerTime.Native.Helpers
         private static string GetUrl(string collection, string? documentId = null)
         {
             string baseUrl = BaseUrl;
-            bool isGlobal = collection == "leaderboard" || collection == "hall_of_fame";
+            bool isGlobal = collection == "leaderboard" || collection == "hall_of_fame" || collection == "contact_messages" || collection == "mail";
 
             if (isGlobal)
             {
