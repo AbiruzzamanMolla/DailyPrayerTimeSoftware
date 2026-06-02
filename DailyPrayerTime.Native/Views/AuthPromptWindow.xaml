@@ -24,7 +24,12 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                <Button x:Name="GoogleSignInBtn" Click="GoogleSignIn_Click" Background="#4285F4" Foreground="White" FontSize="13" FontWeight="SemiBold" Padding="20,10" CornerRadius="8" HorizontalAlignment="Stretch" Cursor="Hand" BorderThickness="0" Margin="0,0,0,8">
+                <Button x:Name="GoogleSignInBtn" Click="GoogleSignIn_Click" Background="#4285F4" Foreground="White" FontSize="13" FontWeight="SemiBold" Padding="20,10" HorizontalAlignment="Stretch" Cursor="Hand" BorderThickness="0" Margin="0,0,0,8">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <TextBlock Text="G" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
                         <TextBlock Text="Sign in with Google" VerticalAlignment="Center"/>
@@ -33,7 +38,13 @@
                 <TextBlock x:Name="ErrorText" Foreground="#f87171" FontSize="10" HorizontalAlignment="Center" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,4,0,0"/>
             </StackPanel>
 
-            <Button Grid.Row="2" Content="{DynamicResource Cancel}" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" Foreground="White" Padding="20,8" CornerRadius="6" HorizontalAlignment="Center" Click="Cancel_Click" Cursor="Hand" FontSize="11"/>
+            <Button Grid.Row="2" Content="{DynamicResource Cancel}" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" Foreground="White" Padding="20,8" HorizontalAlignment="Center" Click="Cancel_Click" Cursor="Hand" FontSize="11">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="6"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </Grid>
     </Border>
 </Window>

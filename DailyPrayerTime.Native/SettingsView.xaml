@@ -498,8 +498,20 @@
                                 <TextBlock Text="Sync your tracker, tasbih, ramadan, and cycle data to Firebase cloud." FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 <CheckBox x:Name="CloudSyncEnabledInput" Content="Enable Cloud Sync" Margin="0,4" Foreground="White"/>
                                 <TextBlock x:Name="CloudSyncStatusText" Text="Not signed in" FontSize="10" Foreground="White" Opacity="0.5" Margin="20,4,0,0"/>
-                                <Button x:Name="CloudSyncSignInBtn" Content="Sign in with Google" Click="CloudSyncSignIn_Click" Margin="0,8,0,0" Padding="12,6" Background="#4285F4" Foreground="White" CornerRadius="6" Cursor="Hand" FontSize="11" FontWeight="SemiBold"/>
-                                <Button x:Name="CloudSyncSignOutBtn" Content="Sign Out" Click="CloudSyncSignOut_Click" Margin="0,6,0,0" Padding="12,6" Background="#374151" Foreground="White" CornerRadius="6" Cursor="Hand" FontSize="11" Visibility="Collapsed"/>
+                                <Button x:Name="CloudSyncSignInBtn" Content="Sign in with Google" Click="CloudSyncSignIn_Click" Margin="0,8,0,0" Padding="12,6" Background="#4285F4" Foreground="White" Cursor="Hand" FontSize="11" FontWeight="SemiBold">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button x:Name="CloudSyncSignOutBtn" Content="Sign Out" Click="CloudSyncSignOut_Click" Margin="0,6,0,0" Padding="12,6" Background="#374151" Foreground="White" Cursor="Hand" FontSize="11" Visibility="Collapsed">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -811,7 +823,7 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{DynamicResource i18n_Updates_Desc}" TextWrapping="Wrap" Foreground="White" Opacity="0.7" FontSize="11"/>
-                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.4.4" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
+                                        <TextBlock x:Name="VersionDisplay" Text="Version: 2.5.0" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
                                     <Button Grid.Column="1" Content="Check Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="12,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
                                         <Button.Resources>
@@ -1050,6 +1062,24 @@
                                         <Bold>Auto-Backups:</Bold> Scheduled intervals (Disabled, Daily, Weekly, Monthly) along with a folder browser. Periodically zips and archives all your spiritual logs, checklists, and counters securely on your PC, so you never lose your history.
                                     </TextBlock>
                                 </BulletDecorator>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
+                                        <Bold>Monthly Report Card:</Bold> Tap the <Bold>Card</Bold> button at the top of the Tracker to instantly generate a premium shareable image (1080×1920 portrait) summarising your prayer completion rate, total counts, per-prayer breakdown bars, and a QR code. Save the file to your device or share it directly.
+                                    </TextBlock>
+                                </BulletDecorator>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
+                                        <Bold>Cloud Sync (Google Account):</Bold> Enable Cloud Sync and sign in with your Google account to securely push your tracker, tasbih, Ramadan, and cycle data to Firebase cloud storage. Your data is stored under your unique Google UID, completely private from other users. Tap <Bold>Sync</Bold> in the Tracker tab or <Bold>Sync Now</Bold> in Settings to upload. Sign out at any time to disconnect.
+                                    </TextBlock>
+                                </BulletDecorator>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
+                                        <Bold>Global Leaderboard &amp; Hall of Fame:</Bold> After syncing, your monthly prayer statistics automatically appear on the shared Global Leaderboard in the Tracker tab. Rankings are sorted by completion rate and total prayers. The top three users earn medal icons (🥇🥈🥉). The <Bold>Hall of Fame</Bold> sub-tab permanently records the previous months' top three champions. Enable <Bold>Anonymous Mode</Bold> in Tracker settings if you prefer to appear as "Anonymous" on the board.
+                                    </TextBlock>
+                                </BulletDecorator>
 
                                 <!-- CATEGORY 3: REMINDERS & AUDIO -->
                                 <TextBlock Text="🔔 3. Audio, Alerts, &amp; Adhan Personalization" FontWeight="Bold" FontSize="13" Foreground="#60a5fa" Margin="0,8,0,4"/>
@@ -1116,22 +1146,26 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.4.4" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.5.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Global Notice &amp; Update System:</Bold> Added support for audiobookbangla's Notice API. Automatically and silently synchronizes notifications once per day, storing updates locally to reduce bandwidth and avoid unnecessary requests.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Global Leaderboard &amp; Hall of Fame:</Bold> All signed-in users now compete on a shared Monthly Leaderboard inside the Tracker tab, sorted by completion rate. Medal icons crown the top three. A permanent Hall of Fame preserves each month's champions forever.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Embedded Settings View:</Bold> No more modal windows. The Settings panel is integrated directly into the main window as a beautiful, SPA-style dark-green view that hides the footer while active.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Google Sign-In via In-App Browser:</Bold> Signing in with Google now opens a secure in-app window powered by WebView2 — no external browser tab is ever opened. The sign-in flow completes automatically and closes itself.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>8-Language Dua Library Selector:</Bold> Added dynamic dropdown selection for Duas and supplications. Instantly translate name, transliteration, and translations across English, Bengali, Hindi, Tamil, Telugu, Malayalam, Indonesian, and Arabic.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Monthly Report Card:</Bold> Tap the Card button in the Tracker header to generate a beautiful 1080×1920 portrait image of your monthly prayer stats — complete with a QR code — ready to save or share.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Zen Mode &amp; Font Adjustments:</Bold> Fixed spacing issues during Zen Mode inside the main hero card. Transferred font-scaling options to the central Theme panel.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Cloud Sync Error Visibility:</Bold> Sync failures are now shown as clear error popups instead of silent no-ops. All cloud errors are also written to the built-in app_log.txt diagnostic log for easy troubleshooting.</TextBlock>
+                                </BulletDecorator>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Premium Button Styles:</Bold> The Sync and Card buttons in the Tracker now feature a glassmorphic dark-glass look with hover/press glow effects matching the rest of the app's premium aesthetic.</TextBlock>
                                 </BulletDecorator>
                             </StackPanel>
                         </Border>

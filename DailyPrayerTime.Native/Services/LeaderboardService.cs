@@ -119,7 +119,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to fetch leaderboard: {ex.Message}");
+                string errorLog = $"Failed to fetch leaderboard: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
 
             return _cachedEntries;
@@ -216,7 +218,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to push leaderboard stats: {ex.Message}");
+                string errorLog = $"Failed to push leaderboard stats: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -278,7 +282,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to save Hall of Fame: {ex.Message}");
+                string errorLog = $"Failed to save Hall of Fame: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -312,7 +318,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to fetch Hall of Fame: {ex.Message}");
+                string errorLog = $"Failed to fetch Hall of Fame: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
 
             return results;

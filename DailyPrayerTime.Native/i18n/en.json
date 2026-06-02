@@ -507,5 +507,10 @@
   "Cycle_SafeDays": "{0} safe days remaining",
   "Cycle_CloudSync": "Cloud Sync",
   "Cycle_SyncEnabled": "Sync cycle data to cloud",
-  "Cycle_SyncDisabled": "Cloud sync disabled"
+  "Cycle_SyncDisabled": "Cloud sync disabled",
+  "Tracker_TabDaily": "Daily",
+  "Tracker_TabWeekly": "Weekly",
+  "Tracker_TabMonthly": "Monthly",
+  "Tracker_TabYearly": "Yearly",
+  "Tracker_TabLeaderboard": "Leaderboard"
 }

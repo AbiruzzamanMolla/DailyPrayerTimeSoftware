@@ -507,5 +507,10 @@
   "Cycle_SafeDays": "{0} দিন বাকি আছে",
   "Cycle_CloudSync": "ক্লাউড সিঙ্ক",
   "Cycle_SyncEnabled": "মাসিক তথ্য ক্লাউডে সিঙ্ক করুন",
-  "Cycle_SyncDisabled": "ক্লাউড সিঙ্ক নিষ্ক্রিয়"
+  "Cycle_SyncDisabled": "ক্লাউড সিঙ্ক নিষ্ক্রিয়",
+  "Tracker_TabDaily": "দৈনিক",
+  "Tracker_TabWeekly": "সাপ্তাহিক",
+  "Tracker_TabMonthly": "মাসিক",
+  "Tracker_TabYearly": "বাৎসরিক",
+  "Tracker_TabLeaderboard": "লিডারবোর্ড"
 }

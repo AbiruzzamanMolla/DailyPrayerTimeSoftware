@@ -177,7 +177,7 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.4.3");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.5.0");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {
@@ -1133,9 +1133,9 @@ namespace DailyPrayerTime.Native
 
         private void CloudSyncSignOut_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Are you sure you want to sign out? Cloud sync will be disabled.",
-                "Sign Out", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes)
+            var result = System.Windows.MessageBox.Show("Are you sure you want to sign out? Cloud sync will be disabled.",
+                "Sign Out", System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning);
+            if (result == System.Windows.MessageBoxResult.Yes)
             {
                 AuthService.Instance.SignOut();
                 UpdateCloudSyncUI();

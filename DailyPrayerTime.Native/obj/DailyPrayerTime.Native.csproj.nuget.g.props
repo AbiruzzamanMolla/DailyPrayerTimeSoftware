@@ -16,6 +16,8 @@
     <Import Project="$(NuGetPackageRoot)microsoft.net.illink.tasks\8.0.25\build\Microsoft.NET.ILLink.Tasks.props" Condition="Exists('$(NuGetPackageRoot)microsoft.net.illink.tasks\8.0.25\build\Microsoft.NET.ILLink.Tasks.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Web_WebView2 Condition=" '$(PkgMicrosoft_Web_WebView2)' == '' ">C:\Users\Abir\.nuget\packages\microsoft.web.webview2\1.0.1462.37</PkgMicrosoft_Web_WebView2>
     <PkgMicrosoft_NET_ILLink_Tasks Condition=" '$(PkgMicrosoft_NET_ILLink_Tasks)' == '' ">C:\Users\Abir\.nuget\packages\microsoft.net.illink.tasks\8.0.25</PkgMicrosoft_NET_ILLink_Tasks>
+    <PkgFirebaseAuthentication_WPF Condition=" '$(PkgFirebaseAuthentication_WPF)' == '' ">C:\Users\Abir\.nuget\packages\firebaseauthentication.wpf\4.1.0</PkgFirebaseAuthentication_WPF>
   </PropertyGroup>
 </Project>

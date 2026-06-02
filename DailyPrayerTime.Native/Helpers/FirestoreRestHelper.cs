@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,20 +21,48 @@ namespace DailyPrayerTime.Native.Helpers
             return await AuthService.Instance.GetIdTokenAsync();
         }
 
+        private static string GetUrl(string collection, string? documentId = null)
+        {
+            string baseUrl = BaseUrl;
+            bool isGlobal = collection == "leaderboard" || collection == "hall_of_fame";
+
+            if (isGlobal)
+            {
+                return string.IsNullOrEmpty(documentId)
+                    ? $"{baseUrl}/{collection}"
+                    : $"{baseUrl}/{collection}/{documentId}";
+            }
+            else
+            {
+                string uid = SettingsManager.Current.FirebaseUid ?? "";
+                return string.IsNullOrEmpty(documentId)
+                    ? $"{baseUrl}/users/{uid}/{collection}"
+                    : $"{baseUrl}/users/{uid}/{collection}/{documentId}";
+            }
+        }
+
         public static async Task<Dictionary<string, object>?> GetDocumentAsync(string collection, string documentId)
         {
             var token = await GetTokenAsync();
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(SettingsManager.Current.FirebaseUid))
                 return null;
 
-            string uid = SettingsManager.Current.FirebaseUid!;
-            string url = $"{BaseUrl}/users/{uid}/{collection}/{documentId}";
+            string url = GetUrl(collection, documentId);
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", $"Bearer {token}");
 
             var response = await _http.SendAsync(request);
-            if (!response.IsSuccessStatusCode) return null;
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return null;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errMsg = await response.Content.ReadAsStringAsync();
+                string errorLog = $"Firestore read failed: {response.StatusCode} - {errMsg}";
+                AppLogger.Log(errorLog);
+                throw new HttpRequestException(errorLog);
+            }
 
             var json = await response.Content.ReadAsStringAsync();
             return ParseFirestoreDocument(json);
@@ -45,14 +74,22 @@ namespace DailyPrayerTime.Native.Helpers
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(SettingsManager.Current.FirebaseUid))
                 return new List<(string, Dictionary<string, object>)>();
 
-            string uid = SettingsManager.Current.FirebaseUid!;
-            string url = $"{BaseUrl}/users/{uid}/{collection}";
+            string url = GetUrl(collection);
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             request.Headers.Add("Authorization", $"Bearer {token}");
 
             var response = await _http.SendAsync(request);
-            if (!response.IsSuccessStatusCode) return new List<(string, Dictionary<string, object>)>();
+            if (response.StatusCode == HttpStatusCode.NotFound)
+                return new List<(string, Dictionary<string, object>)>();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errMsg = await response.Content.ReadAsStringAsync();
+                string errorLog = $"Firestore collection query failed: {response.StatusCode} - {errMsg}";
+                AppLogger.Log(errorLog);
+                throw new HttpRequestException(errorLog);
+            }
 
             var json = await response.Content.ReadAsStringAsync();
             return ParseFirestoreCollection(json);
@@ -64,8 +101,7 @@ namespace DailyPrayerTime.Native.Helpers
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(SettingsManager.Current.FirebaseUid))
                 return false;
 
-            string uid = SettingsManager.Current.FirebaseUid!;
-            string url = $"{BaseUrl}/users/{uid}/{collection}/{documentId}";
+            string url = GetUrl(collection, documentId);
 
             var firestoreData = ConvertToFirestoreFields(data);
             var body = new { fields = firestoreData };
@@ -76,7 +112,14 @@ namespace DailyPrayerTime.Native.Helpers
             request.Content = content;
 
             var response = await _http.SendAsync(request);
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                var errMsg = await response.Content.ReadAsStringAsync();
+                string errorLog = $"Firestore write failed: {response.StatusCode} - {errMsg}";
+                AppLogger.Log(errorLog);
+                throw new HttpRequestException(errorLog);
+            }
+            return true;
         }
 
         public static async Task<bool> DeleteDocumentAsync(string collection, string documentId)
@@ -85,14 +128,20 @@ namespace DailyPrayerTime.Native.Helpers
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(SettingsManager.Current.FirebaseUid))
                 return false;
 
-            string uid = SettingsManager.Current.FirebaseUid!;
-            string url = $"{BaseUrl}/users/{uid}/{collection}/{documentId}";
+            string url = GetUrl(collection, documentId);
 
             var request = new HttpRequestMessage(HttpMethod.Delete, url);
             request.Headers.Add("Authorization", $"Bearer {token}");
 
             var response = await _http.SendAsync(request);
-            return response.IsSuccessStatusCode;
+            if (!response.IsSuccessStatusCode)
+            {
+                var errMsg = await response.Content.ReadAsStringAsync();
+                string errorLog = $"Firestore delete failed: {response.StatusCode} - {errMsg}";
+                AppLogger.Log(errorLog);
+                throw new HttpRequestException(errorLog);
+            }
+            return true;
         }
 
         private static Dictionary<string, object> ConvertToFirestoreFields(object obj)
@@ -112,6 +161,39 @@ namespace DailyPrayerTime.Native.Helpers
         {
             if (value == null)
                 return new { nullValue = (object?)null };
+
+            if (value is JToken token)
+            {
+                if (token.Type == JTokenType.Null)
+                    return new { nullValue = (object?)null };
+                if (token.Type == JTokenType.Boolean)
+                    return new { booleanValue = (bool)token };
+                if (token.Type == JTokenType.Integer)
+                    return new { integerValue = (long)token };
+                if (token.Type == JTokenType.Float)
+                    return new { doubleValue = (double)token };
+                if (token.Type == JTokenType.String)
+                    return new { stringValue = token.ToString() };
+                if (token.Type == JTokenType.Date)
+                    return new { stringValue = ((DateTime)token).ToString("o") };
+                if (token.Type == JTokenType.Array)
+                {
+                    var values = new List<object>();
+                    foreach (var item in token)
+                        values.Add(ConvertToFirestoreValue(item));
+                    return new { arrayValue = new { values } };
+                }
+                if (token.Type == JTokenType.Object)
+                {
+                    var nestedFields = new Dictionary<string, object>();
+                    foreach (var prop in ((JObject)token).Properties())
+                    {
+                        nestedFields[prop.Name] = ConvertToFirestoreValue(prop.Value);
+                    }
+                    return new { mapValue = new { fields = nestedFields } };
+                }
+            }
+
             if (value is bool b)
                 return new { booleanValue = b };
             if (value is int i)
@@ -122,6 +204,8 @@ namespace DailyPrayerTime.Native.Helpers
                 return new { doubleValue = d };
             if (value is string s)
                 return new { stringValue = s };
+            if (value is DateTime dt)
+                return new { stringValue = dt.ToString("o") };
 
             // For arrays/lists
             if (value is System.Collections.IList list)
@@ -154,20 +238,33 @@ namespace DailyPrayerTime.Native.Helpers
         private static List<(string Id, Dictionary<string, object> Data)> ParseFirestoreCollection(string json)
         {
             var results = new List<(string, Dictionary<string, object>)>();
-            var jArray = JArray.Parse(json);
-            foreach (var doc in jArray)
+            try
             {
-                var name = doc["name"]?.ToString() ?? "";
-                var docId = name.Contains('/') ? name.Split('/')[^1] : name;
-                var data = new Dictionary<string, object>();
-                if (doc["fields"] is JObject fields)
+                if (string.IsNullOrWhiteSpace(json)) return results;
+                var root = JObject.Parse(json);
+                if (root["documents"] is JArray jArray)
                 {
-                    foreach (var prop in fields.Properties())
+                    foreach (var doc in jArray)
                     {
-                        data[prop.Name] = ParseFirestoreValue(prop.Value);
+                        var name = doc["name"]?.ToString() ?? "";
+                        var docId = name.Contains('/') ? name.Split('/')[^1] : name;
+                        var data = new Dictionary<string, object>();
+                        if (doc["fields"] is JObject fields)
+                        {
+                            foreach (var prop in fields.Properties())
+                            {
+                                data[prop.Name] = ParseFirestoreValue(prop.Value);
+                            }
+                        }
+                        results.Add((docId, data));
                     }
                 }
-                results.Add((docId, data));
+            }
+            catch (Exception ex)
+            {
+                string errorLog = $"Error parsing firestore collection: {ex.Message}";
+                System.Diagnostics.Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
             return results;
         }

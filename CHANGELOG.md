@@ -5,7 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-06-02
+
+### Added
+
+- **Global Leaderboard**: Implemented a fully functional Monthly Leaderboard visible inside the Tracker tab. All signed-in users can push their prayer statistics to a shared, global Firestore collection and compete on a ranked standings board sorted by completion rate and total prayers. Displays medals (🥇🥈🥉) for the top three, highlights the current user's own row, and includes their rank badge.
+- **Hall of Fame Tab**: Added a "Hall of Fame" sub-tab inside the Leaderboard that stores and displays the previous months' Top 3 ranked users, preserved permanently for historical recognition.
+- **Leaderboard Tab in Tracker Navigation**: Embedded the Leaderboard view directly into the Tracker tab's sub-navigation bar. The tab is docked to the far right of the row to visually distinguish it from the standard Daily/Weekly/Monthly/Yearly tabs.
+- **Asymmetric Premium Glassmorphic Leaderboard Tabs**: Styled the Monthly and Hall of Fame toggle buttons with custom-radius `ControlTemplate` styles. The Monthly tab has a left-rounded corner profile (`8,0,0,8`) and Hall of Fame is right-rounded (`0,8,8,0`), creating a connected pill button group with forest-green active states and translucent glass inactive states.
+- **Google Sign-In via Embedded WebView2**: Replaced the broken `signInWithRedirect` OAuth flow that failed due to browser `sessionStorage` partitioning with a self-contained in-app WPF Window powered by `WebView2`. The window navigates to Google's auth URI, intercepts the final `__/auth/handler?code=` callback URL, and closes automatically — all without ever opening an external browser tab.
+- **Cloud Sync Error Logging**: All Firestore REST API errors (read, write, delete, collection query, and JSON parsing failures) are now written to the built-in `app_log.txt` file with full stack traces, alongside the existing `Debug.WriteLine` output. CloudSyncService, LeaderboardService, and FirestoreRestHelper all participate in this diagnostic logging.
+- **Cloud Sync Error Propagation**: Sync failures in `CloudSyncService` are now explicitly bubbled up to the UI layer using `throw;`, so users see a descriptive error popup (`Sync failed: Firestore write failed: ...`) instead of a silent no-op success message.
+- **Monthly Tracker Report Card**: Added a "Card" button in the Tracker header that generates a premium portrait-format shareable image (1080×1920px) summarizing the user's prayer statistics for the month, complete with a gradient background, stats grid, prayer-by-prayer progress bars, and a QR code.
+
+### Changed
+
+- **Leaderboard Navigation is Localization-Proof**: The Tracker tab selection logic now uses the XAML item `Name` attribute (e.g. `TabLeaderboard`) rather than its visible localized `Content` text. This ensures the tab routing works correctly in all supported languages (Bengali, Arabic, etc.) without any code changes.
+- **Progress Report Card Layout Expanded**: The monthly stats card now uses `HorizontalAlignment.Stretch` for the stats grid, expanding the six stats tiles to fill the full 920px container width. Font sizes, padding, and progress bar heights have been substantially scaled up for a polished, premium look.
+- **Dynamic Progress Bar Rendering in Card**: Replaced fixed-width progress bars (hardcoded at `400px`) with a star-column `Grid` layout, allowing each bar to stretch proportionally across the full card width. Bar height scaled from `12px` to `16px` with corner radius `8`.
+- **Sync Button and Card Button Styling**: Applied a new reusable `PremiumGlassButton` style to the Card and Sync buttons in the Tracker header. The template supports disabled state gracefully (no white-out flicker during sync), hover/press glow effects, and consistent transparent dark-glass aesthetics.
+- **Cloud Sync AppLogger Integration**: All `Debug.WriteLine` error messages in Firestore, Cloud Sync, and Leaderboard services are now duplicated into the persistent `app_log.txt` file — visible from the built-in Settings log viewer without needing a debugger.
+
+### Fixed
+
+- **Firestore REST Collection Parsing Crash**: The `ParseFirestoreCollection` method was calling `JArray.Parse(json)` on a Firestore REST response, which is actually a JSON Object with a `"documents"` array key. This caused a silent JSON exception and an empty leaderboard on every fetch. Fixed by parsing as `JObject` and safely extracting `root["documents"]` as a `JArray`.
+- **Private Collection Scoping for Leaderboard**: All Firestore REST endpoints were hardcoded to prefix paths with `/users/{uid}/`, which incorrectly placed the shared `leaderboard` and `hall_of_fame` collections inside each user's private subdirectory. They are now routed to the global database root for all-user visibility. Private collections (`tracker`, `tasbih`, `ramadan`, `cycle`) remain securely sandboxed.
+- **`JToken`/`JValue` Serialization Crash**: Newtonsoft.Json deserializes internal nested dictionary values as `JValue`/`JToken` wrapper types. The old `ConvertToFirestoreValue` method matched only native C# types (`string`, `bool`, `int`, etc.), causing a `JsonSerializationException` when encountering `JValue` wrappers like `"2 Sunnah (Mu'akkadah)"`. Added explicit top-priority JToken type dispatch before all native type checks.
+- **`DateTime` Serialization Crash**: C# `DateTime` values (e.g. timestamps for checked prayers) triggered a `JsonSerializationException` when passed to `ConvertToFirestoreValue` because they are not Firestore-native primitives. Added explicit handling to format them as ISO-8601 strings (`"o"` format). The same fix applies to `JTokenType.Date` from Newtonsoft.
+- **Off-Screen Report Card Rendering (Blank Image)**: The programmatically generated monthly card `FrameworkElement` was never added to the visual tree, causing its layout to remain at 0×0. Fixed by calling `Measure`, `Arrange`, and `UpdateLayout` on the card element before passing it to `RenderTargetBitmap`, ensuring correct dimensions and visual output.
+- **Build Errors from CornerRadius on Non-Border Elements**: Resolved `MC3072` XAML compilation errors caused by applying `CornerRadius` on element types that don't support it (e.g. plain `Button`). Fixed using proper `ControlTemplate`-based approaches that bind `CornerRadius` through the element's `Tag` property.
+
 ## [2.4.4] - 2026-05-26
+
 
 ### Added
 

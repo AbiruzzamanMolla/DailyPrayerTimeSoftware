@@ -53,8 +53,20 @@
                 <ColumnDefinition Width="8"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="StartPeriodBtn" Grid.Column="0" Content="{DynamicResource Cycle_StartPeriod}" Background="#dc2626" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" CornerRadius="8" Click="StartPeriod_Click" Cursor="Hand" BorderThickness="0"/>
-            <Button x:Name="EndPeriodBtn" Grid.Column="2" Content="{DynamicResource Cycle_EndPeriod}" Background="#059669" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" CornerRadius="8" Click="EndPeriod_Click" Cursor="Hand" BorderThickness="0"/>
+            <Button x:Name="StartPeriodBtn" Grid.Column="0" Content="{DynamicResource Cycle_StartPeriod}" Background="#dc2626" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" Click="StartPeriod_Click" Cursor="Hand" BorderThickness="0">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <Button x:Name="EndPeriodBtn" Grid.Column="2" Content="{DynamicResource Cycle_EndPeriod}" Background="#059669" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" Click="EndPeriod_Click" Cursor="Hand" BorderThickness="0">
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
         </Grid>
 
         <!-- Stats Row -->

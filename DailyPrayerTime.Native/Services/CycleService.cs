@@ -145,12 +145,12 @@ namespace DailyPrayerTime.Native.Services
             {
                 int daysAfterEnd = (date - endDate).Days;
                 int daysBetweenEndAndNext = _entries
-                    .Where(e => !string.IsNullOrEmpty(e.StartDate) && e.StartDate > entry.EndDate)
+                    .Where(e => !string.IsNullOrEmpty(e.StartDate) && string.Compare(e.StartDate, entry.EndDate) > 0)
                     .OrderBy(e => e.StartDate)
                     .Select(e => DateTime.Parse(e.StartDate))
                     .FirstOrDefault() == default
                         ? 0
-                        : (_entries.Where(e => !string.IsNullOrEmpty(e.StartDate) && e.StartDate > entry.EndDate)
+                        : (_entries.Where(e => !string.IsNullOrEmpty(e.StartDate) && string.Compare(e.StartDate, entry.EndDate) > 0)
                             .OrderBy(e => e.StartDate)
                             .Select(e => (DateTime.Parse(e.StartDate) - endDate).Days)
                             .FirstOrDefault());

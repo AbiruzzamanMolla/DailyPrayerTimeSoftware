@@ -91,7 +91,7 @@ namespace DailyPrayerTime.Native.Helpers
             // Decorative divider
             headerStack.Children.Add(new Border
             {
-                Width = 500,
+                Width = 700,
                 Height = 2,
                 Background = new SolidColorBrush(Color.FromArgb(0x44, 0x10, 0xB9, 0x81)),
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -125,8 +125,7 @@ namespace DailyPrayerTime.Native.Helpers
                 FontSize = 28,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                LetterSpacing = 2
+                HorizontalAlignment = HorizontalAlignment.Center
             });
 
             headerStack.Children.Add(new TextBlock
@@ -154,7 +153,7 @@ namespace DailyPrayerTime.Native.Helpers
             // ─── Stats Section ──────────────────────────────────
             var statsStack = new StackPanel
             {
-                HorizontalAlignment = HorizontalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
                 Margin = new Thickness(80, 40, 80, 0)
             };
 
@@ -312,7 +311,7 @@ namespace DailyPrayerTime.Native.Helpers
             // Decorative divider
             footerStack.Children.Add(new Border
             {
-                Width = 400,
+                Width = 600,
                 Height = 2,
                 Background = new SolidColorBrush(Color.FromArgb(0x33, 0x10, 0xB9, 0x81)),
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -355,13 +354,13 @@ namespace DailyPrayerTime.Native.Helpers
             stack.Children.Add(new TextBlock
             {
                 Text = emoji,
-                FontSize = 28,
+                FontSize = 36,
                 HorizontalAlignment = HorizontalAlignment.Center
             });
             stack.Children.Add(new TextBlock
             {
                 Text = value,
-                FontSize = 32,
+                FontSize = 42,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Colors.White),
                 HorizontalAlignment = HorizontalAlignment.Center
@@ -369,7 +368,7 @@ namespace DailyPrayerTime.Native.Helpers
             stack.Children.Add(new TextBlock
             {
                 Text = label,
-                FontSize = 14,
+                FontSize = 16,
                 Foreground = new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0xFF, 0xFF)),
                 HorizontalAlignment = HorizontalAlignment.Center
             });
@@ -378,8 +377,8 @@ namespace DailyPrayerTime.Native.Helpers
             {
                 Background = new SolidColorBrush(Color.FromArgb(0x15, 0xFF, 0xFF, 0xFF)),
                 CornerRadius = new CornerRadius(16),
-                Padding = new Thickness(20, 15, 20, 15),
-                Margin = new Thickness(5),
+                Padding = new Thickness(20, 25, 20, 25),
+                Margin = new Thickness(8),
                 Child = stack
             };
 
@@ -392,58 +391,70 @@ namespace DailyPrayerTime.Native.Helpers
             var nameBlock = new TextBlock
             {
                 Text = prayerName,
-                FontSize = 16,
+                FontSize = 20,
                 FontWeight = FontWeights.SemiBold,
                 Foreground = new SolidColorBrush(Colors.White),
-                Width = 100,
+                Width = 140,
                 VerticalAlignment = VerticalAlignment.Center
             };
 
-            // Progress bar background
+            // Progress bar background (fills parent column dynamically via HorizontalAlignment.Stretch)
             var progressBg = new Border
             {
-                Height = 12,
-                CornerRadius = new CornerRadius(6),
+                Height = 16,
+                CornerRadius = new CornerRadius(8),
                 Background = new SolidColorBrush(Color.FromArgb(0x30, 0xFF, 0xFF, 0xFF)),
-                Width = 400
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
 
-            // Progress bar fill
+            // Progress bar fill grid (uses columns with star widths matching the percentage to stretch perfectly)
+            var fillGrid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+            fillGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Math.Max(0.01, rate), GridUnitType.Star) });
+            fillGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(Math.Max(0.01, 100.0 - rate), GridUnitType.Star) });
+
             var progressFill = new Border
             {
-                Height = 12,
-                CornerRadius = new CornerRadius(6),
+                Height = 16,
+                CornerRadius = new CornerRadius(8),
                 Background = new SolidColorBrush(rate >= 80 ? Color.FromRgb(0x10, 0xB9, 0x81) :
                                                      rate >= 50 ? Color.FromRgb(0xFB, 0xBF, 0x24) :
                                                      Color.FromRgb(0xF8, 0x71, 0x71)),
-                Width = rate >= 100 ? 400 : (rate / 100.0 * 400),
-                HorizontalAlignment = HorizontalAlignment.Left
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
+            Grid.SetColumn(progressFill, 0);
+            fillGrid.Children.Add(progressFill);
 
-            var progressGrid = new Grid();
+            var progressGrid = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
             progressGrid.Children.Add(progressBg);
-            progressGrid.Children.Add(progressFill);
+            progressGrid.Children.Add(fillGrid);
 
             var rateBlock = new TextBlock
             {
                 Text = $"{rate:F0}%",
-                FontSize = 14,
+                FontSize = 18,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(rate >= 80 ? Color.FromRgb(0x34, 0xD3, 0x99) :
                                                  rate >= 50 ? Color.FromRgb(0xFB, 0xBF, 0x24) :
                                                  Color.FromRgb(0xF8, 0x71, 0x71)),
-                Width = 60,
+                Width = 80,
                 TextAlignment = TextAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Center
             };
 
             var row = new Grid
             {
-                Margin = new Thickness(0, 4, 0, 4)
+                Margin = new Thickness(0, 4, 0, 4),
+                HorizontalAlignment = HorizontalAlignment.Stretch
             };
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(120) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(150) });
             row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
+            row.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(90) });
 
             Grid.SetColumn(nameBlock, 0);
             Grid.SetColumn(progressGrid, 1);
@@ -456,21 +467,22 @@ namespace DailyPrayerTime.Native.Helpers
             return new Border
             {
                 Background = new SolidColorBrush(Color.FromArgb(0x10, 0xFF, 0xFF, 0xFF)),
-                CornerRadius = new CornerRadius(10),
-                Padding = new Thickness(15, 8, 15, 8),
-                Margin = new Thickness(0, 3, 0, 3),
+                CornerRadius = new CornerRadius(12),
+                Padding = new Thickness(25, 12, 25, 12),
+                Margin = new Thickness(0, 4, 0, 4),
+                HorizontalAlignment = HorizontalAlignment.Stretch,
                 Child = row
             };
         }
 
-        private static Image? GenerateQRCode()
+        private static System.Windows.Controls.Image? GenerateQRCode()
         {
             try
             {
                 using var qrGenerator = new QRCodeGenerator();
                 var qrData = qrGenerator.CreateQrCode(DownloadUrl, QRCodeGenerator.ECCLevel.Q);
                 var qrCode = new PngByteQRCode(qrData);
-                byte[] qrBytes = qrCode.GetGraphic(10, 255, 255, true);
+                byte[] qrBytes = qrCode.GetGraphic(10);
 
                 var bitmap = new BitmapImage();
                 using var ms = new MemoryStream(qrBytes);
@@ -480,13 +492,14 @@ namespace DailyPrayerTime.Native.Helpers
                 bitmap.EndInit();
                 bitmap.Freeze();
 
-                return new Image
+                var img = new System.Windows.Controls.Image
                 {
                     Source = bitmap,
-                    Width = 120,
-                    Height = 120,
-                    RenderOptions.BitmapScalingMode = BitmapScalingMode.HighQuality
+                    Width = 150,
+                    Height = 150
                 };
+                RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.HighQuality);
+                return img;
             }
             catch
             {
@@ -494,16 +507,15 @@ namespace DailyPrayerTime.Native.Helpers
             }
         }
 
-        private static RenderTargetBitmap RenderVisualToBitmap(Visual visual, int width, int height)
+        private static RenderTargetBitmap RenderVisualToBitmap(FrameworkElement element, int width, int height)
         {
-            var dv = new DrawingVisual();
-            using (var ctx = dv.RenderOpen())
-            {
-                ctx.DrawRectangle(new VisualBrush(visual), null, new Rect(new Point(0, 0), new Size(width, height)));
-            }
+            var size = new Size(width, height);
+            element.Measure(size);
+            element.Arrange(new Rect(size));
+            element.UpdateLayout();
 
             var bitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
-            bitmap.Render(dv);
+            bitmap.Render(element);
             return bitmap;
         }
     }

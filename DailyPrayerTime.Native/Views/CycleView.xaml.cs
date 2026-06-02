@@ -7,10 +7,14 @@ using System.Windows.Media;
 using DailyPrayerTime.Native.Helpers;
 using DailyPrayerTime.Native.Models;
 using DailyPrayerTime.Native.Services;
+using Color = System.Windows.Media.Color;
+using MessageBox = System.Windows.MessageBox;
+using Button = System.Windows.Controls.Button;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DailyPrayerTime.Native.Views
 {
-    public partial class CycleView : UserControl
+    public partial class CycleView : System.Windows.Controls.UserControl
     {
         private CycleService _cycleService;
 

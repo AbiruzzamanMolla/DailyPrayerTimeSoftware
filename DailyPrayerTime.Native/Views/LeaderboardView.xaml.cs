@@ -5,10 +5,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DailyPrayerTime.Native.Services;
+using Color = System.Windows.Media.Color;
+using MessageBox = System.Windows.MessageBox;
+using Button = System.Windows.Controls.Button;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DailyPrayerTime.Native.Views
 {
-    public partial class LeaderboardView : UserControl
+    public partial class LeaderboardView : System.Windows.Controls.UserControl
     {
         private bool _isHallOfFameView = false;
 
@@ -307,8 +311,11 @@ namespace DailyPrayerTime.Native.Views
         {
             _isHallOfFameView = false;
             TabMonthly.Background = new SolidColorBrush(Color.FromRgb(0x10, 0xB9, 0x81));
-            TabHallOfFame.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xFF, 0xFF));
-            TabHallOfFame.BorderBrush = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
+            TabMonthly.BorderBrush = new SolidColorBrush(Color.FromRgb(0x34, 0xD3, 0x99));
+            
+            TabHallOfFame.Background = new SolidColorBrush(Color.FromArgb(0x10, 0xFF, 0xFF, 0xFF));
+            TabHallOfFame.BorderBrush = new SolidColorBrush(Color.FromArgb(0x20, 0xFF, 0xFF, 0xFF));
+            
             MonthLabel.Text = DateTime.Today.ToString("MMMM yyyy");
             LoadData();
         }
@@ -317,8 +324,11 @@ namespace DailyPrayerTime.Native.Views
         {
             _isHallOfFameView = true;
             TabHallOfFame.Background = new SolidColorBrush(Color.FromRgb(0x10, 0xB9, 0x81));
-            TabMonthly.Background = new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xFF, 0xFF));
-            TabMonthly.BorderBrush = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
+            TabHallOfFame.BorderBrush = new SolidColorBrush(Color.FromRgb(0x34, 0xD3, 0x99));
+            
+            TabMonthly.Background = new SolidColorBrush(Color.FromArgb(0x10, 0xFF, 0xFF, 0xFF));
+            TabMonthly.BorderBrush = new SolidColorBrush(Color.FromArgb(0x20, 0xFF, 0xFF, 0xFF));
+            
             MonthLabel.Text = DateTime.Today.Year.ToString();
             LoadData();
         }

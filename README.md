@@ -28,11 +28,11 @@
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
 | **Scoop**                      | `scoop bucket add abiruzzaman https://github.com/AbiruzzamanMolla/scoop-bucket`<br>`scoop install dailyprayertimer`     |
 | **Chocolatey (Verified)**      | `choco install dailyprayertimer`                                                                                        |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.4_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.4.4_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.4.4_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.0_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.0_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.5.0_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
-> **Version 2.4.4** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
+> **Version 2.5.0** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
 
 1. **Package Managers**: Open any terminal (PowerShell, CMD, or Terminal) and run the respective command above.
 2. **Manual**: Download the installer matching your system.
@@ -57,13 +57,17 @@
 - **Prohibited Times (Makruh) Alerts**: Visual countdowns and warnings for Sunrise, Zawal, and Sunset.
 - **Manual Calculation Options**: Custom Fajr/Isha angles, High Latitude rules, Suhur/Iftar offsets, and Hijri adjustments.
 
-### 📈 Spiritual Tracker & Analytics
+### 📈 Spiritual Tracker, Cloud Sync & Leaderboard
 - **Divine Tracker Dashboard**: A comprehensive spiritual progress monitor with bi-directional sync between the Tracker popup and Hero dashboard.
 - **In-Depth Analytics**: Visualize your consistency with aggregate progress cards showing Weekly, Monthly, and Yearly statistics.
 - **Automated Qadha Tracking**: Smart logic that calculates missed Fard prayers across all periods (Today, Week, Month, Year).
 - **Nafal & Sawm Integration**: Progress now tracks Sunnah prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
 - **Interactive Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
 - **Double-Precision Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
+- **Monthly Report Card**: Generate a shareable 1080×1920 portrait image of your monthly prayer statistics complete with a QR code — ready to save or send directly from the Tracker tab.
+- **Cloud Sync (Google Account)**: Sign in with Google and push your tracker, tasbih, Ramadan, and cycle data to Firebase cloud storage. All cloud errors are surfaced as visible popups and written to the diagnostic log.
+- **Global Leaderboard**: Compete with other signed-in users on a shared Monthly Leaderboard inside the Tracker tab. Rankings are sorted by completion rate. Medal icons (🥇🥈🥉) crown the top three. An Anonymous Mode option hides your name on the board.
+- **Hall of Fame**: A permanent record of each previous month's Top 3 ranked users, preserved forever in the Hall of Fame sub-tab.
 
 ### 🧭 Qibla Compass
 - **Qibla Direction Finder**: Built-in compass that calculates precise Qibla direction from your location to the Kaaba (21.4225°N, 39.8262°E) using spherical trigonometry.

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using DailyPrayerTime.Native.Helpers;
@@ -16,7 +17,7 @@ namespace DailyPrayerTime.Native.Services
         public static CloudSyncService Instance => _instance.Value;
 
         private static readonly HttpClient _http = new();
-        private Timer? _tasbihDebounceTimer;
+        private System.Threading.Timer? _tasbihDebounceTimer;
         private Dictionary<string, int> _pendingTasbihCounts = new();
         private DateTime _pendingTasbihDate;
         private bool _isSyncing;
@@ -48,7 +49,10 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push tracker failed: {ex.Message}");
+                string errorLog = $"Cloud push tracker failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
+                throw;
             }
         }
 
@@ -95,7 +99,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud pull tracker failed: {ex.Message}");
+                string errorLog = $"Cloud pull tracker failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
                 return null;
             }
         }
@@ -146,7 +152,10 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Tracker sync failed: {ex.Message}");
+                string errorLog = $"Tracker sync failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
+                throw;
             }
             finally
             {
@@ -161,7 +170,7 @@ namespace DailyPrayerTime.Native.Services
             _pendingTasbihDate = date;
             _pendingTasbihCounts = counts;
             _tasbihDebounceTimer?.Dispose();
-            _tasbihDebounceTimer = new Timer(async _ => await FlushTasbih(), null, 10000, Timeout.Infinite);
+            _tasbihDebounceTimer = new System.Threading.Timer(async _ => await FlushTasbih(), null, 10000, Timeout.Infinite);
         }
 
         private async Task FlushTasbih()
@@ -179,7 +188,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push tasbih failed: {ex.Message}");
+                string errorLog = $"Cloud push tasbih failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -202,7 +213,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push ramadan failed: {ex.Message}");
+                string errorLog = $"Cloud push ramadan failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -229,7 +242,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud pull ramadan failed: {ex.Message}");
+                string errorLog = $"Cloud pull ramadan failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
                 return null;
             }
         }
@@ -253,7 +268,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push cycle failed: {ex.Message}");
+                string errorLog = $"Cloud push cycle failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -274,7 +291,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push cycle meta failed: {ex.Message}");
+                string errorLog = $"Cloud push cycle meta failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -315,7 +334,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud push leaderboard failed: {ex.Message}");
+                string errorLog = $"Cloud push leaderboard failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
             }
         }
 
@@ -354,7 +375,9 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Cloud pull leaderboard failed: {ex.Message}");
+                string errorLog = $"Cloud pull leaderboard failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
                 return new List<LeaderboardEntry>();
             }
         }
@@ -390,7 +413,10 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Full sync failed: {ex.Message}");
+                string errorLog = $"Full sync failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
+                throw;
             }
             finally
             {
@@ -409,7 +435,10 @@ namespace DailyPrayerTime.Native.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Day sync failed: {ex.Message}");
+                string errorLog = $"Day sync failed: {ex.Message}";
+                Debug.WriteLine(errorLog);
+                AppLogger.Log(errorLog + Environment.NewLine + ex.StackTrace);
+                throw;
             }
             finally
             {

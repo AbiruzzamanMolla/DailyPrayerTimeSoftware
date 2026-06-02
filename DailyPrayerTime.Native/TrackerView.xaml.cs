@@ -10,6 +10,9 @@ using WColor = System.Windows.Media.Color;
 using WColorConverter = System.Windows.Media.ColorConverter;
 using DailyPrayerTime.Native.Models;
 using DailyPrayerTime.Native.Services;
+using MessageBox = System.Windows.MessageBox;
+using Button = System.Windows.Controls.Button;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DailyPrayerTime.Native
 {
@@ -351,20 +354,38 @@ namespace DailyPrayerTime.Native
         {
             if (TrackerTabList.SelectedItem is ListBoxItem selected)
             {
-                string tab = selected.Content?.ToString() ?? "";
-                DailySection.Visibility = tab == "Daily" ? Visibility.Visible : Visibility.Collapsed;
-                HistoryHeader.Visibility = tab != "Daily" ? Visibility.Visible : Visibility.Collapsed;
+                string tabName = selected.Name ?? "";
+                DailySection.Visibility = tabName == "TabDaily" ? Visibility.Visible : Visibility.Collapsed;
+                HistoryHeader.Visibility = (tabName != "TabDaily" && tabName != "TabLeaderboard") ? Visibility.Visible : Visibility.Collapsed;
                 
                 // Hide components initially
                 HistoryList.Visibility = Visibility.Collapsed;
                 CalendarGrid.Visibility = Visibility.Collapsed;
                 TrackerBackButton.Visibility = Visibility.Collapsed;
 
+                if (OverallProgressCard != null)
+                    OverallProgressCard.Visibility = tabName == "TabLeaderboard" ? Visibility.Collapsed : Visibility.Visible;
+                if (QadhaSummaryCard != null)
+                    QadhaSummaryCard.Visibility = tabName == "TabLeaderboard" ? Visibility.Collapsed : Visibility.Visible;
+
+                if (LeaderboardControl != null)
+                {
+                    if (tabName == "TabLeaderboard")
+                    {
+                        LeaderboardControl.Visibility = Visibility.Visible;
+                        LeaderboardControl.LoadData();
+                    }
+                    else
+                    {
+                        LeaderboardControl.Visibility = Visibility.Collapsed;
+                    }
+                }
+
                 UpdateQadhaSummary();
 
-                switch (tab)
+                switch (tabName)
                 {
-                    case "Daily":
+                    case "TabDaily":
                         OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_DailyCompletion");
                         if (_currentDeeds.Date != DateTime.Today.ToString("yyyy-MM-dd"))
                         {
@@ -374,21 +395,21 @@ namespace DailyPrayerTime.Native
                         }
                         UpdateOverallProgress(); // This updates the card for Daily
                         break;
-                    case "Weekly":
+                    case "TabWeekly":
                         OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_WeeklyCompletion");
                         HistorySectionTitle.Text = "THIS WEEK (SAT - FRI)";
                         HistoryList.Visibility = Visibility.Visible;
                         LoadWeeklyHistory();
                         UpdateAggregateProgress(7);
                         break;
-                    case "Monthly":
+                    case "TabMonthly":
                         OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_MonthlyCompletion");
                         HistorySectionTitle.Text = DateTime.Today.ToString("MMMM yyyy").ToUpper();
                         CalendarGrid.Visibility = Visibility.Visible;
                         LoadMonthlyCalendar(DateTime.Today.Year, DateTime.Today.Month);
                         UpdateAggregateProgress(DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
                         break;
-                    case "Yearly":
+                    case "TabYearly":
                         OverallProgressTitle.Text = LocalizationManager.Instance.GetString("Tracker_YearlyCompletion");
                         HistorySectionTitle.Text = DateTime.Today.Year + " SUMMARY";
                         HistoryList.Visibility = Visibility.Visible;

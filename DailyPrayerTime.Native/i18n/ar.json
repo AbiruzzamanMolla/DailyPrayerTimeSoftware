@@ -507,5 +507,10 @@
   "Cycle_SafeDays": "بقي {0} أيام طهارة",
   "Cycle_CloudSync": "المزامنة السحابية",
   "Cycle_SyncEnabled": "مزامنة بيانات الدورة مع السحابة",
-  "Cycle_SyncDisabled": "المزامنة السحابية معطلة"
+  "Cycle_SyncDisabled": "المزامنة السحابية معطلة",
+  "Tracker_TabDaily": "يومي",
+  "Tracker_TabWeekly": "أسبوعي",
+  "Tracker_TabMonthly": "شهري",
+  "Tracker_TabYearly": "سنوي",
+  "Tracker_TabLeaderboard": "لوحة الصدارة"
 }

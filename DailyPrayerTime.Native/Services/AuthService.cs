@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading.Tasks;
 using DailyPrayerTime.Native.Helpers;
 using Firebase.Auth;
+using Firebase.Auth.Providers;
+using Firebase.Auth.Repository;
 using Newtonsoft.Json;
 
 namespace DailyPrayerTime.Native.Services
@@ -25,11 +27,11 @@ namespace DailyPrayerTime.Native.Services
 
         private AuthService()
         {
-            _client = new FirebaseAuthClient(new FirebaseConfig
+            _client = new FirebaseAuthClient(new FirebaseAuthConfig
             {
                 ApiKey = Helpers.FirebaseConfig.ApiKey,
                 AuthDomain = Helpers.FirebaseConfig.AuthDomain,
-                Providers = new[]
+                Providers = new FirebaseAuthProvider[]
                 {
                     new GoogleProvider().AddScopes("email", "profile"),
                     new EmailProvider()
@@ -42,15 +44,51 @@ namespace DailyPrayerTime.Native.Services
         {
             try
             {
-                var userCredential = await _client!.SignInWithRedirectAsync(new GoogleProvider().AddScopes("email", "profile"), uri =>
+                var userCredential = await _client!.SignInWithRedirectAsync(FirebaseProviderType.Google, async uri =>
                 {
-                    var psi = new System.Diagnostics.ProcessStartInfo
+                    string? redirectUrl = null;
+                    if (System.Windows.Application.Current.Dispatcher.CheckAccess())
                     {
-                        FileName = uri,
-                        UseShellExecute = true
-                    };
-                    System.Diagnostics.Process.Start(psi);
-                    return Task.FromResult<string?>(null);
+                        var activeWindow = System.Windows.Application.Current.MainWindow;
+                        foreach (System.Windows.Window w in System.Windows.Application.Current.Windows)
+                        {
+                            if (w.IsActive)
+                            {
+                                activeWindow = w;
+                                break;
+                            }
+                        }
+
+                        var win = new Views.GoogleAuthWindow(uri)
+                        {
+                            Owner = activeWindow
+                        };
+                        win.ShowDialog();
+                        redirectUrl = await win.WaitForRedirectAsync();
+                    }
+                    else
+                    {
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var activeWindow = System.Windows.Application.Current.MainWindow;
+                            foreach (System.Windows.Window w in System.Windows.Application.Current.Windows)
+                            {
+                                if (w.IsActive)
+                                {
+                                    activeWindow = w;
+                                    break;
+                                }
+                            }
+
+                            var win = new Views.GoogleAuthWindow(uri)
+                            {
+                                Owner = activeWindow
+                            };
+                            win.ShowDialog();
+                            redirectUrl = win.WaitForRedirectAsync().GetAwaiter().GetResult();
+                        });
+                    }
+                    return redirectUrl;
                 });
 
                 var user = userCredential?.User;

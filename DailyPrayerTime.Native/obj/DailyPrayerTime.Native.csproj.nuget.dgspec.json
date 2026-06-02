@@ -5,7 +5,7 @@
   },
   "projects": {
     "J:\\Web Development\\abir\\software\\DailyPrayerTime\\DailyPrayerTime.Native\\DailyPrayerTime.Native.csproj": {
-      "version": "2.4.4",
+      "version": "2.5.0",
       "restore": {
         "projectUniqueName": "J:\\Web Development\\abir\\software\\DailyPrayerTime\\DailyPrayerTime.Native\\DailyPrayerTime.Native.csproj",
         "projectName": "DailyPrayerTime.Native",
@@ -48,6 +48,14 @@
               "target": "Package",
               "version": "[0.9.0, )"
             },
+            "FirebaseAuthentication.WPF": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
+            "FirebaseAuthentication.net": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
@@ -61,6 +69,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.4.3, )"
             }
           },
           "imports": [
