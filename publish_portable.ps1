@@ -8,11 +8,14 @@ $OutputDir = "./Output/Portable"
 
 Write-Host "🚀 Building Portable Version v$Version ($Runtime)..." -ForegroundColor Cyan
 
-# Ensure output directory exists and is clean
-if (Test-Path $OutputDir) {
-    Remove-Item -Recurse -Force $OutputDir
+# Ensure output directory exists
+if (-not (Test-Path $OutputDir)) {
+    New-Item -ItemType Directory -Force $OutputDir | Out-Null
 }
-New-Item -ItemType Directory -Force $OutputDir | Out-Null
+$TargetExe = Join-Path $OutputDir "DailyPrayerTimer_v$($Version)_Portable_x64.exe"
+if (Test-Path $TargetExe) {
+    Remove-Item -Force $TargetExe
+}
 
 # Publish the application
 dotnet publish $ProjectDir `

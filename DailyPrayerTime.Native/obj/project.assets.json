@@ -413,7 +413,7 @@
         }
       }
     },
-    "net8.0-windows10.0.19041/win-x86": {
+    "net8.0-windows10.0.19041/win-x64": {
       "Adhan/0.9.0": {
         "type": "package",
         "compile": {
@@ -640,7 +640,7 @@
           }
         },
         "native": {
-          "runtimes/win-x86/native/WebView2Loader.dll": {}
+          "runtimes/win-x64/native/WebView2Loader.dll": {}
         },
         "build": {
           "build/_._": {}
@@ -1526,7 +1526,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1534,7 +1534,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.NETCore.App.Host.win-x86",
+            "name": "Microsoft.NETCore.App.Host.win-x64",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1542,7 +1542,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.NETCore.App.Runtime.win-x86",
+            "name": "Microsoft.NETCore.App.Runtime.win-x64",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1554,7 +1554,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
             "version": "[8.0.25, 8.0.25]"
           }
         ],
@@ -1573,7 +1573,7 @@
       }
     },
     "runtimes": {
-      "win-x86": {
+      "win-x64": {
         "#import": []
       }
     }
