@@ -525,5 +525,12 @@
   "ContactUs_Error": "Failed to send message: {0}",
   "ContactUs_Required": "Please fill in all required fields (Subject and Message).",
   "ContactUs_InvalidEmail": "Please enter a valid email address.",
-  "ContactUs_SignInPrompt": "Please sign in with your Google account to unlock direct developer support. Tying messages to a verified account ensures we can safely reply to your query."
+  "ContactUs_SignInPrompt": "Please sign in with your Google account to unlock direct developer support. Tying messages to a verified account ensures we can safely reply to your query.",
+  "CardExport_Title": "Generate Report Card",
+  "CardExport_Generate": "Generate",
+  "CardExport_SelectReportType": "SELECT REPORT TYPE",
+  "CardExport_SelectPeriod": "SELECT PERIOD",
+  "CardExport_WeeklyReport": "Weekly Report",
+  "CardExport_MonthlyReport": "Monthly Report",
+  "CardExport_SubText": "Share your prayer progress with friends and family"
 }

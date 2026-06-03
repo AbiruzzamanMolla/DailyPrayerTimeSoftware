@@ -28,11 +28,11 @@
 | **WinGet (Recommended)**       | `winget install AbiruzzamanMolla.DailyPrayerTimer`                                                                      |
 | **Scoop**                      | `scoop bucket add abiruzzaman https://github.com/AbiruzzamanMolla/scoop-bucket`<br>`scoop install dailyprayertimer`     |
 | **Chocolatey (Verified)**      | `choco install dailyprayertimer`                                                                                        |
-| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.1_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.1_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
-| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.5.1_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
+| **Windows (64-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.2_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (32-bit Installer)** | [DailyPrayerTimer_Setup_v2.5.2_x86.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest)    |
+| **Windows (64-bit Portable)**  | [DailyPrayerTimer_v2.5.2_Portable_x64.exe](https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest) |
 
-> **Version 2.5.1** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
+> **Version 2.5.2** is the current stable release. See the [full changelog](CHANGELOG.md) for details.
 
 1. **Package Managers**: Open any terminal (PowerShell, CMD, or Terminal) and run the respective command above.
 2. **Manual**: Download the installer matching your system.
@@ -64,7 +64,7 @@
 - **Nafal & Sawm Integration**: Progress now tracks Sunnah prayers (Tahajjud, Duha, Awwabin) and includes a Fasting bonus.
 - **Interactive Historian Mode**: Past dates are fully interactive without the "upcoming" blur effect for better retrospective tracking.
 - **Double-Precision Logic**: Daily completion percentage calculation now uses double-precision math for 100% accuracy.
-- **Monthly Report Card**: Generate a shareable 1080×1920 portrait image of your monthly prayer statistics complete with a QR code — ready to save or send directly from the Tracker tab.
+- **Spiritual Report Card**: Generate a shareable 1080×1920 portrait image of your Weekly or Monthly prayer statistics complete with a QR code, featuring a period-selector dialog directly from the Tracker tab.
 - **Cloud Sync (Google Account)**: Sign in with Google and push your tracker, tasbih, Ramadan, and cycle data to Firebase cloud storage. All cloud errors are surfaced as visible popups and written to the diagnostic log.
 - **Global Leaderboard**: Compete with other signed-in users on a shared Monthly Leaderboard inside the Tracker tab. Rankings are sorted by completion rate. Medal icons (🥇🥈🥉) crown the top three. An Anonymous Mode option hides your name on the board.
 - **Hall of Fame**: A permanent record of each previous month's Top 3 ranked users, preserved forever in the Hall of Fame sub-tab.

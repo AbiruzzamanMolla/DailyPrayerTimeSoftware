@@ -15,16 +15,49 @@ namespace DailyPrayerTime.Native.Helpers
         private const string DownloadUrl = "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest";
         private const string AppName = "Daily Prayer Timer";
 
-        public static string GenerateMonthlyCard(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth, int totalAdhkarCompleted, int totalNafalCompleted, int totalTasbihCount)
+        public static string GenerateMonthlyCard(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth, int totalAdhkarCompleted, int totalNafalCompleted, int totalTasbihCount, System.Collections.Generic.Dictionary<string, int> monthlyPrayerStats)
+        {
+            string monthName = DateTime.ParseExact(deeds.Date.Substring(0, 7) + "-01", "yyyy-MM-dd", null).ToString("MMMM yyyy");
+            string fastingText = deeds.Sawm ? "🌙 Fasting: Completed" : "🌙 Fasting: Not Tracked";
+            return GenerateCard(
+                false,
+                monthName.ToUpper(),
+                totalPrayersCompleted,
+                totalDaysTracked,
+                completionRate,
+                daysInMonth,
+                totalAdhkarCompleted,
+                totalNafalCompleted,
+                totalTasbihCount,
+                monthlyPrayerStats,
+                fastingText,
+                deeds.Date.Substring(0, 7)
+            );
+        }
+
+        public static string GenerateCard(
+            bool isWeekly,
+            string periodLabel,
+            int totalPrayersCompleted,
+            int totalDaysTracked,
+            double completionRate,
+            int daysInPeriod,
+            int totalAdhkarCompleted,
+            int totalNafalCompleted,
+            int totalTasbihCount,
+            System.Collections.Generic.Dictionary<string, int> prayerStats,
+            string fastingLabel,
+            string fileDateStr)
         {
             // Create a WPF visual for the card
-            var card = CreateCardVisual(deeds, totalPrayersCompleted, totalDaysTracked, completionRate, daysInMonth, totalAdhkarCompleted, totalNafalCompleted, totalTasbihCount);
+            var card = CreateCardVisual(isWeekly, periodLabel, totalPrayersCompleted, totalDaysTracked, completionRate, daysInPeriod, totalAdhkarCompleted, totalNafalCompleted, totalTasbihCount, prayerStats, fastingLabel);
 
             // Render to bitmap
             var bitmap = RenderVisualToBitmap(card, 1080, 1920); // Instagram story size
 
             // Save to file
-            string fileName = $"PrayerCard_{deeds.Date.Substring(0, 7)}.png";
+            string periodType = isWeekly ? "Weekly" : "Monthly";
+            string fileName = $"PrayerCard_{periodType}_{fileDateStr}.png";
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "DailyPrayerTimer", fileName);
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
 
@@ -38,10 +71,19 @@ namespace DailyPrayerTime.Native.Helpers
             return filePath;
         }
 
-        private static Border CreateCardVisual(DailyDeeds deeds, int totalPrayersCompleted, int totalDaysTracked, double completionRate, int daysInMonth, int totalAdhkarCompleted, int totalNafalCompleted, int totalTasbihCount)
+        private static Border CreateCardVisual(
+            bool isWeekly,
+            string periodLabel,
+            int totalPrayersCompleted,
+            int totalDaysTracked,
+            double completionRate,
+            int daysInPeriod,
+            int totalAdhkarCompleted,
+            int totalNafalCompleted,
+            int totalTasbihCount,
+            System.Collections.Generic.Dictionary<string, int> prayerStats,
+            string fastingLabel)
         {
-            string monthName = DateTime.ParseExact(deeds.Date.Substring(0, 7) + "-01", "yyyy-MM-dd", null).ToString("MMMM yyyy");
-
             // Generate QR code
             var qrImage = GenerateQRCode();
 
@@ -130,7 +172,7 @@ namespace DailyPrayerTime.Native.Helpers
 
             headerStack.Children.Add(new TextBlock
             {
-                Text = "Monthly Prayer Report",
+                Text = isWeekly ? "Weekly Prayer Report" : "Monthly Prayer Report",
                 FontSize = 18,
                 Foreground = new SolidColorBrush(Color.FromArgb(0x99, 0xFF, 0xFF, 0xFF)),
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -139,7 +181,7 @@ namespace DailyPrayerTime.Native.Helpers
 
             headerStack.Children.Add(new TextBlock
             {
-                Text = monthName.ToUpper(),
+                Text = periodLabel,
                 FontSize = 36,
                 FontWeight = FontWeights.Bold,
                 Foreground = new SolidColorBrush(Color.FromRgb(0xFB, 0xBF, 0x24)),
@@ -203,7 +245,7 @@ namespace DailyPrayerTime.Native.Helpers
 
             statsGrid.Children.Add(CreateStatCard("📿", totalPrayersCompleted.ToString(), "Prayers", 0));
             statsGrid.Children.Add(CreateStatCard("📅", totalDaysTracked.ToString(), "Days Tracked", 1));
-            statsGrid.Children.Add(CreateStatCard("📊", daysInMonth.ToString(), "Days in Month", 2));
+            statsGrid.Children.Add(CreateStatCard("📊", daysInPeriod.ToString(), isWeekly ? "Days in Week" : "Days in Month", 2));
 
             statsStack.Children.Add(statsGrid);
 
@@ -236,15 +278,11 @@ namespace DailyPrayerTime.Native.Helpers
             string[] prayers = { "Fajr", "Dhuhr", "Asr", "Maghrib", "Isha" };
             foreach (var prayer in prayers)
             {
-                if (deeds.Prayers.ContainsKey(prayer))
-                {
-                    var prayerDeeds = deeds.Prayers[prayer];
-                    int completed = prayerDeeds.Count(d => d.IsChecked);
-                    int total = prayerDeeds.Count;
-                    double rate = total > 0 ? (double)completed / total * 100 : 0;
+                int completed = prayerStats.ContainsKey(prayer) ? prayerStats[prayer] : 0;
+                int total = daysInPeriod;
+                double rate = total > 0 ? (double)completed / total * 100 : 0;
 
-                    statsStack.Children.Add(CreatePrayerRow(prayer, completed, total, rate));
-                }
+                statsStack.Children.Add(CreatePrayerRow(prayer, completed, total, rate));
             }
 
             // Sawm status
@@ -257,7 +295,7 @@ namespace DailyPrayerTime.Native.Helpers
                 HorizontalAlignment = HorizontalAlignment.Center,
                 Child = new TextBlock
                 {
-                    Text = deeds.Sawm ? "🌙 Fasting: Completed" : "🌙 Fasting: Not Tracked",
+                    Text = fastingLabel,
                     FontSize = 18,
                     FontWeight = FontWeights.SemiBold,
                     Foreground = new SolidColorBrush(Color.FromRgb(0xFB, 0xBF, 0x24)),

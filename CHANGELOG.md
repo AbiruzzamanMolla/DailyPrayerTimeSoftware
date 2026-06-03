@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.2] - 2026-06-03
+
+### Added
+
+- **Weekly & Monthly Report Cards**: Replaced the fixed monthly report card generator with a modern popup window allowing selection between "Weekly Report" and "Monthly Report".
+- **Dynamic Period Selector**: Introduced a select box to choose from the last 10 weeks (Saturday to Friday) or the last 12 months.
+- **WPF ComboBox Custom Theme**: Implemented a dark green ControlTemplate for the ComboBox to match the premium green theme, resolving styling conflicts where text was invisible.
+- **Localisation Suite**: Added full translation support for the new dialog elements in English, Bangla, Arabic, Hindi, Indonesian, Malayalam, Tamil, and Telugu.
+
+### Fixed
+
+- **Report Card Breakdown Stats**: Fixed a bug where the monthly card breakdown stats (Fajr, Dhuhr, etc.) were displaying `0%` when today was empty. They are now accumulated over the entire target period.
+
 ## [2.5.1] - 2026-06-02
 
 ### Added

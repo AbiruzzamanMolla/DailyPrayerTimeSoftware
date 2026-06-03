@@ -525,5 +525,12 @@
   "ContactUs_Error": "فشل إرسال الرسالة: {0}",
   "ContactUs_Required": "برجاء ملء كافة الحقول المطلوبة (الموضوع والرسالة).",
   "ContactUs_InvalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح.",
-  "ContactUs_SignInPrompt": "يرجى تسجيل الدخول باستخدام حساب Google الخاص بك لفتح الدعم المباشر للمطورين. يضمن ربط الرسائل بحساب تم التحقق منه إمكانية الرد على استفسارك بأمان."
+  "ContactUs_SignInPrompt": "يرجى تسجيل الدخول باستخدام حساب Google الخاص بك لفتح الدعم المباشر للمطورين. يضمن ربط الرسائل بحساب تم التحقق منه إمكانية الرد على استفسارك بأمان.",
+  "CardExport_Title": "إنشاء بطاقة التقرير",
+  "CardExport_Generate": "يولد",
+  "CardExport_SelectReportType": "اختر نوع التقرير",
+  "CardExport_SelectPeriod": "حدد الفترة",
+  "CardExport_WeeklyReport": "التقرير الأسبوعي",
+  "CardExport_MonthlyReport": "التقرير الشهري",
+  "CardExport_SubText": "شارك تقدم صلاتك مع الأصدقاء والعائلة"
 }

@@ -525,5 +525,12 @@
   "ContactUs_Error": "Gagal mengirim pesan: {0}",
   "ContactUs_Required": "Silakan isi semua bidang yang wajib diisi (Subjek dan Pesan).",
   "ContactUs_InvalidEmail": "Silakan masukkan alamat email yang valid.",
-  "ContactUs_SignInPrompt": "Silakan masuk dengan akun Google Anda untuk membuka kunci dukungan pengembang langsung. Mengikat pesan ke akun terverifikasi memastikan kami dapat membalas pertanyaan Anda dengan aman."
+  "ContactUs_SignInPrompt": "Silakan masuk dengan akun Google Anda untuk membuka kunci dukungan pengembang langsung. Mengikat pesan ke akun terverifikasi memastikan kami dapat membalas pertanyaan Anda dengan aman.",
+  "CardExport_Title": "Hasilkan Kartu Laporan",
+  "CardExport_Generate": "Menghasilkan",
+  "CardExport_SelectReportType": "PILIH JENIS LAPORAN",
+  "CardExport_SelectPeriod": "PILIH PERIODE",
+  "CardExport_WeeklyReport": "Laporan Mingguan",
+  "CardExport_MonthlyReport": "Laporan Bulanan",
+  "CardExport_SubText": "Bagikan kemajuan doa Anda dengan teman dan keluarga"
 }
