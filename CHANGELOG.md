@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.3] - 2026-06-09
+
+### Added
+
+- **Modern Taskbar Tray Flyout Menu**: Implemented a custom WPF-based flyout window toggled by the system tray icon, showing exactly 5 daily prayer times (start/end ranges) with a dynamic Gregorian and Hijri date header.
+- **Taskbar Menu Localization**: Full dynamic i18n support for the taskbar menu, including month/day names, countdown texts ("starts in" / "ends in"), and relative remaining times.
+
+### Fixed
+
+- **Coordinates & Location Layout**: Split coordinates and location name into two lines to prevent layout clipping and truncation for long names.
+- **Accidental Main App Opening**: Disabled system tray icon double-click handler to prevent accidentally opening the main window.
+- **Isha Timing Clipping**: Expanded flyout window height to `560` to ensure Isha and other list items are not clipped.
+- **C# Compiler Warnings**: Cleaned up nullability compiler warnings in `CloudSyncService.cs`.
+
 ## [2.5.2] - 2026-06-03
 
 ### Added

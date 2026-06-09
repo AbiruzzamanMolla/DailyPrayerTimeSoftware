@@ -110,8 +110,7 @@ namespace DailyPrayerTime.Native
 
                 y = tr.Top + (tr.Height - sch) / 2;
 
-                if (x == _lastX && y == _lastY && scw == _lastW && sch == _lastH)
-                    return;
+                // Always call SetWindowPos to re-assert topmost status, preventing Windows taskbar from hiding it.
 
                 NativeMethods.SetWindowPos(_myHwnd, NativeMethods.HWND_TOPMOST,
                     x, y, scw, sch,

@@ -178,7 +178,8 @@ namespace DailyPrayerTime.Native
             LatInput.Text = s.Latitude.ToString();
             LngInput.Text = s.Longitude.ToString();
             
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), "2.5.1");
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.5.3");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {

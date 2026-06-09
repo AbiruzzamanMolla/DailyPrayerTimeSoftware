@@ -308,7 +308,7 @@ namespace DailyPrayerTime.Native.Services
                 {
                     AverageCycleLength = data.TryGetValue("averageLength", out var al) ? Convert.ToInt32(al) : 28,
                     AveragePeriodLength = data.TryGetValue("averagePeriodLength", out var apl) ? Convert.ToInt32(apl) : 6,
-                    LastPeriodStart = data.TryGetValue("lastPeriodStart", out var lps) ? lps.ToString() : "",
+                    LastPeriodStart = data.TryGetValue("lastPeriodStart", out var lps) ? lps?.ToString() ?? "" : "",
                     TotalCycles = data.TryGetValue("totalCycles", out var tc) ? Convert.ToInt32(tc) : 0
                 };
             }

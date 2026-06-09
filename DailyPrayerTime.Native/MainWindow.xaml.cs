@@ -33,6 +33,8 @@ namespace DailyPrayerTime.Native
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
         private CongregationTimerPopup? _activeJamaatPopup;
+        private Views.TaskbarMenuWindow? _activeTaskbarMenu;
+        private DateTime _lastFlyoutCloseTime = DateTime.MinValue;
         
         private bool _sunriseProhibActive = false;
         private bool _zawalProhibActive = false;
@@ -128,7 +130,7 @@ namespace DailyPrayerTime.Native
             };
         }
 
-        private async Task CheckForUpdates()
+        internal async Task CheckForUpdates()
         {
             try
             {
@@ -148,7 +150,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private async Task CheckApiNoticeAsync()
+        internal async Task CheckApiNoticeAsync()
         {
             try
             {
@@ -313,7 +315,51 @@ namespace DailyPrayerTime.Native
                 taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
             };
 
-            _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
+            _notifyIcon.MouseClick += (s, e) =>
+            {
+                if (e.Button == Forms.MouseButtons.Left)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        if ((DateTime.Now - _lastFlyoutCloseTime).TotalMilliseconds < 300)
+                        {
+                            return;
+                        }
+
+                        if (_activeTaskbarMenu != null)
+                        {
+                            if (!_activeTaskbarMenu.IsClosing)
+                            {
+                                try
+                                {
+                                    _activeTaskbarMenu.Close();
+                                }
+                                catch { }
+                            }
+                            _activeTaskbarMenu = null;
+                            return;
+                        }
+
+                        if (_todayPrayerTimes != null && _tomorrowPrayerTimes != null)
+                        {
+                            _activeTaskbarMenu = new Views.TaskbarMenuWindow(_todayPrayerTimes, _tomorrowPrayerTimes, this);
+                            _activeTaskbarMenu.Closed += (sender, args) =>
+                            {
+                                _activeTaskbarMenu = null;
+                                _lastFlyoutCloseTime = DateTime.Now;
+                            };
+                            _activeTaskbarMenu.Show();
+                        }
+                        else
+                        {
+                            ShowWindow();
+                        }
+                    });
+                }
+            };
+
+            // Disabled double click handler to prevent accidentally opening the main app window.
+            // _notifyIcon.DoubleClick += (s, e) => { ShowWindow(); };
             
             this.Closing += (s, e) =>
             {
@@ -798,7 +844,7 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private static string GetHijriDate(int d = 0, int m = 0, int y = 0, string wd = "")
+        internal static string GetHijriDate(int d = 0, int m = 0, int y = 0, string wd = "")
         {
             try {
                 int day, month, year;
