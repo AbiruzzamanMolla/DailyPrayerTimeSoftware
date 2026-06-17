@@ -32,7 +32,7 @@ namespace DailyPrayerTime.Native
         private EnhancedTaskbarWindow? _enhancedTaskbarWindow;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
-        private CongregationTimerPopup? _activeJamaatPopup;
+        private Window? _activeJamaatPopup;
         private Views.TaskbarMenuWindow? _activeTaskbarMenu;
         private DateTime _lastFlyoutCloseTime = DateTime.MinValue;
         
@@ -1549,7 +1549,9 @@ namespace DailyPrayerTime.Native
             {
                 if (_lastJamaatPopupPrayer != p)
                 {
-                    ShowJamaatPopup(FormatPrayerName(p), validatedJamaat);
+                    string timeFmt = GetTimeFmt();
+                    string range = GetPrayerTimeRange(p, _todayPrayerTimes, _tomorrowPrayerTimes, timeFmt);
+                    ShowJamaatPopup(FormatPrayerName(p), validatedJamaat, range);
                     _lastJamaatPopupPrayer = p;
                 }
                 return true;
@@ -2152,10 +2154,20 @@ namespace DailyPrayerTime.Native
             };
         }
 
-        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime)
+        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime, string rangeStr)
         {
             if (_activeJamaatPopup != null) _activeJamaatPopup.Close();
-            _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
+            
+            var s = SettingsManager.Current;
+            if (s.JamaatReminderMode == "FullScreen")
+            {
+                _activeJamaatPopup = new CongregationTimerFullScreenWindow(prayerName, jamaatTime, s.JamaatReminderEscable, rangeStr);
+            }
+            else
+            {
+                _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
+            }
+            
             _activeJamaatPopup.Show();
         }
 

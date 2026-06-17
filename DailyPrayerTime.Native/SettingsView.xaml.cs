@@ -179,7 +179,7 @@ namespace DailyPrayerTime.Native
             LngInput.Text = s.Longitude.ToString();
             
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.5.3");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.6.0");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {
@@ -302,6 +302,19 @@ namespace DailyPrayerTime.Native
             EstablishedAsrInput.IsChecked = s.EstablishedAsr;
             EstablishedMaghribInput.IsChecked = s.EstablishedMaghrib;
             EstablishedIshaInput.IsChecked = s.EstablishedIsha;
+
+            // Load Jamaat Reminder Mode & Escable settings
+            foreach (ComboBoxItem item in JamaatReminderModeInput.Items)
+            {
+                if (item.Tag?.ToString() == s.JamaatReminderMode)
+                {
+                    JamaatReminderModeInput.SelectedItem = item;
+                    break;
+                }
+            }
+            if (JamaatReminderModeInput.SelectedIndex == -1) JamaatReminderModeInput.SelectedIndex = 0;
+            JamaatReminderEscableInput.IsChecked = s.JamaatReminderEscable;
+            UpdateEscableVisibility();
 
             SuhurOffsetInput.Text = s.SuhurOffset.ToString();
             IftarOffsetInput.Text = s.IftarOffset.ToString();
@@ -568,6 +581,12 @@ namespace DailyPrayerTime.Native
             s.EstablishedMaghrib = EstablishedMaghribInput.IsChecked ?? true;
             s.EstablishedIsha = EstablishedIshaInput.IsChecked ?? true;
 
+            if (JamaatReminderModeInput.SelectedItem is ComboBoxItem modeItem && modeItem.Tag is string rMode)
+            {
+                s.JamaatReminderMode = rMode;
+            }
+            s.JamaatReminderEscable = JamaatReminderEscableInput.IsChecked ?? true;
+
             if (AutoBackupScheduleInput.SelectedItem is ComboBoxItem backupItem && backupItem.Tag is string backupSchedule)
             {
                 s.AutoBackupSchedule = backupSchedule;
@@ -814,10 +833,38 @@ namespace DailyPrayerTime.Native
 
         private void TestEstablished_Click(object sender, RoutedEventArgs e)
         {
-            var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
-            var parentWin = Window.GetWindow(this);
-            if (parentWin != null) popup.Owner = parentWin;
-            popup.Show();
+            string rMode = "Popup";
+            if (JamaatReminderModeInput.SelectedItem is ComboBoxItem modeItem && modeItem.Tag is string tag)
+            {
+                rMode = tag;
+            }
+            bool escable = JamaatReminderEscableInput.IsChecked ?? true;
+
+            if (rMode == "FullScreen")
+            {
+                var fullscreen = new CongregationTimerFullScreenWindow("Test Prayer", DateTime.Now.AddMinutes(5), escable, "00:00 AM - 00:00 PM");
+                fullscreen.Show();
+            }
+            else
+            {
+                var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
+                var parentWin = Window.GetWindow(this);
+                if (parentWin != null) popup.Owner = parentWin;
+                popup.Show();
+            }
+        }
+
+        private void JamaatReminderModeInput_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateEscableVisibility();
+        }
+
+        private void UpdateEscableVisibility()
+        {
+            if (JamaatReminderEscableInput == null || JamaatReminderModeInput == null) return;
+            var selected = JamaatReminderModeInput.SelectedItem as ComboBoxItem;
+            string mode = selected?.Tag?.ToString() ?? "Popup";
+            JamaatReminderEscableInput.Visibility = (mode == "FullScreen") ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void TestDeedPopup_Click(object sender, RoutedEventArgs e)

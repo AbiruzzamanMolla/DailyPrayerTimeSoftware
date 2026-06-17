@@ -60,6 +60,8 @@ namespace DailyPrayerTime.Native
         public string MaghribJamaatTime { get; set; } = "18:45";
         public string IshaJamaatTime { get; set; } = "20:30";
         public int JamaatPopupOffset { get; set; } = 5; // Minutes before Jamaat
+        public string JamaatReminderMode { get; set; } = "Popup"; // "Popup" or "FullScreen"
+        public bool JamaatReminderEscable { get; set; } = true;
         
         // Adhan Sound Alarm Settings
         public bool AdhanAlarmEnabled { get; set; } = false;

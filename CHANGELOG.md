@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-06-17
+
+### Added
+
+- **Full-Screen Blocked Congregation Reminder**: Introduced a brand new full-screen notification mode for the congregation (Jamaat) reminders that blocks the desktop and shows real-time countdown, prayer range timing, and congregation start times.
+- **Dismissal Option Configuration**: Added settings options to toggle whether the full-screen blocked notification is dismissable (allowing Esc-key or close button) or strictly blocks the screen until the countdown expires.
+- **Dynamic Accent styling**: The full-screen notification is beautifully styled with the active gradient colors and custom button contrast elements to match the app theme dynamically.
+- **Bilingual localizations**: Completed Bengali and English translations for all new display modes and configurations.
+
 ## [2.5.3] - 2026-06-09
 
 ### Added
