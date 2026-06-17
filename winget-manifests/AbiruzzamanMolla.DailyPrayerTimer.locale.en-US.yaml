@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
 
 PackageIdentifier: AbiruzzamanMolla.DailyPrayerTimer
-PackageVersion: 2.4.4
+PackageVersion: 2.6.0
 PackageLocale: en-US
 Publisher: Abiruzzaman Molla
 PublisherUrl: https://github.com/AbiruzzamanMolla
@@ -26,18 +26,11 @@ Tags:
   - timer
   - deskband
 ReleaseNotes: |-
-  v2.4.4 Features:
-  - Embedded Modern Settings Screen integrated directly inside the main app window
-  - Single-Row Tabbed Settings Navigation with modern custom icons
-  - Dynamic Layout & Footer Management (auto-hides nav bar when settings open)
-  - Exhaustive Help & Settings Directory with full parameter documentation
-  - Built-in System Log Viewer (app_log.txt & audio_log.txt) with Copy Logs button
-  - Ultra-Slim 2px Fluent Scrollbars with hover/drag translucent coloring
-  - Zen Mode Refinements: collapses tabs, trackers, and banners for pure focus
-  - Global Font Scaling Optimization with thread-safe weak-referencing listener
-  - Fixed First-Click Blank Tab initialization bug
-  - Fixed ComboBox dropdown text invisibility in Log Viewer
-  - Resolved all CS8618/CS8600/CS8604/CS8625 compilation warnings
-ReleaseNotesUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/tag/v2.4.4
+  v2.6.0 Features:
+  - Full-Screen Blocked Congregation Reminder: Introduced a brand new full-screen notification mode for the congregation (Jamaat) reminders that blocks the desktop and shows real-time countdown, prayer range timing, and congregation start times.
+  - Dismissal Option Configuration: Added settings options to toggle whether the full-screen blocked notification is dismissable (allowing Esc-key or close button) or strictly blocks the screen until the countdown expires.
+  - Dynamic Accent styling: The full-screen notification is beautifully styled with the active gradient colors and custom button contrast elements to match the app theme dynamically.
+  - Bilingual localizations: Completed Bengali and English translations for all new display modes and configurations.
+ReleaseNotesUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/tag/v2.6.0
 ManifestType: defaultLocale
 ManifestVersion: 1.9.0
