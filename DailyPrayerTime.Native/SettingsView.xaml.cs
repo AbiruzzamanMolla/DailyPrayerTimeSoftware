@@ -179,7 +179,7 @@ namespace DailyPrayerTime.Native
             LngInput.Text = s.Longitude.ToString();
             
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.6.0");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.6.1");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {

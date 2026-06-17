@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.1] - 2026-06-17
+
+### Fixed
+
+- **Google Sign-In WebView2 crash**: Redirected the WebView2 User Data Folder (UDF) to `%LOCALAPPDATA%` to prevent `E_ACCESSDENIED (0x80070005)` errors when the application runs from write-restricted directories (e.g. `C:\Program Files`).
+- **Tray Flyout Theme Integration**: Fully re-styled the taskbar tray flyout window with the premium dark green gradient theme and glassmorphic translucent prayer highlights.
+- **Loader Window Theme Integration**: Updated the loader/about dialog with the premium dark green gradient background, white readable text, and glassmorphic button styles.
+- **Build Warning Suppression**: Resolved the `NETSDK1187` MSBuild locale normalization warnings during compiler execution.
+
 ## [2.6.0] - 2026-06-17
 
 ### Added

@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen" Topmost="True" ShowInTaskbar="False">
     
     <Window.Resources>
-        <DropShadowEffect x:Key="CardShadow" BlurRadius="20" ShadowDepth="0" Color="Black" Opacity="0.2"/>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="20" ShadowDepth="2" Color="Black" Opacity="0.4"/>
         
         <Style x:Key="SupportButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#10b981"/>
@@ -29,9 +29,9 @@
         </Style>
 
         <Style x:Key="LaterButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#064e3b"/>
-            <Setter Property="BorderBrush" Value="#d1fae5"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#40FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="20,10"/>
             <Setter Property="FontSize" Value="14"/>
@@ -48,7 +48,9 @@
         </Style>
 
         <Style x:Key="TelegramButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#064e3b"/>
+            <Setter Property="Background" Value="#15FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#3034d399"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="15,10"/>
             <Setter Property="FontSize" Value="13"/>
@@ -56,7 +58,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="20" Padding="{TemplateBinding Padding}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="20" Padding="{TemplateBinding Padding}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="✈️" Margin="0,0,8,0" VerticalAlignment="Center"/>
                                 <ContentPresenter VerticalAlignment="Center"/>
@@ -69,7 +71,13 @@
     </Window.Resources>
 
     <Grid Margin="20">
-        <Border Background="White" CornerRadius="12" BorderBrush="#d1fae5" BorderThickness="1" Effect="{StaticResource CardShadow}">
+        <Border CornerRadius="16" BorderBrush="#3034d399" BorderThickness="1.5" Effect="{StaticResource CardShadow}">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#064e3b" Offset="0"/>
+                    <GradientStop Color="#022c22" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -80,29 +88,29 @@
 
                 <!-- Header -->
                 <StackPanel Grid.Row="0" Margin="25,30,25,10">
-                    <TextBlock x:Name="AppNameText" Text="{DynamicResource AppTitle}" FontSize="20" Foreground="#064e3b" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="AppNameText" Text="{DynamicResource AppTitle}" FontSize="20" Foreground="White" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap"/>
                     
                     <!-- Version Badge -->
-                    <Border Background="#ecfdf5" CornerRadius="15" Padding="12,4" HorizontalAlignment="Center" Margin="0,15,0,0">
-                        <TextBlock x:Name="VersionText" Text="v2.5.1" FontSize="11" Foreground="#059669" FontWeight="Bold"/>
+                    <Border Background="#20FFFFFF" CornerRadius="15" Padding="12,4" HorizontalAlignment="Center" Margin="0,15,0,0">
+                        <TextBlock x:Name="VersionText" Text="v2.5.1" FontSize="11" Foreground="#34D399" FontWeight="Bold"/>
                     </Border>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="25,10,25,20">
                     <TextBlock Text="{DynamicResource Loader_Subtitle}" 
-                               FontSize="12" Foreground="#475569" TextAlignment="Center" TextWrapping="Wrap" LineHeight="18"/>
+                               FontSize="12" Foreground="White" Opacity="0.7" TextAlignment="Center" TextWrapping="Wrap" LineHeight="18"/>
                 </StackPanel>
 
                 <!-- Progress Section -->
                 <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="25,0,25,0">
-                    <Border BorderBrush="#f1f5f9" BorderThickness="1" CornerRadius="10" Padding="15">
+                    <Border BorderBrush="#15FFFFFF" Background="#10FFFFFF" BorderThickness="1" CornerRadius="10" Padding="15">
                         <StackPanel>
                             <Grid>
-                                <TextBlock Text="{DynamicResource Loader_Initializing}" FontSize="10" Foreground="#64748b" HorizontalAlignment="Left"/>
-                                <TextBlock Text="{DynamicResource Loader_PleaseWait}" FontSize="10" Foreground="#64748b" HorizontalAlignment="Right"/>
+                                <TextBlock Text="{DynamicResource Loader_Initializing}" FontSize="10" Foreground="White" Opacity="0.6" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{DynamicResource Loader_PleaseWait}" FontSize="10" Foreground="White" Opacity="0.6" HorizontalAlignment="Right"/>
                             </Grid>
                             <ProgressBar x:Name="StartupProgress" IsIndeterminate="True" Height="4" Margin="0,8,0,0" 
-                                         Background="#f1f5f9" Foreground="#10b981" BorderThickness="0">
+                                         Background="#20FFFFFF" Foreground="#34D399" BorderThickness="0">
                                 <ProgressBar.Resources>
                                     <Style TargetType="Border">
                                         <Setter Property="CornerRadius" Value="2"/>
@@ -116,7 +124,7 @@
                 </StackPanel>
 
                 <!-- Footer -->
-                <Border Grid.Row="3" Background="#f0fdf4" CornerRadius="0,0,12,12" Padding="25,15">
+                <Border Grid.Row="3" Background="#10FFFFFF" CornerRadius="0,0,16,16" Padding="25,15">
                     <UniformGrid Columns="2" Margin="0,5">
                         <Button Content="{DynamicResource SupportUs}" Style="{StaticResource SupportButtonStyle}" Click="Support_Click" Margin="0,0,6,0"/>
                         <Button Content="{DynamicResource Label_Website}" Style="{StaticResource LaterButtonStyle}" Click="Website_Click" Margin="6,0,0,0"/>

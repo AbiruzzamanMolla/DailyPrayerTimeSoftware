@@ -15,7 +15,8 @@
         <Style x:Key="ActionButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Foreground" Value="#D0374151"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Opacity" Value="0.75"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -27,20 +28,30 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#15000000"/>
-                                <Setter Property="Foreground" Value="#FF111827"/>
+                                <Setter TargetName="border" Property="Background" Value="#15FFFFFF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1.0"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
 
     <Grid Margin="12">
-        <Border Background="#F9F5F8FA" CornerRadius="16" BorderBrush="#20000000" BorderThickness="1">
+        <Border CornerRadius="16" BorderBrush="#3034d399" BorderThickness="1.5">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#064e3b" Offset="0"/>
+                    <GradientStop Color="#022c22" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
             <Border.Effect>
-                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.12" Color="Black"/>
+                <DropShadowEffect BlurRadius="20" ShadowDepth="2" Opacity="0.4" Color="Black"/>
             </Border.Effect>
             
             <Grid Margin="16,14,16,14">
@@ -59,21 +70,21 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="DateText" 
-                               Text="MONDAY, 8 JUNE, 2026" 
-                               Foreground="#80374151" 
+                               Text="WEDNESDAY, 17 JUNE, 2026" 
+                               Foreground="White" Opacity="0.5"
                                FontSize="10" 
                                FontWeight="Bold" 
                                HorizontalAlignment="Left"/>
                     <TextBlock Grid.Column="1" x:Name="HijriDateText" 
-                               Text="14 DHUL-HIJJAH, 1447" 
-                               Foreground="#80374151" 
+                               Text="1 MUHARRAM 1448 AH" 
+                               Foreground="White" Opacity="0.5"
                                FontSize="10" 
                                FontWeight="Bold" 
                                HorizontalAlignment="Right"/>
                 </Grid>
 
                 <!-- 2. Large Next/Active Prayer Countdown Card -->
-                <Border Grid.Row="1" CornerRadius="12" Background="#FFF1F5F9" Padding="12,10" Margin="0,0,0,12">
+                <Border Grid.Row="1" CornerRadius="12" Background="#20FFFFFF" Padding="12,10" Margin="0,0,0,12">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -82,19 +93,18 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
-                                <Ellipse Width="8" Height="8" Fill="#10B981" Margin="0,1,6,0" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="ActivePrayerNameText" Text="Dhuhr" Foreground="#FF111827" FontSize="16" FontWeight="Bold"/>
+                                <Ellipse Width="8" Height="8" Fill="#34D399" Margin="0,1,6,0" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="ActivePrayerNameText" Text="Isha" Foreground="White" FontSize="16" FontWeight="Bold"/>
                             </StackPanel>
-                            <TextBlock x:Name="ActivePrayerCountdownText" Text="in 1:24:42" Foreground="#80374151" FontSize="11" FontWeight="Medium"/>
+                            <TextBlock x:Name="ActivePrayerCountdownText" Text="ends in 5h 53m 29s" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Medium"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="2" x:Name="ActivePrayerTimeText" Text="1:08 PM" Foreground="#10B981" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" x:Name="ActivePrayerTimeText" Text="08:14 PM" Foreground="#34D399" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
 
                 <!-- 3. Prayer list -->
                 <StackPanel Grid.Row="2" x:Name="PrayerListPanel" VerticalAlignment="Top">
-                    <!-- Standard WPF components for prayers will be generated in code behind or laid out directly here -->
-                    <!-- We lay them out directly to ensure premium design, clean margins, and perfect rendering -->
+                    <!-- Standard WPF components for prayers -->
                     <!-- Fajr -->
                     <Border x:Name="Border_Fajr" Grid.ColumnSpan="3" CornerRadius="8" Margin="-4,2" Padding="4,4">
                         <Grid x:Name="Row_Fajr" MinHeight="28">
@@ -103,8 +113,8 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{DynamicResource Prayer_Fajr}" Margin="4,0,0,0" Foreground="#E0000000" FontSize="13" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="2" x:Name="Time_Fajr" Text="3:27 AM" Foreground="#B0000000" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Prayer_Fajr}" Margin="4,0,0,0" Foreground="White" Opacity="0.9" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" x:Name="Time_Fajr" Text="03:42 AM - 05:10 AM" Foreground="White" Opacity="0.7" FontSize="13" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <!-- Dhuhr -->
@@ -116,11 +126,11 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{DynamicResource Prayer_Dhuhr}" Margin="4,0,0,0" Foreground="#E0000000" FontSize="13" VerticalAlignment="Center"/>
-                            <Border x:Name="Chip_Dhuhr" Grid.Column="2" Background="#FFF1F5F9" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
-                                <TextBlock x:Name="ChipText_Dhuhr" Text="1h 24m" Foreground="#80374151" FontSize="9" FontWeight="Bold"/>
+                            <TextBlock Text="{DynamicResource Prayer_Dhuhr}" Margin="4,0,0,0" Foreground="White" Opacity="0.9" FontSize="13" VerticalAlignment="Center"/>
+                            <Border x:Name="Chip_Dhuhr" Grid.Column="2" Background="#25FFFFFF" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
+                                <TextBlock x:Name="ChipText_Dhuhr" Text="1h 24m" Foreground="White" Opacity="0.8" FontSize="9" FontWeight="Bold"/>
                             </Border>
-                            <TextBlock Grid.Column="3" x:Name="Time_Dhuhr" Text="1:08 PM" Foreground="#B0000000" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="Time_Dhuhr" Text="11:58 AM - 04:39 PM" Foreground="White" Opacity="0.7" FontSize="13" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <!-- Asr -->
@@ -132,11 +142,11 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{DynamicResource Prayer_Asr}" Margin="4,0,0,0" Foreground="#E0000000" FontSize="13" VerticalAlignment="Center"/>
-                            <Border x:Name="Chip_Asr" Grid.Column="2" Background="#FFF1F5F9" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
-                                <TextBlock x:Name="ChipText_Asr" Text="--" Foreground="#80374151" FontSize="9" FontWeight="Bold"/>
+                            <TextBlock Text="{DynamicResource Prayer_Asr}" Margin="4,0,0,0" Foreground="White" Opacity="0.9" FontSize="13" VerticalAlignment="Center"/>
+                            <Border x:Name="Chip_Asr" Grid.Column="2" Background="#25FFFFFF" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
+                                <TextBlock x:Name="ChipText_Asr" Text="--" Foreground="White" Opacity="0.8" FontSize="9" FontWeight="Bold"/>
                             </Border>
-                            <TextBlock Grid.Column="3" x:Name="Time_Asr" Text="5:08 PM" Foreground="#B0000000" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="Time_Asr" Text="04:39 PM - 06:46 PM" Foreground="White" Opacity="0.7" FontSize="13" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <!-- Maghrib -->
@@ -148,11 +158,11 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{DynamicResource Prayer_Maghrib}" Margin="4,0,0,0" Foreground="#E0000000" FontSize="13" VerticalAlignment="Center"/>
-                            <Border x:Name="Chip_Maghrib" Grid.Column="2" Background="#FFF1F5F9" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
-                                <TextBlock x:Name="ChipText_Maghrib" Text="--" Foreground="#80374151" FontSize="9" FontWeight="Bold"/>
+                            <TextBlock Text="{DynamicResource Prayer_Maghrib}" Margin="4,0,0,0" Foreground="White" Opacity="0.9" FontSize="13" VerticalAlignment="Center"/>
+                            <Border x:Name="Chip_Maghrib" Grid.Column="2" Background="#25FFFFFF" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
+                                <TextBlock x:Name="ChipText_Maghrib" Text="--" Foreground="White" Opacity="0.8" FontSize="9" FontWeight="Bold"/>
                             </Border>
-                            <TextBlock Grid.Column="3" x:Name="Time_Maghrib" Text="8:41 PM" Foreground="#B0000000" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="Time_Maghrib" Text="06:46 PM - 08:14 PM" Foreground="White" Opacity="0.7" FontSize="13" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                     <!-- Isha -->
@@ -164,38 +174,38 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="{DynamicResource Prayer_Isha}" Margin="4,0,0,0" Foreground="#E0000000" FontSize="13" VerticalAlignment="Center"/>
-                            <Border x:Name="Chip_Isha" Grid.Column="2" Background="#FFF1F5F9" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
-                                <TextBlock x:Name="ChipText_Isha" Text="--" Foreground="#80374151" FontSize="9" FontWeight="Bold"/>
+                            <TextBlock Text="{DynamicResource Prayer_Isha}" Margin="4,0,0,0" Foreground="White" Opacity="0.9" FontSize="13" VerticalAlignment="Center"/>
+                            <Border x:Name="Chip_Isha" Grid.Column="2" Background="#25FFFFFF" CornerRadius="6" Padding="6,2" Margin="0,0,10,0" Visibility="Collapsed" VerticalAlignment="Center">
+                                <TextBlock x:Name="ChipText_Isha" Text="--" Foreground="White" Opacity="0.8" FontSize="9" FontWeight="Bold"/>
                             </Border>
-                            <TextBlock Grid.Column="3" x:Name="Time_Isha" Text="10:31 PM" Foreground="#B0000000" FontSize="13" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" x:Name="Time_Isha" Text="08:14 PM - 03:42 AM" Foreground="White" Opacity="0.7" FontSize="13" VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </StackPanel>
 
                 <!-- 4. Info Section (Location & Calculation Method) -->
                 <StackPanel Grid.Row="3" Margin="0,10,0,6">
-                    <Separator Background="#15000000" Margin="0,0,0,10"/>
+                    <Separator Background="#20FFFFFF" Margin="0,0,0,10"/>
                     <StackPanel Orientation="Horizontal" Margin="2,0,0,2">
-                        <TextBlock Text="🌐" FontSize="11" Foreground="#80374151" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="InfoMethodText" Text="Diyanet İşleri (Türkiye)" Foreground="#80374151" FontSize="11" FontWeight="Medium" VerticalAlignment="Center"/>
+                        <TextBlock Text="🌐" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="InfoMethodText" Text="Method_KARACHI" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Medium" VerticalAlignment="Center"/>
                     </StackPanel>
                     <Grid Margin="2,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="📍" FontSize="11" Foreground="#80374151" Margin="0,1,6,0" VerticalAlignment="Top"/>
+                        <TextBlock Text="📍" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,1,6,0" VerticalAlignment="Top"/>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock x:Name="InfoCoordsText" Text="41.0198, 28.9499" Foreground="#80374151" FontSize="11" FontWeight="Medium"/>
-                            <TextBlock x:Name="InfoLocationText" Text="Europe/Istanbul" Foreground="#80374151" FontSize="11" FontWeight="Medium" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="InfoCoordsText" Text="23.9197, 90.7153" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Medium"/>
+                            <TextBlock x:Name="InfoLocationText" Text="Narsingdi, Bangladesh" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Medium" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
 
                 <!-- 5. Interactive Action Buttons -->
                 <StackPanel Grid.Row="4" Margin="0,4,0,0">
-                    <Separator Background="#15000000" Margin="0,0,0,8"/>
+                    <Separator Background="#20FFFFFF" Margin="0,0,0,8"/>
                     
                     <Button Style="{StaticResource ActionButtonStyle}" Click="Settings_Click">
                         <StackPanel Orientation="Horizontal">

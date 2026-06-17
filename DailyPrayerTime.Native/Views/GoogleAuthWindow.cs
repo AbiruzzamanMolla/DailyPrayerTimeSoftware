@@ -37,7 +37,12 @@ namespace DailyPrayerTime.Native.Views
             {
                 try
                 {
-                    await _webView.EnsureCoreWebView2Async();
+                    string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    string userDataFolder = System.IO.Path.Combine(localAppData, "DailyPrayerTime", "WebView2");
+                    System.IO.Directory.CreateDirectory(userDataFolder);
+
+                    var env = await Microsoft.Web.WebView2.Core.CoreWebView2Environment.CreateAsync(null, userDataFolder);
+                    await _webView.EnsureCoreWebView2Async(env);
                     _webView.Source = new Uri(startUri);
                 }
                 catch (Exception ex)

@@ -240,8 +240,8 @@ namespace DailyPrayerTime.Native.Views
 
             if (targetBorder != null)
             {
-                // Soft green background highlight
-                targetBorder.Background = new SolidColorBrush(Color.FromRgb(209, 250, 229)); // #D1FAE5
+                // Translucent theme green background highlight
+                targetBorder.Background = new SolidColorBrush(Color.FromArgb(40, 52, 211, 153)); // 15% opacity of #34D399
                 
                 // Show relative countdown inside list row if possible
                 var nextResult = GetNextPrayerInfo(DateTime.Now);
