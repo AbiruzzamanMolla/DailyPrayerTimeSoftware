@@ -55,5 +55,14 @@ namespace DailyPrayerTime.Native
                 _ = new MainWindow();
             }
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            if (SettingsManager.Current.AutoInstallUpdates)
+            {
+                UpdateService.InstallUpdate();
+            }
+            base.OnExit(e);
+        }
     }
 }

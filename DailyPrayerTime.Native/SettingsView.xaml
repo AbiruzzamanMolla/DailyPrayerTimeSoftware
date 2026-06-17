@@ -719,6 +719,7 @@
                                 </Grid>
                                 <CheckBox x:Name="AutoStartInput" Content="{DynamicResource i18n_Check_AutoStart}" Margin="0,0,0,4" Foreground="White"/>
                                 <CheckBox x:Name="SilentStartInput" Content="{DynamicResource i18n_Check_SilentStart}" Margin="20,0,0,4" Foreground="White"/>
+                                <CheckBox x:Name="AutoInstallUpdatesInput" Content="{DynamicResource i18n_Check_AutoInstallUpdates}" Margin="0,0,0,4" Foreground="White"/>
                                 <CheckBox x:Name="ExternalApiInput" Content="{DynamicResource i18n_Check_ExternalApi}" Margin="0,0,0,4" Foreground="White"/>
                             </StackPanel>
                         </Border>

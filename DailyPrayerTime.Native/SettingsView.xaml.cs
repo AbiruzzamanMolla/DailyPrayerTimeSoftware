@@ -179,7 +179,7 @@ namespace DailyPrayerTime.Native
             LngInput.Text = s.Longitude.ToString();
             
             var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.6.1");
+            VersionDisplay.Text = string.Format(LocalizationManager.Instance.GetString("Version_Label"), version != null ? $"{version.Major}.{version.Minor}.{version.Build}" : "2.6.2");
 
             foreach (System.Windows.Controls.ComboBoxItem item in MethodInput.Items)
             {
@@ -226,6 +226,7 @@ namespace DailyPrayerTime.Native
             AutoStartInput.Checked += (snd, evt) => SilentStartInput.IsEnabled = true;
             AutoStartInput.Unchecked += (snd, evt) => SilentStartInput.IsEnabled = false;
 
+            AutoInstallUpdatesInput.IsChecked = s.AutoInstallUpdates;
             ExternalApiInput.IsChecked = s.UseExternalApi;
 
             for (int i = 0; i < MethodInput.Items.Count; i++)
@@ -521,6 +522,7 @@ namespace DailyPrayerTime.Native
 
             s.AutoStart = AutoStartInput.IsChecked ?? false;
             s.SilentStart = SilentStartInput.IsChecked ?? false;
+            s.AutoInstallUpdates = AutoInstallUpdatesInput.IsChecked ?? false;
             s.UseExternalApi = ExternalApiInput.IsChecked ?? false;
             
             bool is24h = TimeFormatInput.SelectedIndex == 1;

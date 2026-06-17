@@ -142,6 +142,14 @@ namespace DailyPrayerTime.Native
                         UpdateVersionText.Text = string.Format(LocalizationManager.Instance.GetString("Update_VersionAvailable"), _currentUpdate.LatestVersion);
                         UpdateBanner.Visibility = Visibility.Visible;
                     });
+
+                    if (SettingsManager.Current.AutoInstallUpdates && !string.IsNullOrEmpty(_currentUpdate.AssetDownloadUrl))
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            await UpdateService.StartBackgroundDownloadAsync(_currentUpdate.AssetDownloadUrl, _currentUpdate.AssetName);
+                        });
+                    }
                 }
             }
             catch (Exception ex)

@@ -279,6 +279,7 @@
   "Check_HeroGrid": "Show Prayer Times Grid in Hero Section",
   "Check_Notifications": "Enable Prayer Notifications",
   "Check_AutoStart": "Run on Windows Startup",
+  "Check_AutoInstallUpdates": "Auto-install updates on close",
   "Check_SilentStart": "Run silently on startup (hide main window)",
   "Check_ExternalApi": "Use External API for accuracy (requires internet)",
   "Check_StartMinimized": "Start Minimized to Tray",

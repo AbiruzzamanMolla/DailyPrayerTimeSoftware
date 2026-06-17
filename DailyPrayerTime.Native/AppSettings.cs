@@ -140,6 +140,9 @@ namespace DailyPrayerTime.Native
         // Leaderboard
         public bool LeaderboardAnonymous { get; set; } = false;
         public string LastHallOfFameMonth { get; set; } = "";
+
+        // Auto Updates
+        public bool AutoInstallUpdates { get; set; } = false;
     }
 
     public static class SettingsManager
