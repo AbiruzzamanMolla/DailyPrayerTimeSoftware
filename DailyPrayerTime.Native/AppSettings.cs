@@ -52,6 +52,17 @@ namespace DailyPrayerTime.Native
         public double OverlayY { get; set; } = -1;
 
         public bool NotificationsEnabled { get; set; } = true;
+        public bool DndModeEnabled { get; set; } = false;
+        public bool AutoDndOnPrayer { get; set; } = false;
+        public int DndDurationMinutes { get; set; } = 15;
+        
+        // Suhur & Iftar Alarms
+        public bool SuhurAlarmEnabled { get; set; } = false;
+        public bool IftarAlarmEnabled { get; set; } = false;
+        public int SuhurAlarmOffset { get; set; } = 10;
+        public int IftarAlarmOffset { get; set; } = 10;
+        public string SuhurAlarmMode { get; set; } = "Popup";
+        public string IftarAlarmMode { get; set; } = "Popup";
         
         // Congregation (Jamaat) Settings (Fixed Times in "HH:mm" format)
         public string FajrJamaatTime { get; set; } = "05:15";

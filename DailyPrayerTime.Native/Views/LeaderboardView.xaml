@@ -70,7 +70,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="TabMonthly" Grid.Column="0" Content="📅 Monthly" Click="TabMonthly_Click"
-                    Background="#10B981" BorderBrush="#34D399" Tag="8,0,0,8" Style="{StaticResource LeaderboardTabButton}">
+                     Background="{DynamicResource ThemePrimaryBrush}" BorderBrush="{DynamicResource ThemeSecondaryBrush}" Tag="8,0,0,8" Style="{StaticResource LeaderboardTabButton}">
             </Button>
             <Button x:Name="TabHallOfFame" Grid.Column="1" Content="🏆 Hall of Fame" Click="TabHallOfFame_Click"
                     Background="#10FFFFFF" BorderBrush="#20FFFFFF" Tag="0,8,8,0" Style="{StaticResource LeaderboardTabButton}">
@@ -85,7 +85,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" x:Name="MyRankText" FontSize="22" FontWeight="Bold" Foreground="#34d399" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <TextBlock Grid.Column="0" x:Name="MyRankText" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource ThemeSecondaryBrush}" VerticalAlignment="Center" Margin="0,0,12,0"/>
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <TextBlock x:Name="MyNameText" FontSize="12" FontWeight="SemiBold" Foreground="White"/>
                     <TextBlock x:Name="MyStatsText" FontSize="10" Foreground="White" Opacity="0.6"/>

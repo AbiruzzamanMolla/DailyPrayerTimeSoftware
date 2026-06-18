@@ -60,7 +60,7 @@
                     </Style>
                 </Button.Resources>
             </Button>
-            <Button x:Name="EndPeriodBtn" Grid.Column="2" Content="{DynamicResource Cycle_EndPeriod}" Background="#059669" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" Click="EndPeriod_Click" Cursor="Hand" BorderThickness="0">
+            <Button x:Name="EndPeriodBtn" Grid.Column="2" Content="{DynamicResource Cycle_EndPeriod}" Background="{DynamicResource ThemePrimaryBrush}" Foreground="White" FontSize="11" FontWeight="SemiBold" Padding="10,8" Click="EndPeriod_Click" Cursor="Hand" BorderThickness="0">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="8"/>

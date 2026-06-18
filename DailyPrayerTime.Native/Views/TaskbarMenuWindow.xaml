@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Daily Prayer Time Menu" 
-        Height="560" 
+        SizeToContent="Height"
         Width="320"
         WindowStyle="None" 
         ResizeMode="NoResize"
@@ -43,11 +43,11 @@
     </Window.Resources>
 
     <Grid Margin="12">
-        <Border CornerRadius="16" BorderBrush="#3034d399" BorderThickness="1.5">
+        <Border CornerRadius="16" BorderBrush="{DynamicResource ThemeSecondaryTranslucentBrush}" BorderThickness="1.5">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#064e3b" Offset="0"/>
-                    <GradientStop Color="#022c22" Offset="1"/>
+                    <GradientStop Color="{DynamicResource ThemeGradientStart}" Offset="0"/>
+                    <GradientStop Color="{DynamicResource ThemeGradientEnd}" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
             <Border.Effect>
@@ -93,12 +93,12 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
-                                <Ellipse Width="8" Height="8" Fill="#34D399" Margin="0,1,6,0" VerticalAlignment="Center"/>
+                                <Ellipse Width="8" Height="8" Fill="{DynamicResource ThemeSecondaryBrush}" Margin="0,1,6,0" VerticalAlignment="Center"/>
                                 <TextBlock x:Name="ActivePrayerNameText" Text="Isha" Foreground="White" FontSize="16" FontWeight="Bold"/>
                             </StackPanel>
                             <TextBlock x:Name="ActivePrayerCountdownText" Text="ends in 5h 53m 29s" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Medium"/>
                         </StackPanel>
-                        <TextBlock Grid.Column="2" x:Name="ActivePrayerTimeText" Text="08:14 PM" Foreground="#34D399" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" x:Name="ActivePrayerTimeText" Text="08:14 PM" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
 
@@ -206,24 +206,31 @@
                 <!-- 5. Interactive Action Buttons -->
                 <StackPanel Grid.Row="4" Margin="0,4,0,0">
                     <Separator Background="#20FFFFFF" Margin="0,0,0,8"/>
+
+                    <Button x:Name="DndToggleBtn" Style="{StaticResource ActionButtonStyle}" Click="DndToggle_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="DndIcon" Text="🔊" FontSize="12" Width="18" TextAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="DndText" Text="{DynamicResource Tray_DNDMode}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                     
                     <Button Style="{StaticResource ActionButtonStyle}" Click="Settings_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⚙️" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="⚙️" FontSize="12" Width="18" TextAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="{DynamicResource Tray_Settings}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     
                     <Button Style="{StaticResource ActionButtonStyle}" Click="OpenHome_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🏠" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="🏠" FontSize="12" Width="18" TextAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="{DynamicResource Tray_Open}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                     
                     <Button Style="{StaticResource ActionButtonStyle}" Click="Exit_Click">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⏻" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="⏻" FontSize="12" Width="18" TextAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center"/>
                             <TextBlock Text="{DynamicResource Tray_Exit}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2026-06-18
+
+### Added
+
+- **Suhur & Iftar Alarm System**: Introduced a highly configurable alarm/countdown system for Suhur (ends) and Iftar (begins) times. Users can customize trigger offsets (5 to 30 minutes) and select between default popup overlays or keyblocking fullscreen window displays.
+- **Dynamic Theme Colors**: Standardized the application styling to use dynamic resource brushes (`ThemePrimaryBrush`, `ThemeSecondaryBrush`, etc.) instead of hardcoded hex colors, enabling real-time color updating across all UI sections (including Main Window, Settings, Tracker, Leaderboard, and Cycle views) on settings save without requiring restarts.
+- **Modern Switch Toggles**: Refactored settings checkboxes into Fluent-style sliding toggle switches with custom active/inactive state indicators.
+
+### Fixed
+
+- **Tray Context Menu Text Alignment**: Corrected the vertical alignment mismatch on taskbar/tray action items by defining a fixed width and text centering for Unicode/emoji icon bounding blocks.
+- **Toggle Spacing Layout**: Ensured a clean, consistent 10px margin between the toggle switch controls and description labels in settings using Grid column definitions.
+
 ## [2.6.2] - 2026-06-17
 
 ### Added

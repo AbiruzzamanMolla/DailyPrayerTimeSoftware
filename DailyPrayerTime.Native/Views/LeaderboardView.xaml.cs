@@ -224,8 +224,8 @@ namespace DailyPrayerTime.Native.Views
 
         private Border CreateLeaderboardRow(LeaderboardEntry entry, bool isMe)
         {
-            var bg = isMe ? new SolidColorBrush(Color.FromArgb(0x33, 0x10, 0xB9, 0x81)) : new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xFF, 0xFF));
-            var borderBrush = isMe ? new SolidColorBrush(Color.FromArgb(0x60, 0x10, 0xB9, 0x81)) : new SolidColorBrush(Color.FromArgb(0x2A, 0xFF, 0xFF, 0xFF));
+            var bg = isMe ? (Brush)Application.Current.Resources["ThemePrimaryTranslucentBrush"] : new SolidColorBrush(Color.FromArgb(0x1A, 0xFF, 0xFF, 0xFF));
+            var borderBrush = isMe ? (Brush)Application.Current.Resources["ThemePrimaryBrush"] : new SolidColorBrush(Color.FromArgb(0x2A, 0xFF, 0xFF, 0xFF));
 
             string rankEmoji = entry.Rank switch
             {
@@ -310,8 +310,8 @@ namespace DailyPrayerTime.Native.Views
         private void TabMonthly_Click(object sender, RoutedEventArgs e)
         {
             _isHallOfFameView = false;
-            TabMonthly.Background = new SolidColorBrush(Color.FromRgb(0x10, 0xB9, 0x81));
-            TabMonthly.BorderBrush = new SolidColorBrush(Color.FromRgb(0x34, 0xD3, 0x99));
+            TabMonthly.Background = (Brush)Application.Current.Resources["ThemePrimaryBrush"];
+            TabMonthly.BorderBrush = (Brush)Application.Current.Resources["ThemeSecondaryBrush"];
             
             TabHallOfFame.Background = new SolidColorBrush(Color.FromArgb(0x10, 0xFF, 0xFF, 0xFF));
             TabHallOfFame.BorderBrush = new SolidColorBrush(Color.FromArgb(0x20, 0xFF, 0xFF, 0xFF));
@@ -319,12 +319,12 @@ namespace DailyPrayerTime.Native.Views
             MonthLabel.Text = DateTime.Today.ToString("MMMM yyyy");
             LoadData();
         }
-
+ 
         private void TabHallOfFame_Click(object sender, RoutedEventArgs e)
         {
             _isHallOfFameView = true;
-            TabHallOfFame.Background = new SolidColorBrush(Color.FromRgb(0x10, 0xB9, 0x81));
-            TabHallOfFame.BorderBrush = new SolidColorBrush(Color.FromRgb(0x34, 0xD3, 0x99));
+            TabHallOfFame.Background = (Brush)Application.Current.Resources["ThemePrimaryBrush"];
+            TabHallOfFame.BorderBrush = (Brush)Application.Current.Resources["ThemeSecondaryBrush"];
             
             TabMonthly.Background = new SolidColorBrush(Color.FromArgb(0x10, 0xFF, 0xFF, 0xFF));
             TabMonthly.BorderBrush = new SolidColorBrush(Color.FromArgb(0x20, 0xFF, 0xFF, 0xFF));

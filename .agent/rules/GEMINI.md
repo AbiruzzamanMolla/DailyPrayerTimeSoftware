@@ -114,11 +114,16 @@ When user's prompt is NOT in English:
 
 ### 📁 File Dependency Awareness
 
-**Before modifying ANY file:**
+Before modifying ANY file:
 
-1. Check `CODEBASE.md` → File Dependencies
+1. Check CODEBASE.md → File Dependencies
 2. Identify dependent files
 3. Update ALL affected files together
+
+### 🎨 Dynamic Theme Colors (Universal Theme Rule)
+
+- **Rule**: Whenever colors are used or added in the application layout (Background, Foreground, BorderBrush, Color, etc.), they MUST NOT be hardcoded hex values.
+- **Implementation**: Bind them dynamically using `DynamicResource [ThemeKey]` references (e.g., `ThemePrimaryBrush`, `ThemeSecondaryBrush`, `ThemeGradientBrush`, etc.) linked to settings theme colors.
 
 ### 🗺️ System Map Read
 

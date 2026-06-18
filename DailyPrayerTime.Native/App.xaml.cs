@@ -7,6 +7,7 @@ namespace DailyPrayerTime.Native
         protected override async void OnStartup(StartupEventArgs e)
         {
             SettingsManager.Load();
+            DailyPrayerTime.Native.Helpers.ThemeHelper.ApplyTheme();
             LocalizationManager.Instance.SetLanguage(SettingsManager.Current.Language);
             AudioLogger.Log("Application started");
             

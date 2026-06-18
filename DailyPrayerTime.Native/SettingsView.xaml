@@ -16,7 +16,7 @@
 
         <!-- Custom Tab Item Style matching app bottom navigation -->
         <Style x:Key="SettingsTabStyle" TargetType="RadioButton">
-            <Setter Property="Foreground" Value="#9ca3af"/>
+            <Setter Property="Foreground" Value="#BFFFFFFF"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -32,7 +32,7 @@
             </Setter>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Foreground" Value="#34d399"/>
+                    <Setter Property="Foreground" Value="White"/>
                     <Setter Property="Background" Value="#20FFFFFF"/>
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -53,6 +53,89 @@
                                               ContentSource="SelectedContent" 
                                               Margin="{TemplateBinding Padding}"/>
                         </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Toggle Switch Style for CheckBox -->
+        <Style TargetType="CheckBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Grid x:Name="switchContainer" Grid.Column="0" Width="38" Height="20" Margin="0,0,10,0" VerticalAlignment="Center">
+                                <!-- Track background -->
+                                <Border x:Name="Track" 
+                                        CornerRadius="10" 
+                                        Background="#1E2026" 
+                                        BorderThickness="0"/>
+                                <!-- Off state indicator circle (red/coral ring on the right) -->
+                                <Ellipse x:Name="OffIndicator" 
+                                         Width="7" Height="7" 
+                                         Margin="0,0,7,0" 
+                                         HorizontalAlignment="Right" 
+                                         Stroke="#F43F5E" StrokeThickness="1.8"
+                                         VerticalAlignment="Center"/>
+                                <!-- On state indicator line or circle (hidden by default) -->
+                                <Ellipse x:Name="OnIndicator" 
+                                         Width="7" Height="7" 
+                                         Margin="7,0,0,0" 
+                                         HorizontalAlignment="Left" 
+                                         Stroke="#22C55E" StrokeThickness="1.8"
+                                         Visibility="Collapsed"
+                                         VerticalAlignment="Center"/>
+                                <!-- Thumb -->
+                                <Border x:Name="Thumb" 
+                                        Width="14" Height="14" 
+                                        CornerRadius="7" 
+                                        Background="#343743" 
+                                        HorizontalAlignment="Left" 
+                                        VerticalAlignment="Center"
+                                        Margin="3,0,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="4" ShadowDepth="1" Opacity="0.3"/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
+                            
+                            <ContentPresenter Grid.Column="1" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              RecognizesAccessKey="True" 
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Track" Property="Background" Value="{DynamicResource ThemeSecondaryBrush}"/>
+                                <Setter TargetName="Thumb" Property="Background" Value="White"/>
+                                <Setter TargetName="Thumb" Property="HorizontalAlignment" Value="Right"/>
+                                <Setter TargetName="Thumb" Property="Margin" Value="0,0,3,0"/>
+                                <Setter TargetName="OffIndicator" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="OnIndicator" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Track" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Track" Property="Opacity" Value="0.3"/>
+                                <Setter TargetName="Thumb" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -90,7 +173,7 @@
                                 <Setter TargetName="Thumb" Property="Background" Value="#60FFFFFF"/>
                             </Trigger>
                             <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
-                                <Setter TargetName="Thumb" Property="Background" Value="#8034d399"/>
+                                <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -101,7 +184,7 @@
 
     <DockPanel LastChildFill="True" Margin="15,15,15,10">
 
-        <Border Background="#170939" CornerRadius="10" Padding="4" Margin="0,0,0,12" DockPanel.Dock="Top">
+        <Border Background="{DynamicResource ThemePrimaryBrush}" CornerRadius="10" Padding="4" Margin="0,0,0,12" DockPanel.Dock="Top">
             <UniformGrid Columns="6">
                 <RadioButton x:Name="TabSettingsPrayer" Style="{StaticResource SettingsTabStyle}" IsChecked="True" Checked="SettingsTab_Checked" Tag="0" Cursor="Hand">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,4">
@@ -144,8 +227,8 @@
 
         <!-- Action Buttons -->
         <StackPanel x:Name="SettingsButtonsPanel" DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button Content="{DynamicResource i18n_Cancel}" Click="Cancel_Click" Width="80" Padding="8" Background="Transparent" Foreground="#6f6885" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
-            <Button Content="{DynamicResource i18n_SaveSettings}" Click="Save_Click" Width="120" Padding="8" Background="#170939" Foreground="White" BorderThickness="0" Cursor="Hand">
+            <Button Content="{DynamicResource i18n_Cancel}" Click="Cancel_Click" Width="80" Padding="8" Background="Transparent" Foreground="{DynamicResource ThemePrimaryBrush}" BorderThickness="0" Margin="0,0,10,0" Cursor="Hand"/>
+            <Button Content="{DynamicResource i18n_SaveSettings}" Click="Save_Click" Width="120" Padding="8" Background="{DynamicResource ThemePrimaryBrush}" Foreground="White" BorderThickness="0" Cursor="Hand">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="6"/>
@@ -164,7 +247,7 @@
                         <!-- Location -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Location}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Location}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <TextBlock Text="{DynamicResource i18n_Label_LocationName}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
                                 <Grid Margin="0,0,0,8">
                                     <Grid.ColumnDefinitions>
@@ -195,7 +278,7 @@
                         <!-- Calculation Preferences -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Calculation}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Calculation}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <TextBlock Text="{DynamicResource i18n_Label_Method}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,3"/>
                                 <ComboBox x:Name="MethodInput" Margin="0,0,0,8" Padding="5" Foreground="Black">
                                     <ComboBoxItem Content="{DynamicResource i18n_Method_Shia}" Tag="SHIA" Foreground="Black"/>
@@ -269,7 +352,7 @@
                         <!-- Adjustments -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Hijri}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Hijri}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
                                     <TextBlock Text="{DynamicResource i18n_Label_HijriAdj}" VerticalAlignment="Center" Foreground="White" Opacity="0.7" Margin="0,0,10,0"/>
                                     <ComboBox x:Name="HijriAdjInput" Width="60" Padding="5" Foreground="Black">
@@ -282,7 +365,7 @@
                                     <TextBlock Text="{DynamicResource i18n_Label_FixesDiscrepancies}" FontStyle="Italic" FontSize="10" VerticalAlignment="Center" Foreground="White" Opacity="0.5" Margin="10,0,0,0"/>
                                 </StackPanel>
 
-                                <TextBlock Text="{DynamicResource i18n_Section_SuhurIftar}" FontWeight="Bold" FontSize="14" Margin="0,5,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_SuhurIftar}" FontWeight="Bold" FontSize="14" Margin="0,5,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
@@ -304,7 +387,7 @@
                         <!-- Jamaat Times -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Jamaat}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Jamaat}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <TextBlock Text="{DynamicResource i18n_Label_JamaatDesc}" FontSize="11" Foreground="White" Opacity="0.6" FontStyle="Italic" Margin="0,0,0,8"/>
 
                                 <Grid>
@@ -403,7 +486,7 @@
                         <!-- Tracking Settings -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Tracker_TabTitle}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource Tracker_TabTitle}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 
                                 <CheckBox x:Name="TrackerEnabledInput" Content="{DynamicResource Tracker_EnableDaily}" Margin="0,4" Foreground="White"/>
                                 <TextBlock Text="{DynamicResource Tracker_EnableDailyDesc}" FontSize="11" Foreground="White" Opacity="0.6" Margin="20,0,0,12"/>
@@ -442,7 +525,7 @@
                         <!-- Data Management -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Tracker_DataManagement}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource Tracker_DataManagement}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <TextBlock Text="{DynamicResource Tracker_BackupDesc}" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 
                                 <UniformGrid Columns="2" Margin="0,0,0,12">
@@ -477,7 +560,7 @@
                         <!-- Cycle Tracker Settings -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="🌙 Cycle Tracker" FontWeight="Bold" FontSize="14" Foreground="#f472b6" Margin="0,0,0,8"/>
+                                <TextBlock Text="🌙 Cycle Tracker" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <TextBlock Text="Track menstrual cycle with Islamic rulings. Auto-pauses prayer tracking during menstruation." FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 <CheckBox x:Name="CycleEnabledInput" Content="Enable Cycle Tracker" Margin="0,4" Foreground="White"/>
                                 <TextBlock Text="Select your madhab for accurate rulings:" FontSize="11" Foreground="White" Opacity="0.7" Margin="0,8,0,4"/>
@@ -505,7 +588,7 @@
                                         </Style>
                                     </Button.Resources>
                                 </Button>
-                                <Button x:Name="CloudSyncSignOutBtn" Content="Sign Out" Click="CloudSyncSignOut_Click" Margin="0,6,0,0" Padding="12,6" Background="#374151" Foreground="White" Cursor="Hand" FontSize="11" Visibility="Collapsed">
+                                <Button x:Name="CloudSyncSignOutBtn" Content="Sign Out" Click="CloudSyncSignOut_Click" Margin="0,6,0,0" Padding="12,6" Background="{DynamicResource ThemePrimaryBrush}" Foreground="White" Cursor="Hand" FontSize="11" Visibility="Collapsed">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="6"/>
@@ -525,7 +608,7 @@
                         <!-- Adhan Controls -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Adhan_Notifications}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource i18n_Adhan_Notifications}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <TextBlock Text="{DynamicResource i18n_Adhan_EnableSound}" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,10"/>
                                 
                                 <UniformGrid Columns="3" Margin="0,0,0,12">
@@ -569,7 +652,7 @@
                                     <TextBox x:Name="AdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Grid.Column="0"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button Content="{DynamicResource i18n_Btn_Browse}" Click="BrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
-                                        <Button Content="{DynamicResource i18n_Test_Adhan}" Click="TestAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="#34d399" BorderBrush="#40FFFFFF" Cursor="Hand" ToolTip="Test Adhan Playback"/>
+                                        <Button Content="{DynamicResource i18n_Test_Adhan}" Click="TestAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand" ToolTip="Test Adhan Playback"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -582,7 +665,7 @@
                                     <TextBox x:Name="FajrAdhanSoundPathInput" Padding="5" IsReadOnly="True" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Grid.Column="0"/>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                                         <Button Grid.Column="1" Content="{DynamicResource i18n_Btn_Browse}" Click="FajrBrowseAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
-                                        <Button Content="{DynamicResource i18n_Test_Adhan}" Click="TestFajrAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="#34d399" BorderBrush="#40FFFFFF" Cursor="Hand"/>
+                                        <Button Content="{DynamicResource i18n_Test_Adhan}" Click="TestFajrAdhan_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
                                     </StackPanel>
                                 </Grid>
                             </StackPanel>
@@ -615,7 +698,7 @@
                         <!-- Jamaat (Established) Reminders -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Established_Title}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,4"/>
+                                <TextBlock Text="{DynamicResource i18n_Established_Title}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,4"/>
                                 <TextBlock Text="{DynamicResource i18n_Established_Desc}" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,8"/>
                                 
                                 <UniformGrid Columns="3" Margin="0,0,0,8">
@@ -630,7 +713,7 @@
                                     <TextBlock Text="{DynamicResource i18n_Label_EstablishedShow}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
                                     <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Margin="10,0" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
                                     <TextBlock Text="{DynamicResource i18n_Established_MinutesBefore}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
-                                    <Button Content="{DynamicResource i18n_Test_Established}" Click="TestEstablished_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#20FFFFFF" Foreground="#34d399" BorderBrush="#40FFFFFF" Cursor="Hand"/>
+                                    <Button Content="{DynamicResource i18n_Test_Established}" Click="TestEstablished_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
@@ -680,6 +763,74 @@
                                 </Grid>
                             </StackPanel>
                         </Border>
+                        
+                        <!-- System Do Not Disturb / Auto-Mute -->
+                        <Border Style="{StaticResource PremiumCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource Dnd_Title}" FontWeight="Bold" FontSize="14" Foreground="#f43f5e" Margin="0,0,0,8"/>
+                                <CheckBox x:Name="AutoDndOnPrayerInput" Content="{DynamicResource Dnd_Enable}" Foreground="White" Margin="0,0,0,8"/>
+                                <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                    <TextBlock Text="{DynamicResource Dnd_Duration}" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,10,0"/>
+                                    <TextBox x:Name="DndDurationMinutesInput" Width="50" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                    <TextBlock Text="{DynamicResource Dnd_Minutes}" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Suhur & Iftar Alarms -->
+                        <Border Style="{StaticResource PremiumCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="⏰ Suhur &amp; Iftar Alarms" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
+                                
+                                <!-- Suhur Alarm -->
+                                <Grid Margin="0,4,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="SuhurAlarmEnabledInput" Content="Enable Suhur Alarm" Foreground="White" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="Offset:" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11" Margin="10,0,5,0"/>
+                                        <ComboBox x:Name="SuhurAlarmOffsetInput" Width="70" Foreground="Black" Padding="3">
+                                            <ComboBoxItem Content="5 Min" Tag="5"/>
+                                            <ComboBoxItem Content="10 Min" Tag="10"/>
+                                            <ComboBoxItem Content="15 Min" Tag="15"/>
+                                            <ComboBoxItem Content="20 Min" Tag="20"/>
+                                            <ComboBoxItem Content="30 Min" Tag="30"/>
+                                        </ComboBox>
+                                        <TextBlock Text="Mode:" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11" Margin="10,0,5,0"/>
+                                        <ComboBox x:Name="SuhurAlarmModeInput" Width="95" Foreground="Black" Padding="3">
+                                            <ComboBoxItem Content="Popup" Tag="Popup"/>
+                                            <ComboBoxItem Content="FullScreen" Tag="FullScreen"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Iftar Alarm -->
+                                <Grid Margin="0,4,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox x:Name="IftarAlarmEnabledInput" Content="Enable Iftar Alarm" Foreground="White" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="Offset:" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11" Margin="10,0,5,0"/>
+                                        <ComboBox x:Name="IftarAlarmOffsetInput" Width="70" Foreground="Black" Padding="3">
+                                            <ComboBoxItem Content="5 Min" Tag="5"/>
+                                            <ComboBoxItem Content="10 Min" Tag="10"/>
+                                            <ComboBoxItem Content="15 Min" Tag="15"/>
+                                            <ComboBoxItem Content="20 Min" Tag="20"/>
+                                            <ComboBoxItem Content="30 Min" Tag="30"/>
+                                        </ComboBox>
+                                        <TextBlock Text="Mode:" VerticalAlignment="Center" Foreground="White" Opacity="0.7" FontSize="11" Margin="10,0,5,0"/>
+                                        <ComboBox x:Name="IftarAlarmModeInput" Width="95" Foreground="Black" Padding="3">
+                                            <ComboBoxItem Content="Popup" Tag="Popup"/>
+                                            <ComboBoxItem Content="FullScreen" Tag="FullScreen"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -691,7 +842,7 @@
                         <!-- Integrations -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_WindowsIntegration}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_WindowsIntegration}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <CheckBox x:Name="OverlayInput" Content="{DynamicResource i18n_Check_Overlay}" Margin="0,6,0,4" Foreground="White"/>
                                 <CheckBox x:Name="ShowTaskbarTimerInput" Content="{DynamicResource Check_ShowTaskbarTimer}" Margin="0,0,0,4" Foreground="White"/>
                                 <StackPanel Margin="20,0,0,6" Orientation="Horizontal">
@@ -727,7 +878,7 @@
                         <!-- Language -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Language}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Language}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 <TextBlock Text="{DynamicResource i18n_Label_InterfaceLanguage}" Foreground="White" Opacity="0.7" Margin="0,0,0,4" FontSize="11"/>
                                 <ComboBox x:Name="LanguageSelector" Margin="0,0,0,4" Padding="5" SelectionChanged="LanguageSelector_SelectionChanged" Foreground="Black">
                                     <ComboBoxItem Content="English" Tag="en" Foreground="Black"/>
@@ -745,7 +896,7 @@
                         <!-- Appearance -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Appearance}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="#34d399"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Appearance}" FontWeight="Bold" FontSize="14" Margin="0,0,0,6" Foreground="{DynamicResource ThemeSecondaryBrush}"/>
                                 
                                 <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
                                     <TextBlock Text="{DynamicResource Label_AppFontSize}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="White" Opacity="0.7" FontSize="11"/>
@@ -826,7 +977,7 @@
                         <!-- Updates -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Updates}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Updates}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
@@ -836,7 +987,7 @@
                                         <TextBlock Text="{DynamicResource i18n_Updates_Desc}" TextWrapping="Wrap" Foreground="White" Opacity="0.7" FontSize="11"/>
                                         <TextBlock x:Name="VersionDisplay" Text="Version: 2.5.1" Foreground="White" Margin="0,4,0,0" FontSize="12" FontWeight="SemiBold"/>
                                     </StackPanel>
-                                    <Button Grid.Column="1" Content="Check Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="12,6" Background="#170939" Foreground="White" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
+                                    <Button Grid.Column="1" Content="Check Updates" Click="CheckForUpdates_Click" Margin="10,0,0,0" Padding="12,6" Background="{DynamicResource ThemePrimaryBrush}" Foreground="White" BorderThickness="0" VerticalAlignment="Center" Cursor="Hand">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="4"/>
@@ -850,7 +1001,7 @@
                         <!-- Contact Us Form (Authorized Users) -->
                         <Border x:Name="ContactUsCard" Style="{StaticResource PremiumCardStyle}" Visibility="Collapsed">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,6"/>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,6"/>
                                 <TextBlock Text="{DynamicResource i18n_ContactUs_Desc}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 
                                 <Grid>
@@ -895,7 +1046,7 @@
                         <!-- Contact Us Authentication Promo -->
                         <Border x:Name="ContactUsAuthPromptCard" Style="{StaticResource PremiumCardStyle}" Visibility="Visible">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,6"/>
+                                <TextBlock Text="{DynamicResource i18n_ContactUs_Title}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,6"/>
                                 <TextBlock Text="{DynamicResource i18n_ContactUs_SignInPrompt}" Foreground="White" Opacity="0.7" FontSize="11" Margin="0,0,0,10" TextWrapping="Wrap"/>
                                 <Button Content="🔑 Sign in with Google" Click="CloudSyncSignIn_Click" HorizontalAlignment="Left" Padding="15,6" Background="#4285F4" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
                                     <Button.Resources>
@@ -910,7 +1061,7 @@
                         <!-- Resources -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource Section_Official}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource Section_Official}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <WrapPanel>
                                     <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
                                         🌐 <Bold><Run Text="{DynamicResource Label_Website}"/>:</Bold> <Hyperlink NavigateUri="https://abiruzzamanmolla.github.io/DailyPrayerTimeSoftware/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{DynamicResource Btn_OfficialSite}"/></Hyperlink>
@@ -925,7 +1076,7 @@
                         <!-- Sponsors -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="{DynamicResource i18n_Section_Sponsors}" FontWeight="Bold" FontSize="14" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="{DynamicResource i18n_Section_Sponsors}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <WrapPanel>
                                     <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
                                         📺 <Hyperlink NavigateUri="https://www.youtube.com/@islamicaudiobook" RequestNavigate="Hyperlink_RequestNavigate">Islamic Audiobook YT</Hyperlink>
@@ -963,7 +1114,7 @@
                         <!-- WELCOME SECTION -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="📖 Daily Prayer Timer — Comprehensive User Documentation" FontWeight="Bold" FontSize="18" Foreground="#34d399" Margin="0,0,0,8"/>
+                                <TextBlock Text="📖 Daily Prayer Timer — Comprehensive User Documentation" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,8"/>
                                 <TextBlock TextWrapping="Wrap" FontSize="12.5" Foreground="White" Opacity="0.9" LineHeight="20">
                                     Assalamu Alaikum! Welcome to the official User Guide for the Daily Prayer Timer (Native Windows Edition). This comprehensive handbook details every single section, utility, settings page, and hidden convenience of the application, ensuring you can tailor the software perfectly to your daily schedule and spiritual routine.
                                 </TextBlock>
@@ -1069,7 +1220,7 @@
                         <!-- COMPREHENSIVE SETTINGS CONFIGURATION DIRECTORY -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="⚙️ Comprehensive Settings Configuration Directory" FontWeight="Bold" FontSize="15" Foreground="#10b981" Margin="0,0,0,8"/>
+                                <TextBlock Text="⚙️ Comprehensive Settings Configuration Directory" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource ThemePrimaryBrush}" Margin="0,0,0,8"/>
                                 <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="White" Opacity="0.8" LineHeight="18" Margin="0,0,0,10">
                                     Every configuration panel in the software is detailed below. Learn what each switch does, why it is essential for your spiritual scheduling, and how the underlying algorithms operate:
                                 </TextBlock>
@@ -1077,31 +1228,31 @@
                                 <!-- CATEGORY 1: PRAYER CALCULATIONS -->
                                 <TextBlock Text="🕋 1. Core Prayer Calculations &amp; Timing Settings" FontWeight="Bold" FontSize="13" Foreground="#60a5fa" Margin="0,5,0,4"/>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Location Name &amp; GPS Coordinates:</Bold> Denotes your physical city and exact location (Latitude/Longitude). <Italic>Why it's needed:</Italic> Astronomical prayer times are calculated mathematically using sun altitude angles based on your coordinate position. <Italic>How it works:</Italic> Typing your city and clicking "Search" queries the LocationIQ API to fill in coordinates instantly.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Calculation Method:</Bold> Islamic astronomical bodies calculate twilight differently. <Italic>Options:</Italic> Muslim World League (MWL), ISNA, Egypt, Umm Al-Qura (Makkah), Karachi (Shafi/Hanafi), JAKIM, MoRA, Gulf, and Manual. Selecting "Manual" unlocks the <Bold>Fajr/Isha Angle</Bold> fields, allowing you to define precise twilight angles (e.g. 18° or 19.5°) matching your local scholars.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Madhab (Asr School):</Bold> Choose between <Bold>Standard (Shafi/Maliki/Hanbali)</Bold> and <Bold>Hanafi</Bold>. <Italic>Why it's needed:</Italic> In Shafi, Asr starts when an object's shadow equals its height plus shadow at noon. In Hanafi, it starts when the shadow reaches double the height, pushing Asr roughly 45–60 minutes later.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>High Latitude Rule:</Bold> Custom rules for regions far from the equator (above 48° North/South) where astronomical twilight never fully fades during midsummer, causing Fajr/Isha calculations to fail. Options adjust angles automatically to partition the night (e.g. Middle of Night, One-Seventh, Angle-Based).
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Hijri Adjustment:</Bold> A dropdown to offset the lunar Islamic calendar by <Bold>-2, -1, 0, +1, or +2 days</Bold> to match local physical crescent moon sightings.
                                     </TextBlock>
@@ -1110,43 +1261,43 @@
                                 <!-- CATEGORY 2: SPIRITUAL TRACKER -->
                                 <TextBlock Text="📊 2. Tracker, Deeds, &amp; Auto-Backups" FontWeight="Bold" FontSize="13" Foreground="#60a5fa" Margin="0,8,0,4"/>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Enable Spiritual Tracker:</Bold> Main toggle to activate your prayer progress logging tab. Tracking prayers helps keep you motivated and accountable.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Good Deeds Popup:</Bold> Automatically triggers a tiny checklist box (e.g. Dhikr, Charity, Qur'an reading) a custom number of minutes (offset) after your prayer is finished. It helps turn small spiritual habits into automatic daily routines.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Daily Spiritual Summary Popup:</Bold> Prompts you at a custom designated hour (e.g. 10:30 PM) showing a beautiful, glassmorphic summary of all prayers offered and deeds performed during the day before you go to bed.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Auto-Backups:</Bold> Scheduled intervals (Disabled, Daily, Weekly, Monthly) along with a folder browser. Periodically zips and archives all your spiritual logs, checklists, and counters securely on your PC, so you never lose your history.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Monthly Report Card:</Bold> Tap the <Bold>Card</Bold> button at the top of the Tracker to instantly generate a premium shareable image (1080×1920 portrait) summarising your prayer completion rate, total counts, per-prayer breakdown bars, and a QR code. Save the file to your device or share it directly.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Cloud Sync (Google Account):</Bold> Enable Cloud Sync and sign in with your Google account to securely push your tracker, tasbih, Ramadan, and cycle data to Firebase cloud storage. Your data is stored under your unique Google UID, completely private from other users. Tap <Bold>Sync</Bold> in the Tracker tab or <Bold>Sync Now</Bold> in Settings to upload. Sign out at any time to disconnect.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Global Leaderboard &amp; Hall of Fame:</Bold> After syncing, your monthly prayer statistics automatically appear on the shared Global Leaderboard in the Tracker tab. Rankings are sorted by completion rate and total prayers. The top three users earn medal icons (🥇🥈🥉). The <Bold>Hall of Fame</Bold> sub-tab permanently records the previous months' top three champions. Enable <Bold>Anonymous Mode</Bold> in Tracker settings if you prefer to appear as "Anonymous" on the board.
                                     </TextBlock>
@@ -1155,25 +1306,25 @@
                                 <!-- CATEGORY 3: REMINDERS & AUDIO -->
                                 <TextBlock Text="🔔 3. Audio, Alerts, &amp; Adhan Personalization" FontWeight="Bold" FontSize="13" Foreground="#60a5fa" Margin="0,8,0,4"/>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Independent Adhan Toggles &amp; Presets:</Bold> Toggle audio notifications for Fajr, Dhuhr, Asr, Maghrib, Isha, or Tahajjud individually. Select built-in recordings (Makkah, Madinah, Alafasy, Nasser Al-Qatami, Mohammad Al-Menshawy) or upload custom MP3/WAV tracks. Fajr has a separate track option to allow playing the specialized Adhan containing <Italic>"As-salatu khayrun minan-nawm"</Italic> (Prayer is better than sleep).
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Interactive Adhan Notification Window:</Bold> When enabled, a beautiful translucent alert pops up when prayer time enters, showcasing the current prayer, timing range, congregation time, and a helpful **Mute** button to stop the audio instantly without closing the notification itself.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Pre-Adhan Offset Reminders:</Bold> Alerts you a custom amount of minutes before (e.g. 10 or 15 mins prior) via a native Windows toast notification to help you step away from work, perform wudu, and prepare for prayer peacefully.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Congregation (Jamaat) Times &amp; established Reminders:</Bold> Save the congregation times of your local mosque. Toggling this displays a dynamic countdown alert prior to Jamaat start so you can make it to congregation on time.
                                     </TextBlock>
@@ -1182,31 +1333,31 @@
                                 <!-- CATEGORY 4: THEME & WINDOWS -->
                                 <TextBlock Text="🎨 4. Layout, Themes, Interface &amp; Customization" FontWeight="Bold" FontSize="13" Foreground="#60a5fa" Margin="0,8,0,4"/>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Floating Overlay Widget:</Bold> Displays a translucent glassmorphic widget showing the current prayer name and a live countdown timer. Double-click to toggle, click and drag to place anywhere on your screen. Widget coordinate positions are saved automatically across restarts.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Taskbar Timer &amp; Styles:</Bold> Embeds a live countdown timer directly on your Windows taskbar. Choose between <Bold>Enhanced</Bold> (floating borderless text positioned right next to your tray area), <Bold>Integrated</Bold> (blends right into the center taskbar layout of Windows 11), or legacy <Bold>DeskBand</Bold>. You can choose 4 alignment offsets (Left of Tray, Right of Tray, Center, Left Near Start).
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Startup Options:</Bold> Toggle <Bold>Run on Windows Startup</Bold> to launch the app automatically. Enable <Bold>Run Silently on Startup</Bold> to start the app directly minimized to the system tray (keeping your screen clutter-free).
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Interface Language &amp; Font Size Scaling:</Bold> Select one of 8 global interface languages. Scale the entire application interface smoothly using the <Bold>A−</Bold>, <Bold>A○ (Reset)</Bold>, and <Bold>A+</Bold> buttons.
                                     </TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="#10b981" FontSize="12"/></BulletDecorator.Bullet>
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>HEX Colors &amp; Gradients:</Bold> Inputs for Gradient Start/End, Primary Accent, and Secondary Accent. Click the native <Bold>Pick</Bold> button to open a system color dialog to choose colors visually. Click "Reset to Default Colors" to instantly reload the premium dark green theme.
                                     </TextBlock>
@@ -1217,30 +1368,22 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.5.1" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.7.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>In-App Support Contact Form:</Bold> Send suggestions or bug reports to the developer directly from the Settings Support tab (requires cloud sign-in for secure messaging).</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Suhur &amp; Iftar Alarms:</Bold> Enable independent Suhur and Iftar warning countdown timers. Choose between visual popup overlays and keyblocking fullscreen notifications with custom trigger offsets (5 to 30 minutes).</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Global Leaderboard &amp; Hall of Fame:</Bold> All signed-in users now compete on a shared Monthly Leaderboard inside the Tracker tab, sorted by completion rate. Medal icons crown the top three. A permanent Hall of Fame preserves each month's champions forever.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Dynamic UI Colors &amp; Styling:</Bold> Swapped all hardcoded primary/secondary brush values with live dynamic resources, updating your entire workspace palette instantly as you save settings.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Google Sign-In via In-App Browser:</Bold> Signing in with Google now opens a secure in-app window powered by WebView2 — no external browser tab is ever opened. The sign-in flow completes automatically and closes itself.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Modern Switch Toggles:</Bold> Upgraded all checkboxes in Settings to premium pill-shaped sliding toggle switches with active state indicators.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Monthly Report Card:</Bold> Tap the Card button in the Tracker header to generate a beautiful 1080×1920 portrait image of your monthly prayer stats — complete with a QR code — ready to save or share.</TextBlock>
-                                </BulletDecorator>
-                                <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Cloud Sync Error Visibility:</Bold> Sync failures are now shown as clear error popups instead of silent no-ops. All cloud errors are also written to the built-in app_log.txt diagnostic log for easy troubleshooting.</TextBlock>
-                                </BulletDecorator>
-                                <BulletDecorator Margin="0,2,0,2">
-                                    <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Premium Button Styles:</Bold> The Sync and Card buttons in the Tracker now feature a glassmorphic dark-glass look with hover/press glow effects matching the rest of the app's premium aesthetic.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Tray Menu UI Alignment:</Bold> Fixed vertical alignment offset on the tray taskbar context menu items by normalizing icon bounding dimensions.</TextBlock>
                                 </BulletDecorator>
                             </StackPanel>
                         </Border>
@@ -1264,7 +1407,7 @@
                                         <ComboBoxItem Content="Audio Notification Logs (audio_log.txt)" Tag="audio_log.txt"/>
                                     </ComboBox>
                                     <Button Grid.Column="1" Content="🔄 Refresh" Click="RefreshLogs_Click" Margin="8,0,0,0" Padding="12,5" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Cursor="Hand"/>
-                                    <Button Grid.Column="2" Content="📋 Copy Logs" Click="CopyLogs_Click" Margin="8,0,0,0" Padding="12,5" Background="#10b981" Foreground="White" BorderThickness="0" Cursor="Hand">
+                                    <Button Grid.Column="2" Content="📋 Copy Logs" Click="CopyLogs_Click" Margin="8,0,0,0" Padding="12,5" Background="{DynamicResource ThemePrimaryBrush}" Foreground="White" BorderThickness="0" Cursor="Hand">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="4"/>

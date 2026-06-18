@@ -19,10 +19,31 @@ namespace DailyPrayerTime.Native
             _targetTime = targetTime;
             _isEscable = isEscable;
 
-            PrayerNameText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_Label"), prayerName);
+            bool isSuhur = prayerName == LocalizationManager.Instance.GetString("Label_SuhurEnds") || prayerName == "Suhur Ends" || prayerName.Contains("Suhur") || prayerName.Contains("Sehri");
+            bool isIftar = prayerName == LocalizationManager.Instance.GetString("Label_IftarBegins") || prayerName == "Iftar Begins" || prayerName.Contains("Iftar");
+
+            if (isSuhur || isIftar)
+            {
+                PrayerNameText.Text = prayerName;
+            }
+            else
+            {
+                PrayerNameText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_Label"), prayerName);
+            }
             
             string timeFmt = SettingsManager.Current.TimeFormat == "24h" ? "HH:mm" : "hh:mm tt";
-            TargetTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_StartsAt"), targetTime.ToString(timeFmt));
+            if (isSuhur)
+            {
+                TargetTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Label_EndsAt") ?? "Ends at {0}", targetTime.ToString(timeFmt));
+            }
+            else if (isIftar)
+            {
+                TargetTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Label_BeginsAt") ?? "Begins at {0}", targetTime.ToString(timeFmt));
+            }
+            else
+            {
+                TargetTimeText.Text = string.Format(LocalizationManager.Instance.GetString("Jamaat_StartsAt"), targetTime.ToString(timeFmt));
+            }
             
             // Format time range display
             if (!string.IsNullOrEmpty(prayerRange))

@@ -57,6 +57,8 @@ namespace DailyPrayerTime.Native
         private Prayer _lastDeedPopupPrayer = Prayer.NONE;
         private string _lastDeedPopupDate = "";
         private string _lastSummaryPopupDate = "";
+        private string _lastSuhurAlarmDate = "";
+        private string _lastIftarAlarmDate = "";
         private Prayer _lastPreAdhanNotificationID = Prayer.NONE;
         private string _lastShuruqWarningDate = "";
         private string _lastSunriseNotificationDate = "";
@@ -69,6 +71,8 @@ namespace DailyPrayerTime.Native
         private bool _isFastingNoteExpanded = false;
         private bool _isTrackerMode = false;
         private DailyDeeds _currentDeeds;
+        internal DateTime? _autoDndEndTime = null;
+        internal bool _isAutoDndActive = false;
 
         private bool IsWindows11 => Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000;
 
@@ -95,6 +99,12 @@ namespace DailyPrayerTime.Native
             ManageOverlay();
             ManageIntegratedTaskbar();
             ManageEnhancedTaskbar();
+
+            // Initialize volume state based on DND settings
+            if (SettingsManager.Current.DndModeEnabled)
+            {
+                Helpers.VolumeHelper.SetMute(true);
+            }
 
             // Refresh AutoStart registry path in case the app was moved (Portable Mode support)
             if (SettingsManager.Current.AutoStart)
@@ -185,6 +195,18 @@ namespace DailyPrayerTime.Native
                     if (response.IsSuccessStatusCode)
                     {
                         string json = await response.Content.ReadAsStringAsync();
+                        string trimmed = json.TrimStart();
+                        if (trimmed.StartsWith("<"))
+                        {
+                            AppLogger.Log("CheckApiNoticeAsync: Received HTML response instead of JSON. (Likely captive portal or server error)");
+                            return;
+                        }
+                        if (!trimmed.StartsWith("{"))
+                        {
+                            AppLogger.Log("CheckApiNoticeAsync: Received invalid non-JSON response.");
+                            return;
+                        }
+
                         apiResponse = JsonSerializer.Deserialize<NoticeApiResponse>(json);
                         
                         s.CachedNoticeResponseJson = json;
@@ -285,6 +307,18 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
+            var dndItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_DNDMode"));
+            dndItem.CheckOnClick = true;
+            dndItem.Checked = SettingsManager.Current.DndModeEnabled;
+            dndItem.Click += (s, e) => {
+                SettingsManager.Current.DndModeEnabled = dndItem.Checked;
+                SettingsManager.Save();
+                Helpers.VolumeHelper.SetMute(dndItem.Checked);
+                _isAutoDndActive = false;
+                _autoDndEndTime = null;
+            };
+            cms.Items.Add(dndItem);
+
             var taskbarTimerItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_ShowTaskbarTimer"));
             taskbarTimerItem.CheckOnClick = true;
             taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
@@ -320,6 +354,7 @@ namespace DailyPrayerTime.Native
             // Ensure checkmarks and labels stay in sync when menu opens
             cms.Opening += (s, e) => {
                 overlayItem.Checked = SettingsManager.Current.ShowOverlay;
+                dndItem.Checked = SettingsManager.Current.DndModeEnabled;
                 taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
             };
 
@@ -721,18 +756,7 @@ namespace DailyPrayerTime.Native
             var s = SettingsManager.Current;
             HeroLocationText.Text = s.LocationName;
             
-            var primaryBrush = new SolidColorBrush((WColor)WColorConverter.ConvertFromString(s.PrimaryColor));
-            
-            // Hero section background
-            HeroBorder.Background = primaryBrush;
-
-            try 
-            {
-                var mainBrush = (LinearGradientBrush)this.Resources["MainGradient"];
-                mainBrush.GradientStops[0].Color = (WColor)WColorConverter.ConvertFromString(s.GradientStart);
-                mainBrush.GradientStops[1].Color = (WColor)WColorConverter.ConvertFromString(s.GradientEnd);
-            } 
-            catch (Exception) { /* Invalid color format */ }
+            DailyPrayerTime.Native.Helpers.ThemeHelper.ApplyTheme();
 
             // Refresh basmala translation any time settings (language) change
             InitBasmalaHeader();
@@ -1125,10 +1149,44 @@ namespace DailyPrayerTime.Native
             CheckTahajjudStartSound(now);
             CheckProhibitedTimes();
             CheckAndShowJamaatAlarm();
+            CheckAndShowSuhurIftarAlarms(now);
             CheckAndPlayAdhanAlarm(currentPrayer);
             CheckTahajjudAdhanAlarm(now);
             CheckAutoBackup(now);
             CheckEidTakbeer(now);
+            CheckAutoDndExpiration(now);
+        }
+
+        private void ActivateAutoDnd()
+        {
+            var s = SettingsManager.Current;
+            if (s.DndModeEnabled) return; // Already in DND/mute
+
+            s.DndModeEnabled = true;
+            SettingsManager.Save();
+            Helpers.VolumeHelper.SetMute(true);
+
+            _isAutoDndActive = true;
+            _autoDndEndTime = DateTime.Now.AddMinutes(s.DndDurationMinutes);
+            AppLogger.Log($"Auto-DND activated. Volume muted for {s.DndDurationMinutes} minutes.");
+        }
+
+        private void CheckAutoDndExpiration(DateTime now)
+        {
+            if (_isAutoDndActive && _autoDndEndTime.HasValue && now >= _autoDndEndTime.Value)
+            {
+                var s = SettingsManager.Current;
+                _isAutoDndActive = false;
+                _autoDndEndTime = null;
+
+                if (s.DndModeEnabled)
+                {
+                    s.DndModeEnabled = false;
+                    SettingsManager.Save();
+                    Helpers.VolumeHelper.SetMute(false);
+                    AppLogger.Log("Auto-DND expired. Volume unmuted.");
+                }
+            }
         }
 
         private void CheckAutoBackup(DateTime now)
@@ -1220,6 +1278,12 @@ namespace DailyPrayerTime.Native
                 if (s.PrayerSoundEnabled)
                 {
                     NotificationSoundService.PlayPrayerSound(currentPrayer, "start");
+                }
+
+                // Trigger DND auto-mute
+                if (s.AutoDndOnPrayer)
+                {
+                    ActivateAutoDnd();
                 }
 
                 _lastStartNotificationPrayer = currentPrayer;
@@ -1565,6 +1629,59 @@ namespace DailyPrayerTime.Native
                 return true;
             }
             return false;
+        }
+
+        private void CheckAndShowSuhurIftarAlarms(DateTime now)
+        {
+            if (_todayPrayerTimes == null) return;
+
+            var s = SettingsManager.Current;
+            string today = now.ToString("yyyy-MM-dd");
+
+            // 1. Suhur Alarm
+            if (s.SuhurAlarmEnabled && _lastSuhurAlarmDate != today)
+            {
+                DateTime suhurTime = _todayPrayerTimes.Suhur;
+                DateTime triggerTime = suhurTime.AddMinutes(-s.SuhurAlarmOffset);
+
+                if (now >= triggerTime && now < suhurTime)
+                {
+                    _lastSuhurAlarmDate = today;
+                    ShowSuhurIftarAlarm(LocalizationManager.Instance.GetString("Label_SuhurEnds") ?? "Suhur Ends", suhurTime, s.SuhurAlarmMode);
+                }
+            }
+
+            // 2. Iftar Alarm
+            if (s.IftarAlarmEnabled && _lastIftarAlarmDate != today)
+            {
+                DateTime iftarTime = _todayPrayerTimes.Iftar;
+                DateTime triggerTime = iftarTime.AddMinutes(-s.IftarAlarmOffset);
+
+                if (now >= triggerTime && now < iftarTime)
+                {
+                    _lastIftarAlarmDate = today;
+                    ShowSuhurIftarAlarm(LocalizationManager.Instance.GetString("Label_IftarBegins") ?? "Iftar Begins", iftarTime, s.IftarAlarmMode);
+                }
+            }
+        }
+
+        private void ShowSuhurIftarAlarm(string name, DateTime targetTime, string mode)
+        {
+            if (_activeJamaatPopup != null)
+            {
+                try { _activeJamaatPopup.Close(); } catch { }
+            }
+
+            if (mode == "FullScreen")
+            {
+                _activeJamaatPopup = new CongregationTimerFullScreenWindow(name, targetTime, true, "");
+            }
+            else
+            {
+                _activeJamaatPopup = new CongregationTimerPopup(name, targetTime);
+            }
+
+            _activeJamaatPopup.Show();
         }
 
         private void CheckAndShowDeedPopup(Prayer p, DateTime now, AppSettings s)

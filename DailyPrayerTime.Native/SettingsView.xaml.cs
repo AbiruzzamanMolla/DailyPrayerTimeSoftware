@@ -219,6 +219,13 @@ namespace DailyPrayerTime.Native
             PrimaryColorInput.Text = s.PrimaryColor;
             SecondaryColorInput.Text = s.SecondaryColor;
 
+            SuhurAlarmEnabledInput.IsChecked = s.SuhurAlarmEnabled;
+            IftarAlarmEnabledInput.IsChecked = s.IftarAlarmEnabled;
+            SelectComboBoxItemByTag(SuhurAlarmOffsetInput, s.SuhurAlarmOffset.ToString());
+            SelectComboBoxItemByTag(IftarAlarmOffsetInput, s.IftarAlarmOffset.ToString());
+            SelectComboBoxItemByTag(SuhurAlarmModeInput, s.SuhurAlarmMode);
+            SelectComboBoxItemByTag(IftarAlarmModeInput, s.IftarAlarmMode);
+
             AutoStartInput.IsChecked = s.AutoStart;
             SilentStartInput.IsChecked = s.SilentStart;
             SilentStartInput.IsEnabled = s.AutoStart;
@@ -336,6 +343,8 @@ namespace DailyPrayerTime.Native
             }
             
             PrayerSoundEnabledInput.IsChecked = s.PrayerSoundEnabled;
+            AutoDndOnPrayerInput.IsChecked = s.AutoDndOnPrayer;
+            DndDurationMinutesInput.Text = s.DndDurationMinutes.ToString();
             if (PrayerSoundLanguageInput.ItemsSource is List<SoundLanguage> soundLangs)
             {
                 var selected = soundLangs.FirstOrDefault(l => l.Code == s.PrayerSoundLanguage) ?? soundLangs.FirstOrDefault();
@@ -520,6 +529,25 @@ namespace DailyPrayerTime.Native
             s.PrimaryColor = PrimaryColorInput.Text;
             s.SecondaryColor = SecondaryColorInput.Text;
 
+            s.SuhurAlarmEnabled = SuhurAlarmEnabledInput.IsChecked ?? false;
+            s.IftarAlarmEnabled = IftarAlarmEnabledInput.IsChecked ?? false;
+            if (SuhurAlarmOffsetInput.SelectedItem is ComboBoxItem suhurOffsetItem && int.TryParse(suhurOffsetItem.Tag?.ToString(), out int suhurOffset))
+            {
+                s.SuhurAlarmOffset = suhurOffset;
+            }
+            if (IftarAlarmOffsetInput.SelectedItem is ComboBoxItem iftarOffsetItem && int.TryParse(iftarOffsetItem.Tag?.ToString(), out int iftarOffset))
+            {
+                s.IftarAlarmOffset = iftarOffset;
+            }
+            if (SuhurAlarmModeInput.SelectedItem is ComboBoxItem suhurModeItem)
+            {
+                s.SuhurAlarmMode = suhurModeItem.Tag?.ToString() ?? "Popup";
+            }
+            if (IftarAlarmModeInput.SelectedItem is ComboBoxItem iftarModeItem)
+            {
+                s.IftarAlarmMode = iftarModeItem.Tag?.ToString() ?? "Popup";
+            }
+
             s.AutoStart = AutoStartInput.IsChecked ?? false;
             s.SilentStart = SilentStartInput.IsChecked ?? false;
             s.AutoInstallUpdates = AutoInstallUpdatesInput.IsChecked ?? false;
@@ -607,12 +635,15 @@ namespace DailyPrayerTime.Native
             }
 
             s.PrayerSoundEnabled = PrayerSoundEnabledInput.IsChecked ?? true;
+            s.AutoDndOnPrayer = AutoDndOnPrayerInput.IsChecked ?? false;
+            if (int.TryParse(DndDurationMinutesInput.Text, out int dndDuration)) s.DndDurationMinutes = dndDuration;
             if (PrayerSoundLanguageInput.SelectedItem is SoundLanguage soundLang)
             {
                 s.PrayerSoundLanguage = soundLang.Code;
             }
 
             SettingsManager.Save();
+            DailyPrayerTime.Native.Helpers.ThemeHelper.ApplyTheme();
             OnCloseRequested?.Invoke(true);
         }
 
@@ -1317,6 +1348,19 @@ namespace DailyPrayerTime.Native
             {
                 ContactSendBtn.IsEnabled = true;
                 ContactSendBtn.Content = LocalizationManager.Instance.GetString("ContactUs_Send");
+            }
+        }
+
+        private void SelectComboBoxItemByTag(ComboBox comboBox, string tag)
+        {
+            if (comboBox == null || tag == null) return;
+            for (int i = 0; i < comboBox.Items.Count; i++)
+            {
+                if ((comboBox.Items[i] as ComboBoxItem)?.Tag?.ToString() == tag)
+                {
+                    comboBox.SelectedIndex = i;
+                    break;
+                }
             }
         }
     }

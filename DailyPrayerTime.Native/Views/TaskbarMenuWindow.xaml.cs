@@ -39,7 +39,8 @@ namespace DailyPrayerTime.Native.Views
             _timer.Tick += (s, e) => UpdateCountdown();
             _timer.Start();
 
-            PositionWindow();
+            this.Loaded += (s, e) => PositionWindow();
+            UpdateDndVisuals();
         }
 
         private void LoadLocalizedStrings()
@@ -241,7 +242,7 @@ namespace DailyPrayerTime.Native.Views
             if (targetBorder != null)
             {
                 // Translucent theme green background highlight
-                targetBorder.Background = new SolidColorBrush(Color.FromArgb(40, 52, 211, 153)); // 15% opacity of #34D399
+                targetBorder.Background = (Brush)Application.Current.Resources["ThemeSecondaryTranslucentBrush"];
                 
                 // Show relative countdown inside list row if possible
                 var nextResult = GetNextPrayerInfo(DateTime.Now);
@@ -337,6 +338,35 @@ namespace DailyPrayerTime.Native.Views
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void UpdateDndVisuals()
+        {
+            if (SettingsManager.Current.DndModeEnabled)
+            {
+                DndIcon.Text = "🔇";
+                DndText.Opacity = 1.0;
+                DndText.Foreground = (Brush)Application.Current.Resources["ThemeSecondaryBrush"];
+            }
+            else
+            {
+                DndIcon.Text = "🔊";
+                DndText.Opacity = 0.75;
+                DndText.Foreground = Brushes.White;
+            }
+        }
+
+        private void DndToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var s = SettingsManager.Current;
+            s.DndModeEnabled = !s.DndModeEnabled;
+            SettingsManager.Save();
+            Helpers.VolumeHelper.SetMute(s.DndModeEnabled);
+            
+            _mainWindow._isAutoDndActive = false;
+            _mainWindow._autoDndEndTime = null;
+
+            UpdateDndVisuals();
         }
 
         protected override void OnClosed(EventArgs e)
