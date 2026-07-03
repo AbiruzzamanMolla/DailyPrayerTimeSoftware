@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-07-03
+
+### Added
+
+- **Dhikr & Durood Reminder System**: Introduced periodic background reminders that play audio files at user-specified intervals. Includes automatic download of default pronunciation assets.
+- **Dynamic Multi-Selectable Dhikr Sounds**: Fully customized the Dhikr reminder settings to scan the local `Assets/Dhikr` directory at runtime. Users can toggle which specific tasbih sounds they want to play using CheckBoxes in Settings. Plays a random audio file from the checked selections.
+- **Durood Custom File Selection**: Supported browsing and selecting custom Durood audio files (.mp3/.wav), with fallback to the default short Durood audio.
+- **Do Not Disturb (DND) Mute Integration**: Ensured both reminders respect the application DND state and refrain from playing sounds when DND is enabled.
+
 ## [2.7.0] - 2026-06-18
 
 ### Added

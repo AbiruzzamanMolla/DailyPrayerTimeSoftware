@@ -154,6 +154,14 @@ namespace DailyPrayerTime.Native
 
         // Auto Updates
         public bool AutoInstallUpdates { get; set; } = false;
+
+        // Dhikr & Durood Settings
+        public bool DhikrReminderEnabled { get; set; } = false;
+        public int DhikrIntervalMinutes { get; set; } = 15;
+        public bool DuroodReminderEnabled { get; set; } = false;
+        public int DuroodIntervalMinutes { get; set; } = 15;
+        public string DuroodSoundPath { get; set; } = "";
+        public string DhikrSelectedFiles { get; set; } = "";
     }
 
     public static class SettingsManager

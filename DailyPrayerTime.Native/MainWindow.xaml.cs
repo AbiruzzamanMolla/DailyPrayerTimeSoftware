@@ -74,6 +74,10 @@ namespace DailyPrayerTime.Native
         internal DateTime? _autoDndEndTime = null;
         internal bool _isAutoDndActive = false;
 
+        private DateTime _lastDhikrTime = DateTime.MinValue;
+        private DateTime _lastDuroodTime = DateTime.MinValue;
+        private MediaPlayer _dhikrPlayer = new MediaPlayer();
+
         private bool IsWindows11 => Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= 22000;
 
         public MainWindow()
@@ -94,6 +98,7 @@ namespace DailyPrayerTime.Native
             SetupTrayIcon();
             _ = CalculatePrayerTimes();
             Task.Run(async () => await DownloadDefaultAdhan());
+            Task.Run(async () => await DownloadDefaultDhikrAndDuroodAssets());
             _ = CheckForUpdates();
             _ = CheckApiNoticeAsync();
             ManageOverlay();
@@ -1141,6 +1146,8 @@ namespace DailyPrayerTime.Native
                 _lastJamaatPopupPrayer = currentPrayer;
                 var nextResult = GetNextPrayerInfo(now);
                 _lastPreAdhanNotificationID = nextResult.nextPrayer;
+                _lastDhikrTime = now;
+                _lastDuroodTime = now;
                 _isFirstBoot = false;
             }
 
@@ -1155,6 +1162,7 @@ namespace DailyPrayerTime.Native
             CheckAutoBackup(now);
             CheckEidTakbeer(now);
             CheckAutoDndExpiration(now);
+            CheckDhikrAndDuroodReminders(now);
         }
 
         private void ActivateAutoDnd()
@@ -2951,6 +2959,218 @@ namespace DailyPrayerTime.Native
                 {
                     int done = deeds.Count(d => d.IsChecked);
                     HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
+                }
+            }
+        }
+
+        private void CheckDhikrAndDuroodReminders(DateTime now)
+        {
+            var s = SettingsManager.Current;
+
+            // 1. Dhikr Reminder Check
+            if (s.DhikrReminderEnabled)
+            {
+                if (_lastDhikrTime == DateTime.MinValue)
+                {
+                    _lastDhikrTime = now;
+                }
+                else
+                {
+                    TimeSpan elapsed = now - _lastDhikrTime;
+                    if (elapsed.TotalMinutes >= s.DhikrIntervalMinutes)
+                    {
+                        _lastDhikrTime = now;
+                        TriggerDhikrReminder();
+                    }
+                }
+            }
+
+            // 2. Durood Reminder Check
+            if (s.DuroodReminderEnabled)
+            {
+                if (_lastDuroodTime == DateTime.MinValue)
+                {
+                    _lastDuroodTime = now;
+                }
+                else
+                {
+                    TimeSpan elapsed = now - _lastDuroodTime;
+                    if (elapsed.TotalMinutes >= s.DuroodIntervalMinutes)
+                    {
+                        _lastDuroodTime = now;
+                        TriggerDuroodReminder();
+                    }
+                }
+            }
+        }
+
+        private void TriggerDhikrReminder()
+        {
+            var s = SettingsManager.Current;
+            if (s.DndModeEnabled) return;
+
+            string dhikrDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Dhikr");
+            if (!Directory.Exists(dhikrDir)) return;
+
+            var allFiles = Directory.GetFiles(dhikrDir, "*.mp3")
+                .Concat(Directory.GetFiles(dhikrDir, "*.wav"))
+                .ToList();
+            if (allFiles.Count == 0) return;
+
+            var selectedSet = new HashSet<string>(
+                (s.DhikrSelectedFiles ?? "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries),
+                StringComparer.OrdinalIgnoreCase
+            );
+
+            List<string> candidateFiles;
+            if (selectedSet.Count == 0)
+            {
+                candidateFiles = allFiles;
+            }
+            else
+            {
+                candidateFiles = allFiles
+                    .Where(f => selectedSet.Contains(Path.GetFileName(f)))
+                    .ToList();
+
+                if (candidateFiles.Count == 0)
+                {
+                    candidateFiles = allFiles;
+                }
+            }
+
+            var rand = new Random();
+            string selectedFile = candidateFiles[rand.Next(candidateFiles.Count)];
+            string fileName = Path.GetFileNameWithoutExtension(selectedFile).ToLower();
+
+            string phraseTitle = LocalizationManager.Instance.GetString("Dhikr_Notification_Title");
+            string phraseArabic = "";
+            string phraseText = "";
+
+            if (fileName.Contains("subhan_allah") && !fileName.Contains("alazeem") && !fileName.Contains("behamdih"))
+            {
+                phraseArabic = "سُبْحَانَ اللَّهِ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_SubhanAllah");
+            }
+            else if (fileName.Contains("subhanallah"))
+            {
+                phraseArabic = "سُبْحَانَ اللَّهِ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_SubhanAllah");
+            }
+            else if (fileName.Contains("alhamdulilah") || fileName.Contains("alhamdulillah"))
+            {
+                phraseArabic = "الْحَمْدُ لِلَّهِ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_Alhamdulillah");
+            }
+            else if (fileName.Contains("allah_akbar") || fileName.Contains("allahuakbar"))
+            {
+                phraseArabic = "اللَّهُ أَكْبَرُ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_AllahuAkbar");
+            }
+            else if (fileName.Contains("astafer_allah"))
+            {
+                phraseArabic = "أَسْتَغْفِرُ اللَّهَ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_Astaghfirullah");
+            }
+            else if (fileName.Contains("la_illah_ila_allahu") || fileName.Contains("la_illah_ila_allah"))
+            {
+                phraseArabic = "لَا إِلَٰهَ إِلَّا اللَّهُ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_LaIlahaIllaAllah");
+            }
+            else if (fileName.Contains("subhan_allah_wa_behamdih"))
+            {
+                phraseArabic = "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_SubhanAllahiWaBihamdih");
+            }
+            else if (fileName.Contains("subhan_allah_alazeem"))
+            {
+                phraseArabic = "سُبْحَانَ اللَّهِ الْعَظِيمِ";
+                phraseText = LocalizationManager.Instance.GetString("Dhikr_SubhanAllahAlAzeem");
+            }
+            else
+            {
+                phraseText = Path.GetFileNameWithoutExtension(selectedFile).Replace('_', ' ');
+            }
+
+            string displayMessage = !string.IsNullOrEmpty(phraseArabic) ? $"{phraseArabic} ({phraseText})" : phraseText;
+
+            ShowNotification(phraseTitle, displayMessage, false);
+            PlayDhikrOrDuroodSound(selectedFile);
+        }
+
+        private void TriggerDuroodReminder()
+        {
+            var s = SettingsManager.Current;
+            if (s.DndModeEnabled) return;
+
+            string path = s.DuroodSoundPath;
+            if (string.IsNullOrEmpty(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Durood", "durood_default.mp3");
+            }
+
+            if (!File.Exists(path)) return;
+
+            string phraseTitle = LocalizationManager.Instance.GetString("Durood_Notification_Title");
+            string phraseArabic = "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ";
+            string phraseText = LocalizationManager.Instance.GetString("Durood_Text");
+            string displayMessage = $"{phraseArabic}\n({phraseText})";
+
+            ShowNotification(phraseTitle, displayMessage, false);
+            PlayDhikrOrDuroodSound(path);
+        }
+
+        private void PlayDhikrOrDuroodSound(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+            try
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    _dhikrPlayer.Open(new Uri(path));
+                    _dhikrPlayer.Volume = SettingsManager.Current.AdhanVolume / 100.0;
+                    _dhikrPlayer.Play();
+                });
+            }
+            catch (Exception ex)
+            {
+                AppLogger.Log($"PlayDhikrOrDuroodSound error: {ex.Message}");
+            }
+        }
+
+        private async Task DownloadDefaultDhikrAndDuroodAssets()
+        {
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string dhikrDir = Path.Combine(baseDir, "Assets", "Dhikr");
+            string duroodDir = Path.Combine(baseDir, "Assets", "Durood");
+
+            if (!Directory.Exists(dhikrDir)) Directory.CreateDirectory(dhikrDir);
+            if (!Directory.Exists(duroodDir)) Directory.CreateDirectory(duroodDir);
+
+            var filesToDownload = new Dictionary<string, string>
+            {
+                { Path.Combine(dhikrDir, "subhanallah.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%B3%D9%8F%D8%A8%D9%8F%D8%AD%D9%8E%D8%A7%D9%86%D9%8E%20%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
+                { Path.Combine(dhikrDir, "alhamdulillah.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%92%D8%AD%D9%8E%D9%85%D9%92%D8%AF%D9%8F%20%D9%84%D9%8B%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
+                { Path.Combine(dhikrDir, "allahuakbar.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%8F%20%D8%A3%D9%8E%D9%83%D9%92%D8%A8%D9%8E%D8%B1%D9%8F&tl=ar&client=tw-ob" },
+                { Path.Combine(duroodDir, "durood_default.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%8F%D9%85%D9%91%D9%8E%20%D8%B5%D9%8E%D9%84%D9%91%D9%90%20%D9%88%D9%8E%D8%B3%D9%8E%D9%84%D9%91%D9%90%D9%85%D9%92%20%D8%B9%D9%8E%D9%84%D9%8E%D9%8A%D9%92%D9%85%D9%90%20%D9%86%D9%8E%D8%A8%D9%90%D9%8A%D9%91%D9%90%D9%86%D9%8E%D8%A7%20%D9%85%D9%8F%D8%AD%D9%8E%D9%85%D9%91%D9%8E%D8%AF%D9%90&tl=ar&client=tw-ob" }
+            };
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
+
+            foreach (var kvp in filesToDownload)
+            {
+                if (File.Exists(kvp.Key)) continue;
+
+                try
+                {
+                    var data = await client.GetByteArrayAsync(kvp.Value);
+                    await File.WriteAllBytesAsync(kvp.Key, data);
+                    Debug.WriteLine($"Downloaded: {kvp.Key}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Failed to download {kvp.Key}: {ex.Message}");
                 }
             }
         }

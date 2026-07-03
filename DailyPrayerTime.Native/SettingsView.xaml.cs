@@ -345,6 +345,13 @@ namespace DailyPrayerTime.Native
             PrayerSoundEnabledInput.IsChecked = s.PrayerSoundEnabled;
             AutoDndOnPrayerInput.IsChecked = s.AutoDndOnPrayer;
             DndDurationMinutesInput.Text = s.DndDurationMinutes.ToString();
+
+            DhikrReminderEnabledInput.IsChecked = s.DhikrReminderEnabled;
+            SelectComboBoxItemByTag(DhikrIntervalInput, s.DhikrIntervalMinutes.ToString());
+            DuroodReminderEnabledInput.IsChecked = s.DuroodReminderEnabled;
+            SelectComboBoxItemByTag(DuroodIntervalInput, s.DuroodIntervalMinutes.ToString());
+            DuroodSoundPathInput.Text = s.DuroodSoundPath;
+            PopulateDhikrCheckBoxes(s.DhikrSelectedFiles);
             if (PrayerSoundLanguageInput.ItemsSource is List<SoundLanguage> soundLangs)
             {
                 var selected = soundLangs.FirstOrDefault(l => l.Code == s.PrayerSoundLanguage) ?? soundLangs.FirstOrDefault();
@@ -637,6 +644,30 @@ namespace DailyPrayerTime.Native
             s.PrayerSoundEnabled = PrayerSoundEnabledInput.IsChecked ?? true;
             s.AutoDndOnPrayer = AutoDndOnPrayerInput.IsChecked ?? false;
             if (int.TryParse(DndDurationMinutesInput.Text, out int dndDuration)) s.DndDurationMinutes = dndDuration;
+
+            s.DhikrReminderEnabled = DhikrReminderEnabledInput.IsChecked ?? false;
+            if (DhikrIntervalInput.SelectedItem is ComboBoxItem dhikrItem && int.TryParse(dhikrItem.Tag?.ToString(), out int dhikrInterval))
+            {
+                s.DhikrIntervalMinutes = dhikrInterval;
+            }
+            var selectedDhikrs = new List<string>();
+            if (DhikrFilesPanel != null)
+            {
+                foreach (var child in DhikrFilesPanel.Children)
+                {
+                    if (child is CheckBox cb && cb.IsChecked == true && cb.Tag is string filename)
+                    {
+                        selectedDhikrs.Add(filename);
+                    }
+                }
+            }
+            s.DhikrSelectedFiles = string.Join(";", selectedDhikrs);
+            s.DuroodReminderEnabled = DuroodReminderEnabledInput.IsChecked ?? false;
+            if (DuroodIntervalInput.SelectedItem is ComboBoxItem duroodItem && int.TryParse(duroodItem.Tag?.ToString(), out int duroodInterval))
+            {
+                s.DuroodIntervalMinutes = duroodInterval;
+            }
+            s.DuroodSoundPath = DuroodSoundPathInput.Text;
             if (PrayerSoundLanguageInput.SelectedItem is SoundLanguage soundLang)
             {
                 s.PrayerSoundLanguage = soundLang.Code;
@@ -1362,6 +1393,149 @@ namespace DailyPrayerTime.Native
                     break;
                 }
             }
+        }
+
+        private void BrowseDurood_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Audio files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                DuroodSoundPathInput.Text = openFileDialog.FileName;
+            }
+        }
+
+        private void TestDurood_Click(object sender, RoutedEventArgs e)
+        {
+            string path = DuroodSoundPathInput.Text;
+            if (string.IsNullOrEmpty(path))
+            {
+                path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Durood", "durood_default.mp3");
+            }
+
+            if (!File.Exists(path))
+            {
+                System.Windows.MessageBox.Show(LocalizationManager.Instance.GetString("Msg_InvalidSoundFile"), "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                _testPlayer.Open(new Uri(path));
+                _testPlayer.Volume = AdhanVolumeInput.Value / 100.0;
+                _testPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}");
+            }
+        }
+
+        private void TestDhikr_Click(object sender, RoutedEventArgs e)
+        {
+            string dhikrDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Dhikr");
+            if (!Directory.Exists(dhikrDir))
+            {
+                System.Windows.MessageBox.Show("Dhikr directory does not exist.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var checkedFiles = new List<string>();
+            if (DhikrFilesPanel != null)
+            {
+                foreach (var child in DhikrFilesPanel.Children)
+                {
+                    if (child is CheckBox cb && cb.IsChecked == true && cb.Tag is string filename)
+                    {
+                        checkedFiles.Add(filename);
+                    }
+                }
+            }
+
+            if (checkedFiles.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Please select at least one Dhikr to test (দয়া করে টেস্ট করার জন্য অন্তত একটি যিকির সিলেক্ট করুন)।", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var rand = new Random();
+            string selectedFilename = checkedFiles[rand.Next(checkedFiles.Count)];
+            string fullPath = Path.Combine(dhikrDir, selectedFilename);
+
+            if (!File.Exists(fullPath))
+            {
+                System.Windows.MessageBox.Show("Selected audio file not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                _testPlayer.Open(new Uri(fullPath));
+                _testPlayer.Volume = AdhanVolumeInput.Value / 100.0;
+                _testPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to play sound: {ex.Message}");
+            }
+        }
+
+        private void PopulateDhikrCheckBoxes(string selectedFilesStr)
+        {
+            if (DhikrFilesPanel == null) return;
+            DhikrFilesPanel.Children.Clear();
+
+            string dhikrDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Dhikr");
+            if (!Directory.Exists(dhikrDir)) return;
+
+            var files = Directory.GetFiles(dhikrDir, "*.mp3")
+                .Concat(Directory.GetFiles(dhikrDir, "*.wav"))
+                .Select(Path.GetFileName)
+                .Where(f => !string.IsNullOrEmpty(f))
+                .ToList();
+
+            var selectedSet = new HashSet<string>(
+                (selectedFilesStr ?? "").Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries),
+                StringComparer.OrdinalIgnoreCase
+            );
+
+            bool checkAllByDefault = selectedSet.Count == 0;
+
+            foreach (var file in files)
+            {
+                if (file == null) continue;
+                var cb = new CheckBox
+                {
+                    Content = GetDhikrDisplayName(file),
+                    Tag = file,
+                    Margin = new Thickness(0, 4, 15, 4),
+                    Foreground = System.Windows.Media.Brushes.White,
+                    IsChecked = checkAllByDefault || selectedSet.Contains(file)
+                };
+                DhikrFilesPanel.Children.Add(cb);
+            }
+        }
+
+        private string GetDhikrDisplayName(string filename)
+        {
+            string clean = filename.ToLower();
+            string key = "";
+
+            if (clean.Contains("subhan_allah") && !clean.Contains("alazeem") && !clean.Contains("behamdih")) key = "Dhikr_SubhanAllah";
+            else if (clean.Contains("alhamdulilah")) key = "Dhikr_Alhamdulillah";
+            else if (clean.Contains("allah_akbar")) key = "Dhikr_AllahuAkbar";
+            else if (clean.Contains("astafer_allah")) key = "Dhikr_Astaghfirullah";
+            else if (clean.Contains("la_illah_ila_allahu") || clean.Contains("la_illah_ila_allah")) key = "Dhikr_LaIlahaIllaAllah";
+            else if (clean.Contains("subhan_allah_wa_behamdih")) key = "Dhikr_SubhanAllahiWaBihamdih";
+            else if (clean.Contains("subhan_allah_alazeem")) key = "Dhikr_SubhanAllahAlAzeem";
+
+            if (!string.IsNullOrEmpty(key))
+            {
+                string localized = LocalizationManager.Instance.GetString(key);
+                if (localized != key) return localized;
+            }
+
+            return Path.GetFileNameWithoutExtension(filename).Replace('_', ' ');
         }
     }
 }

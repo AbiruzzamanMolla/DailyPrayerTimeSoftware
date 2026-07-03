@@ -831,6 +831,67 @@
                                 </Grid>
                             </StackPanel>
                         </Border>
+
+                        <!-- Dhikr Reminder -->
+                        <Border Style="{StaticResource PremiumCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource i18n_Dhikr_Title}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="{DynamicResource i18n_Dhikr_Desc}" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                
+                                <CheckBox x:Name="DhikrReminderEnabledInput" Content="{DynamicResource i18n_Dhikr_Enable}" Foreground="White" Margin="0,4"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                    <TextBlock Text="{DynamicResource i18n_Dhikr_Interval}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" Margin="0,0,10,0" FontSize="11"/>
+                                    <ComboBox x:Name="DhikrIntervalInput" Width="150" Padding="5" Foreground="Black">
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_15}" Tag="15" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_30}" Tag="30" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_45}" Tag="45" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Hour_1}" Tag="60" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Hours_2}" Tag="120" Foreground="Black"/>
+                                    </ComboBox>
+                                    <Button Content="{DynamicResource i18n_Btn_TestDhikr}" Click="TestDhikr_Click" Margin="10,0,0,0" Padding="10,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
+                                </StackPanel>
+                                
+                                <TextBlock Text="Select Dhikr sounds to play (বাজানোর জন্য যিকির নির্বাচন করুন):" FontSize="11" Foreground="White" Opacity="0.8" Margin="0,10,0,4"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="80" Margin="0,0,0,4">
+                                    <WrapPanel x:Name="DhikrFilesPanel" Orientation="Horizontal"/>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Durood Reminder -->
+                        <Border Style="{StaticResource PremiumCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="{DynamicResource i18n_Durood_Title}" FontWeight="Bold" FontSize="14" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,4"/>
+                                <TextBlock Text="{DynamicResource i18n_Durood_Desc}" FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                
+                                <CheckBox x:Name="DuroodReminderEnabledInput" Content="{DynamicResource i18n_Durood_Enable}" Foreground="White" Margin="0,4"/>
+                                
+                                <StackPanel Orientation="Horizontal" Margin="0,8,0,8">
+                                    <TextBlock Text="{DynamicResource i18n_Durood_Interval}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" Margin="0,0,10,0" FontSize="11"/>
+                                    <ComboBox x:Name="DuroodIntervalInput" Width="150" Padding="5" Foreground="Black">
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_15}" Tag="15" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_30}" Tag="30" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Mins_45}" Tag="45" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Hour_1}" Tag="60" Foreground="Black"/>
+                                        <ComboBoxItem Content="{DynamicResource i18n_Hours_2}" Tag="120" Foreground="Black"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <TextBlock Text="{DynamicResource i18n_Durood_Sound}" FontSize="11" Foreground="White" Opacity="0.7" Margin="0,5,0,2"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="DuroodSoundPathInput" Padding="5" IsReadOnly="True" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Grid.Column="0"/>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button Content="{DynamicResource i18n_Btn_Browse}" Click="BrowseDurood_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                        <Button Content="{DynamicResource i18n_Btn_TestDurood}" Click="TestDurood_Click" Padding="10,0" Margin="5,0,0,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -1368,22 +1429,22 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.7.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.8.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Suhur &amp; Iftar Alarms:</Bold> Enable independent Suhur and Iftar warning countdown timers. Choose between visual popup overlays and keyblocking fullscreen notifications with custom trigger offsets (5 to 30 minutes).</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Dhikr &amp; Durood Reminder System:</Bold> Added background reminders playing random Dhikr (SubhanAllah, Alhamdulillah, Allahu Akbar, Astaghfirullah, La Ilaha Illallah, SubhanAllahi wa bihamdih, SubhanAllahil Azeem) and Durood sounds at configurable intervals.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Dynamic UI Colors &amp; Styling:</Bold> Swapped all hardcoded primary/secondary brush values with live dynamic resources, updating your entire workspace palette instantly as you save settings.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Multi-Selectable Dhikr Sounds:</Bold> Scans the Dhikr folder dynamically at runtime, allowing users to toggle specific sounds to play via CheckBoxes in Settings.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Modern Switch Toggles:</Bold> Upgraded all checkboxes in Settings to premium pill-shaped sliding toggle switches with active state indicators.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>DND Mute Support:</Bold> Integrated audio playback controls to automatically respect Do Not Disturb (DND) modes.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Tray Menu UI Alignment:</Bold> Fixed vertical alignment offset on the tray taskbar context menu items by normalizing icon bounding dimensions.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Custom Durood Upload:</Bold> Users can choose a custom audio file (.mp3/.wav) or use the default built-in pronunciation.</TextBlock>
                                 </BulletDecorator>
                             </StackPanel>
                         </Border>
