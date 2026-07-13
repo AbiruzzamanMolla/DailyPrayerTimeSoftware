@@ -9,12 +9,19 @@ namespace DailyPrayerTime.Native
     {
         private DispatcherTimer _timer;
         private DateTime _targetTime;
+        private DateTime _endTime;
 
         public CongregationTimerPopup(string prayerName, DateTime targetTime)
+            : this(prayerName, targetTime, targetTime)
+        {
+        }
+
+        public CongregationTimerPopup(string prayerName, DateTime targetTime, DateTime endTime)
         {
             InitializeComponent();
             FontSizeHelper.AutoScaleOnLoaded(this);
             _targetTime = targetTime;
+            _endTime = endTime;
             bool isSuhur = prayerName == LocalizationManager.Instance.GetString("Label_SuhurEnds") || prayerName == "Suhur Ends" || prayerName.Contains("Suhur") || prayerName.Contains("Sehri");
             bool isIftar = prayerName == LocalizationManager.Instance.GetString("Label_IftarBegins") || prayerName == "Iftar Begins" || prayerName.Contains("Iftar");
 
@@ -62,14 +69,22 @@ namespace DailyPrayerTime.Native
 
         private void UpdateDisplay()
         {
-            TimeSpan remaining = _targetTime - DateTime.Now;
+            DateTime now = DateTime.Now;
+            TimeSpan remaining = _targetTime - now;
             if (remaining.TotalSeconds <= 0)
             {
                 TimerText.Text = "00:00";
-                _timer.Stop();
-                return;
             }
-            TimerText.Text = $"{remaining.Minutes:D2}:{remaining.Seconds:D2}";
+            else
+            {
+                TimerText.Text = $"{remaining.Minutes:D2}:{remaining.Seconds:D2}";
+            }
+
+            if (now >= _endTime)
+            {
+                _timer.Stop();
+                this.Close();
+            }
         }
 
         private void Dismiss_Click(object sender, RoutedEventArgs e)

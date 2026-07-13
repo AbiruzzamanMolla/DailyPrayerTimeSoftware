@@ -271,6 +271,19 @@ namespace DailyPrayerTime.Native
             SetTimeToInputs(s.IshaJamaatTime, IshaHourInput, IshaMinuteInput, IshaAmPmInput, is24h);
 
             JamaatPopupOffsetInput.Text = s.JamaatPopupOffset.ToString();
+            JamaatCloseOffsetInput.Text = s.JamaatCloseOffset.ToString();
+            UseSeparateJamaatOffsetsInput.IsChecked = s.UseSeparateJamaatOffsets;
+            JamaatOffsetFajrInput.Text = s.JamaatOffsetFajr.ToString();
+            JamaatOffsetDhuhrInput.Text = s.JamaatOffsetDhuhr.ToString();
+            JamaatOffsetAsrInput.Text = s.JamaatOffsetAsr.ToString();
+            JamaatOffsetMaghribInput.Text = s.JamaatOffsetMaghrib.ToString();
+            JamaatOffsetIshaInput.Text = s.JamaatOffsetIsha.ToString();
+            JamaatEndOffsetFajrInput.Text = s.JamaatEndOffsetFajr.ToString();
+            JamaatEndOffsetDhuhrInput.Text = s.JamaatEndOffsetDhuhr.ToString();
+            JamaatEndOffsetAsrInput.Text = s.JamaatEndOffsetAsr.ToString();
+            JamaatEndOffsetMaghribInput.Text = s.JamaatEndOffsetMaghrib.ToString();
+            JamaatEndOffsetIshaInput.Text = s.JamaatEndOffsetIsha.ToString();
+            UpdateSeparateOffsetsVisibility();
 
             AdhanFajrInput.IsChecked = s.AdhanFajr;
             AdhanDhuhrInput.IsChecked = s.AdhanDhuhr;
@@ -570,6 +583,18 @@ namespace DailyPrayerTime.Native
             s.IshaJamaatTime = GetTimeFromInputs(IshaHourInput, IshaMinuteInput, IshaAmPmInput, !is24h);
 
             if (int.TryParse(JamaatPopupOffsetInput.Text, out int offset)) s.JamaatPopupOffset = offset;
+            if (int.TryParse(JamaatCloseOffsetInput.Text, out int closeOffset)) s.JamaatCloseOffset = closeOffset;
+            s.UseSeparateJamaatOffsets = UseSeparateJamaatOffsetsInput.IsChecked ?? false;
+            if (int.TryParse(JamaatOffsetFajrInput.Text, out int oFajr)) s.JamaatOffsetFajr = oFajr;
+            if (int.TryParse(JamaatOffsetDhuhrInput.Text, out int oDhuhr)) s.JamaatOffsetDhuhr = oDhuhr;
+            if (int.TryParse(JamaatOffsetAsrInput.Text, out int oAsr)) s.JamaatOffsetAsr = oAsr;
+            if (int.TryParse(JamaatOffsetMaghribInput.Text, out int oMaghrib)) s.JamaatOffsetMaghrib = oMaghrib;
+            if (int.TryParse(JamaatOffsetIshaInput.Text, out int oIsha)) s.JamaatOffsetIsha = oIsha;
+            if (int.TryParse(JamaatEndOffsetFajrInput.Text, out int eFajr)) s.JamaatEndOffsetFajr = eFajr;
+            if (int.TryParse(JamaatEndOffsetDhuhrInput.Text, out int eDhuhr)) s.JamaatEndOffsetDhuhr = eDhuhr;
+            if (int.TryParse(JamaatEndOffsetAsrInput.Text, out int eAsr)) s.JamaatEndOffsetAsr = eAsr;
+            if (int.TryParse(JamaatEndOffsetMaghribInput.Text, out int eMaghrib)) s.JamaatEndOffsetMaghrib = eMaghrib;
+            if (int.TryParse(JamaatEndOffsetIshaInput.Text, out int eIsha)) s.JamaatEndOffsetIsha = eIsha;
             
             s.AdhanSoundPath = AdhanSoundPathInput.Text;
             s.AdhanPopupEnabled = AdhanPopupEnabledInput.IsChecked ?? true;
@@ -895,6 +920,27 @@ namespace DailyPrayerTime.Native
                 .Show();
         }
 
+        private System.Collections.Generic.List<Window> _activeTestPopups = new System.Collections.Generic.List<Window>();
+        private bool _isClosingAllTestPopups = false;
+        private void CloseAllActiveTestPopups()
+        {
+            if (_isClosingAllTestPopups) return;
+            _isClosingAllTestPopups = true;
+            try
+            {
+                var popups = _activeTestPopups.ToList();
+                _activeTestPopups.Clear();
+                foreach (var win in popups)
+                {
+                    try { win.Close(); } catch { }
+                }
+            }
+            finally
+            {
+                _isClosingAllTestPopups = false;
+            }
+        }
+
         private void TestEstablished_Click(object sender, RoutedEventArgs e)
         {
             string rMode = "Popup";
@@ -904,14 +950,31 @@ namespace DailyPrayerTime.Native
             }
             bool escable = JamaatReminderEscableInput.IsChecked ?? true;
 
+            DateTime targetTime = DateTime.Now.AddMinutes(5);
+            DateTime endTime = DateTime.Now.AddMinutes(7);
+
             if (rMode == "FullScreen")
             {
-                var fullscreen = new CongregationTimerFullScreenWindow("Test Prayer", DateTime.Now.AddMinutes(5), escable, "00:00 AM - 00:00 PM");
-                fullscreen.Show();
+                CloseAllActiveTestPopups();
+                foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+                {
+                    var fullscreen = new CongregationTimerFullScreenWindow("Test Prayer", targetTime, endTime, escable, "00:00 AM - 00:00 PM");
+                    fullscreen.WindowStartupLocation = WindowStartupLocation.Manual;
+                    fullscreen.Left = screen.Bounds.Left;
+                    fullscreen.Top = screen.Bounds.Top;
+                    fullscreen.Width = screen.Bounds.Width;
+                    fullscreen.Height = screen.Bounds.Height;
+                    fullscreen.Closed += (s, args) => CloseAllActiveTestPopups();
+                    _activeTestPopups.Add(fullscreen);
+                    fullscreen.Show();
+                }
             }
             else
             {
-                var popup = new CongregationTimerPopup("Test Prayer", DateTime.Now.AddMinutes(5));
+                CloseAllActiveTestPopups();
+                var popup = new CongregationTimerPopup("Test Prayer", targetTime, endTime);
+                popup.Closed += (s, args) => CloseAllActiveTestPopups();
+                _activeTestPopups.Add(popup);
                 var parentWin = Window.GetWindow(this);
                 if (parentWin != null) popup.Owner = parentWin;
                 popup.Show();
@@ -929,6 +992,20 @@ namespace DailyPrayerTime.Native
             var selected = JamaatReminderModeInput.SelectedItem as ComboBoxItem;
             string mode = selected?.Tag?.ToString() ?? "Popup";
             JamaatReminderEscableInput.Visibility = (mode == "FullScreen") ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void UseSeparateJamaatOffsets_Changed(object sender, RoutedEventArgs e)
+        {
+            UpdateSeparateOffsetsVisibility();
+        }
+
+        private void UpdateSeparateOffsetsVisibility()
+        {
+            if (UseSeparateJamaatOffsetsInput == null || SeparateOffsetsPanel == null || JamaatPopupOffsetInput == null || JamaatCloseOffsetInput == null) return;
+            bool isChecked = UseSeparateJamaatOffsetsInput.IsChecked ?? false;
+            SeparateOffsetsPanel.Visibility = isChecked ? Visibility.Visible : Visibility.Collapsed;
+            JamaatPopupOffsetInput.IsEnabled = !isChecked;
+            JamaatCloseOffsetInput.IsEnabled = !isChecked;
         }
 
         private void TestDeedPopup_Click(object sender, RoutedEventArgs e)

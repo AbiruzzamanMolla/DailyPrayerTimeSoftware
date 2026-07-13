@@ -32,7 +32,26 @@ namespace DailyPrayerTime.Native
         private EnhancedTaskbarWindow? _enhancedTaskbarWindow;
         private Prayer _lastJamaatPopupPrayer = Prayer.NONE;
         private Forms.NotifyIcon? _notifyIcon;
-        private Window? _activeJamaatPopup;
+        private System.Collections.Generic.List<Window> _activeJamaatPopups = new System.Collections.Generic.List<Window>();
+        private bool _isClosingAllPopups = false;
+        private void CloseAllActiveJamaatPopups()
+        {
+            if (_isClosingAllPopups) return;
+            _isClosingAllPopups = true;
+            try
+            {
+                var popups = _activeJamaatPopups.ToList();
+                _activeJamaatPopups.Clear();
+                foreach (var win in popups)
+                {
+                    try { win.Close(); } catch { }
+                }
+            }
+            finally
+            {
+                _isClosingAllPopups = false;
+            }
+        }
         private Views.TaskbarMenuWindow? _activeTaskbarMenu;
         private DateTime _lastFlyoutCloseTime = DateTime.MinValue;
         
@@ -1610,6 +1629,40 @@ namespace DailyPrayerTime.Native
             ResetJamaatAlarmState(now, s);
         }
 
+        private int GetJamaatPopupOffset(Prayer p, AppSettings s)
+        {
+            if (s.UseSeparateJamaatOffsets)
+            {
+                return p switch
+                {
+                    Prayer.FAJR => s.JamaatOffsetFajr,
+                    Prayer.DHUHR => s.JamaatOffsetDhuhr,
+                    Prayer.ASR => s.JamaatOffsetAsr,
+                    Prayer.MAGHRIB => s.JamaatOffsetMaghrib,
+                    Prayer.ISHA => s.JamaatOffsetIsha,
+                    _ => s.JamaatPopupOffset
+                };
+            }
+            return s.JamaatPopupOffset;
+        }
+
+        private int GetJamaatEndOffset(Prayer p, AppSettings s)
+        {
+            if (s.UseSeparateJamaatOffsets)
+            {
+                return p switch
+                {
+                    Prayer.FAJR => s.JamaatEndOffsetFajr,
+                    Prayer.DHUHR => s.JamaatEndOffsetDhuhr,
+                    Prayer.ASR => s.JamaatEndOffsetAsr,
+                    Prayer.MAGHRIB => s.JamaatEndOffsetMaghrib,
+                    Prayer.ISHA => s.JamaatEndOffsetIsha,
+                    _ => s.JamaatCloseOffset
+                };
+            }
+            return s.JamaatCloseOffset;
+        }
+
         private bool CheckAndShowJamaatAlarm(Prayer p, DateTime now, AppSettings s)
         {
             DateTime? jamaatTime = GetJamaatTime(p, s, now);
@@ -1623,15 +1676,16 @@ namespace DailyPrayerTime.Native
             if (validatedJamaat < startTime) validatedJamaat = startTime;
             if (validatedJamaat >= endTime) validatedJamaat = endTime.AddMinutes(-1);
 
-            DateTime popupTriggerTime = validatedJamaat.AddMinutes(-s.JamaatPopupOffset);
+            DateTime popupTriggerTime = validatedJamaat.AddMinutes(-GetJamaatPopupOffset(p, s));
+            DateTime popupEndTime = validatedJamaat.AddMinutes(GetJamaatEndOffset(p, s));
 
-            if (now >= popupTriggerTime && now < validatedJamaat)
+            if (now >= popupTriggerTime && now < popupEndTime)
             {
                 if (_lastJamaatPopupPrayer != p)
                 {
                     string timeFmt = GetTimeFmt();
                     string range = GetPrayerTimeRange(p, _todayPrayerTimes, _tomorrowPrayerTimes, timeFmt);
-                    ShowJamaatPopup(FormatPrayerName(p), validatedJamaat, range);
+                    ShowJamaatPopup(FormatPrayerName(p), validatedJamaat, popupEndTime, range);
                     _lastJamaatPopupPrayer = p;
                 }
                 return true;
@@ -1675,21 +1729,30 @@ namespace DailyPrayerTime.Native
 
         private void ShowSuhurIftarAlarm(string name, DateTime targetTime, string mode)
         {
-            if (_activeJamaatPopup != null)
-            {
-                try { _activeJamaatPopup.Close(); } catch { }
-            }
+            CloseAllActiveJamaatPopups();
 
             if (mode == "FullScreen")
             {
-                _activeJamaatPopup = new CongregationTimerFullScreenWindow(name, targetTime, true, "");
+                foreach (var screen in Forms.Screen.AllScreens)
+                {
+                    var fullscreen = new CongregationTimerFullScreenWindow(name, targetTime, true, "");
+                    fullscreen.WindowStartupLocation = WindowStartupLocation.Manual;
+                    fullscreen.Left = screen.Bounds.Left;
+                    fullscreen.Top = screen.Bounds.Top;
+                    fullscreen.Width = screen.Bounds.Width;
+                    fullscreen.Height = screen.Bounds.Height;
+                    fullscreen.Closed += (sender, args) => CloseAllActiveJamaatPopups();
+                    _activeJamaatPopups.Add(fullscreen);
+                    fullscreen.Show();
+                }
             }
             else
             {
-                _activeJamaatPopup = new CongregationTimerPopup(name, targetTime);
+                var popup = new CongregationTimerPopup(name, targetTime);
+                popup.Closed += (sender, args) => CloseAllActiveJamaatPopups();
+                _activeJamaatPopups.Add(popup);
+                popup.Show();
             }
-
-            _activeJamaatPopup.Show();
         }
 
         private void CheckAndShowDeedPopup(Prayer p, DateTime now, AppSettings s)
@@ -2287,21 +2350,33 @@ namespace DailyPrayerTime.Native
             };
         }
 
-        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime, string rangeStr)
+        private void ShowJamaatPopup(string prayerName, DateTime jamaatTime, DateTime endTime, string rangeStr)
         {
-            if (_activeJamaatPopup != null) _activeJamaatPopup.Close();
+            CloseAllActiveJamaatPopups();
             
             var s = SettingsManager.Current;
             if (s.JamaatReminderMode == "FullScreen")
             {
-                _activeJamaatPopup = new CongregationTimerFullScreenWindow(prayerName, jamaatTime, s.JamaatReminderEscable, rangeStr);
+                foreach (var screen in Forms.Screen.AllScreens)
+                {
+                    var fullscreen = new CongregationTimerFullScreenWindow(prayerName, jamaatTime, endTime, s.JamaatReminderEscable, rangeStr);
+                    fullscreen.WindowStartupLocation = WindowStartupLocation.Manual;
+                    fullscreen.Left = screen.Bounds.Left;
+                    fullscreen.Top = screen.Bounds.Top;
+                    fullscreen.Width = screen.Bounds.Width;
+                    fullscreen.Height = screen.Bounds.Height;
+                    fullscreen.Closed += (sender, args) => CloseAllActiveJamaatPopups();
+                    _activeJamaatPopups.Add(fullscreen);
+                    fullscreen.Show();
+                }
             }
             else
             {
-                _activeJamaatPopup = new CongregationTimerPopup(prayerName, jamaatTime);
+                var popup = new CongregationTimerPopup(prayerName, jamaatTime, endTime);
+                popup.Closed += (sender, args) => CloseAllActiveJamaatPopups();
+                _activeJamaatPopups.Add(popup);
+                popup.Show();
             }
-            
-            _activeJamaatPopup.Show();
         }
 
         private void CheckProhibitedTimes()
@@ -2966,6 +3041,7 @@ namespace DailyPrayerTime.Native
         private void CheckDhikrAndDuroodReminders(DateTime now)
         {
             var s = SettingsManager.Current;
+            bool dhikrIsTriggering = false;
 
             // 1. Dhikr Reminder Check
             if (s.DhikrReminderEnabled)
@@ -2979,8 +3055,18 @@ namespace DailyPrayerTime.Native
                     TimeSpan elapsed = now - _lastDhikrTime;
                     if (elapsed.TotalMinutes >= s.DhikrIntervalMinutes)
                     {
-                        _lastDhikrTime = now;
-                        TriggerDhikrReminder();
+                        // Check if Durood was played very recently (within 1 minute)
+                        if (s.DuroodReminderEnabled && _lastDuroodTime != DateTime.MinValue && (now - _lastDuroodTime).TotalMinutes < 1)
+                        {
+                            // Delay Dhikr by 1 minute
+                            _lastDhikrTime = now - TimeSpan.FromMinutes(s.DhikrIntervalMinutes) + TimeSpan.FromMinutes(1);
+                        }
+                        else
+                        {
+                            _lastDhikrTime = now;
+                            TriggerDhikrReminder();
+                            dhikrIsTriggering = true;
+                        }
                     }
                 }
             }
@@ -2997,8 +3083,19 @@ namespace DailyPrayerTime.Native
                     TimeSpan elapsed = now - _lastDuroodTime;
                     if (elapsed.TotalMinutes >= s.DuroodIntervalMinutes)
                     {
-                        _lastDuroodTime = now;
-                        TriggerDuroodReminder();
+                        // Check if Dhikr is triggering now OR was played very recently (within 1 minute)
+                        bool dhikrPlayedRecently = _lastDhikrTime != DateTime.MinValue && (now - _lastDhikrTime).TotalMinutes < 1;
+
+                        if (dhikrIsTriggering || dhikrPlayedRecently)
+                        {
+                            // Delay Durood by 1 minute so they don't play simultaneously
+                            _lastDuroodTime = now - TimeSpan.FromMinutes(s.DuroodIntervalMinutes) + TimeSpan.FromMinutes(1);
+                        }
+                        else
+                        {
+                            _lastDuroodTime = now;
+                            TriggerDuroodReminder();
+                        }
                     }
                 }
             }
@@ -3149,10 +3246,10 @@ namespace DailyPrayerTime.Native
 
             var filesToDownload = new Dictionary<string, string>
             {
-                { Path.Combine(dhikrDir, "subhanallah.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%B3%D9%8F%D8%A8%D9%8F%D8%AD%D9%8E%D8%A7%D9%86%D9%8E%20%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
-                { Path.Combine(dhikrDir, "alhamdulillah.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%92%D8%AD%D9%8E%D9%85%D9%92%D8%AF%D9%8F%20%D9%84%D9%8B%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
-                { Path.Combine(dhikrDir, "allahuakbar.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%8F%20%D8%A3%D9%8E%D9%83%D9%92%D8%A8%D9%8E%D8%B1%D9%8F&tl=ar&client=tw-ob" },
-                { Path.Combine(duroodDir, "durood_default.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%8F%D9%85%D9%91%D9%8E%20%D8%B5%D9%8E%D9%84%D9%91%D9%90%20%D9%88%D9%8E%D8%B3%D9%8E%D9%84%D9%91%D9%90%D9%85%D9%92%20%D8%B9%D9%8E%D9%84%D9%8E%D9%8A%D9%92%D9%85%D9%90%20%D9%86%D9%8E%D8%A8%D9%90%D9%8A%D9%91%D9%90%D9%86%D9%8E%D8%A7%20%D9%85%D9%8F%D8%AD%D9%8E%D9%85%D9%91%D9%8E%D8%AF%D9%90&tl=ar&client=tw-ob" }
+                { Path.Combine(dhikrDir, "SUBHAN_ALLAH.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%B3%D9%8F%D8%A8%D9%8F%D8%AD%D9%8E%D8%A7%D9%86%D9%8E%20%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
+                { Path.Combine(dhikrDir, "ALHAMDULILAH.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%92%D8%AD%D9%8E%D9%85%D9%92%D8%AF%D9%8F%20%D9%84%D9%8B%D9%84%D9%91%D9%8E%D9%87%D9%90&tl=ar&client=tw-ob" },
+                { Path.Combine(dhikrDir, "ALLAH_AKBAR.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%90%20%D8%A3%D9%8E%D9%83%D9%92%D8%A8%D9%8E%D8%B1%D9%8F&tl=ar&client=tw-ob" },
+                { Path.Combine(duroodDir, "durood_default.mp3"), "https://translate.google.com/translate_tts?ie=UTF-8&q=%D8%A7%D9%84%D9%84%D9%91%D9%8E%D9%87%D9%90%D9%85%D9%91%D9%8E%20%D8%B5%D9%8E%D9%84%D9%91%D9%90%20%D9%88%D9%8E%D8%B3%D9%8E%D9%84%D9%91%D9%90%D9%85%D9%92%20%D8%B9%D9%8E%D9%84%D9%8E%D9%8A%D9%92%D9%85%D9%90%20%D9%86%D9%8E%D8%A8%D9%90%D9%8A%D9%91%D9%90%D9%86%D9%8E%D8%A7%20%D9%85%D9%8F%D8%AD%D9%8E%D9%85%D9%91%D9%8E%D8%AF%D9%90&tl=ar&client=tw-ob" }
             };
 
             using var client = new HttpClient();

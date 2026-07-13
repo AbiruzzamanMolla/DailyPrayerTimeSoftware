@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using DailyPrayerTime.Native.Services;
 using Newtonsoft.Json;
 
@@ -54,6 +55,10 @@ namespace DailyPrayerTime.Native
         private PhraseItem CurrentPhrase => _phrases[_currentIndex];
         private int CurrentCount => _counts.GetValueOrDefault(CurrentPhrase.Key, 0);
         private ObservableCollection<DuaCardItem> _duaCards = new();
+        private DispatcherTimer? _autoTimer;
+        private bool _isAutoPlaying = false;
+        private double _autoIntervalSeconds = 2.0;
+        private readonly System.Windows.Media.MediaPlayer _soundPlayer = new();
 
         public TasbihView()
         {
@@ -64,11 +69,15 @@ namespace DailyPrayerTime.Native
             _targets["AllahuAkbar"] = 34;
             _targets["LaIlahaIllallah"] = 0;
             _targets["Astaghfirullah"] = 0;
+            _targets["Durood"] = 0;
 
             BuildPhraseChips();
             SelectPhrase(0);
             SetupKeyboard();
             DuasList.ItemsSource = _duaCards;
+            _soundPlayer.MediaEnded += SoundPlayer_MediaEnded;
+            _soundPlayer.MediaFailed += SoundPlayer_MediaFailed;
+            Unloaded += (s, e) => StopAutoPlay();
         }
 
         public void LoadData()
@@ -123,6 +132,7 @@ namespace DailyPrayerTime.Native
         {
             if (index < 0 || index >= _phrases.Count) return;
             _currentIndex = index;
+            StopAutoPlay();
 
             for (int i = 0; i < PhrasePanel.Children.Count; i++)
             {
@@ -180,6 +190,7 @@ namespace DailyPrayerTime.Native
                 case "AllahuAkbar": return LocalizationManager.Instance.GetString("Tasbih_AllahuAkbar");
                 case "LaIlahaIllallah": return LocalizationManager.Instance.GetString("Tasbih_LaIlaha");
                 case "Astaghfirullah": return LocalizationManager.Instance.GetString("Tasbih_Astaghfirullah");
+                case "Durood": return LocalizationManager.Instance.GetString("Durood_Title");
                 default: return key;
             }
         }
@@ -200,12 +211,72 @@ namespace DailyPrayerTime.Native
             transform.BeginAnimation(System.Windows.Media.ScaleTransform.ScaleYProperty, anim);
         }
 
+        private bool PlayPhraseSound()
+        {
+            try
+            {
+                string key = CurrentPhrase.Key;
+                string path = "";
+                if (key == "Durood")
+                {
+                    string customPath = SettingsManager.Current.DuroodSoundPath;
+                    if (!string.IsNullOrEmpty(customPath) && File.Exists(customPath))
+                    {
+                        path = customPath;
+                    }
+                    else
+                    {
+                        path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Durood", "durood_default.mp3");
+                    }
+                }
+                else
+                {
+                    string filename;
+                    switch (key)
+                    {
+                        case "SubhanAllah": filename = "SUBHAN_ALLAH.mp3"; break;
+                        case "Alhamdulillah": filename = "ALHAMDULILAH.mp3"; break;
+                        case "AllahuAkbar": filename = "ALLAH_AKBAR.mp3"; break;
+                        case "LaIlahaIllallah": filename = "LA_ILLAH_ILA_ALLAH.mp3"; break;
+                        case "Astaghfirullah": filename = "ASTAFER_ALLAH.mp3"; break;
+                        default: filename = key.ToLower() + ".mp3"; break;
+                    }
+
+                    path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Dhikr", filename);
+                    if (!File.Exists(path))
+                    {
+                        string fallbackPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Dhikr", key.ToLower() + ".mp3");
+                        if (File.Exists(fallbackPath)) path = fallbackPath;
+                    }
+                }
+
+                if (File.Exists(path))
+                {
+                    _soundPlayer.Open(new Uri(path));
+                    _soundPlayer.Volume = SettingsManager.Current.AdhanVolume / 100.0;
+                    _soundPlayer.Play();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Tasbih play sound error: " + ex.Message);
+            }
+            return false;
+        }
+
         private void Increment()
+        {
+            IncrementAndPlay();
+        }
+
+        private bool IncrementAndPlay()
         {
             var phrase = CurrentPhrase;
             _counts[phrase.Key] = CurrentCount + 1;
             Save();
             UpdateUI();
+            return PlayPhraseSound();
         }
 
         private void TapArea_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -280,6 +351,7 @@ namespace DailyPrayerTime.Native
 
         private void SwitchToDuas(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            StopAutoPlay();
             TasbihPanel.Visibility = Visibility.Collapsed;
             DuasPanel.Visibility = Visibility.Visible;
             TabTasbih.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(26, 255, 255, 255));
@@ -361,6 +433,123 @@ namespace DailyPrayerTime.Native
         {
             if (sender is System.Windows.FrameworkElement fe && fe.DataContext is DuaCardItem item)
                 item.IsExpanded = !item.IsExpanded;
+        }
+        private void PlayOnce_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            PlayPhraseSound();
+            e.Handled = true;
+        }
+
+        private void PlayPause_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_isAutoPlaying)
+            {
+                StopAutoPlay();
+            }
+            else
+            {
+                StartAutoPlay();
+            }
+        }
+
+        private void SoundPlayer_MediaEnded(object? sender, EventArgs e)
+        {
+            if (_isAutoPlaying)
+            {
+                StartOneShotTimer();
+            }
+        }
+
+        private void SoundPlayer_MediaFailed(object? sender, System.Windows.Media.ExceptionEventArgs e)
+        {
+            if (_isAutoPlaying)
+            {
+                StartOneShotTimer();
+            }
+        }
+
+        private void StartOneShotTimer()
+        {
+            _autoTimer?.Stop();
+            if (_autoTimer == null)
+            {
+                _autoTimer = new DispatcherTimer();
+                _autoTimer.Tick += AutoTimer_Tick;
+            }
+            _autoTimer.Interval = TimeSpan.FromSeconds(_autoIntervalSeconds);
+            _autoTimer.Start();
+        }
+
+        private void TriggerNextAutoPlayStep()
+        {
+            if (!_isAutoPlaying) return;
+
+            var phrase = CurrentPhrase;
+            int target = _targets.GetValueOrDefault(phrase.Key, 0);
+            if (target > 0 && CurrentCount >= target)
+            {
+                StopAutoPlay();
+                return;
+            }
+
+            bool played = IncrementAndPlay();
+            if (!played)
+            {
+                StartOneShotTimer();
+            }
+        }
+
+        private void StartAutoPlay()
+        {
+            if (_isAutoPlaying) return;
+            _isAutoPlaying = true;
+            UpdatePlayButtonUI();
+
+            TriggerNextAutoPlayStep();
+        }
+
+        private void StopAutoPlay()
+        {
+            if (!_isAutoPlaying) return;
+            _isAutoPlaying = false;
+            _autoTimer?.Stop();
+            UpdatePlayButtonUI();
+        }
+
+        private void AutoTimer_Tick(object? sender, EventArgs e)
+        {
+            _autoTimer?.Stop();
+            TriggerNextAutoPlayStep();
+        }
+
+        private void AutoIntervalCombo_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.ComboBox combo && combo.SelectedItem is System.Windows.Controls.ComboBoxItem item)
+            {
+                if (item.Tag is string tag && double.TryParse(tag, out double sec))
+                {
+                    _autoIntervalSeconds = sec;
+                    if (_isAutoPlaying && _autoTimer != null)
+                    {
+                        _autoTimer.Interval = TimeSpan.FromSeconds(_autoIntervalSeconds);
+                    }
+                }
+            }
+        }
+
+        private void UpdatePlayButtonUI()
+        {
+            if (PlayPauseText == null || PlayPauseButton == null) return;
+            if (_isAutoPlaying)
+            {
+                PlayPauseText.Text = "⏸ Pause";
+                PlayPauseButton.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(239, 68, 68));
+            }
+            else
+            {
+                PlayPauseText.Text = "▶ Play";
+                PlayPauseButton.Background = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(16, 185, 129));
+            }
         }
     }
 

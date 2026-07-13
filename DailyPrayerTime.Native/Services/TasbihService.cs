@@ -17,6 +17,7 @@ namespace DailyPrayerTime.Native.Services
             new("AllahuAkbar", "ٱللَّٰهُ أَكْبَرُ", "Allaahu 'Akbar", "আল্লাহু আকবার"),
             new("LaIlahaIllallah", "لَا إِلَٰهَ إِلَّا ٱللَّٰهُ", "Laa 'ilaaha 'illallaah", "লা ইলাহা ইল্লাল্লাহ"),
             new("Astaghfirullah", "أَسْتَغْفِرُ ٱللَّٰهَ", "'Astaghfirullaah", "আসতাগফিরুল্লাহ"),
+            new("Durood", "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ", "Allahumma salli wa sallim 'ala nabiyyina Muhammad", "আল্লাহুম্মা সাল্লি ওয়া সাল্লামি আলা নাবিইনা মুহাম্মাদ"),
         };
 
         private string GetFilePath(DateTime date)

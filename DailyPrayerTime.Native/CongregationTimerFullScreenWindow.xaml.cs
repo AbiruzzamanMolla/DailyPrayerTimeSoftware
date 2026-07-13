@@ -10,13 +10,20 @@ namespace DailyPrayerTime.Native
     {
         private DispatcherTimer _timer;
         private DateTime _targetTime;
+        private DateTime _endTime;
         private bool _isEscable;
 
         public CongregationTimerFullScreenWindow(string prayerName, DateTime targetTime, bool isEscable, string prayerRange)
+            : this(prayerName, targetTime, targetTime, isEscable, prayerRange)
+        {
+        }
+
+        public CongregationTimerFullScreenWindow(string prayerName, DateTime targetTime, DateTime endTime, bool isEscable, string prayerRange)
         {
             InitializeComponent();
             FontSizeHelper.AutoScaleOnLoaded(this);
             _targetTime = targetTime;
+            _endTime = endTime;
             _isEscable = isEscable;
 
             bool isSuhur = prayerName == LocalizationManager.Instance.GetString("Label_SuhurEnds") || prayerName == "Suhur Ends" || prayerName.Contains("Suhur") || prayerName.Contains("Sehri");
@@ -99,15 +106,22 @@ namespace DailyPrayerTime.Native
 
         private void UpdateDisplay()
         {
-            TimeSpan remaining = _targetTime - DateTime.Now;
+            DateTime now = DateTime.Now;
+            TimeSpan remaining = _targetTime - now;
             if (remaining.TotalSeconds <= 0)
             {
                 TimerText.Text = "00:00";
+            }
+            else
+            {
+                TimerText.Text = $"{remaining.Minutes:D2}:{remaining.Seconds:D2}";
+            }
+
+            if (now >= _endTime)
+            {
                 _timer.Stop();
                 this.Close();
-                return;
             }
-            TimerText.Text = $"{remaining.Minutes:D2}:{remaining.Seconds:D2}";
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

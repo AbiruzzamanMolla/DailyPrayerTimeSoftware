@@ -570,7 +570,10 @@
   "Hour_1": "১ ঘণ্টা",
   "Hours_2": "২ ঘণ্টা",
   "Dhikr_Astaghfirullah": "আস্তাগফিরুল্লাহ",
-  "Dhikr_LaIlahaIllaAllah": "লা ইলাহা ইল্লাল্লাহ",
   "Dhikr_SubhanAllahiWaBihamdih": "সুবহানাল্লাহি ওয়া বিহামদিহি",
-  "Dhikr_SubhanAllahAlAzeem": "সুবহানাল্লাহিল আজিম"
+  "Dhikr_SubhanAllahAlAzeem": "সুবহানাল্লাহিল আজিম",
+  "UseSeparateOffsets": "প্রতিটি নামাজের জন্য আলাদা সময়সীমা নির্ধারণ করুন",
+  "SeparateOffsets_Title": "জামাতের কত মিনিট আগে ফুল স্ক্রিন নোটিফিকেশন দেখাবে:",
+  "Label_EstablishedClose": "বিজ্ঞপ্তিটি বন্ধ করুন",
+  "Established_MinutesAfter": "মিনিট পর (জামাত সময় পার হওয়ার)"
 }

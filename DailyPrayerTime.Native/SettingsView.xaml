@@ -704,17 +704,74 @@
                                 <UniformGrid Columns="3" Margin="0,0,0,8">
                                     <CheckBox x:Name="EstablishedFajrInput" Content="{DynamicResource i18n_Prayer_Fajr}" Foreground="White" Margin="0,4"/>
                                     <CheckBox x:Name="EstablishedDhuhrInput" Content="{DynamicResource i18n_Prayer_Dhuhr}" Foreground="White" Margin="0,4"/>
-                                    <CheckBox x:Name="EstablishedAsrInput" Content="{DynamicResource i18n_Prayer_Asr}" Foreground="White" Margin="0,4"/>
+                                        <CheckBox x:Name="EstablishedAsrInput" Content="{DynamicResource i18n_Prayer_Asr}" Foreground="White" Margin="0,4"/>
                                     <CheckBox x:Name="EstablishedMaghribInput" Content="{DynamicResource i18n_Prayer_Maghrib}" Foreground="White" Margin="0,4"/>
                                     <CheckBox x:Name="EstablishedIshaInput" Content="{DynamicResource i18n_Prayer_Isha}" Foreground="White" Margin="0,4"/>
                                 </UniformGrid>
-                                
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{DynamicResource i18n_Label_EstablishedShow}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
-                                    <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Margin="10,0" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
-                                    <TextBlock Text="{DynamicResource i18n_Established_MinutesBefore}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
-                                    <Button Content="{DynamicResource i18n_Test_Established}" Click="TestEstablished_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
-                                </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                     <TextBlock Text="{DynamicResource i18n_Label_EstablishedShow}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
+                                     <TextBox x:Name="JamaatPopupOffsetInput" Width="40" Margin="10,0" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                     <TextBlock Text="{DynamicResource i18n_Established_MinutesBefore}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
+                                     <Button Content="{DynamicResource i18n_Test_Established}" Click="TestEstablished_Click" Margin="20,0,0,0" Padding="10,0" Height="28" Background="#20FFFFFF" Foreground="{DynamicResource ThemeSecondaryBrush}" BorderBrush="#40FFFFFF" Cursor="Hand"/>
+                                 </StackPanel>
+
+                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                     <TextBlock Text="{DynamicResource i18n_Label_EstablishedClose}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
+                                     <TextBox x:Name="JamaatCloseOffsetInput" Width="40" Margin="10,0" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF"/>
+                                     <TextBlock Text="{DynamicResource i18n_Established_MinutesAfter}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11"/>
+                                 </StackPanel>
+
+                                 <CheckBox x:Name="UseSeparateJamaatOffsetsInput" Content="{DynamicResource i18n_UseSeparateOffsets}" Checked="UseSeparateJamaatOffsets_Changed" Unchecked="UseSeparateJamaatOffsets_Changed" Foreground="White" Margin="0,10,0,0"/>
+
+                                 <StackPanel x:Name="SeparateOffsetsPanel" Margin="0,10,0,0" Visibility="Collapsed">
+                                     <TextBlock Text="{DynamicResource i18n_SeparateOffsets_Title}" FontWeight="SemiBold" FontSize="11.5" Foreground="{DynamicResource ThemeSecondaryBrush}" Margin="0,0,0,6"/>
+                                     <Grid>
+                                         <Grid.ColumnDefinitions>
+                                             <ColumnDefinition Width="90"/>
+                                             <ColumnDefinition Width="150"/>
+                                             <ColumnDefinition Width="20"/>
+                                             <ColumnDefinition Width="150"/>
+                                         </Grid.ColumnDefinitions>
+                                         <Grid.RowDefinitions>
+                                             <RowDefinition Height="Auto"/>
+                                             <RowDefinition Height="Auto"/>
+                                             <RowDefinition Height="Auto"/>
+                                             <RowDefinition Height="Auto"/>
+                                             <RowDefinition Height="Auto"/>
+                                             <RowDefinition Height="Auto"/>
+                                         </Grid.RowDefinitions>
+
+                                         <!-- Headers -->
+                                         <TextBlock Grid.Row="0" Grid.Column="0" Text="Prayer" FontWeight="SemiBold" Foreground="White" Opacity="0.5" FontSize="10" Margin="0,0,0,4"/>
+                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Start offset (mins before)" FontWeight="SemiBold" Foreground="White" Opacity="0.5" FontSize="10" Margin="0,0,0,4"/>
+                                         <TextBlock Grid.Row="0" Grid.Column="3" Text="End offset (mins after)" FontWeight="SemiBold" Foreground="White" Opacity="0.5" FontSize="10" Margin="0,0,0,4"/>
+
+                                         <!-- Fajr -->
+                                         <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource i18n_Prayer_Fajr}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4"/>
+                                         <TextBox Grid.Row="1" Grid.Column="1" x:Name="JamaatOffsetFajrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                         <TextBox Grid.Row="1" Grid.Column="3" x:Name="JamaatEndOffsetFajrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+
+                                         <!-- Dhuhr -->
+                                         <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource i18n_Prayer_Dhuhr}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4"/>
+                                         <TextBox Grid.Row="2" Grid.Column="1" x:Name="JamaatOffsetDhuhrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                         <TextBox Grid.Row="2" Grid.Column="3" x:Name="JamaatEndOffsetDhuhrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+
+                                         <!-- Asr -->
+                                         <TextBlock Grid.Row="3" Grid.Column="0" Text="{DynamicResource i18n_Prayer_Asr}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4"/>
+                                         <TextBox Grid.Row="3" Grid.Column="1" x:Name="JamaatOffsetAsrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                         <TextBox Grid.Row="3" Grid.Column="3" x:Name="JamaatEndOffsetAsrInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+
+                                         <!-- Maghrib -->
+                                         <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource i18n_Prayer_Maghrib}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4"/>
+                                         <TextBox Grid.Row="4" Grid.Column="1" x:Name="JamaatOffsetMaghribInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                         <TextBox Grid.Row="4" Grid.Column="3" x:Name="JamaatEndOffsetMaghribInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+
+                                         <!-- Isha -->
+                                         <TextBlock Grid.Row="5" Grid.Column="0" Text="{DynamicResource i18n_Prayer_Isha}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,4"/>
+                                         <TextBox Grid.Row="5" Grid.Column="1" x:Name="JamaatOffsetIshaInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                         <TextBox Grid.Row="5" Grid.Column="3" x:Name="JamaatEndOffsetIshaInput" Width="45" Padding="4" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" HorizontalAlignment="Left" Margin="0,4"/>
+                                     </Grid>
+                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
                                     <TextBlock Text="{DynamicResource i18n_Established_Mode}" VerticalAlignment="Center" Foreground="White" Opacity="0.8" FontSize="11" Margin="0,0,10,0"/>
@@ -1429,22 +1486,22 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.8.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.9.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Dhikr &amp; Durood Reminder System:</Bold> Added background reminders playing random Dhikr (SubhanAllah, Alhamdulillah, Allahu Akbar, Astaghfirullah, La Ilaha Illallah, SubhanAllahi wa bihamdih, SubhanAllahil Azeem) and Durood sounds at configurable intervals.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Auto-Play Tasbih Counter:</Bold> Interactive autoplay with sound pronunciation and configurable interval speeds (1s to 5s), automatically pacing sounds sequentially.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Multi-Selectable Dhikr Sounds:</Bold> Scans the Dhikr folder dynamically at runtime, allowing users to toggle specific sounds to play via CheckBoxes in Settings.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Multi-Monitor Full Screen Support:</Bold> Displays congregation/Jamaat timer full-screen notifications on all connected screens simultaneously, with unified sync-close dismiss.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>DND Mute Support:</Bold> Integrated audio playback controls to automatically respect Do Not Disturb (DND) modes.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Separate Offsets per Fard Prayer:</Bold> Configure custom start (minutes before) and end (minutes after) timer ranges for Fajr, Dhuhr, Asr, Maghrib, and Isha individually in settings.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Custom Durood Upload:</Bold> Users can choose a custom audio file (.mp3/.wav) or use the default built-in pronunciation.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Durood Tasbih &amp; Asset Fixes:</Bold> Added Durood to the Tasbih counter list with custom audio playback support, and fixed duplicate asset download overlaps.</TextBlock>
                                 </BulletDecorator>
                             </StackPanel>
                         </Border>

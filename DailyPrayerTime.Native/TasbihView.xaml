@@ -31,7 +31,12 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock Text="📿" FontSize="30" HorizontalAlignment="Center" Margin="0,2,0,2"/>
                         <TextBlock x:Name="CountText" Text="0" Foreground="White" FontSize="52" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,2,0,2"/>
-                        <TextBlock x:Name="PhraseText" Text="" Foreground="#34d399" FontSize="18" FontFamily="Traditional Arabic, Segoe UI" HorizontalAlignment="Center" Margin="0,2,0,2"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,2">
+                            <TextBlock x:Name="PhraseText" Text="" Foreground="#34d399" FontSize="18" FontFamily="Traditional Arabic, Segoe UI" VerticalAlignment="Center"/>
+                            <Border Width="24" Height="24" Background="#20FFFFFF" CornerRadius="12" Margin="10,0,0,0" Cursor="Hand" MouseLeftButtonUp="PlayOnce_Click" ToolTip="Listen Pronunciation">
+                                <TextBlock Text="🔊" Foreground="White" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </StackPanel>
                         <TextBlock Text="{DynamicResource Tasbih_TapHint}" Foreground="White" Opacity="0.4" FontSize="10" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </Border>
@@ -56,6 +61,30 @@
                         <Border Grid.Column="3" Width="38" Height="38" Background="#2AFFFFFF" CornerRadius="19" Cursor="Hand" MouseLeftButtonUp="Target_Click">
                             <TextBlock x:Name="TargetText" Text="33" Foreground="#fbbf24" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Auto-Play Controls -->
+                <Border Background="#1AFFFFFF" CornerRadius="12" BorderBrush="#2AFFFFFF" BorderThickness="1" Padding="12,10" Margin="0,0,0,6">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" x:Name="PlayPauseButton" Width="80" Height="32" Background="#10B981" CornerRadius="16" Cursor="Hand" MouseLeftButtonUp="PlayPause_Click">
+                            <TextBlock x:Name="PlayPauseText" Text="▶ Play" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Interval:" Foreground="White" Opacity="0.7" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <ComboBox x:Name="AutoIntervalCombo" Width="100" Height="26" SelectionChanged="AutoIntervalCombo_SelectionChanged" Background="#20FFFFFF" Foreground="Black" FontSize="11">
+                                <ComboBoxItem Content="1 Second" Tag="1.0"/>
+                                <ComboBoxItem Content="1.5 Seconds" Tag="1.5"/>
+                                <ComboBoxItem Content="2 Seconds" Tag="2.0" IsSelected="True"/>
+                                <ComboBoxItem Content="3 Seconds" Tag="3.0"/>
+                                <ComboBoxItem Content="5 Seconds" Tag="5.0"/>
+                            </ComboBox>
+                        </StackPanel>
                     </Grid>
                 </Border>
 

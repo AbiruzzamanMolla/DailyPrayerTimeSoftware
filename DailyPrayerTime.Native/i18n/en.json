@@ -570,7 +570,10 @@
   "Hour_1": "1 Hour",
   "Hours_2": "2 Hours",
   "Dhikr_Astaghfirullah": "Astaghfirullah",
-  "Dhikr_LaIlahaIllaAllah": "La ilaha illa Allah",
   "Dhikr_SubhanAllahiWaBihamdih": "SubhanAllahi wa bihamdih",
-  "Dhikr_SubhanAllahAlAzeem": "SubhanAllah Al-Azeem"
+  "Dhikr_SubhanAllahAlAzeem": "SubhanAllah Al-Azeem",
+  "UseSeparateOffsets": "Enable separate timer settings for each prayer",
+  "SeparateOffsets_Title": "Separate Minutes Before Jamaat Notifications:",
+  "Label_EstablishedClose": "Close full screen / popup",
+  "Established_MinutesAfter": "minutes after Jamaat time has passed"
 }

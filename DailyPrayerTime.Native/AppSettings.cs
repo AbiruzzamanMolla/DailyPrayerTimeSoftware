@@ -71,6 +71,18 @@ namespace DailyPrayerTime.Native
         public string MaghribJamaatTime { get; set; } = "18:45";
         public string IshaJamaatTime { get; set; } = "20:30";
         public int JamaatPopupOffset { get; set; } = 5; // Minutes before Jamaat
+        public bool UseSeparateJamaatOffsets { get; set; } = false;
+        public int JamaatOffsetFajr { get; set; } = 5;
+        public int JamaatOffsetDhuhr { get; set; } = 5;
+        public int JamaatOffsetAsr { get; set; } = 5;
+        public int JamaatOffsetMaghrib { get; set; } = 5;
+        public int JamaatOffsetIsha { get; set; } = 5;
+        public int JamaatCloseOffset { get; set; } = 5; // Minutes after Jamaat to close
+        public int JamaatEndOffsetFajr { get; set; } = 5;
+        public int JamaatEndOffsetDhuhr { get; set; } = 5;
+        public int JamaatEndOffsetAsr { get; set; } = 5;
+        public int JamaatEndOffsetMaghrib { get; set; } = 5;
+        public int JamaatEndOffsetIsha { get; set; } = 5;
         public string JamaatReminderMode { get; set; } = "Popup"; // "Popup" or "FullScreen"
         public bool JamaatReminderEscable { get; set; } = true;
         
