@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Active Users Count View**: Added a new active user statistics card directly under the Support & Contact settings panel, with a manual refresh action.
 - **Social & Resource Links Update**: Updated the official Telegram join link and added official Facebook page and GitHub repository links under the Official Resources settings card.
 
+## [2.9.0] - 2026-07-14
+
+### Added
+
+- **Anonymous Daily Active User Tracking**: Implemented unauthenticated periodic (hourly) user pings using Firestore REST API to count daily active installations uniquely and securely without storing personal information (uses local generated `AnalyticsDeviceId` UUID).
+- **Active Users Count View**: Added a new active user statistics card directly under the Support & Contact settings panel, with a manual refresh action.
+- **Social & Resource Links Update**: Updated the official Telegram join link and added official Facebook page and GitHub repository links under the Official Resources settings card.
+
 ## [2.8.0] - 2026-07-03
 
 ### Added
