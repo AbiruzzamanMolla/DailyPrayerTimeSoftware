@@ -1176,6 +1176,26 @@
                             </StackPanel>
                         </Border>
 
+                        <!-- Active Users Today -->
+                        <Border Style="{StaticResource PremiumCardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="👥 Active Users" FontWeight="Bold" FontSize="14" Foreground="#10B981" Margin="0,0,0,8"/>
+                                <TextBlock Text="See how many users are active today using this software." FontSize="11" Foreground="White" Opacity="0.6" Margin="0,0,0,10" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,4">
+                                    <TextBlock Text="Active today:" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="ActiveUserCountText" Text="Loading..." Foreground="#34d399" FontWeight="Bold" FontSize="13" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <TextBlock x:Name="ActiveUserLastFetchText" Text="" FontSize="10" Foreground="White" Opacity="0.5" Margin="0,2,0,8"/>
+                                <Button x:Name="RefreshActiveUserBtn" Content="Refresh" Click="RefreshActiveUser_Click" Padding="12,6" Background="#20FFFFFF" Foreground="White" BorderBrush="#40FFFFFF" Cursor="Hand" FontSize="11" FontWeight="SemiBold">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+
                         <!-- Resources -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
@@ -1185,7 +1205,13 @@
                                         🌐 <Bold><Run Text="{DynamicResource Label_Website}"/>:</Bold> <Hyperlink NavigateUri="https://abiruzzamanmolla.github.io/DailyPrayerTimeSoftware/" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{DynamicResource Btn_OfficialSite}"/></Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
-                                        📢 <Bold><Run Text="{DynamicResource Label_Telegram}"/>:</Bold> <Hyperlink NavigateUri="https://t.me/dailyprayertimersoftware" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="{DynamicResource Btn_JoinChannel}"/></Hyperlink>
+                                        📢 <Bold>Telegram:</Bold> <Hyperlink NavigateUri="https://telegram.me/dailyprayertimersoftware" RequestNavigate="Hyperlink_RequestNavigate">Join Channel</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
+                                        👤 <Bold>Facebook:</Bold> <Hyperlink NavigateUri="https://www.facebook.com/dailyprayertimer/" RequestNavigate="Hyperlink_RequestNavigate">Official Page</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
+                                        💻 <Bold>Source Code:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware" RequestNavigate="Hyperlink_RequestNavigate">GitHub Repository</Hyperlink>
                                     </TextBlock>
                                 </WrapPanel>
                             </StackPanel>
@@ -1418,6 +1444,12 @@
                                     <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
                                         <Bold>Global Leaderboard &amp; Hall of Fame:</Bold> After syncing, your monthly prayer statistics automatically appear on the shared Global Leaderboard in the Tracker tab. Rankings are sorted by completion rate and total prayers. The top three users earn medal icons (🥇🥈🥉). The <Bold>Hall of Fame</Bold> sub-tab permanently records the previous months' top three champions. Enable <Bold>Anonymous Mode</Bold> in Tracker settings if you prefer to appear as "Anonymous" on the board.
+                                    </TextBlock>
+                                </BulletDecorator>
+                                <BulletDecorator Margin="0,2,0,2">
+                                    <BulletDecorator.Bullet><TextBlock Text="•" Foreground="{DynamicResource ThemePrimaryBrush}" FontSize="12"/></BulletDecorator.Bullet>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0">
+                                        <Bold>Active Users Tracking (Unauthenticated):</Bold> An anonymous daily active user count is updated every hour. A randomly generated GUID (stored locally as `AnalyticsDeviceId`) identifies unique installations without tracking your IP or personal details. Today's active count can be fetched and refreshed directly from the Support tab.
                                     </TextBlock>
                                 </BulletDecorator>
 

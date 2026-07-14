@@ -123,6 +123,7 @@ namespace DailyPrayerTime.Native
             ManageOverlay();
             ManageIntegratedTaskbar();
             ManageEnhancedTaskbar();
+            AnalyticsService.Instance.Start();
 
             // Initialize volume state based on DND settings
             if (SettingsManager.Current.DndModeEnabled)

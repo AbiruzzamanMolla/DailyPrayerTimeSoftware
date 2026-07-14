@@ -156,6 +156,11 @@ namespace DailyPrayerTime.Native
         public string? FirebaseDisplayName { get; set; }
         public string LastSyncAt { get; set; } = "";
 
+        // Analytics
+        public string AnalyticsDeviceId { get; set; } = Guid.NewGuid().ToString();
+        public int LastActiveUserCount { get; set; } = 0;
+        public string LastActiveUserFetchTime { get; set; } = "";
+
         // Cycle Tracker
         public bool CycleEnabled { get; set; } = false;
         public string SelectedCycleMadhab { get; set; } = "Sistani";

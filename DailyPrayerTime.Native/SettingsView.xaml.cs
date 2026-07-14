@@ -36,6 +36,11 @@ namespace DailyPrayerTime.Native
             // Select first tab initially
             if (SettingsTabControl != null) SettingsTabControl.SelectedIndex = 0;
             if (TabSettingsPrayer != null) TabSettingsPrayer.IsChecked = true;
+
+            AnalyticsService.Instance.UserCountUpdated += (count) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() => UpdateActiveUserUI()));
+            };
         }
 
         public void Initialize(CombinedPrayerTimes? today, CombinedPrayerTimes? tomorrow)
@@ -389,6 +394,9 @@ namespace DailyPrayerTime.Native
             // Cloud sync settings
             CloudSyncEnabledInput.IsChecked = s.CloudSyncEnabled;
             UpdateCloudSyncUI();
+
+            // Active users settings
+            UpdateActiveUserUI();
 
             PopulateHints();
             LoadLogs();
@@ -1613,6 +1621,37 @@ namespace DailyPrayerTime.Native
             }
 
             return Path.GetFileNameWithoutExtension(filename).Replace('_', ' ');
+        }
+
+        private void UpdateActiveUserUI()
+        {
+            if (ActiveUserCountText != null)
+            {
+                ActiveUserCountText.Text = SettingsManager.Current.LastActiveUserCount.ToString();
+            }
+            if (ActiveUserLastFetchText != null)
+            {
+                ActiveUserLastFetchText.Text = string.IsNullOrEmpty(SettingsManager.Current.LastActiveUserFetchTime)
+                    ? ""
+                    : $"Last updated: {SettingsManager.Current.LastActiveUserFetchTime}";
+            }
+        }
+
+        private async void RefreshActiveUser_Click(object sender, RoutedEventArgs e)
+        {
+            if (ActiveUserCountText != null)
+            {
+                ActiveUserCountText.Text = "Updating...";
+            }
+            try
+            {
+                await AnalyticsService.Instance.FetchActiveUserCountAsync();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to fetch active users: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                UpdateActiveUserUI();
+            }
         }
     }
 }
