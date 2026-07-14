@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
 
 PackageIdentifier: AbiruzzamanMolla.DailyPrayerTimer
-PackageVersion: 2.6.0
+PackageVersion: 2.9.1
 PackageLocale: en-US
 Publisher: Abiruzzaman Molla
 PublisherUrl: https://github.com/AbiruzzamanMolla
@@ -26,11 +26,10 @@ Tags:
   - timer
   - deskband
 ReleaseNotes: |-
-  v2.6.0 Features:
-  - Full-Screen Blocked Congregation Reminder: Introduced a brand new full-screen notification mode for the congregation (Jamaat) reminders that blocks the desktop and shows real-time countdown, prayer range timing, and congregation start times.
-  - Dismissal Option Configuration: Added settings options to toggle whether the full-screen blocked notification is dismissable (allowing Esc-key or close button) or strictly blocks the screen until the countdown expires.
-  - Dynamic Accent styling: The full-screen notification is beautifully styled with the active gradient colors and custom button contrast elements to match the app theme dynamically.
-  - Bilingual localizations: Completed Bengali and English translations for all new display modes and configurations.
-ReleaseNotesUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/tag/v2.6.0
+  v2.9.1 Features:
+  - Anonymous Daily Active User Tracking: Implemented unauthenticated periodic (hourly) user pings using Firestore REST API to count daily active installations uniquely and securely without storing personal information (uses local generated AnalyticsDeviceId UUID).
+  - Active Users Count View: Added a new active user statistics card directly under the Support & Contact settings panel, with a manual refresh action.
+  - Social & Resource Links Update: Updated the official Telegram join link and added official Facebook page and GitHub repository links under the Official Resources settings card.
+ReleaseNotesUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/tag/v2.9.1
 ManifestType: defaultLocale
 ManifestVersion: 1.9.0

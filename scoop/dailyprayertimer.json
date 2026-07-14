@@ -1,16 +1,16 @@
 {
-    "version": "2.4.4",
+    "version": "2.9.1",
     "description": "A high-performance, native Windows application for accurate prayer times, featuring a premium glassmorphic UI, deep taskbar integration, and full multi-language support.",
     "homepage": "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.4.4/DailyPrayerTimer_Setup_v2.4.4_x64.exe#/setup.exe",
-            "hash": "FB293E39135D8B7A8DF65036FD3FCDDAF4C3EBA4303A6FC33F3BDB5B913CF24E"
+            "url": "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.9.1/DailyPrayerTimer_Setup_v2.9.1_x64.exe#/setup.exe",
+            "hash": "F1BA4181008E3F51460D822807458A6CD78B13E8FEB2C82BEA061DF00F026E66"
         },
         "32bit": {
-            "url": "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.4.4/DailyPrayerTimer_Setup_v2.4.4_x86.exe#/setup.exe",
-            "hash": "90ADC74DC6BA45938034E35E1D9471B418619DA2AD40A53DB250CD47EB8A37B7"
+            "url": "https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.9.1/DailyPrayerTimer_Setup_v2.9.1_x86.exe#/setup.exe",
+            "hash": "DD808BA249C5438190A475BEC66A1CE90529B2BB9DFE8CF2E719978CE4AB1D1D"
         }
     },
     "innosetup": true,

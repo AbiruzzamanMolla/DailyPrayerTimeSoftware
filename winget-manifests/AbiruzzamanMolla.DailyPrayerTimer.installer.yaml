@@ -1,18 +1,18 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
 
 PackageIdentifier: AbiruzzamanMolla.DailyPrayerTimer
-PackageVersion: 2.6.0
+PackageVersion: 2.9.1
 InstallerLocale: en-US
 InstallerType: inno
 Scope: machine
 UpgradeBehavior: install
-ReleaseDate: 2026-06-17
+ReleaseDate: 2026-07-14
 Installers:
   - Architecture: x64
-    InstallerUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.6.0/DailyPrayerTimer_Setup_v2.6.0_x64.exe
-    InstallerSha256: 128411ecad7f46107ec1d75fa7488e314807736fb1705ee105a6f454edfc4af8
+    InstallerUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.9.1/DailyPrayerTimer_Setup_v2.9.1_x64.exe
+    InstallerSha256: f1ba4181008e3f51460d822807458a6cd78b13e8feb2c82bea061df00f026e66
   - Architecture: x86
-    InstallerUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.6.0/DailyPrayerTimer_Setup_v2.6.0_x86.exe
-    InstallerSha256: 627d45d9fd99c238158f95eeee6d5c38cc48308f91bdefca52133b538c685329
+    InstallerUrl: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/download/v2.9.1/DailyPrayerTimer_Setup_v2.9.1_x86.exe
+    InstallerSha256: dd808ba249c5438190a475bec66a1ce90529b2bb9dfe8cf2e719978ce4ab1d1d
 ManifestType: installer
 ManifestVersion: 1.9.0
