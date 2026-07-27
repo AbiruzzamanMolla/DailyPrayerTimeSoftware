@@ -1211,6 +1211,9 @@
                                         👤 <Bold>Facebook:</Bold> <Hyperlink NavigateUri="https://www.facebook.com/dailyprayertimer/" RequestNavigate="Hyperlink_RequestNavigate">Official Page</Hyperlink>
                                     </TextBlock>
                                     <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
+                                        🔒 <Bold>Privacy Policy:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/blob/main/PRIVACY.md" RequestNavigate="Hyperlink_RequestNavigate">View Policy</Hyperlink>
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,20,6" Foreground="White" FontSize="11">
                                         💻 <Bold>Source Code:</Bold> <Hyperlink NavigateUri="https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware" RequestNavigate="Hyperlink_RequestNavigate">GitHub Repository</Hyperlink>
                                     </TextBlock>
                                 </WrapPanel>
@@ -1518,7 +1521,7 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.9.0" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.9.2" FontWeight="Bold" FontSize="15" Foreground="#fbbf24" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
                                     <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="White" Opacity="0.8" Margin="10,0,0,0"><Bold>Auto-Play Tasbih Counter:</Bold> Interactive autoplay with sound pronunciation and configurable interval speeds (1s to 5s), automatically pacing sounds sequentially.</TextBlock>

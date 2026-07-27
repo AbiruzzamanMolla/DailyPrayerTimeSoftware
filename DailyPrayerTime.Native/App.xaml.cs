@@ -15,7 +15,7 @@ namespace DailyPrayerTime.Native
             
             this.DispatcherUnhandledException += (s, args) =>
             {
-                AudioLogger.Log($"UNHANDLED EXCEPTION: {args.Exception}");
+                AudioLogger.Log($"UNHANDLED DISPATCHER EXCEPTION: {args.Exception}");
                 System.Console.WriteLine(args.Exception.ToString());
                 System.Windows.MessageBox.Show(
                     string.Format(LocalizationManager.Instance.GetString("Msg_AppErrorGeneral"), args.Exception.ToString()), 
@@ -23,6 +23,20 @@ namespace DailyPrayerTime.Native
                     System.Windows.MessageBoxButton.OK, 
                     System.Windows.MessageBoxImage.Error);
                 args.Handled = true; // Prevents the app from crashing completely
+            };
+
+            System.AppDomain.CurrentDomain.UnhandledException += (s, args) =>
+            {
+                if (args.ExceptionObject is System.Exception ex)
+                {
+                    AudioLogger.Log($"UNHANDLED APPDOMAIN EXCEPTION: {ex}");
+                }
+            };
+
+            System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (s, args) =>
+            {
+                AudioLogger.Log($"UNOBSERVED TASK EXCEPTION: {args.Exception}");
+                args.SetObserved();
             };
 
             base.OnStartup(e);

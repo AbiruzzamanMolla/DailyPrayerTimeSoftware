@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.2] - 2026-07-27
+
+### Added
+
+- **Microsoft Store Compliance Audit & Package Metadata**: Configured standard assembly metadata tags (`Company`, `Authors`, `Copyright`, `Description`, `PackageLicenseExpression`) for Microsoft Store Win32 ingestion.
+- **In-App Privacy Policy Access**: Integrated an explicit Privacy Policy hyperlink (`PRIVACY.md`) in the Support & Contact settings panel to comply with Microsoft Store Policy 10.5.
+- **Enhanced Unhandled Exception Handling**: Added `AppDomain` and `TaskScheduler` unhandled exception hooks in `App.xaml.cs` for maximum stability and error logging.
+- **Installer Uninstall Metadata**: Added `UninstallDisplayIcon` and `UninstallDisplayName` parameters to 64-bit and 32-bit Inno Setup installer scripts to support clean installation and uninstallation via Windows Apps & Features.
+
 ## [2.9.1] - 2026-07-14
 
 ### Added
