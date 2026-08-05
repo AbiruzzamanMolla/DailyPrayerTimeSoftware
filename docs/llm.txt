@@ -1,0 +1,44 @@
+# Daily Prayer Timer for Windows
+
+Daily Prayer Timer is a lightweight, native, and accurate Windows desktop application designed to help Muslims track prayer times, listen to Adhan alerts, and log spiritual progress directly from their PC.
+
+## Specifications
+- **Operating System:** Windows 10, Windows 11 (64-bit native application)
+- **License:** 100% Free & Open-source (Waqf / charity project)
+- **Version:** v2.x (Latest)
+- **Developer:** Abiruzzaman Molla (Bangladesh)
+
+## Main Features
+- **Accurate Calculations:** Supports all major Islamic calculation methods (MWL, ISNA, Umm al-Qura, Karachi, etc.) with custom offsets and Hanafi/Shafi'i Asr calculation.
+- **Deep Windows Integration:** TrafficMonitor-style taskbar widgets, floating tray timer, Glassmorphism notification alerts, and custom Fajr/standard Adhans (Makkah, Madinah, Alafasi).
+- **Spiritual Deed Tracker:** Built-in tracker popup to log daily prayers and good deeds (Amal) with monthly consistency statistics.
+- **Ramadan & Nafal Mode:** Dedicated Suhur/Iftar countdowns, fasting tracker, Nafal prayer schedule, and prohibited times alerts.
+
+## Installation Options
+
+### 1. Microsoft Store (Primary)
+Install natively from the Microsoft Store:
+- Store Web Page: https://apps.microsoft.com/detail/9NJPH9QSXC2R
+- Store Deep Link Protocol: `ms-windows-store://pdp/?productid=9NJPH9QSXC2R`
+
+### 2. Windows Package Manager (Winget)
+Run the following command in PowerShell:
+```powershell
+winget install AbiruzzamanMolla.DailyPrayerTimer
+```
+
+### 3. Chocolatey Package Manager
+Run the following command in command prompt or PowerShell:
+```powershell
+choco install dailyprayertimer
+```
+
+### 4. Direct Manual Installer
+Download the latest `.exe` or `.msi` setup file directly from GitHub Releases:
+- Download Link: https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware/releases/latest
+
+## Links & Community
+- **Official Website:** http://dailyprayertimer.pro.bd/
+- **GitHub Repository:** https://github.com/AbiruzzamanMolla/DailyPrayerTimeSoftware
+- **Telegram Updates Channel:** https://t.me/dailyprayertimersoftware
+- **Developer Website:** https://abiruzzamanmolla.github.io
