@@ -93,15 +93,7 @@ namespace DailyPrayerTime.Native
 
         private void ApplyTheme()
         {
-            var s = SettingsManager.Current;
-            try {
-                GradStop1.Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.GradientStart);
-                GradStop2.Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.GradientEnd);
-                
-                // Color the Dismiss button dynamically to contrast well
-                DismissButton.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.SecondaryColor));
-                DismissButton.Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.GradientEnd));
-            } catch { }
+            // Fully driven by dynamic resources in XAML
         }
 
         private void UpdateDisplay()

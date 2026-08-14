@@ -332,6 +332,38 @@ namespace DailyPrayerTime.Native
             };
             cms.Items.Add(overlayItem);
 
+            var clickThroughItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_OverlayClickThrough"));
+            clickThroughItem.CheckOnClick = true;
+            clickThroughItem.Checked = SettingsManager.Current.OverlayClickThrough;
+            clickThroughItem.Click += (s, e) => {
+                SettingsManager.Current.OverlayClickThrough = clickThroughItem.Checked;
+                SettingsManager.Save();
+                _overlay?.SetClickThrough(clickThroughItem.Checked);
+            };
+
+            var opacityMenu = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_Opacity"));
+            int[] opacityPresets = { 30, 50, 70, 90 };
+            foreach (var opacity in opacityPresets)
+            {
+                var opacityItem = new Forms.ToolStripMenuItem(opacity + "%");
+                opacityItem.Checked = SettingsManager.Current.OverlayClickThroughOpacity == opacity;
+                opacityItem.Click += (s, e) => {
+                    SettingsManager.Current.OverlayClickThroughOpacity = opacity;
+                    SettingsManager.Save();
+                    foreach (var item in opacityMenu.DropDownItems)
+                    {
+                        if (item is Forms.ToolStripMenuItem mi) mi.Checked = (mi.Text == opacity + "%");
+                    }
+                    if (SettingsManager.Current.OverlayClickThrough)
+                    {
+                        _overlay?.SetClickThrough(true);
+                    }
+                };
+                opacityMenu.DropDownItems.Add(opacityItem);
+            }
+            clickThroughItem.DropDownItems.Add(opacityMenu);
+            cms.Items.Add(clickThroughItem);
+
             var dndItem = new Forms.ToolStripMenuItem(LocalizationManager.Instance.GetString("Tray_DNDMode"));
             dndItem.CheckOnClick = true;
             dndItem.Checked = SettingsManager.Current.DndModeEnabled;
@@ -381,6 +413,12 @@ namespace DailyPrayerTime.Native
                 overlayItem.Checked = SettingsManager.Current.ShowOverlay;
                 dndItem.Checked = SettingsManager.Current.DndModeEnabled;
                 taskbarTimerItem.Checked = SettingsManager.Current.ShowTaskbarTimer;
+                clickThroughItem.Checked = SettingsManager.Current.OverlayClickThrough;
+                foreach (var item in opacityMenu.DropDownItems)
+                {
+                    if (item is Forms.ToolStripMenuItem mi)
+                        mi.Checked = (mi.Text == SettingsManager.Current.OverlayClickThroughOpacity + "%");
+                }
             };
 
             _notifyIcon.MouseClick += (s, e) =>
@@ -2281,11 +2319,11 @@ namespace DailyPrayerTime.Native
 
         private string GetStatusColorHex(Prayer currentPrayer, DateTime nextTime)
         {
-            if (_todayPrayerTimes == null) return "#10b981";
+            if (_todayPrayerTimes == null) return GetThemeColorHex("ThemePrimaryBrush", "#10b981");
 
             DateTime now = DateTime.Now;
             if (_sunriseProhibActive || _zawalProhibActive || _sunsetProhibActive)
-                return "#ef4444";
+                return GetThemeColorHex("ThemeProhibitedBgBrush", "#ef4444");
 
             if (currentPrayer != Prayer.NONE)
             {
@@ -2294,12 +2332,25 @@ namespace DailyPrayerTime.Native
                 {
                     double minsLeft = (endTime - now).TotalMinutes;
                     if (minsLeft < 10 && minsLeft > 0)
-                        return "#fbbf24";
+                        return GetThemeColorHex("ThemeWarningBrush", "#fbbf24");
                 }
-                return "#10b981";
+                return GetThemeColorHex("ThemePrimaryBrush", "#10b981");
             }
 
-            return "#9ca3af";
+            return GetThemeColorHex("ThemeTextMutedBrush", "#9ca3af");
+        }
+
+        private string GetThemeColorHex(string key, string fallback)
+        {
+            try
+            {
+                if (Application.Current.Resources[key] is SolidColorBrush brush)
+                {
+                    return $"#{brush.Color.R:X2}{brush.Color.G:X2}{brush.Color.B:X2}";
+                }
+            }
+            catch {}
+            return fallback;
         }
 
         private void UpdateProgressBar(Prayer currentPrayer, DateTime nextTime, DateTime now)

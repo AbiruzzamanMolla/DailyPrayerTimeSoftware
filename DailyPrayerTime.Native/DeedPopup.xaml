@@ -18,8 +18,8 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
                         <Border x:Name="ChipBorder" 
-                                Background="#1AFFFFFF" 
-                                BorderBrush="#25FFFFFF" 
+                                Background="{DynamicResource ThemeCardBgBrush}" 
+                                BorderBrush="{DynamicResource ThemeCardBorderBrush}" 
                                 BorderThickness="1" 
                                 CornerRadius="10" 
                                 Padding="12,8"
@@ -30,24 +30,24 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid Width="16" Height="16" Margin="0,0,10,0" VerticalAlignment="Center">
-                                    <Border x:Name="CheckRect" CornerRadius="4" BorderBrush="#AFFFFFFF" BorderThickness="1.5"/>
-                                    <Path x:Name="CheckIcon" Data="M3,7 L6,10 L11,4" Stroke="#10B981" StrokeThickness="2.5" Visibility="Collapsed"/>
+                                    <Border x:Name="CheckRect" CornerRadius="4" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1.5"/>
+                                    <Path x:Name="CheckIcon" Data="M3,7 L6,10 L11,4" Stroke="{DynamicResource ThemePrimaryBrush}" StrokeThickness="2.5" Visibility="Collapsed"/>
                                 </Grid>
                                 <ContentPresenter x:Name="Content" Grid.Column="1" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="ChipBorder" Property="Background" Value="#3310B981"/>
-                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#6010B981"/>
-                                <Setter TargetName="CheckRect" Property="BorderBrush" Value="#10B981"/>
-                                <Setter TargetName="CheckRect" Property="Background" Value="#10B981"/>
+                                <Setter TargetName="ChipBorder" Property="Background" Value="{DynamicResource ThemePrimaryTranslucentBrush}"/>
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="{DynamicResource ThemePrimaryBrush}"/>
+                                <Setter TargetName="CheckRect" Property="BorderBrush" Value="{DynamicResource ThemePrimaryBrush}"/>
+                                <Setter TargetName="CheckRect" Property="Background" Value="{DynamicResource ThemePrimaryBrush}"/>
                                 <Setter TargetName="CheckIcon" Property="Stroke" Value="White"/>
                                 <Setter TargetName="CheckIcon" Property="Visibility" Value="Visible"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ChipBorder" Property="Background" Value="#26FFFFFF"/>
-                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="#48FFFFFF"/>
+                                <Setter TargetName="ChipBorder" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
+                                <Setter TargetName="ChipBorder" Property="BorderBrush" Value="{DynamicResource ThemeSecondaryBrush}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -56,27 +56,27 @@
         </Style>
     </Window.Resources>
     
-    <Border CornerRadius="24" Margin="10" Background="{StaticResource MainGradient}" BorderBrush="#30FFFFFF" BorderThickness="1.5">
+    <Border CornerRadius="24" Margin="10" Background="{DynamicResource ThemePopupBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1.5">
         <Border.Effect>
             <DropShadowEffect BlurRadius="25" Direction="-90" RenderingBias="Quality" ShadowDepth="2" Opacity="0.4"/>
         </Border.Effect>
         <DockPanel LastChildFill="True" Margin="25">
             <!-- Header -->
             <StackPanel DockPanel.Dock="Top" Margin="0,0,0,20">
-                <TextBlock x:Name="TitleText" Text="DID YOU PRAY?" Foreground="#FBBF24" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="Mark your deeds for this prayer" Foreground="White" Opacity="0.6" FontSize="13" HorizontalAlignment="Center" Margin="0,8,0,0"/>
+                <TextBlock x:Name="TitleText" Text="DID YOU PRAY?" Foreground="{DynamicResource ThemeWarningBrush}" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center"/>
+                <TextBlock Text="Mark your deeds for this prayer" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" FontSize="13" HorizontalAlignment="Center" Margin="0,8,0,0"/>
             </StackPanel>
-
+ 
             <!-- Footer Action -->
             <Grid DockPanel.Dock="Bottom" Margin="0,20,0,0">
-                <Button Content="SAVE &amp; CLOSE" Click="Save_Click" HorizontalAlignment="Center" Padding="40,12" Background="#BAE6FD" Foreground="#022C22" FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                <Button Content="SAVE &amp; CLOSE" Click="Save_Click" HorizontalAlignment="Center" Padding="40,12" Background="{DynamicResource ThemeButtonBgBrush}" Foreground="{DynamicResource ThemeButtonTextBrush}" FontSize="14" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
                     <Button.Resources>
                         <Style TargetType="Border">
                              <Setter Property="CornerRadius" Value="20"/>
                         </Style>
                     </Button.Resources>
                     <Button.Effect>
-                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#BAE6FD" Opacity="0.3"/>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="{DynamicResource ThemeSecondaryColor}" Opacity="0.3"/>
                     </Button.Effect>
                 </Button>
             </Grid>

@@ -9,45 +9,45 @@
         Background="Transparent"
         ResizeMode="NoResize">
 
-    <Border Background="#064E3B" CornerRadius="16" BorderBrush="#2AFFFFFF" BorderThickness="1.5">
+    <Border Background="{DynamicResource ThemePopupBgBrush}" CornerRadius="16" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1.5">
         <Grid Margin="25">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
+ 
             <!-- Header -->
             <StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,5,0,20">
                 <TextBlock Text="🕌" FontSize="36" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-                <TextBlock Text="{DynamicResource CardExport_Title}" FontSize="18" FontWeight="Bold" Foreground="#FBBF24" HorizontalAlignment="Center"/>
-                <TextBlock Text="{DynamicResource CardExport_SubText}" FontSize="12" Foreground="White" Opacity="0.7" HorizontalAlignment="Center" Margin="0,4,0,0" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="{DynamicResource CardExport_Title}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeWarningBrush}" HorizontalAlignment="Center"/>
+                <TextBlock Text="{DynamicResource CardExport_SubText}" FontSize="12" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" HorizontalAlignment="Center" Margin="0,4,0,0" TextWrapping="Wrap" TextAlignment="Center"/>
             </StackPanel>
 
             <!-- Selection Body -->
             <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="10,0,10,0">
                 <StackPanel.Resources>
                     <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
-                        <Border x:Name="Border" CornerRadius="8" Background="#022C22" BorderBrush="#33FFFFFF" BorderThickness="1">
+                        <Border x:Name="Border" CornerRadius="8" Background="{DynamicResource ThemeTitleBarBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition />
                                     <ColumnDefinition Width="32" />
                                 </Grid.ColumnDefinitions>
                                 <Border Grid.Column="0" Background="Transparent" />
-                                <Path x:Name="Arrow" Grid.Column="1" Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" />
+                                <Path x:Name="Arrow" Grid.Column="1" Fill="{DynamicResource ThemeTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 4 4 L 8 0 Z" />
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#065F46" />
+                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="true">
-                                <Setter TargetName="Border" Property="Background" Value="#022C22" />
+                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource ThemeTitleBarBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
-
+ 
                     <ControlTemplate x:Key="ComboBoxTemplate" TargetType="ComboBox">
                         <Grid>
                             <ToggleButton Name="ToggleButton" 
@@ -65,7 +65,7 @@
                                               VerticalAlignment="Center" />
                             <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
                                 <Grid Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border Name="DropDownBorder" Background="#022C22" BorderBrush="#33FFFFFF" BorderThickness="1" CornerRadius="8" Margin="0,4,0,0">
+                                    <Border Name="DropDownBorder" Background="{DynamicResource ThemePopupBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Margin="0,4,0,0">
                                         <ScrollViewer Margin="4" SnapsToDevicePixels="True">
                                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                         </ScrollViewer>
@@ -77,7 +77,7 @@
                 </StackPanel.Resources>
 
                 <!-- Card Type Selection -->
-                <TextBlock Text="{DynamicResource CardExport_SelectReportType}" FontSize="11" FontWeight="Bold" Foreground="White" Opacity="0.5" Margin="0,0,0,10"/>
+                <TextBlock Text="{DynamicResource CardExport_SelectReportType}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" Margin="0,0,0,10"/>
                 
                 <Grid Margin="0,0,0,25">
                     <Grid.ColumnDefinitions>
@@ -85,16 +85,16 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <RadioButton x:Name="RadioWeekly" Grid.Column="0" Content="{DynamicResource CardExport_WeeklyReport}" Foreground="White" FontSize="14" FontWeight="SemiBold" IsChecked="True" Checked="ReportType_Changed" Cursor="Hand"/>
-                    <RadioButton x:Name="RadioMonthly" Grid.Column="1" Content="{DynamicResource CardExport_MonthlyReport}" Foreground="White" FontSize="14" FontWeight="SemiBold" Checked="ReportType_Changed" Cursor="Hand"/>
+                    <RadioButton x:Name="RadioWeekly" Grid.Column="0" Content="{DynamicResource CardExport_WeeklyReport}" Foreground="{DynamicResource ThemeTextBrush}" FontSize="14" FontWeight="SemiBold" IsChecked="True" Checked="ReportType_Changed" Cursor="Hand"/>
+                    <RadioButton x:Name="RadioMonthly" Grid.Column="1" Content="{DynamicResource CardExport_MonthlyReport}" Foreground="{DynamicResource ThemeTextBrush}" FontSize="14" FontWeight="SemiBold" Checked="ReportType_Changed" Cursor="Hand"/>
                 </Grid>
 
                 <!-- Period Selection -->
-                <TextBlock Text="{DynamicResource CardExport_SelectPeriod}" FontSize="11" FontWeight="Bold" Foreground="White" Opacity="0.5" Margin="0,0,0,8"/>
-                <ComboBox x:Name="PeriodComboBox" Template="{StaticResource ComboBoxTemplate}" Foreground="White" FontSize="13" Cursor="Hand">
+                <TextBlock Text="{DynamicResource CardExport_SelectPeriod}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" Margin="0,0,0,8"/>
+                <ComboBox x:Name="PeriodComboBox" Template="{StaticResource ComboBoxTemplate}" Foreground="{DynamicResource ThemeTextBrush}" FontSize="13" Cursor="Hand">
                     <ComboBox.Resources>
                         <Style TargetType="ComboBoxItem">
-                            <Setter Property="Background" Value="#022C22"/>
+                            <Setter Property="Background" Value="{DynamicResource ThemeTitleBarBrush}"/>
                             <Setter Property="Foreground" Value="White"/>
                             <Setter Property="Padding" Value="12,8"/>
                             <Setter Property="Template">
@@ -105,7 +105,7 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsMouseOver" Value="true">
-                                                <Setter TargetName="Border" Property="Background" Value="#10B981" />
+                                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource ThemePrimaryBrush}" />
                                                 <Setter Property="Foreground" Value="White" />
                                             </Trigger>
                                         </ControlTemplate.Triggers>
@@ -124,7 +124,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="{DynamicResource Cancel}" Grid.Column="0" Background="Transparent" BorderBrush="#33FFFFFF" BorderThickness="1" Foreground="White" Padding="0,12" Margin="0,0,8,0" Click="Cancel_Click" Cursor="Hand" FontSize="13" FontWeight="SemiBold">
+                <Button Content="{DynamicResource Cancel}" Grid.Column="0" Background="Transparent" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" Foreground="{DynamicResource ThemeTextBrush}" Padding="0,12" Margin="0,0,8,0" Click="Cancel_Click" Cursor="Hand" FontSize="13" FontWeight="SemiBold">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="8"/>
@@ -132,7 +132,7 @@
                     </Button.Resources>
                 </Button>
 
-                <Button Content="{DynamicResource CardExport_Generate}" Grid.Column="1" Background="#10B981" BorderThickness="0" Foreground="White" Padding="0,12" Margin="8,0,0,0" Click="Generate_Click" Cursor="Hand" FontSize="13" FontWeight="Bold">
+                <Button Content="{DynamicResource CardExport_Generate}" Grid.Column="1" Background="{DynamicResource ThemeButtonBgBrush}" BorderThickness="0" Foreground="{DynamicResource ThemeButtonTextBrush}" Padding="0,12" Margin="8,0,0,0" Click="Generate_Click" Cursor="Hand" FontSize="13" FontWeight="Bold">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="8"/>

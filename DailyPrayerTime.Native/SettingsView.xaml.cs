@@ -197,7 +197,15 @@ namespace DailyPrayerTime.Native
             MadhabInput.SelectedIndex = s.School == 1 ? 1 : 0;
             
             OverlayInput.IsChecked = s.ShowOverlay;
+            OverlayClickThroughInput.IsChecked = s.OverlayClickThrough;
+            OverlayClickThroughOpacityInput.Value = s.OverlayClickThroughOpacity;
+            OverlayOpacityLabel.Text = s.OverlayClickThroughOpacity + "%";
+            OverlayOpacityPanel.IsEnabled = s.OverlayClickThrough;
             ShowTaskbarTimerInput.IsChecked = s.ShowTaskbarTimer;
+
+            OverlayClickThroughInput.Checked += (snd, evt) => OverlayOpacityPanel.IsEnabled = true;
+            OverlayClickThroughInput.Unchecked += (snd, evt) => OverlayOpacityPanel.IsEnabled = false;
+            OverlayClickThroughOpacityInput.ValueChanged += (snd, evt) => OverlayOpacityLabel.Text = ((int)OverlayClickThroughOpacityInput.Value) + "%";
             
             foreach (System.Windows.Controls.ComboBoxItem item in TaskbarTimerTypeInput.Items)
             {
@@ -223,6 +231,32 @@ namespace DailyPrayerTime.Native
             GradEndInput.Text = s.GradientEnd;
             PrimaryColorInput.Text = s.PrimaryColor;
             SecondaryColorInput.Text = s.SecondaryColor;
+
+            // Set correct theme preset combo
+            if (ThemePresetCombo != null)
+            {
+                if (!string.IsNullOrEmpty(s.ThemePreset) && s.ThemePreset != "custom")
+                {
+                    SelectComboBoxItemByTag(ThemePresetCombo, s.ThemePreset);
+                }
+                else
+                {
+                    if (s.GradientStart?.ToUpper() == "#064E3B" && s.GradientEnd?.ToUpper() == "#022C22" && s.PrimaryColor?.ToUpper() == "#10B981" && s.SecondaryColor?.ToUpper() == "#34D399")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "green");
+                    else if (s.GradientStart?.ToUpper() == "#0A192F" && s.GradientEnd?.ToUpper() == "#020C1B" && s.PrimaryColor?.ToUpper() == "#172A45" && s.SecondaryColor?.ToUpper() == "#64FFDA")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "blue");
+                    else if (s.GradientStart?.ToUpper() == "#1F1D1A" && s.GradientEnd?.ToUpper() == "#0D0C0B" && s.PrimaryColor?.ToUpper() == "#D4AF37" && s.SecondaryColor?.ToUpper() == "#F3E5AB")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "gold");
+                    else if (s.GradientStart?.ToUpper() == "#2E0814" && s.GradientEnd?.ToUpper() == "#0F0307" && s.PrimaryColor?.ToUpper() == "#F43F5E" && s.SecondaryColor?.ToUpper() == "#FDA4AF")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "rose");
+                    else if (s.GradientStart?.ToUpper() == "#121212" && s.GradientEnd?.ToUpper() == "#000000" && s.PrimaryColor?.ToUpper() == "#FFFFFF" && s.SecondaryColor?.ToUpper() == "#D4D4D4")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "dark");
+                    else if (s.GradientStart?.ToUpper() == "#FFFFFF" && s.GradientEnd?.ToUpper() == "#F1F5F9" && s.PrimaryColor?.ToUpper() == "#000000" && s.SecondaryColor?.ToUpper() == "#334155")
+                        SelectComboBoxItemByTag(ThemePresetCombo, "light");
+                    else
+                        SelectComboBoxItemByTag(ThemePresetCombo, "custom");
+                }
+            }
 
             SuhurAlarmEnabledInput.IsChecked = s.SuhurAlarmEnabled;
             IftarAlarmEnabledInput.IsChecked = s.IftarAlarmEnabled;
@@ -528,6 +562,8 @@ namespace DailyPrayerTime.Native
             s.School = MadhabInput.SelectedIndex; // 0=Shafi, 1=Hanafi
             
             s.ShowOverlay = OverlayInput.IsChecked ?? true;
+            s.OverlayClickThrough = OverlayClickThroughInput.IsChecked ?? false;
+            s.OverlayClickThroughOpacity = (int)OverlayClickThroughOpacityInput.Value;
             s.ShowTaskbarTimer = ShowTaskbarTimerInput.IsChecked ?? false;
             
             if (TaskbarTimerTypeInput.SelectedItem is System.Windows.Controls.ComboBoxItem typeItem && typeItem.Tag is string tType)
@@ -556,6 +592,14 @@ namespace DailyPrayerTime.Native
             s.GradientEnd = GradEndInput.Text;
             s.PrimaryColor = PrimaryColorInput.Text;
             s.SecondaryColor = SecondaryColorInput.Text;
+            if (ThemePresetCombo?.SelectedItem is ComboBoxItem presetItem && presetItem.Tag is string pTag)
+            {
+                s.ThemePreset = pTag;
+            }
+            else
+            {
+                s.ThemePreset = "custom";
+            }
 
             s.SuhurAlarmEnabled = SuhurAlarmEnabledInput.IsChecked ?? false;
             s.IftarAlarmEnabled = IftarAlarmEnabledInput.IsChecked ?? false;
@@ -1300,6 +1344,28 @@ namespace DailyPrayerTime.Native
             }
         }
 
+        private void ClearLogs_Click(object sender, RoutedEventArgs e)
+        {
+            var result = System.Windows.MessageBox.Show("Are you sure you want to clear this log file?", "Clear Logs", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    string path = GetSelectedLogPath();
+                    if (File.Exists(path))
+                    {
+                        File.WriteAllText(path, string.Empty);
+                        LoadLogs();
+                        System.Windows.MessageBox.Show("Log file cleared successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Failed to clear logs: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         private void UpdateManualParamsVisibility()
         {
             if (ManualParamsPanel != null && MethodInput != null)
@@ -1651,6 +1717,70 @@ namespace DailyPrayerTime.Native
             {
                 System.Windows.MessageBox.Show($"Failed to fetch active users: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 UpdateActiveUserUI();
+            }
+        }
+
+        private void ThemePresetCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ThemePresetCombo == null || GradStartInput == null || GradEndInput == null || PrimaryColorInput == null || SecondaryColorInput == null) return;
+            var item = ThemePresetCombo.SelectedItem as ComboBoxItem;
+            string tag = item?.Tag?.ToString() ?? "custom";
+
+            switch (tag)
+            {
+                case "green":
+                    GradStartInput.Text = "#064E3B";
+                    GradEndInput.Text = "#022C22";
+                    PrimaryColorInput.Text = "#10B981";
+                    SecondaryColorInput.Text = "#34D399";
+                    break;
+                case "blue":
+                    GradStartInput.Text = "#0A192F";
+                    GradEndInput.Text = "#020C1B";
+                    PrimaryColorInput.Text = "#172A45";
+                    SecondaryColorInput.Text = "#64FFDA";
+                    break;
+                case "gold":
+                    GradStartInput.Text = "#1F1D1A";
+                    GradEndInput.Text = "#0D0C0B";
+                    PrimaryColorInput.Text = "#D4AF37";
+                    SecondaryColorInput.Text = "#F3E5AB";
+                    break;
+                case "rose":
+                    GradStartInput.Text = "#2E0814";
+                    GradEndInput.Text = "#0F0307";
+                    PrimaryColorInput.Text = "#F43F5E";
+                    SecondaryColorInput.Text = "#FDA4AF";
+                    break;
+                case "dark":
+                    GradStartInput.Text = "#121212";
+                    GradEndInput.Text = "#000000";
+                    PrimaryColorInput.Text = "#FFFFFF";
+                    SecondaryColorInput.Text = "#D4D4D4";
+                    break;
+                case "light":
+                    GradStartInput.Text = "#FFFFFF";
+                    GradEndInput.Text = "#F1F5F9";
+                    PrimaryColorInput.Text = "#000000";
+                    SecondaryColorInput.Text = "#334155";
+                    break;
+                case "system":
+                    bool isDark = Helpers.ThemeHelper.IsWindowsDarkTheme();
+                    if (isDark)
+                    {
+                        GradStartInput.Text = "#121212";
+                        GradEndInput.Text = "#000000";
+                        PrimaryColorInput.Text = "#FFFFFF";
+                        SecondaryColorInput.Text = "#D4D4D4";
+                    }
+                    else
+                    {
+                        GradStartInput.Text = "#FFFFFF";
+                        GradEndInput.Text = "#F1F5F9";
+                        PrimaryColorInput.Text = "#000000";
+                        SecondaryColorInput.Text = "#334155";
+                    }
+                    break;
             }
         }
     }

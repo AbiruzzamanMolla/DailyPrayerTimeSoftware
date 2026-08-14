@@ -1,0 +1,26 @@
+# Tasks - Theme Refactoring
+
+- [x] Create Greenish Glassmorphic theme definitions in ThemeHelper.cs
+- [x] Make all application window/popup backgrounds dynamic
+- [x] Update MainWindow.xaml to use dynamic colors and resources
+- [x] Update SettingsView.xaml to use dynamic colors and resources
+- [x] Update TrackerView.xaml to use dynamic colors and resources
+- [x] Update TasbihView.xaml to use dynamic colors and resources
+- [x] Update RamadanView.xaml to use dynamic colors and resources
+- [x] Update QiblaView.xaml to use dynamic colors and resources
+- [x] Update DeedPopup.xaml to use dynamic colors and resources
+- [x] Update DailySummaryPopup.xaml to use dynamic colors and resources
+- [x] Update CongregationTimerPopup.xaml and CongregationTimerFullScreenWindow.xaml to use dynamic colors and resources
+- [x] Update AdhanNotificationWindow.xaml to use dynamic colors and resources
+- [x] Run build and verify styling is correct
+- [x] Convert Cloud Sync sign-in and share card export popups to dynamic theme colors
+- [x] Add Theme Preset Selector options in Layout & Theme settings
+- [x] Update Desktop Overlay and Enhanced Taskbar Timer to dynamically inherit theme colors
+- [x] Update Custom Title Bar (menubar) and Footer Navigation Bar to dynamically inherit theme-specific dark tints
+- [x] Update Startup Loader Window to dynamically inherit active theme colors and styles
+- [x] Add Microsoft Store link in Settings > Support > Official Resources
+- [x] Scan codebase and migrate remaining hardcoded colors (e.g., #fbbf24) to dynamic theme resources
+- [x] Add log cleanup "Clear Logs" button in Settings > Help > System Diagnostic Logs
+- [x] Add 3 new theme presets (Dark: Black & White, Light: White & Black, and Windows System Follow with real-time accent & mode sync)
+- [x] Fix ComboBox dropdown text visibility and convert hardcoded white foregrounds to dynamic ThemeTextBrush
+- [x] Fix title bar (menubar) icon and window control button colors to follow dynamic text theme colors

@@ -9,17 +9,17 @@
     
     <UserControl.Resources>
         <Style x:Key="GlassCard" TargetType="Border">
-            <Setter Property="Background" Value="#1AFFFFFF"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeCardBgBrush}"/>
             <Setter Property="CornerRadius" Value="16"/>
-            <Setter Property="BorderBrush" Value="#2AFFFFFF"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="0,0,0,12"/>
             <Setter Property="Padding" Value="16"/>
         </Style>
         
         <Style x:Key="PremiumGlassButton" TargetType="Button">
-            <Setter Property="Background" Value="#10FFFFFF"/>
-            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentHighBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="12,6"/>
@@ -38,17 +38,17 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#20FFFFFF"/>
-                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#40FFFFFF"/>
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource ThemeSecondaryBrush}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#30FFFFFF"/>
-                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#50FFFFFF"/>
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ThemePrimaryTranslucentBrush}"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource ThemePrimaryBrush}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#05FFFFFF"/>
-                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#10FFFFFF"/>
-                                <Setter Property="Foreground" Value="#66FFFFFF"/>
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{DynamicResource ThemeCardBgBrush}"/>
+                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeTextMutedBrush}"/>
                                 <Setter Property="Opacity" Value="0.4"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -69,9 +69,9 @@
                         <BulletDecorator Background="Transparent">
                             <BulletDecorator.Bullet>
                                 <Border x:Name="BulletBorder" Width="18" Height="18" 
-                                        CornerRadius="5" Background="#20FFFFFF" 
-                                        BorderBrush="#40FFFFFF" BorderThickness="1.5">
-                                    <TextBlock x:Name="CheckMark" Text="✓" Foreground="White" 
+                                        CornerRadius="5" Background="{DynamicResource ThemeCardBgBrush}" 
+                                        BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1.5">
+                                    <TextBlock x:Name="CheckMark" Text="✓" Foreground="{DynamicResource ThemeTextBrush}" 
                                                FontSize="12" FontWeight="Bold" 
                                                HorizontalAlignment="Center" VerticalAlignment="Center" 
                                                Visibility="Collapsed"/>
@@ -107,12 +107,12 @@
                 <Border Style="{StaticResource GlassCard}" Padding="12,8" Margin="0,0,0,15" Background="#20111827">
                     <Grid>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="NOW:" Foreground="White" Opacity="0.6" FontSize="9" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <TextBlock Text="NOW:" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" FontSize="9" FontWeight="Bold" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <TextBlock x:Name="MiniPrayerName" Text="DHUHR" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                             <TextBlock x:Name="MiniCountdown" Text="01:23:45" Foreground="White" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                             <TextBlock Text="LEFT" Foreground="White" Opacity="0.5" FontSize="9" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                             <TextBlock x:Name="MiniCountdown" Text="01:23:45" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                             <TextBlock Text="LEFT" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" FontSize="9" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -120,27 +120,27 @@
                 <!-- Page Header -->
                 <Grid Margin="0,0,0,20">
                     <StackPanel>
-                        <TextBlock Text="Divine Tracker" Foreground="White" FontSize="24" FontWeight="Bold"/>
-                        <TextBlock Text="Visualize your spiritual journey" Foreground="#D1D5DB" FontSize="12" Opacity="0.8" Margin="2,2,0,0"/>
+                        <TextBlock Text="Divine Tracker" Foreground="{DynamicResource ThemeTextBrush}" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Visualize your spiritual journey" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="12" Opacity="0.8" Margin="2,2,0,0"/>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
                         <Button x:Name="ShareCardBtn" Click="ShareCard_Click" Style="{StaticResource PremiumGlassButton}" Margin="0,0,10,0" ToolTip="Generate shareable card">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="🎴" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                <TextBlock Text="Card" FontSize="10" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock Text="Card" FontSize="10" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button x:Name="CloudSyncBtn" Click="CloudSync_Click" Style="{StaticResource PremiumGlassButton}" Margin="0,0,10,0" ToolTip="Sync to cloud">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="☁" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                <TextBlock Text="Sync" FontSize="10" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock Text="Sync" FontSize="10" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <StackPanel>
                             <Border Background="{DynamicResource ThemePrimaryBrush}" CornerRadius="8" Padding="8,4" Margin="0,0,0,4">
-                                <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
+                                <TextBlock x:Name="CurrentDateLabel" Text="13 APR" Foreground="{DynamicResource ThemeTextBrush}" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right"/>
                             </Border>
-                            <TextBlock x:Name="HijriDateLabel" Text="24 RAMADAN 1445 AH" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="HijriDateLabel" Text="24 RAMADAN 1445 AH" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" FontSize="10" FontWeight="SemiBold" HorizontalAlignment="Right"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -201,35 +201,35 @@
                             Cursor="Hand" Background="Transparent" BorderThickness="0" Padding="0">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border x:Name="BackBorder" Background="#15FFFFFF" CornerRadius="20"
-                                        BorderBrush="#25FFFFFF" BorderThickness="1" Padding="10,5">
+                                <Border x:Name="BackBorder" Background="{DynamicResource ThemeCardBgBrush}" CornerRadius="20"
+                                        BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" Padding="10,5">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <TextBlock Text="&#x2190;" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                        <TextBlock Text="BACK" Foreground="#D1D5DB" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        <TextBlock Text="BACK" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="BackBorder" Property="Background" Value="#25FFFFFF"/>
-                                        <Setter TargetName="BackBorder" Property="BorderBrush" Value="#40FFFFFF"/>
+                                        <Setter TargetName="BackBorder" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
+                                        <Setter TargetName="BackBorder" Property="BorderBrush" Value="{DynamicResource ThemeCardBorderBrush}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold"/>
+                    <TextBlock x:Name="HistorySectionTitle" Text="LAST 7 DAYS" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" FontSize="10" FontWeight="Bold"/>
                 </StackPanel>
 
                 <!-- COMMON COMPLETION CARD -->
                 <Border x:Name="OverallProgressCard" Style="{StaticResource GlassCard}" Background="{DynamicResource ThemeCardBackgroundBrush}" Padding="20">
                     <StackPanel>
                         <Grid>
-                            <TextBlock x:Name="OverallProgressTitle" Text="{DynamicResource Tracker_DailyCompletion}" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
-                            <TextBlock x:Name="OverallProgressPercent" Text="0%" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            <TextBlock x:Name="OverallProgressTitle" Text="{DynamicResource Tracker_DailyCompletion}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
+                            <TextBlock x:Name="OverallProgressPercent" Text="0%" Foreground="{DynamicResource ThemeTextBrush}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid Margin="0,15,0,0">
                             <!-- Background Bar -->
-                            <Border Height="12" Background="#20FFFFFF" CornerRadius="6"/>
+                            <Border Height="12" Background="{DynamicResource ThemeCardBgBrush}" CornerRadius="6"/>
                             <!-- Glass Progress Fill -->
                             <ProgressBar x:Name="MainProgressBar" Value="0" Height="12" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource ThemeSecondaryBrush}">
                                 <ProgressBar.Template>
@@ -242,7 +242,7 @@
                                                         <GradientStop Color="{DynamicResource ThemeSecondaryColor}" Offset="1"/>
                                                     </LinearGradientBrush>
                                                 </Border.Background>
-                                                <Border Background="#40FFFFFF" Margin="0,1,0,3" CornerRadius="4" Opacity="0.5"/>
+                                                <Border Background="{DynamicResource ThemeCardBgBrush}" Margin="0,1,0,3" CornerRadius="4" Opacity="0.5"/>
                                             </Border>
                                         </Grid>
                                     </ControlTemplate>
@@ -253,19 +253,19 @@
                         <!-- Stats Row -->
                         <Grid Margin="0,15,0,0">
                              <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Tracker_Completed}" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
+                                <TextBlock Text="{DynamicResource Tracker_Completed}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
                                 <TextBlock x:Name="StatsCompletedCount" Text="0" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="10" FontWeight="Bold"/>
                              </StackPanel>
                              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                                <TextBlock Text="{DynamicResource Tracker_Missed}" Foreground="White" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
+                                <TextBlock Text="{DynamicResource Tracker_Missed}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" FontSize="10" FontWeight="Bold" Margin="0,0,4,0"/>
                                 <TextBlock x:Name="StatsMissedCount" Text="0" Foreground="#F87171" FontSize="10" FontWeight="Bold"/>
                              </StackPanel>
                         </Grid>
                         
                         <Grid x:Name="SawmGrid" Margin="0,12,0,0">
                             <StackPanel Orientation="Horizontal" x:Name="SawmIndicator">
-                                <Border Width="8" Height="8" CornerRadius="4" Background="#FBBF24" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                                <TextBlock Text="FASTING ACTIVE" Foreground="#FBBF24" FontSize="10" FontWeight="Bold"/>
+                                <Border Width="8" Height="8" CornerRadius="4" Background="{DynamicResource ThemeWarningBrush}" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock Text="FASTING ACTIVE" Foreground="{DynamicResource ThemeWarningBrush}" FontSize="10" FontWeight="Bold"/>
                             </StackPanel>
                             <CheckBox x:Name="SawmToggle" Content="FASTING TODAY?" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="10" FontWeight="Bold" Click="SawmToggle_Click"/>
                         </Grid>
@@ -275,7 +275,7 @@
                 <!-- Daily View Content -->
                 <StackPanel x:Name="DailySection">
                     <!-- Daily Prayers Grid -->
-                <TextBlock Text="MANDATORY PRAYERS" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,8,0,12"/>
+                <TextBlock Text="MANDATORY PRAYERS" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,8,0,12"/>
                 <ItemsControl x:Name="PrayerList">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -297,8 +297,8 @@
                                 <StackPanel>
                                     <Grid Margin="0,0,0,12">
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding PrayerName}" Foreground="White" FontWeight="Bold" FontSize="15"/>
-                                            <Border Background="#20FFFFFF" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding PrayerName}" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="15"/>
+                                            <Border Background="{DynamicResource ThemeCardBgBrush}" CornerRadius="4" Padding="6,2" Margin="10,0,0,0" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding CompletionText}" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="9" FontWeight="Bold"/>
                                             </Border>
                                         </StackPanel>
@@ -340,7 +340,7 @@
                 </ItemsControl>
 
                 <!-- Nafal Section -->
-                <TextBlock Text="EXTRA WORSHIP &amp; NAFAL" Foreground="White" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,15,0,12"/>
+                <TextBlock Text="EXTRA WORSHIP &amp; NAFAL" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" FontSize="11" FontWeight="Bold" Margin="4,15,0,12"/>
                 
                 <!-- Specialized Nafal Card -->
                 <Border Style="{StaticResource GlassCard}">
@@ -362,21 +362,21 @@
                                 </Style>
                             </Grid.Style>
                             <StackPanel>
-                                <TextBlock Text="DUHA / ISHRAQ" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="DUHA / ISHRAQ" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="Sunnah Mu'akkadah" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:-2" Background="#1AFFFFFF">
-                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:-2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="-" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
-                                <TextBlock x:Name="DuhaCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:2" Background="#1AFFFFFF">
-                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="DuhaCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextBrush}" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Duha:2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="+" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
                         </Grid>
 
-                        <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
+                        <Border Height="1" Background="{DynamicResource ThemeCardBgBrush}" Margin="0,5,0,15"/>
 
                         <!-- Awwabin -->
                         <Grid Margin="0,0,0,15" x:Name="AwwabinGrid">
@@ -395,21 +395,21 @@
                                 </Style>
                             </Grid.Style>
                             <StackPanel>
-                                <TextBlock Text="AWWABIN" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="AWWABIN" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="After Maghrib" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:-2" Background="#1AFFFFFF">
-                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:-2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="-" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
-                                <TextBlock x:Name="AwwabinCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:2" Background="#1AFFFFFF">
-                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="AwwabinCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextBrush}" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Awwabin:2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="+" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
                         </Grid>
 
-                        <Border Height="1" Background="#1AFFFFFF" Margin="0,5,0,15"/>
+                        <Border Height="1" Background="{DynamicResource ThemeCardBgBrush}" Margin="0,5,0,15"/>
 
                         <!-- Tahajjud -->
                         <Grid x:Name="TahajjudGrid">
@@ -428,16 +428,16 @@
                                 </Style>
                             </Grid.Style>
                             <StackPanel>
-                                <TextBlock Text="TAHAJJUD" Foreground="White" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="TAHAJJUD" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="Night Prayer" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="9" FontWeight="Bold" Opacity="0.8"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:-2" Background="#1AFFFFFF">
-                                    <TextBlock Text="-" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:-2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="-" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
-                                <TextBlock x:Name="TahajjudCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold"/>
-                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:2" Background="#1AFFFFFF">
-                                    <TextBlock Text="+" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock x:Name="TahajjudCount" Text="0" Width="35" TextAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextBrush}" FontSize="16" FontWeight="Bold"/>
+                                <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Width="28" Height="28" Click="NafalCount_Click" Tag="Tahajjud:2" Background="{DynamicResource ThemeCardBgBrush}">
+                                    <TextBlock Text="+" Foreground="{DynamicResource ThemeTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Button>
                             </StackPanel>
                         </Grid>
@@ -462,21 +462,21 @@
                         <Button Click="HistoryItem_Click" Tag="{Binding FullDate}" Margin="4" Width="85" Height="100" Padding="0" BorderThickness="0" Background="Transparent">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border CornerRadius="12" Background="#1AFFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1" Name="BtnBorder">
+                                    <Border CornerRadius="12" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" Name="BtnBorder">
                                         <Grid>
                                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                                <TextBlock Text="{Binding DateLabel}" Foreground="White" FontSize="10" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,8" Opacity="0.8"/>
+                                                <TextBlock Text="{Binding DateLabel}" Foreground="{DynamicResource ThemeTextBrush}" FontSize="10" FontWeight="Bold" TextAlignment="Center" Margin="0,0,0,8" Opacity="0.8"/>
                                                 <Grid Width="45" Height="45">
-                                                    <Ellipse Stroke="#20FFFFFF" StrokeThickness="3"/>
+                                                    <Ellipse Stroke="{DynamicResource ThemeCardBorderBrush}" StrokeThickness="3"/>
                                                     <Ellipse Stroke="{DynamicResource ThemeSecondaryBrush}" StrokeThickness="3" StrokeDashArray="100" Name="ProgressRing"/>
-                                                    <TextBlock Text="{Binding ProgressText}" Foreground="White" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding ProgressText}" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                                 </Grid>
                                             </StackPanel>
                                         </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="BtnBorder" Property="Background" Value="#25FFFFFF"/>
+                                            <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
                                             <Setter TargetName="BtnBorder" Property="BorderBrush" Value="{DynamicResource ThemeSecondaryTranslucentBrush}"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
@@ -491,23 +491,23 @@
             <Border x:Name="QadhaSummaryCard" Style="{StaticResource GlassCard}" Background="#2D1B36" Padding="20" Margin="0,10,0,20">
                 <StackPanel>
                     <Grid>
-                        <TextBlock Text="{DynamicResource Tracker_QadhaSummary}" Foreground="White" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
+                        <TextBlock Text="{DynamicResource Tracker_QadhaSummary}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" FontSize="10" FontWeight="Bold"/>
                     </Grid>
                     <StackPanel Margin="0,15,0,0">
                         <Grid Margin="0,0,0,10">
-                            <TextBlock Text="{DynamicResource Tracker_Today}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{DynamicResource Tracker_Today}" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="11" FontWeight="SemiBold"/>
                             <TextBlock x:Name="QadhaTodayCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid Margin="0,0,0,10">
-                            <TextBlock Text="{DynamicResource Tracker_ThisWeek}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{DynamicResource Tracker_ThisWeek}" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="11" FontWeight="SemiBold"/>
                             <TextBlock x:Name="QadhaWeekCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid Margin="0,0,0,10">
-                            <TextBlock Text="{DynamicResource Tracker_ThisMonth}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{DynamicResource Tracker_ThisMonth}" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="11" FontWeight="SemiBold"/>
                             <TextBlock x:Name="QadhaMonthCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                         <Grid>
-                            <TextBlock Text="{DynamicResource Tracker_ThisYear}" Foreground="#D1D5DB" FontSize="11" FontWeight="SemiBold"/>
+                            <TextBlock Text="{DynamicResource Tracker_ThisYear}" Foreground="{DynamicResource ThemeSecondaryBrush}" FontSize="11" FontWeight="SemiBold"/>
                             <TextBlock x:Name="QadhaYearCount" Text="0" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
                         </Grid>
                     </StackPanel>

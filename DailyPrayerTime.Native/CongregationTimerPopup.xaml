@@ -5,26 +5,20 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" WindowStartupLocation="CenterScreen" ShowInTaskbar="False">
     
-    <Border CornerRadius="20" Margin="10">
-        <Border.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" x:Name="PopupGradient">
-                <GradientStop Color="#064e3b" Offset="0" x:Name="GradStop1"/>
-                <GradientStop Color="#022c22" Offset="1" x:Name="GradStop2"/>
-            </LinearGradientBrush>
-        </Border.Background>
+    <Border CornerRadius="20" Margin="10" Background="{DynamicResource ThemePopupBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1">
         <Border.Effect>
             <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="1" Opacity="0.5"/>
         </Border.Effect>
         
         <Grid Margin="20">
             <StackPanel VerticalAlignment="Center">
-                <TextBlock x:Name="PrayerNameText" Text="Fajr Jamaat" FontSize="18" Foreground="White" Opacity="0.8" HorizontalAlignment="Center"/>
-                <TextBlock x:Name="TargetTimeText" Text="Starts at 05:15 PM" FontSize="14" Foreground="White" Opacity="0.6" HorizontalAlignment="Center" Margin="0,2,0,0"/>
-                <TextBlock x:Name="TimerText" Text="05:00" FontSize="64" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="0,-5,0,0"/>
-                <TextBlock Text="{DynamicResource i18n_Label_MinutesRemaining}" FontSize="12" Foreground="White" Opacity="0.6" HorizontalAlignment="Center" Margin="0,-10,0,15"/>
+                <TextBlock x:Name="PrayerNameText" Text="Fajr Jamaat" FontSize="18" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" HorizontalAlignment="Center"/>
+                <TextBlock x:Name="TargetTimeText" Text="Starts at 05:15 PM" FontSize="14" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                <TextBlock x:Name="TimerText" Text="05:00" FontSize="64" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" HorizontalAlignment="Center" Margin="0,-5,0,0"/>
+                <TextBlock Text="{DynamicResource i18n_Label_MinutesRemaining}" FontSize="12" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" HorizontalAlignment="Center" Margin="0,-10,0,15"/>
                 
                 <Button Content="{DynamicResource i18n_Btn_Dismiss}" Click="Dismiss_Click" 
-                        Background="#34d399" Foreground="#022c22" 
+                        Background="{DynamicResource ThemeButtonBgBrush}" Foreground="{DynamicResource ThemeButtonTextBrush}" 
                         Padding="20,8" HorizontalAlignment="Center" 
                         BorderThickness="0" FontWeight="Bold">
                     <Button.Resources>

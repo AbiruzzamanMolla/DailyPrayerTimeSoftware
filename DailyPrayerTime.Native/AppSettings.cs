@@ -13,6 +13,7 @@ namespace DailyPrayerTime.Native
         public int GradientAngle { get; set; } = 100;
         public string PrimaryColor { get; set; } = "#10b981";
         public string SecondaryColor { get; set; } = "#34d399";
+        public string ThemePreset { get; set; } = "green";
         
         public int School { get; set; } = 1; // 1 = Hanafi, 0 = Shafi
         public string Method { get; set; } = "KARACHI";
@@ -50,6 +51,8 @@ namespace DailyPrayerTime.Native
 
         public double OverlayX { get; set; } = -1;
         public double OverlayY { get; set; } = -1;
+        public bool OverlayClickThrough { get; set; } = false;
+        public int OverlayClickThroughOpacity { get; set; } = 70;
 
         public bool NotificationsEnabled { get; set; } = true;
         public bool DndModeEnabled { get; set; } = false;

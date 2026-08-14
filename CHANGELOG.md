@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-08-14
+
+### Added
+
+- **Overlay Click-Through & Transparency**: Desktop overlay window now supports full click-through mode so the window passes all mouse events to underlying apps. Added configurable transparency/opacity controls so users can set the overlay to any opacity level.
+- **Light Theme (White & Black)**: New high-contrast light preset — pure white background with black text and accents for maximum readability in bright environments.
+- **Dark Theme (Black & White)**: New high-contrast dark/OLED-ready preset — deep black background with pure white text for maximum contrast in dark environments.
+- **Windows System Theme Follow**: New dynamic preset that automatically detects the active Windows light/dark mode and accent color in real time and syncs the app theme accordingly.
+- **Microsoft Store Link in Support**: Added official Microsoft Store listing URL (`apps.microsoft.com`) directly in Settings › Support › Official Resources.
+- **Clear Logs Button**: Added a "Clear Logs" action button in Settings › Help › System Diagnostic Logs to purge all local log files with one click.
+
+### Changed
+
+- **Full Dynamic Theme Color System**: Completed a comprehensive sweep of all 18 XAML files — removed every hardcoded hex/named color (`#FFFFFF`, `White`, `Black`, `#20FFFFFF`, etc.) and replaced with `{DynamicResource ThemeXxxBrush}` references so every UI element adapts to the active theme automatically.
+- **ComboBox/Select Box Custom Template**: Replaced WPF default `ComboBox` and `ComboBoxItem` styles with a fully custom `ControlTemplate` in `App.xaml`. The dropdown popup background now uses `ThemePopupBgBrush` and item text uses `ThemeTextBrush`, ensuring legibility across all themes.
+- **CardShadow Promoted to Global Resource**: Moved `DropShadowEffect CardShadow` from `LoaderWindow.xaml` local resources to `App.xaml` global resources so all windows and templates can reference it.
+- **Loader Window Theme Adaptation**: Replaced all semi-transparent white (`#20FFFFFF`, `#10FFFFFF`, `#15FFFFFF`) overlays in the splash/loader screen with proper `ThemeCardBgBrush` / `ThemeCardBorderBrush` bindings.
+
+### Fixed
+
+- **Menubar Icon Color**: Title bar button icons (🕌, ✦, ⚙, ─, ☐) now explicitly bind `Foreground="{DynamicResource ThemeTextBrush}"` so they render correctly in both Light (dark slate icons) and Dark (white icons) modes. The close (✕) button correctly inherits its parent's red (#EF4444) foreground.
+- **Select Box Text Invisible in Dark Theme**: ComboBox dropdown items were rendering white text on the system-default white popup background in Dark mode. Resolved by the new custom ComboBox ControlTemplate that forces the popup background to `ThemePopupBgBrush`.
+- **Decorative Path/SVG Icons**: All decorative `Fill="White"` paths (sun/moon hero background, Qibla compass center dot, congregation timer icon, overlay background) now use `Fill="{DynamicResource ThemeTextBrush}"` so they remain visible in Light mode.
+- **Toggle Switch Colors**: Eid toggle knob and track in Ramadan view now use `ThemeSecondaryBrush` / `ThemeCardBgBrush` instead of hardcoded gray/translucent white.
+
 ## [2.9.2] - 2026-07-27
 
 ### Added

@@ -11,6 +11,9 @@ namespace DailyPrayerTime.Native
         private const int GWL_EXSTYLE = -20;
         private const int WS_EX_NOACTIVATE = 0x08000000;
         private const int WS_EX_TOOLWINDOW = 0x00000080;
+        private const int WS_EX_TRANSPARENT = 0x00000020;
+
+        private bool _isClickThrough;
 
         [DllImport("user32.dll")]
         private static extern int GetWindowLong(IntPtr hwnd, int index);
@@ -39,6 +42,29 @@ namespace DailyPrayerTime.Native
             var hwnd = new WindowInteropHelper(this).Handle;
             int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
             SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW);
+
+            if (SettingsManager.Current.OverlayClickThrough)
+            {
+                SetClickThrough(true);
+            }
+        }
+
+        public void SetClickThrough(bool enabled)
+        {
+            _isClickThrough = enabled;
+            var hwnd = new WindowInteropHelper(this).Handle;
+            int exStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+
+            if (enabled)
+            {
+                SetWindowLong(hwnd, GWL_EXSTYLE, exStyle | WS_EX_TRANSPARENT);
+                this.Opacity = SettingsManager.Current.OverlayClickThroughOpacity / 100.0;
+            }
+            else
+            {
+                SetWindowLong(hwnd, GWL_EXSTYLE, exStyle & ~WS_EX_TRANSPARENT);
+                this.Opacity = 1.0;
+            }
         }
 
         public void ForceTopmost()
@@ -87,18 +113,21 @@ namespace DailyPrayerTime.Native
 
         private void Border_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            if (_isClickThrough) return;
             var sb = (Storyboard)this.Resources["ExpandAnim"];
             sb.Begin();
         }
 
         private void Border_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            if (_isClickThrough) return;
             var sb = (Storyboard)this.Resources["CollapseAnim"];
             sb.Begin();
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (_isClickThrough) return;
             if (e.ChangedButton == MouseButton.Left)
             {
                 this.DragMove();

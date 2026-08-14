@@ -7,48 +7,42 @@
     
     <Grid>
         <!-- Background Gradient -->
-        <Border x:Name="BackgroundBorder">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" x:Name="ScreenGradient">
-                    <GradientStop Color="#064e3b" Offset="0" x:Name="GradStop1"/>
-                    <GradientStop Color="#022c22" Offset="1" x:Name="GradStop2"/>
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border x:Name="BackgroundBorder" Background="{DynamicResource ThemePopupBgBrush}">
 
             <!-- Main Layout Grid -->
             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40">
                     <!-- Icon / Decorative top indicator -->
                     <Path Data="M12,2A10,10,0,0,0,2,12a9.89,9.89,0,0,0,2.26,6.33L3,21a1,1,0,0,0,1,1l2.67-.74A10,10,0,1,0,12,2Zm0,18a8,8,0,1,1,8-8A8,8,0,0,1,12,20ZM13,7H11v6H17V11H13Z"
-                          Fill="White" Opacity="0.3" Width="60" Height="60" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,30"/>
-
+                          Fill="{DynamicResource ThemeTextBrush}" Opacity="0.3" Width="60" Height="60" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,30"/>
+ 
                     <!-- Prayer Name -->
                     <TextBlock x:Name="PrayerNameText" Text="Fajr Jamaat Starts Soon" 
-                               FontSize="36" FontWeight="SemiBold" Foreground="White" Opacity="0.9" 
+                               FontSize="36" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.9" 
                                HorizontalAlignment="Center" TextAlignment="Center" Margin="0,0,0,10"/>
-
+ 
                     <!-- Start & End Time Range -->
                     <TextBlock x:Name="PrayerRangeText" Text="Prayer Time: 04:30 AM - 05:45 AM" 
-                               FontSize="18" Foreground="White" Opacity="0.6" 
+                               FontSize="18" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" 
                                HorizontalAlignment="Center" TextAlignment="Center" Margin="0,0,0,10"/>
-
+ 
                     <!-- Jamaat Time -->
                     <TextBlock x:Name="TargetTimeText" Text="Starts at 05:15 PM" 
-                               FontSize="22" FontWeight="Medium" Foreground="#34d399" 
+                               FontSize="22" FontWeight="Medium" Foreground="{DynamicResource ThemeSecondaryBrush}" 
                                HorizontalAlignment="Center" TextAlignment="Center" Margin="0,0,0,30"/>
-
+ 
                     <!-- Countdown Timer -->
                     <TextBlock x:Name="TimerText" Text="05:00" 
-                               FontSize="120" FontWeight="Bold" Foreground="White" 
+                               FontSize="120" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" 
                                HorizontalAlignment="Center" TextAlignment="Center" Margin="0,-15,0,5"/>
-
+ 
                     <TextBlock Text="{DynamicResource i18n_Label_MinutesRemaining}" 
-                               FontSize="16" Foreground="White" Opacity="0.5" 
+                               FontSize="16" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.5" 
                                HorizontalAlignment="Center" TextAlignment="Center" Margin="0,0,0,50"/>
-
+ 
                     <!-- Dismiss button (conditional visibility) -->
                     <Button x:Name="DismissButton" Content="{DynamicResource i18n_Btn_Dismiss}" Click="Dismiss_Click" 
-                            Background="#34d399" Foreground="#022c22" 
+                            Background="{DynamicResource ThemeButtonBgBrush}" Foreground="{DynamicResource ThemeButtonTextBrush}" 
                             Padding="35,14" HorizontalAlignment="Center" 
                             BorderThickness="0" FontSize="18" FontWeight="Bold" Cursor="Hand">
                         <Button.Resources>

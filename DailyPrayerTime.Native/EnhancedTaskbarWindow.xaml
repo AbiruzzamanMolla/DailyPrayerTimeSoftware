@@ -5,6 +5,6 @@
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         ShowInTaskbar="False" Topmost="False" ResizeMode="NoResize">
     <Grid Margin="4,0,4,0">
-        <TextBlock x:Name="DisplayText" Text="..." Foreground="#E0FFFFFF" FontSize="11" FontFamily="Segoe UI" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="DisplayText" Text="..." Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" FontFamily="Segoe UI" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </Window>

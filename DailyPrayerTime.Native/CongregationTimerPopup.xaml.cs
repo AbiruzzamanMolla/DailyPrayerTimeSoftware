@@ -60,11 +60,7 @@ namespace DailyPrayerTime.Native
 
         private void ApplyTheme()
         {
-            var s = SettingsManager.Current;
-            try {
-                GradStop1.Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.GradientStart);
-                GradStop2.Color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(s.GradientEnd);
-            } catch { }
+            // The template uses the dynamic ThemeBgBrush directly from application resources
         }
 
         private void UpdateDisplay()

@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
     <Product>Daily Prayer Timer (Native)</Product>
-    <Version>2.9.2</Version>
+    <Version>2.10.0</Version>
     <AssemblyVersion>2.9.2.0</AssemblyVersion>
     <FileVersion>2.9.2.0</FileVersion>
     <Company>Abiruzzaman Molla</Company>
