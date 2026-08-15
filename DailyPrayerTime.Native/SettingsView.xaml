@@ -1543,22 +1543,22 @@
                         <!-- LATEST NEW UPDATES (CHANGELOG SUMMARY) -->
                         <Border Style="{StaticResource PremiumCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="✨ What's New in Version 2.9.2" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource ThemeWarningBrush}" Margin="0,0,0,6"/>
+                                <TextBlock Text="✨ What's New in Version 2.10.0" FontWeight="Bold" FontSize="15" Foreground="{DynamicResource ThemeWarningBrush}" Margin="0,0,0,6"/>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Auto-Play Tasbih Counter:</Bold> Interactive autoplay with sound pronunciation and configurable interval speeds (1s to 5s), automatically pacing sounds sequentially.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Overlay Click-Through &amp; Transparency:</Bold> Desktop overlay window now supports full click-through mode and configurable opacity/transparency controls.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Multi-Monitor Full Screen Support:</Bold> Displays congregation/Jamaat timer full-screen notifications on all connected screens simultaneously, with unified sync-close dismiss.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Dynamic System Light/Dark Themes:</Bold> Complete support for System High-Contrast Light, OLED Dark, and automatic Windows Light/Dark/Accent theme sync in real time.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Separate Offsets per Fard Prayer:</Bold> Configure custom start (minutes before) and end (minutes after) timer ranges for Fajr, Dhuhr, Asr, Maghrib, and Isha individually in settings.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>ComboBox Custom Templates:</Bold> Replaced all standard Select Boxes with beautiful custom themes to guarantee high legibility across all custom styles.</TextBlock>
                                 </BulletDecorator>
                                 <BulletDecorator Margin="0,2,0,2">
                                     <BulletDecorator.Bullet><TextBlock Text="✅" FontSize="11"/></BulletDecorator.Bullet>
-                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Durood Tasbih &amp; Asset Fixes:</Bold> Added Durood to the Tasbih counter list with custom audio playback support, and fixed duplicate asset download overlaps.</TextBlock>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11.5" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" Margin="10,0,0,0"><Bold>Diagnostics and Support:</Bold> Added a "Clear Logs" button for quick log purging, and direct official Microsoft Store support resources link.</TextBlock>
                                 </BulletDecorator>
                             </StackPanel>
                         </Border>

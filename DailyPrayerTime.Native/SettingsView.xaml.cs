@@ -1466,7 +1466,7 @@ namespace DailyPrayerTime.Native
             {
                 string messageId = Guid.NewGuid().ToString();
                 var timestamp = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-                string appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.9.2";
+                string appVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "2.10.0";
                 string uid = AuthService.Instance.Uid ?? "";
 
                 // 1. Save message to 'contact_messages'
