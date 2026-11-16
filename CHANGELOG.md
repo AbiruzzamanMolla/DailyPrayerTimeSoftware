@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-11-16
+
+### Added
+
+- **Dismissible Update Banner**: The update notice now has a close control and remembers the dismissed version, so it stops asking for the same release.
+
+### Changed
+
+- **One Icon Set**: Emoji in the bottom navigation and title bar replaced with a single stroked vector icon set (1.6 stroke, inherits the theme foreground). Icon-only buttons now carry accessibility names.
+- **Flatter Home Hero**: The card nested inside the hero card and the six bordered prayer tiles were replaced by one hairline-separated block and a flat five-column prayer row. The prayer tracker lost its extra card and became a hairline section.
+
+### Fixed
+
+- **Negative Countdowns**: The Iftar and prohibited-time tiles showed future events as "-3h 2m" and "-2h 47m". Remaining time is now shown as plain time next to "Starts in".
+- **Countdown Label**: "Time Left for Dhuhr" counted down to Asr. The label now reads "Dhuhr ends in".
+- **Tracker Progress**: "0/1 Completed" appeared beside five deed checkboxes; the count now covers every visible deed.
+- **Theme Drift in Code**: Toolbar active state, prayer-list highlight, prohibited-time cards, highlights countdown and Zen background read theme brushes instead of hardcoded colors.
+- **Tofu Glyph**: The honorific "ﷺ" rendered as a box in English fasting notes; replaced with "(peace be upon him)".
+
 ## [2.10.0] - 2026-08-14
 
 ### Added

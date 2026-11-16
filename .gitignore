@@ -49,3 +49,5 @@ manifests/
 wingetcreate.exe
 *.nupkg
 scoop-bucket/
+# Local design review output
+.unslopovich/

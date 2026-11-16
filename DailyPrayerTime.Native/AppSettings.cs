@@ -174,6 +174,8 @@ namespace DailyPrayerTime.Native
 
         // Auto Updates
         public bool AutoInstallUpdates { get; set; } = false;
+        /// <summary>Latest version the user dismissed from the update banner; not shown again for that version.</summary>
+        public string DismissedUpdateVersion { get; set; } = "";
 
         // Dhikr & Durood Settings
         public bool DhikrReminderEnabled { get; set; } = false;

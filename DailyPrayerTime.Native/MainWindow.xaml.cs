@@ -170,7 +170,8 @@ namespace DailyPrayerTime.Native
             try
             {
                 _currentUpdate = await UpdateService.CheckForUpdateAsync();
-                if (_currentUpdate != null && _currentUpdate.IsUpdateAvailable)
+                if (_currentUpdate != null && _currentUpdate.IsUpdateAvailable
+                    && _currentUpdate.LatestVersion != SettingsManager.Current.DismissedUpdateVersion)
                 {
                     Dispatcher.Invoke(() =>
                     {
@@ -660,7 +661,6 @@ namespace DailyPrayerTime.Native
 
         private async void Settings_Click(object? sender, RoutedEventArgs? e)
         {
-            SettingsIcon.Foreground = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
             await Task.Delay(50);
             ShowSettingsView();
             SyncToolbarIcons();
@@ -702,12 +702,12 @@ namespace DailyPrayerTime.Native
             if (_isZenMode)
             {
                 // Deep dark navy background from reference image
-                MainGrid.Background = new SolidColorBrush(WColor.FromRgb(17, 24, 39));
+                MainGrid.SetResourceReference(System.Windows.Controls.Panel.BackgroundProperty, "ThemeBgBrush");
             }
             else
             {
                 // Restore original gradient
-                MainGrid.Background = (LinearGradientBrush)FindResource("MainGradient");
+                MainGrid.SetResourceReference(System.Windows.Controls.Panel.BackgroundProperty, "ThemeBgBrush");
             }
         }
 
@@ -728,7 +728,7 @@ namespace DailyPrayerTime.Native
             UpdateFastingHighlights();
 
             MainContentStack.VerticalAlignment = VerticalAlignment.Top;
-            MainGrid.Background = (LinearGradientBrush)FindResource("MainGradient");
+            MainGrid.SetResourceReference(System.Windows.Controls.Panel.BackgroundProperty, "ThemeBgBrush");
 
             // Restore remote API notice banners cleanly
             _ = CheckApiNoticeAsync();
@@ -791,9 +791,18 @@ namespace DailyPrayerTime.Native
             Settings_Click(null, null);
         }
 
-        private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void UpdateBannerDismiss_Click(object sender, RoutedEventArgs e)
         {
-            if (_currentUpdate != null && !string.IsNullOrEmpty(_currentUpdate.ReleaseUrl))
+            UpdateBanner.Visibility = Visibility.Collapsed;
+            if (_currentUpdate != null)
+            {
+                SettingsManager.Current.DismissedUpdateVersion = _currentUpdate.LatestVersion;
+                SettingsManager.Save();
+            }
+        }
+
+        private void UpdateBanner_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {            if (_currentUpdate != null && !string.IsNullOrEmpty(_currentUpdate.ReleaseUrl))
             {
                 try
                 {
@@ -1043,13 +1052,13 @@ namespace DailyPrayerTime.Native
                 {
                     DhuhrLabel.Text = LocalizationManager.Instance.GetString("Prayer_Duha");
                     SubDhuhrTime.Text = $"{duhaStart.ToString(timeFmt)} - {duhaEnd.ToString(timeFmt)}";
-                    DhuhrLabel.Foreground = new SolidColorBrush(WColor.FromRgb(251, 191, 36)); // amber-400
+                    DhuhrLabel.Foreground = ThemeBrush("ThemeWarningBrush", System.Windows.Media.Brushes.White);
                 }
                 else
                 {
                     DhuhrLabel.Text = showJumuah ? LocalizationManager.Instance.GetString("Prayer_Jumuah") : LocalizationManager.Instance.GetString("Prayer_Dhuhr");
                     SubDhuhrTime.Text = $"{_todayPrayerTimes.Dhuhr.ToString(timeFmt)} - {_todayPrayerTimes.Asr.ToString(timeFmt)}";
-                    DhuhrLabel.Foreground = System.Windows.Media.Brushes.White;
+                    DhuhrLabel.Foreground = ThemeBrush("ThemeTextBrush", System.Windows.Media.Brushes.White);
                 }
 
                 // Slot Swapping: Tahajjud (After Midnight)
@@ -1061,13 +1070,13 @@ namespace DailyPrayerTime.Native
                 if (now >= midnight && now < _tomorrowPrayerTimes.Fajr)
                 {
                     IshaLabel.Text = LocalizationManager.Instance.GetString("Prayer_Tahajjud");
-                    IshaLabel.Foreground = new SolidColorBrush(WColor.FromRgb(52, 211, 153)); // emerald-400 (Tahajjud)
+                    IshaLabel.Foreground = ThemeBrush("ThemeAccentBrush", System.Windows.Media.Brushes.White);
                     SubIshaTime.Text = $"{midnight.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
                 }
                 else
                 {
                     IshaLabel.Text = LocalizationManager.Instance.GetString("Prayer_Isha");
-                    IshaLabel.Foreground = System.Windows.Media.Brushes.White;
+                    IshaLabel.Foreground = ThemeBrush("ThemeTextBrush", System.Windows.Media.Brushes.White);
                     SubIshaTime.Text = $"{_todayPrayerTimes.Isha.ToString(timeFmt)} - {_tomorrowPrayerTimes.Fajr.ToString(timeFmt)}";
                 }
 
@@ -1877,36 +1886,35 @@ namespace DailyPrayerTime.Native
         }
 
 
-        private static void UpdateProhibCard(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock timerText, System.Windows.Controls.TextBlock? stickyStatus, DateTime now, DateTime start, DateTime end)
+        private void UpdateProhibCard(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock timerText, System.Windows.Controls.TextBlock? stickyStatus, DateTime now, DateTime start, DateTime end)
         {
             if (now >= start && now <= end)
             {
-                card.Background = new SolidColorBrush(WColor.FromArgb(150, 239, 68, 68)); // semi-transparent red
+                card.Background = ThemeBrush("ThemeProhibitedBgBrush", new SolidColorBrush(WColor.FromArgb(150, 239, 68, 68)));
                 TimeSpan rem = end - now;
-                string t = $"{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
-                timerText.Text = t;
+                timerText.Text = $"{rem.Hours}h {rem.Minutes}m {rem.Seconds}s";
                 if (stickyStatus != null)
                 {
                     stickyStatus.Text = "ACTIVE";
-                    stickyStatus.Foreground = new SolidColorBrush(WColor.FromRgb(248, 113, 113)); // red-400
+                    stickyStatus.Foreground = ThemeBrush("ThemeWarningBrush", new SolidColorBrush(WColor.FromRgb(251, 191, 36)));
                 }
             }
             else
             {
-                card.Background = new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255)); // 10% white (glass)
+                card.Background = ThemeBrush("ThemeCardBgBrush", new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255)));
                 if (now < start)
                 {
                     TimeSpan rem = start - now;
-                    string t = rem.TotalHours < 24 
-                        ? $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}" 
+                    string t = rem.TotalHours < 24
+                        ? $"{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}"
                         : LocalizationManager.Instance.GetString("Label_Upcoming");
                     timerText.Text = t;
                     if (stickyStatus != null)
                     {
-                        stickyStatus.Text = rem.TotalHours < 24 
-                            ? string.Format(LocalizationManager.Instance.GetString("Label_StartsInShort"), rem.Hours, rem.Minutes) 
+                        stickyStatus.Text = rem.TotalHours < 24
+                            ? string.Format(LocalizationManager.Instance.GetString("Label_StartsInShort"), rem.Hours, rem.Minutes)
                             : LocalizationManager.Instance.GetString("Label_Upcoming");
-                        stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.7 };
+                        stickyStatus.Foreground = ThemeBrush("ThemeTextMutedBrush", System.Windows.Media.Brushes.White);
                     }
                 }
                 else
@@ -1915,7 +1923,7 @@ namespace DailyPrayerTime.Native
                     if (stickyStatus != null)
                     {
                         stickyStatus.Text = LocalizationManager.Instance.GetString("Label_Passed");
-                        stickyStatus.Foreground = new SolidColorBrush(Colors.White) { Opacity = 0.5 };
+                        stickyStatus.Foreground = ThemeBrush("ThemeTextMutedBrush", System.Windows.Media.Brushes.White);
                     }
                 }
             }
@@ -2034,18 +2042,18 @@ namespace DailyPrayerTime.Native
             UpdateSingleHighlight(IftarCountdownText, now, _todayPrayerTimes.Iftar);
         }
 
-        private static void UpdateSingleHighlight(System.Windows.Controls.TextBlock textBlock, DateTime now, DateTime target)
+        private void UpdateSingleHighlight(System.Windows.Controls.TextBlock textBlock, DateTime now, DateTime target)
         {
             if (now > target)
             {
                 textBlock.Text = LocalizationManager.Instance.GetString("Label_Passed");
-                textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(156, 163, 175)); // slate-400
+                textBlock.Foreground = ThemeBrush("ThemeTextMutedBrush", new SolidColorBrush(WColor.FromRgb(156, 163, 175)));
             }
             else
             {
                 TimeSpan rem = target - now;
-                textBlock.Text = $"-{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}";
-                textBlock.Foreground = new SolidColorBrush(WColor.FromRgb(255, 255, 255)); // white
+                textBlock.Text = $"{rem.Hours}{LocalizationManager.Instance.GetString("Unit_Hour_Short")} {rem.Minutes}{LocalizationManager.Instance.GetString("Unit_Min_Short")} {rem.Seconds}{LocalizationManager.Instance.GetString("Unit_Sec_Short")}";
+                textBlock.Foreground = ThemeBrush("ThemeTextBrush", new SolidColorBrush(WColor.FromRgb(255, 255, 255)));
             }
         }
 
@@ -2221,7 +2229,7 @@ namespace DailyPrayerTime.Native
                 }
                 else
                 {
-                    HeroContextNoteText.Foreground = new SolidColorBrush(WColor.FromRgb(251, 191, 36)); // amber-400 (reset for Makruh)
+                    HeroContextNoteText.Foreground = ThemeBrush("ThemeWarningBrush", new SolidColorBrush(WColor.FromRgb(251, 191, 36)));
                 }
             }
         }
@@ -2664,10 +2672,10 @@ namespace DailyPrayerTime.Native
 
         private void UpdatePrayerListHighlighting(Prayer curPrayer)
         {
-            ResetHighlighting(this);
-            var activeBg = new SolidColorBrush(WColor.FromArgb(40, 255, 255, 255));
-            var activeNameBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153));
-            var whiteBrush = new SolidColorBrush(Colors.White);
+            ResetHighlighting();
+            var activeBg = ThemeBrush("ThemePrimaryTranslucentBrush", new SolidColorBrush(WColor.FromArgb(40, 255, 255, 255)));
+            var activeNameBrush = ThemeBrush("ThemeAccentBrush", new SolidColorBrush(WColor.FromRgb(52, 211, 153)));
+            var whiteBrush = ThemeBrush("ThemeTextBrush", new SolidColorBrush(Colors.White));
 
             switch (curPrayer)
             {
@@ -2680,21 +2688,21 @@ namespace DailyPrayerTime.Native
             }
         }
 
-        private static void ResetHighlighting(MainWindow window)
+        private void ResetHighlighting()
         {
-            var transparentBg = new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255));
-            var whiteBrush = new SolidColorBrush(Colors.White);
-            var greenBrush = new SolidColorBrush(WColor.FromRgb(52, 211, 153));
-            
-            SetCardHighlight(window.FajrCard, window.FajrNameText, window.FajrTimeText, transparentBg, whiteBrush, greenBrush);
-            SetCardHighlight(window.SunriseCard, window.SunriseNameText, window.SunriseTimeText, transparentBg, whiteBrush, greenBrush);
-            SetCardHighlight(window.DhuhrCard, window.DhuhrNameText, window.DhuhrTimeText, transparentBg, whiteBrush, greenBrush);
-            SetCardHighlight(window.AsrCard, window.AsrNameText, window.AsrTimeText, transparentBg, whiteBrush, greenBrush);
-            SetCardHighlight(window.MaghribCard, window.MaghribNameText, window.MaghribTimeText, transparentBg, whiteBrush, greenBrush);
-            SetCardHighlight(window.IshaCard, window.IshaNameText, window.IshaTimeText, transparentBg, whiteBrush, greenBrush);
+            var transparentBg = ThemeBrush("ThemeCardBgBrush", new SolidColorBrush(WColor.FromArgb(26, 255, 255, 255)));
+            var whiteBrush = ThemeBrush("ThemeTextBrush", new SolidColorBrush(Colors.White));
+            var greenBrush = ThemeBrush("ThemeAccentBrush", new SolidColorBrush(WColor.FromRgb(52, 211, 153)));
+
+            SetCardHighlight(FajrCard, FajrNameText, FajrTimeText, transparentBg, whiteBrush, greenBrush);
+            SetCardHighlight(SunriseCard, SunriseNameText, SunriseTimeText, transparentBg, whiteBrush, greenBrush);
+            SetCardHighlight(DhuhrCard, DhuhrNameText, DhuhrTimeText, transparentBg, whiteBrush, greenBrush);
+            SetCardHighlight(AsrCard, AsrNameText, AsrTimeText, transparentBg, whiteBrush, greenBrush);
+            SetCardHighlight(MaghribCard, MaghribNameText, MaghribTimeText, transparentBg, whiteBrush, greenBrush);
+            SetCardHighlight(IshaCard, IshaNameText, IshaTimeText, transparentBg, whiteBrush, greenBrush);
         }
 
-        private static void SetCardHighlight(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock name, System.Windows.Controls.TextBlock time, SolidColorBrush bg, SolidColorBrush nameFg, SolidColorBrush timeFg)
+        private static void SetCardHighlight(System.Windows.Controls.Border card, System.Windows.Controls.TextBlock name, System.Windows.Controls.TextBlock time, Brush bg, Brush nameFg, Brush timeFg)
         {
             card.Background = bg;
             name.Foreground = nameFg;
@@ -2863,25 +2871,22 @@ namespace DailyPrayerTime.Native
 
         private void SyncToolbarIcons()
         {
-            var activeBg = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#34D399"));
-            var transBg = System.Windows.Media.Brushes.Transparent;
-            var darkFg = new SolidColorBrush((WColor)WColorConverter.ConvertFromString("#111827"));
-            var whiteFg = System.Windows.Media.Brushes.White;
+            var activeBg = ThemeBrush("ThemePrimaryTranslucentBrush", System.Windows.Media.Brushes.Transparent);
+            var activeFg = ThemeBrush("ThemeAccentBrush", System.Windows.Media.Brushes.White);
+            var idleFg = ThemeBrush("ThemeTextBrush", System.Windows.Media.Brushes.White);
 
-            // 1. Ramadan Icon
-            RamadanBtn.Background = _isRamadanMode ? activeBg : transBg;
-            RamadanIcon.Foreground = _isRamadanMode ? darkFg : whiteFg;
-            RamadanIcon.Opacity = 1.0;
+            RamadanBtn.Background = _isRamadanMode ? activeBg : System.Windows.Media.Brushes.Transparent;
+            RamadanBtn.Foreground = _isRamadanMode ? activeFg : idleFg;
 
-            // 3. Zen Mode Icon
-            ZenModeBtn.Background = _isZenMode ? activeBg : transBg;
-            ZenModeIcon.Foreground = _isZenMode ? darkFg : whiteFg;
-            ZenModeIcon.Opacity = 1.0;
+            ZenModeBtn.Background = _isZenMode ? activeBg : System.Windows.Media.Brushes.Transparent;
+            ZenModeBtn.Foreground = _isZenMode ? activeFg : idleFg;
 
-            // 4. Settings & System Icons (Always White/Visible)
-            SettingsIcon.Foreground = whiteFg;
-            SettingsIcon.Opacity = 1.0;
+            SettingsBtn.Foreground = idleFg;
         }
+
+        /// <summary>Reads a theme brush so code-built visuals follow light and dark themes.</summary>
+        private Brush ThemeBrush(string key, Brush fallback)
+            => (TryFindResource(key) as Brush) ?? fallback;
 
         public HashSet<string> GetEnabledTrackerPrayers()
         {
@@ -3075,18 +3080,10 @@ namespace DailyPrayerTime.Native
 
         private void UpdateOverallTrackerProgress()
         {
-            if (HeroRakatList.ItemsSource is List<DeedEntry> deeds)
+            if (HeroRakatList.ItemsSource is List<DeedEntry> deeds && deeds.Count > 0)
             {
-                var fardDeed = deeds.FirstOrDefault(d => d.Type == DeedType.Fard);
-                if (fardDeed != null)
-                {
-                    HeroTrackerProgress.Text = fardDeed.IsChecked ? "1/1 Completed" : "0/1 Completed";
-                }
-                else
-                {
-                    int done = deeds.Count(d => d.IsChecked);
-                    HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
-                }
+                int done = deeds.Count(d => d.IsChecked);
+                HeroTrackerProgress.Text = $"{done}/{deeds.Count} Completed";
             }
         }
 

@@ -169,6 +169,12 @@
           }
         }
       },
+      "Microsoft.NET.ILLink.Tasks/8.0.25": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/3.1.0": {
         "type": "package",
         "compile": {
@@ -407,7 +413,7 @@
         }
       }
     },
-    "net8.0-windows10.0.19041/win-x64": {
+    "net8.0-windows10.0.19041/win-x86": {
       "Adhan/0.9.0": {
         "type": "package",
         "compile": {
@@ -575,6 +581,12 @@
           }
         }
       },
+      "Microsoft.NET.ILLink.Tasks/8.0.25": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/3.1.0": {
         "type": "package",
         "compile": {
@@ -628,7 +640,7 @@
           }
         },
         "native": {
-          "runtimes/win-x64/native/WebView2Loader.dll": {}
+          "runtimes/win-x86/native/WebView2Loader.dll": {}
         },
         "build": {
           "build/_._": {}
@@ -846,6 +858,57 @@
         "lib/net6.0-windows7.0/vi/Firebase.Auth.UI.resources.dll",
         "lib/net6.0-windows7.0/zh/Firebase.Auth.UI.resources.dll",
         "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Microsoft.NET.ILLink.Tasks/8.0.25": {
+      "sha512": "sqX4nmBft05ivqKvUT4nxaN8rT3apCLt9SWFkfRrQPwra1zPwFknQAw1lleuMCKOCLvVmOWwrC2iPSm9RiXZUg==",
+      "type": "package",
+      "path": "microsoft.net.illink.tasks/8.0.25",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "Sdk/Sdk.props",
+        "THIRD-PARTY-NOTICES.TXT",
+        "analyzers/dotnet/cs/ILLink.CodeFixProvider.dll",
+        "analyzers/dotnet/cs/ILLink.RoslynAnalyzer.dll",
+        "build/Microsoft.NET.ILLink.Analyzers.props",
+        "build/Microsoft.NET.ILLink.Tasks.props",
+        "build/Microsoft.NET.ILLink.targets",
+        "microsoft.net.illink.tasks.8.0.25.nupkg.sha512",
+        "microsoft.net.illink.tasks.nuspec",
+        "tools/net472/ILLink.Tasks.dll",
+        "tools/net472/ILLink.Tasks.dll.config",
+        "tools/net472/Mono.Cecil.Mdb.dll",
+        "tools/net472/Mono.Cecil.Pdb.dll",
+        "tools/net472/Mono.Cecil.Rocks.dll",
+        "tools/net472/Mono.Cecil.dll",
+        "tools/net472/Sdk/Sdk.props",
+        "tools/net472/System.Buffers.dll",
+        "tools/net472/System.Collections.Immutable.dll",
+        "tools/net472/System.Memory.dll",
+        "tools/net472/System.Numerics.Vectors.dll",
+        "tools/net472/System.Reflection.Metadata.dll",
+        "tools/net472/System.Runtime.CompilerServices.Unsafe.dll",
+        "tools/net472/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net472/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net472/build/Microsoft.NET.ILLink.targets",
+        "tools/net8.0/ILLink.Tasks.deps.json",
+        "tools/net8.0/ILLink.Tasks.dll",
+        "tools/net8.0/Mono.Cecil.Mdb.dll",
+        "tools/net8.0/Mono.Cecil.Pdb.dll",
+        "tools/net8.0/Mono.Cecil.Rocks.dll",
+        "tools/net8.0/Mono.Cecil.dll",
+        "tools/net8.0/Sdk/Sdk.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.targets",
+        "tools/net8.0/illink.deps.json",
+        "tools/net8.0/illink.dll",
+        "tools/net8.0/illink.runtimeconfig.json",
+        "useSharedDesignerContext.txt"
       ]
     },
     "Microsoft.NETCore.Platforms/3.1.0": {
@@ -1366,6 +1429,7 @@
       "Adhan >= 0.9.0",
       "FirebaseAuthentication.WPF >= 4.1.0",
       "FirebaseAuthentication.net >= 4.1.0",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.25",
       "Microsoft.Toolkit.Uwp.Notifications >= 7.1.3",
       "Newtonsoft.Json >= 13.0.3",
       "QRCoder >= 1.4.3"
@@ -1375,7 +1439,7 @@
     "C:\\Users\\Abir\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "2.10.0",
+    "version": "2.11.0",
     "restore": {
       "projectUniqueName": "J:\\Web Development\\abir\\software\\DailyPrayerTime\\DailyPrayerTime.Native\\DailyPrayerTime.Native.csproj",
       "projectName": "DailyPrayerTime.Native",
@@ -1426,6 +1490,12 @@
             "target": "Package",
             "version": "[4.1.0, )"
           },
+          "Microsoft.NET.ILLink.Tasks": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[8.0.25, )",
+            "autoReferenced": true
+          },
           "Microsoft.Toolkit.Uwp.Notifications": {
             "target": "Package",
             "version": "[7.1.3, )"
@@ -1456,7 +1526,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1464,7 +1534,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "name": "Microsoft.NETCore.App.Host.win-x86",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1472,7 +1542,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.NETCore.App.Runtime.win-x64",
+            "name": "Microsoft.NETCore.App.Runtime.win-x86",
             "version": "[8.0.25, 8.0.25]"
           },
           {
@@ -1484,7 +1554,7 @@
             "version": "[8.0.25, 8.0.25]"
           },
           {
-            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
             "version": "[8.0.25, 8.0.25]"
           }
         ],
@@ -1503,7 +1573,7 @@
       }
     },
     "runtimes": {
-      "win-x64": {
+      "win-x86": {
         "#import": []
       }
     }

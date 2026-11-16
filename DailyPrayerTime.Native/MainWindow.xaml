@@ -113,6 +113,33 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+
+        <!-- One icon set: stroked, 1.6, inherits the control's Foreground -->
+        <Style x:Key="TabIconStyle" TargetType="Path">
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Fill" Value="Transparent"/>
+            <Setter Property="StrokeThickness" Value="1.6"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="StrokeLineJoin" Value="Round"/>
+            <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+        </Style>
+
+        <Style x:Key="ToolbarIconStyle" TargetType="Path">
+            <Setter Property="Width" Value="17"/>
+            <Setter Property="Height" Value="17"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Fill" Value="Transparent"/>
+            <Setter Property="StrokeThickness" Value="1.6"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="StrokeLineJoin" Value="Round"/>
+            <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
     
     <Border Background="{DynamicResource ThemeGradientBrush}" CornerRadius="15" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1">
@@ -143,16 +170,19 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Button x:Name="RamadanBtn" Click="RamadanMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_Ramadan}" Margin="0,0,5,0">
-                        <TextBlock x:Name="RamadanIcon" Text="🕌" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button x:Name="RamadanBtn" Click="RamadanMode_Click" Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{DynamicResource ToolTip_Ramadan}" AutomationProperties.Name="{DynamicResource ToolTip_Ramadan}" Margin="0,0,5,0">
+                        <Path Style="{StaticResource ToolbarIconStyle}" Data="M15.2 3.5a9 9 0 1 0 0 17c-4.6-1.2-7.4-4.6-7.4-8.5S10.6 4.7 15.2 3.5Z"/>
                     </Button>
 
-                    <Button x:Name="ZenModeBtn" Click="ZenMode_Click" Style="{StaticResource ToolbarButtonStyle}" ToolTip="{DynamicResource ToolTip_ZenMode}" Margin="0,0,5,0">
-                        <TextBlock x:Name="ZenModeIcon" Text="✦" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ThemeTextBrush}" Opacity="1.0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button x:Name="ZenModeBtn" Click="ZenMode_Click" Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{DynamicResource ToolTip_ZenMode}" AutomationProperties.Name="{DynamicResource ToolTip_ZenMode}" Margin="0,0,5,0">
+                        <Path Style="{StaticResource ToolbarIconStyle}" Data="M12 3.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6ZM12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Z"/>
                     </Button>
 
-                    <Button x:Name="SettingsBtn" Click="Settings_Click" Style="{StaticResource ToolbarButtonStyle}" Margin="0,0,10,0">
-                        <TextBlock x:Name="SettingsIcon" Text="⚙" FontSize="16" Foreground="{DynamicResource ThemeTextBrush}" Opacity="1.0" />
+                    <Button x:Name="SettingsBtn" Click="Settings_Click" Style="{StaticResource ToolbarButtonStyle}"
+                            ToolTip="{DynamicResource Settings}" AutomationProperties.Name="{DynamicResource Settings}" Margin="0,0,10,0">
+                        <Path Style="{StaticResource ToolbarIconStyle}" Data="M12 2.2l1.4 2.3 2.7-.3.6 2.6 2.3 1.4-1.1 2.5 1.1 2.5-2.3 1.4-.6 2.6-2.7-.3L12 21.8l-1.4-2.3-2.7.3-.6-2.6L5 15.8l1.1-2.5L5 10.8l2.3-1.4.6-2.6 2.7.3zM12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z"/>
                     </Button>
 
                     <Border Width="1" Height="20" Background="{DynamicResource ThemeCardBorderBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
@@ -180,6 +210,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="✨" FontSize="18" VerticalAlignment="Center" Margin="0,0,12,0" />
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -187,6 +218,11 @@
                         <TextBlock x:Name="UpdateVersionText" Text="{DynamicResource Update_Ready}" Foreground="{DynamicResource ThemeButtonTextBrush}" FontSize="11" Opacity="0.8" />
                     </StackPanel>
                     <TextBlock Grid.Column="2" Text="{DynamicResource Update_Download}" Foreground="{DynamicResource ThemeButtonTextBrush}" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+                    <Button x:Name="UpdateBannerDismiss" Grid.Column="3" Click="UpdateBannerDismiss_Click"
+                            Background="Transparent" BorderThickness="0" Padding="8,2" Margin="10,0,0,0" Cursor="Hand"
+                            ToolTip="{DynamicResource Btn_Dismiss}" AutomationProperties.Name="{DynamicResource Btn_Dismiss}">
+                        <TextBlock Text="✕" FontSize="11" Foreground="{DynamicResource ThemeButtonTextBrush}"/>
+                    </Button>
                 </Grid>
             </Border>
 
@@ -300,8 +336,9 @@
  
                     <TextBlock x:Name="HeroPrayerNote" Text="" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" FontSize="12" HorizontalAlignment="Center" Margin="0,10,0,0" TextWrapping="Wrap" MaxWidth="300" FontWeight="SemiBold"/>
  
-                    <Border x:Name="HeroMiniGridsBorder" Margin="0,15,0,0" Background="{DynamicResource ThemeCardBgBrush}" CornerRadius="12" Padding="12,12">
+                    <Border x:Name="HeroMiniGridsBorder" Margin="0,15,0,0" Background="Transparent" BorderThickness="0" Padding="0">
                         <StackPanel>
+                            <Border Height="1" Background="{DynamicResource ThemeCardBorderBrush}" Margin="0,0,0,10"/>
                             <Grid Margin="0,0,0,12">
                                 <TextBlock x:Name="HeroSubDate" Text="--" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.9" FontSize="11" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock x:Name="HeroSubDay" Text="--" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -313,14 +350,14 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Column="0" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="0,0,5,0">
+                                <Border Grid.Column="0" Background="Transparent" BorderThickness="0" Padding="0,4" Margin="0,0,5,0">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="{DynamicResource Label_SuhurEnds}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="HeroSuhurTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                         <TextBlock x:Name="HeroSuhurStatus" Text="--:--:--" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.8" FontSize="9" HorizontalAlignment="Center" Margin="0,1,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Column="1" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12,10" Margin="5,0,5,0">
+                                <Border Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="0,4" Margin="5,0,5,0">
                                     <StackPanel HorizontalAlignment="Center">
                                         <TextBlock Text="{DynamicResource Label_IftarBegins}" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.7" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="HeroIftarTime" Text="--:--" Foreground="{DynamicResource ThemeWarningBrush}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,2,0,0"/>
@@ -339,31 +376,31 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Border Grid.Row="0" Grid.Column="0" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="0" Grid.Column="0" Background="Transparent" BorderThickness="0" Padding="4,2" Margin="2">
                                     <StackPanel>
                                         <TextBlock Text="{DynamicResource Prayer_Fajr}" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubFajrTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0" Padding="4,2" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="DhuhrLabel" Text="{DynamicResource Prayer_Dhuhr}" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubDhuhrTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="0" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="1" Grid.Column="0" Background="Transparent" BorderThickness="0" Padding="4,2" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="AsrLabel" Text="Asr" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubAsrTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="1" Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="4,2" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="MaghribLabel" Text="Maghrib" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubMaghribTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </Border>
-                                <Border Grid.Row="1" Grid.Column="2" Background="{DynamicResource ThemeCardBgBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="5" Margin="2">
+                                <Border Grid.Row="1" Grid.Column="2" Background="Transparent" BorderThickness="0" Padding="4,2" Margin="2">
                                     <StackPanel>
                                         <TextBlock x:Name="IshaLabel" Text="Isha" Foreground="{DynamicResource ThemeTextBrush}" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center"/>
                                         <TextBlock x:Name="SubIshaTime" Text="--:--" Foreground="{DynamicResource ThemeTextBrush}" FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0"/>
@@ -374,16 +411,16 @@
                     </Border>
 
                     <Border x:Name="HeroTrackerBox" 
-                            Background="{DynamicResource ThemeCardBgBrush}" 
-                            CornerRadius="12" 
-                            Padding="12,15" 
+                            Background="Transparent" 
+                            CornerRadius="0" 
+                            Padding="0" 
                             Margin="0,15,0,0"
                             BorderBrush="{DynamicResource ThemeCardBorderBrush}"
-                            BorderThickness="1"
+                            BorderThickness="0,1,0,0"
                             Visibility="Visible">
-                        <StackPanel>
+                        <StackPanel Margin="0,10,0,0">
                             <Grid Margin="0,0,0,10">
-                                <TextBlock x:Name="HeroTrackerTitle" Text="TRACKER" FontSize="11" Opacity="0.8" Foreground="{DynamicResource ThemeTextBrush}" Margin="4,0,0,0" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="HeroTrackerTitle" Text="TRACKER" FontSize="11" Opacity="0.8" Foreground="{DynamicResource ThemeTextBrush}" Margin="0" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <TextBlock x:Name="HeroTrackerProgress" Text="0/0 Completed" Foreground="{DynamicResource ThemeTextBrush}" Opacity="0.6" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                             <ItemsControl x:Name="HeroRakatList" HorizontalContentAlignment="Stretch">
@@ -648,40 +685,40 @@
 
         <Border x:Name="FooterNavigationBar" Grid.Row="3" Background="{DynamicResource ThemeTitleBarBrush}" BorderBrush="{DynamicResource ThemeCardBorderBrush}" BorderThickness="0,1,0,0">
             <UniformGrid Columns="6">
-                <RadioButton x:Name="TabHome" Style="{StaticResource BottomTabStyle}" IsChecked="True" Checked="TabHome_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabHome" Style="{StaticResource BottomTabStyle}" IsChecked="True" Checked="TabHome_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tab_Home}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="🏠" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tab_Home}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M3 10.6 12 3l9 7.6M5.6 9.6V21h12.8V9.6M9.5 21v-6h5v6"/>
+                        <TextBlock Text="{DynamicResource Tab_Home}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="TabPrayers" Style="{StaticResource BottomTabStyle}" Checked="TabPrayers_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabPrayers" Style="{StaticResource BottomTabStyle}" Checked="TabPrayers_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tab_Salat}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="🕒" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tab_Salat}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M12 3.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6ZM12 7.4V12l3.4 2"/>
+                        <TextBlock Text="{DynamicResource Tab_Salat}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="TabTracker" Style="{StaticResource BottomTabStyle}" Checked="TabTracker_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabTracker" Style="{StaticResource BottomTabStyle}" Checked="TabTracker_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tracker_Tab}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="📊" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tracker_Tab}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M4 20h16M7.5 20v-6M12 20V7.5M16.5 20v-9.5"/>
+                        <TextBlock Text="{DynamicResource Tracker_Tab}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="TabQibla" Style="{StaticResource BottomTabStyle}" Checked="TabQibla_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabQibla" Style="{StaticResource BottomTabStyle}" Checked="TabQibla_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tab_Qibla}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="🧭" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tab_Qibla}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M12 3.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6ZM15.4 8.6l-2 5.2-5.2 2 2-5.2 5.2-2Z"/>
+                        <TextBlock Text="{DynamicResource Tab_Qibla}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="TabTasbih" Style="{StaticResource BottomTabStyle}" Checked="TabTasbih_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabTasbih" Style="{StaticResource BottomTabStyle}" Checked="TabTasbih_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tab_Tasbih}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="📿" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tab_Tasbih}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M12 2.6a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM18.1 6.9a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM18.1 13.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM12 17.8a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM5.9 13.5a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6ZM5.9 6.9a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6Z"/>
+                        <TextBlock Text="{DynamicResource Tab_Tasbih}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
-                <RadioButton x:Name="TabRamadan" Style="{StaticResource BottomTabStyle}" Checked="TabRamadan_Checked" Cursor="Hand">
+                <RadioButton x:Name="TabRamadan" Style="{StaticResource BottomTabStyle}" Checked="TabRamadan_Checked" Cursor="Hand" AutomationProperties.Name="{DynamicResource Tab_Ramadan}">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,6">
-                        <TextBlock Text="🌙" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,1"/>
-                        <TextBlock Text="{DynamicResource Tab_Ramadan}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                        <Path Style="{StaticResource TabIconStyle}" Data="M13.4 3.3a8.9 8.9 0 1 0 0 17.4 7 7 0 1 1 0-17.4Z"/>
+                        <TextBlock Text="{DynamicResource Tab_Ramadan}" FontSize="9" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
                     </StackPanel>
                 </RadioButton>
             </UniformGrid>
